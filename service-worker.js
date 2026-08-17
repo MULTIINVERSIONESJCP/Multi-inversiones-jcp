@@ -1,49 +1,5 @@
-const CACHE_NAME = 'multi-jcp-v65-pwa';
-const APP_SHELL = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/icon-maskable-192.png',
-  '/icon-maskable-512.png'
-];
-
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL))
-  );
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(k => k !== CACHE_NAME)
-          .map(k => caches.delete(k))
-      )
-    )
-  );
-  self.clients.claim();
-});
-
-self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return;
-
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        const copy = response.clone();
-        caches.open(CACHE_NAME)
-          .then(cache => cache.put(event.request, copy))
-          .catch(() => {});
-        return response;
-      })
-      .catch(() =>
-        caches.match(event.request)
-          .then(cached => cached || caches.match('/index.html'))
-      )
-  );
-});
+const CACHE_NAME='multi-jcp-v80-work';
+const APP_SHELL=['/','/index.html','/manifest.json','/icon-192.png','/icon-512.png','/icon-maskable-192.png','/icon-maskable-512.png'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP_SHELL)));self.skipWaiting();});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))));self.clients.claim();});
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(r=>{const cp=r.clone();caches.open(CACHE_NAME).then(c=>c.put(e.request,cp)).catch(()=>{});return r;}).catch(()=>caches.match(e.request).then(c=>c||caches.match('/index.html'))));});

@@ -454,7 +454,8 @@ table{width:100%;border-collapse:collapse;background:var(--card);border-radius:1
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="MULTI JCP">
-<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 
 <style id="v41-inventory-compact-style">
 #vehiculos .inventory-title-row{margin-top:-8px!important;margin-bottom:0!important;align-items:center!important}
@@ -799,6 +800,405 @@ body{padding-bottom:78px}
 @media(max-width:600px){.supports-search{grid-template-columns:1fr 92px}.support-record{grid-template-columns:1fr}.support-record button{width:100%}.support-detail-vehicle{grid-template-columns:86px 1fr}.support-detail-vehicle img{width:86px;height:68px}.support-actions{grid-template-columns:1fr}.support-actions .full{grid-column:auto}}
 </style>
 
+
+<style id="v69-header-polish">
+/* V69 — Encabezados compactos consistentes: logo | título | menú */
+#vehiculos .inventory-title-row,
+.unified-module-title-row{
+  grid-template-columns:minmax(0,1fr) 42px!important;
+  gap:8px!important;
+  align-items:center!important;
+}
+
+#vehiculos .inventory-inline-brand,
+.unified-module-brand{
+  display:grid!important;
+  grid-template-columns:145px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:8px!important;
+  min-width:0!important;
+}
+
+#vehiculos .inventory-inline-logo,
+.unified-module-logo{
+  width:145px!important;
+  height:48px!important;
+  max-width:100%!important;
+  object-fit:contain!important;
+  object-position:left center!important;
+  margin:0!important;
+}
+
+#vehiculos .inventory-inline-title,
+.unified-module-title{
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:22px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:0!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  text-align:center!important;
+  margin:0!important;
+  min-width:0!important;
+}
+
+#vehiculos .inventory-car-icon,
+.unified-module-icon{
+  font-size:.72em!important;
+  margin-right:2px!important;
+}
+
+#vehiculos .vehicle-module-menu-wrap,
+.unified-module-menu-wrap,
+#soportes .supports-module-menu-wrap{
+  width:42px!important;
+  min-width:42px!important;
+  display:flex!important;
+  justify-content:flex-end!important;
+}
+
+#vehiculos .dots-btn,
+.unified-module-title-row .dots-btn,
+#soportes .dots-btn{
+  width:42px!important;
+  min-width:42px!important;
+  height:42px!important;
+}
+
+#vehiculos .inventory-gold-line,
+.unified-module-gold-line{
+  display:block!important;
+  height:2px!important;
+  width:100%!important;
+  background:var(--gold)!important;
+  margin:6px 0 0!important;
+  border:0!important;
+}
+
+#vehiculos .vehicle-expense-note,
+.unified-module-note{
+  margin:1px 0 0!important;
+  padding:0 2px!important;
+  line-height:1.08!important;
+  font-size:9px!important;
+  color:#f5f5f5!important;
+}
+
+/* Soportes usa exactamente el mismo encabezado */
+#soportes .unified-module-header{margin-top:-4px!important;margin-bottom:8px!important}
+#soportes .unified-module-title-row{grid-template-columns:minmax(0,1fr) 42px!important}
+#soportes .unified-module-brand{
+  grid-template-columns:145px minmax(0,1fr)!important;
+}
+#soportes .unified-module-title{
+  font-size:22px!important;
+  text-align:center!important;
+}
+#soportes .unified-module-gold-line{margin-top:6px!important}
+#soportes .unified-module-note{margin-top:1px!important}
+
+/* Ventas y demás módulos: título un poco más pequeño para no invadir el menú */
+#ventas .unified-module-title{font-size:21px!important}
+#movimientos .unified-module-title,
+#clientes .unified-module-title,
+#prestamos .unified-module-title,
+#inversiones .unified-module-title,
+#patrimonioView .unified-module-title,
+#reportes .unified-module-title{font-size:21px!important}
+
+@media(max-width:390px){
+  #vehiculos .inventory-inline-brand,
+  .unified-module-brand{
+    grid-template-columns:126px minmax(0,1fr)!important;
+    gap:5px!important;
+  }
+  #vehiculos .inventory-inline-logo,
+  .unified-module-logo{
+    width:126px!important;
+    height:44px!important;
+  }
+  #vehiculos .inventory-inline-title,
+  .unified-module-title,
+  #soportes .unified-module-title,
+  #ventas .unified-module-title{
+    font-size:19px!important;
+  }
+}
+</style>
+
+
+<style id="v70-header-fix">
+/* V70 — corrección real de encabezados en móvil */
+
+/* En módulos internos no se usa el encabezado global grande.
+   Cada módulo conserva su propio encabezado: logo | título | ⋮ */
+body.internal-module-open .app > header{
+  display:none !important;
+}
+
+/* Una sola fila, sin truncar los títulos */
+#vehiculos .inventory-title-row,
+.unified-module-title-row{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 46px !important;
+  align-items:center !important;
+  column-gap:6px !important;
+  width:100% !important;
+}
+
+#vehiculos .inventory-inline-brand,
+.unified-module-brand{
+  display:grid !important;
+  grid-template-columns:128px minmax(0,1fr) !important;
+  align-items:center !important;
+  gap:6px !important;
+  width:100% !important;
+  min-width:0 !important;
+}
+
+#vehiculos .inventory-inline-logo,
+.unified-module-logo{
+  width:128px !important;
+  height:45px !important;
+  object-fit:contain !important;
+  object-position:left center !important;
+  margin:0 !important;
+}
+
+#vehiculos .inventory-inline-title,
+.unified-module-title{
+  width:100% !important;
+  min-width:0 !important;
+  margin:0 !important;
+  font-size:18px !important;
+  line-height:1 !important;
+  letter-spacing:-.25px !important;
+  white-space:nowrap !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  text-align:center !important;
+}
+
+/* MOVIMIENTOS necesita unos píxeles extra */
+#movimientos .unified-module-brand{
+  grid-template-columns:118px minmax(0,1fr) !important;
+}
+#movimientos .unified-module-logo{width:118px !important;}
+#movimientos .unified-module-title{font-size:16px !important;letter-spacing:-.45px !important;}
+
+/* SOPORTES: exactamente un encabezado */
+#soportes .unified-module-brand{
+  grid-template-columns:128px minmax(0,1fr) !important;
+}
+#soportes .unified-module-title{
+  font-size:18px !important;
+  text-align:center !important;
+}
+
+/* Línea separada del logo y texto pegado debajo */
+#vehiculos .inventory-gold-line,
+.unified-module-gold-line{
+  margin:7px 0 0 !important;
+  height:2px !important;
+}
+#vehiculos .vehicle-expense-note,
+.unified-module-note{
+  margin:1px 0 0 !important;
+  padding:0 2px !important;
+  line-height:1.08 !important;
+}
+
+@media (min-width:520px){
+  #vehiculos .inventory-inline-brand,
+  .unified-module-brand{
+    grid-template-columns:145px minmax(0,1fr) !important;
+  }
+  #vehiculos .inventory-inline-logo,
+  .unified-module-logo{width:145px !important;height:48px !important;}
+  #vehiculos .inventory-inline-title,
+  .unified-module-title{font-size:21px !important;}
+  #movimientos .unified-module-brand{grid-template-columns:138px minmax(0,1fr) !important;}
+  #movimientos .unified-module-logo{width:138px !important;}
+  #movimientos .unified-module-title{font-size:19px !important;}
+}
+</style>
+
+
+<style id="v72-cash-capital-style">
+.cash-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
+.cash-kpi{background:#111;border:1px solid #333;border-radius:11px;padding:11px 8px;text-align:center;min-width:0}
+.cash-kpi span{display:block;color:#aaa;font-size:10px;line-height:1.2}.cash-kpi b{display:block;color:#fff;font-size:15px;margin-top:5px;white-space:nowrap}
+.cash-kpi.highlight{border-color:#6a5520;background:#17130b}.cash-kpi.highlight b{color:var(--gold)}
+.cash-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.cash-panel{background:#0d0d0d;border:1px solid #303030;border-radius:13px;padding:12px}
+.cash-panel h3{color:var(--gold);font-size:14px;margin:0 0 10px}
+.cash-panel input,.cash-panel select,.cash-panel textarea{width:100%;padding:10px;background:#090909;border:1px solid #333;color:#fff;border-radius:8px;margin-bottom:8px;text-transform:uppercase}
+.cash-panel textarea{min-height:60px;resize:vertical}.cash-panel button{width:100%;min-height:42px}
+.cash-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cash-form-grid .full{grid-column:1/-1}
+.cash-results{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
+.cash-results>div{background:#111;border:1px solid #303030;border-radius:11px;padding:11px 8px;text-align:center}.cash-results span{display:block;color:#aaa;font-size:10px}
+.cash-results b{display:block;margin-top:5px;font-size:15px}.cash-results .highlight{border-color:#476d3a}.cash-results .highlight b{color:#39d98a}
+.cash-close-info{font-size:11px;color:#aaa;margin-bottom:9px}.cash-close-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:5px 0 10px}
+.cash-close-summary>div{background:#111;border:1px solid #333;border-radius:10px;padding:10px;text-align:center}
+.cash-close-summary span{font-size:10px;color:#aaa;display:block}.cash-close-summary b{display:block;font-size:16px;margin-top:4px}
+.cash-close-summary .ok{border-color:#376047}.cash-close-summary .ok b{color:#39d98a}.cash-close-summary .bad{border-color:#633}.cash-close-summary .bad b{color:#ff6868}
+.cash-close-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cash-save-close{background:var(--gold)!important;color:#111!important}
+.cc-row{display:grid;grid-template-columns:95px 1fr auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #242424}.cc-row:last-child{border-bottom:0}
+.cc-row small{color:#999;font-size:9px}.cc-row b{font-size:11px}.cc-row .cc-value{color:var(--gold);white-space:nowrap}
+.cc-close-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #242424}.cc-close-row button{width:auto;min-height:34px;padding:7px 10px}
+#cajaCapital .unified-module-title{font-size:17px!important}
+@media(max-width:700px){
+  .cash-summary-grid,.cash-results{grid-template-columns:repeat(2,minmax(0,1fr))}.cash-grid-2{grid-template-columns:1fr}
+  .cash-form-grid{grid-template-columns:1fr}.cash-form-grid .full{grid-column:auto}.cash-close-summary{grid-template-columns:1fr}.cash-close-actions{grid-template-columns:1fr}
+  .cc-row{grid-template-columns:78px 1fr}.cc-row .cc-value{grid-column:2}
+}
+@media(max-width:390px){#cajaCapital .unified-module-title{font-size:15px!important}}
+</style>
+
+
+<style id="v73-center-financial-style">
+.cf-period-row{display:flex;justify-content:space-between;align-items:center;margin:12px 2px 8px;color:#ddd;font-size:11px}
+.cf-period-row span{color:#999}
+.cf-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cf-card{background:#111;border:1px solid #333;border-radius:14px;padding:14px 12px;min-height:112px}
+.cf-card-label{font-weight:900;font-size:12px}.cf-card-value{font-weight:1000;font-size:21px;margin:12px 0 8px;white-space:nowrap}
+.cf-card small{display:block;color:#999;font-size:9px;line-height:1.25}
+.cf-green{border-color:#315c45}.cf-green .cf-card-label,.cf-green .cf-card-value{color:#43d38b}
+.cf-blue{border-color:#2f4d72}.cf-blue .cf-card-label,.cf-blue .cf-card-value{color:#5aa8ff}
+.cf-purple{border-color:#514171}.cf-purple .cf-card-label,.cf-purple .cf-card-value{color:#a98aff}
+.cf-orange{border-color:#6b4c2e}.cf-orange .cf-card-label,.cf-orange .cf-card-value{color:#f0a24a}
+.cf-actions{margin-top:13px;background:#0d0d0d;border:1px solid #2e2e2e;border-radius:14px;padding:12px}
+.cf-actions-title{font-weight:900;color:#fff;margin-bottom:9px;font-size:12px}
+.cf-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cf-action{display:flex!important;align-items:center!important;text-align:left!important;gap:10px!important;background:#121a22!important;border:1px solid #243545!important;border-radius:10px!important;padding:12px!important;min-height:70px!important;color:#fff!important}
+.cf-action>span{font-size:23px}.cf-action div{display:flex;flex-direction:column;gap:3px}.cf-action b{font-size:11px}.cf-action small{font-size:8px;color:#aaa;line-height:1.25}
+.cf-action.cf-wide{grid-column:1/-1}
+.cf-detail-panel,.ext-panel{margin-top:12px;background:#0d0d0d;border:1px solid #303030;border-radius:13px;padding:12px}
+.cf-detail-panel input,.cf-detail-panel select,.cf-detail-panel textarea,.ext-panel input,.ext-panel select,.ext-panel textarea,.ext-filter select{width:100%;padding:10px;background:#090909;border:1px solid #333;color:#fff;border-radius:8px;margin-bottom:8px;text-transform:uppercase}
+.cf-detail-panel textarea,.ext-panel textarea{min-height:60px;resize:vertical}.cf-detail-panel>button,.ext-panel>button{width:100%;min-height:42px}
+.cf-panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}.cf-panel-head h3,.ext-panel h3{margin:0;color:var(--gold);font-size:13px}
+.cf-panel-head button{width:36px!important;height:34px!important;min-height:34px!important;padding:0!important;background:#171717!important;color:#bbb!important}
+.cf-detail-panel h4{font-size:11px;color:#aaa;margin:5px 0 7px}
+.ext-filter{margin:12px 0 8px}.ext-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ext-summary>div{background:#111;border:1px solid #303030;border-radius:11px;padding:11px 7px;text-align:center}
+.ext-summary span{display:block;color:#999;font-size:9px}.ext-summary b{display:block;margin-top:5px;font-size:14px}.ext-summary .ext-net{border-color:#376047}.ext-summary .ext-net b{color:#39d98a}
+.ext-cat-row{display:grid;grid-template-columns:1fr auto;gap:8px;padding:9px 0;border-bottom:1px solid #242424}.ext-cat-row:last-child{border-bottom:0}
+.ext-cat-row b{font-size:11px}.ext-cat-row span{color:var(--gold);font-weight:800;font-size:11px}
+.ext-row{display:grid;grid-template-columns:82px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #242424}.ext-row:last-child{border-bottom:0}
+.ext-row small{font-size:8px;color:#999}.ext-row b{font-size:10px}.ext-row span{font-size:10px;color:#ff7777;font-weight:800;white-space:nowrap}
+@media(max-width:390px){.cf-card-value{font-size:18px}.cf-action-grid{grid-template-columns:1fr}.cf-action.cf-wide{grid-column:auto}.ext-summary{grid-template-columns:1fr}.ext-row{grid-template-columns:70px 1fr}.ext-row span{grid-column:2}}
+</style>
+
+
+<style id="v74-extractos-flujo-style">
+.ext-cash-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.ext-cash-summary>div{background:#111;border:1px solid #303030;border-radius:11px;padding:11px 7px;text-align:center}
+.ext-cash-summary span{display:block;color:#999;font-size:9px}
+.ext-cash-summary b{display:block;margin-top:5px;font-size:15px}
+.ext-cash-summary .ext-in{border-color:#315c45}.ext-cash-summary .ext-in b{color:#43d38b}
+.ext-cash-summary .ext-out{border-color:#633}.ext-cash-summary .ext-out b{color:#ff7777}
+.ext-cash-summary .ext-flow{border-color:#6a5520}.ext-cash-summary .ext-flow b{color:var(--gold)}
+.ext-filter-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ext-flow-row{display:grid;grid-template-columns:78px 92px minmax(0,1fr) auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #242424}
+.ext-flow-row:last-child{border-bottom:0}
+.ext-flow-row small{font-size:8px;color:#999}
+.ext-flow-row .flow-type{font-size:8px;font-weight:900;border:1px solid #333;border-radius:999px;padding:5px 7px;text-align:center}
+.ext-flow-row .flow-type.in{color:#43d38b;border-color:#315c45}
+.ext-flow-row .flow-type.out{color:#ff7777;border-color:#633}
+.ext-flow-row b{font-size:10px;line-height:1.2}
+.ext-flow-row .flow-value{font-size:10px;font-weight:900;white-space:nowrap}
+.ext-flow-row .flow-value.in{color:#43d38b}.ext-flow-row .flow-value.out{color:#ff7777}
+@media(max-width:520px){
+  .ext-cash-summary{grid-template-columns:1fr}
+  .ext-filter-grid{grid-template-columns:1fr}
+  .ext-flow-row{grid-template-columns:72px 1fr auto}
+  .ext-flow-row .flow-type{grid-column:2;justify-self:start}
+  .ext-flow-row b{grid-column:2}
+  .ext-flow-row .flow-value{grid-column:3;grid-row:1 / span 2}
+}
+</style>
+
+
+<style id="v75-extractos-redesign">
+.ext-pro-filter{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.ext-pro-filter input,.ext-pro-filter select{width:100%;padding:10px;border-radius:9px;border:1px solid #333;background:#0c0c0c;color:#fff;text-transform:uppercase}
+.ext-pro-filter #extSearch{grid-column:1/-1}
+.ext-pro-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ext-pro-card{background:#111;border:1px solid #333;border-radius:12px;padding:11px;min-width:0}
+.ext-pro-card span{font-size:9px;font-weight:900;display:block}.ext-pro-card b{display:block;font-size:17px;margin:7px 0 4px;white-space:nowrap}.ext-pro-card small{color:#999;font-size:8px}
+.ext-pro-card.green{border-color:#315c45}.ext-pro-card.green span,.ext-pro-card.green b{color:#43d38b}
+.ext-pro-card.red{border-color:#633}.ext-pro-card.red span,.ext-pro-card.red b{color:#ff7777}
+.ext-pro-card.blue{border-color:#2f4d72}.ext-pro-card.blue span,.ext-pro-card.blue b{color:#5aa8ff}
+.ext-pro-card.gold{border-color:#6a5520}.ext-pro-card.gold span,.ext-pro-card.gold b{color:var(--gold)}
+.ext-pro-results{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:9px 0}
+.ext-pro-results>div{background:#0f0f0f;border:1px solid #2d2d2d;border-radius:10px;padding:9px;text-align:center}
+.ext-pro-results span{display:block;color:#999;font-size:8px}.ext-pro-results b{display:block;font-size:13px;margin-top:4px}.ext-pro-results .net b{color:#43d38b}
+.ext-pro-main{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:10px;margin-top:10px}
+.ext-pro-table-wrap,.ext-detail-card{background:#0d0d0d;border:1px solid #303030;border-radius:12px;overflow:hidden}
+.ext-pro-table-head{display:grid;grid-template-columns:88px 130px minmax(170px,1fr) 110px 105px;gap:7px;background:#151515;color:var(--gold);padding:10px;font-size:8px;font-weight:900}
+.ext-pro-row{display:grid;grid-template-columns:88px 130px minmax(170px,1fr) 110px 105px;gap:7px;align-items:center;padding:10px;border-bottom:1px solid #242424;cursor:pointer}
+.ext-pro-row:last-child{border-bottom:0}.ext-pro-row:hover{background:#141414}
+.ext-pro-row small{font-size:8px;color:#aaa}.ext-pro-row b{font-size:9px;line-height:1.25}
+.ext-pro-row .category{font-size:8px}.ext-pro-row .account{font-size:8px;color:#aaa}.ext-pro-row .amount{font-size:9px;font-weight:900;text-align:right;white-space:nowrap}
+.ext-pro-row .amount.in{color:#43d38b}.ext-pro-row .amount.out{color:#ff7777}
+.ext-detail-card{padding:12px}.ext-detail-card h3{margin:0 0 10px;color:#fff;font-size:12px}
+.ext-detail-line{display:grid;grid-template-columns:88px 1fr;gap:6px;padding:6px 0;border-bottom:1px solid #222;font-size:9px}.ext-detail-line span{color:#999}.ext-detail-line b{word-break:break-word}
+.ext-box-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.ext-box-head button{width:auto!important;min-height:34px!important;padding:7px 10px!important}
+.ext-pro-bottom{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:760px){
+  .ext-pro-main{grid-template-columns:1fr}
+  .ext-detail-card{order:-1}
+  .ext-pro-table-wrap{overflow-x:auto}
+  .ext-pro-table-head,.ext-pro-row{min-width:680px}
+  .ext-pro-bottom{grid-template-columns:1fr}
+}
+@media(max-width:390px){
+  .ext-pro-summary{grid-template-columns:1fr 1fr}
+  .ext-pro-results{grid-template-columns:1fr}
+}
+</style>
+
+
+<style id="v78-direct-module-styles">
+.vehicle-expense-selector-v78{margin-top:12px;background:#0d0d0d;border:1px solid #363020;border-radius:13px;padding:12px}
+.vehicle-expense-selector-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.vehicle-expense-selector-head h3{margin:0;color:var(--gold);font-size:15px}
+.vehicle-expense-selector-head button{width:auto!important;min-height:34px!important;padding:7px 10px!important}
+.cf-card.cf-cyan{border-color:#285a65}
+.cf-card.cf-cyan .cf-card-label,.cf-card.cf-cyan .cf-card-value{color:#55d6e8}
+.cf-wide-summary{grid-column:1/-1;cursor:pointer}
+.cf-standalone-v78{display:block!important;margin-top:12px}
+#capitalFinanciacion .unified-module-title,#historialFinanciero .unified-module-title{font-size:15px!important}
+#carteraCaja table{width:100%}
+@media(max-width:390px){
+  #capitalFinanciacion .unified-module-title,#historialFinanciero .unified-module-title{font-size:13px!important}
+}
+</style>
+
+
+<style id="v80-back-buttons-style">
+.v80-back-to-cash{
+  display:flex;
+  justify-content:flex-start;
+  margin:8px 0 10px;
+}
+.v80-back-to-cash button{
+  width:auto!important;
+  min-height:38px!important;
+  padding:8px 12px!important;
+  border-radius:9px!important;
+  background:#151515!important;
+  border:1px solid #4a4126!important;
+  color:var(--gold)!important;
+  font-weight:900!important;
+  font-size:10px!important;
+}
+.v80-back-to-cash button:active{
+  transform:scale(.98);
+}
+</style>
+
 </head>
 <body>
 <div id="authOverlay" class="auth-overlay-v2 auth-overlay">
@@ -857,7 +1257,8 @@ body{padding-bottom:78px}
 <div class="card" onclick="show('ventas')">💰<br><b>Ventas</b></div>
 <div class="card" onclick="show('prestamos')">🤝<br><b>Préstamos</b></div>
 <div class="card" onclick="show('inversiones')">📈<br><b>Inversiones</b></div>
-<div class="card" onclick="show('movimientos')">💰<br><b>Movimientos</b></div>
+<div class="card" onclick="show('cajaCapital')">💵<br><b>Caja y capital</b></div>
+<div class="card" onclick="show('extractos')">📑<br><b>Extractos</b></div>
 <div class="card" onclick="openSupportsModule()">📄<br><b>Soportes</b></div>
 </div>
 <div class="section">Resumen</div>
@@ -887,6 +1288,7 @@ body{padding-bottom:78px}
       <button class="dots-btn vehicle-module-dots" onclick="toggleVehicleModuleMenu(event)" aria-label="Más opciones de vehículos">⋮</button>
       <div id="vehicleModuleMenu" class="top-menu vehicle-module-menu">
         <button onclick="toggleForm('formVeh');closeVehicleModuleMenu()">＋ Registrar vehículo</button>
+        <button onclick="openVehicleExpenseSelector();closeVehicleModuleMenu()">💸 Agregar gastos</button>
         <button onclick="openVehicleEditPanel();closeVehicleModuleMenu()">✏️ Modificar vehículos</button>
         <button onclick="generateInventoryReportPDF();closeVehicleModuleMenu()">📋 Informe general</button>
       </div>
@@ -907,6 +1309,18 @@ body{padding-bottom:78px}
 <div class="inventory-gold-line"></div>
 <div class="vehicle-expense-note">💡 Los gastos asociados se suman a la inversión total del vehículo.</div>
 <div id="vehList"></div>
+
+<div id="vehicleExpenseSelector" class="vehicle-expense-selector-v78" style="display:none">
+  <div class="vehicle-expense-selector-head">
+    <div>
+      <h3>💸 Selecciona el vehículo</h3>
+      <div class="label">Elige un vehículo del inventario para registrar gastos.</div>
+    </div>
+    <button type="button" onclick="closeVehicleExpenseSelector()">Cerrar</button>
+  </div>
+  <div id="vehicleExpenseSelectorGrid" class="inventory-cards"></div>
+</div>
+
 <div id="vehicleDetail" class="card" style="display:none;margin-top:14px">
   <div class="row">
     <h3 id="vehicleDetailTitle" style="margin:0">Detalle del vehículo</h3>
@@ -961,7 +1375,6 @@ body{padding-bottom:78px}
     <div class="sales-menu-card" onclick="toggleSaleGrid()"><div class="sales-menu-icon">💵</div><b>Nueva venta</b></div>
     <div class="sales-menu-card" onclick="togglePermutaForm()"><div class="sales-menu-icon">↔️</div><b>Permuta</b></div>
     <div class="sales-menu-card" onclick="openSalesHistory()"><div class="sales-menu-icon">📋</div><b>Ventas realizadas</b></div>
-    <div class="sales-menu-card" onclick="openSalesReceivables()"><div class="sales-menu-icon">💳</div><b>Cartera por cobrar</b></div>
   </div>
 <div id="permutaGrid" style="display:none;margin:16px 0">
   <div class="row" style="align-items:center;flex-wrap:wrap"><h3 style="margin:0">↔️ Selecciona el vehículo para la permuta</h3><div style="display:flex;gap:7px"><button class="permuta-history-btn" onclick="openPermutaHistory()">📋 Permutas realizadas</button><button onclick="closePermutaGrid()">Cerrar</button></div></div>
@@ -1025,7 +1438,7 @@ body{padding-bottom:78px}
   </div>
 
   <div class="sale-invoice-actions">
-    <button class="sale-save-btn" onclick="savePermuta()">💾 GUARDAR PERMUTA</button>
+    <button id="savePermutaBtn" class="sale-save-btn" onclick="savePermuta()">💾 GUARDAR PERMUTA</button>
     <button class="sale-cancel-btn" onclick="closePermutaForm()">CANCELAR</button>
   </div>
 </div>
@@ -1036,11 +1449,6 @@ body{padding-bottom:78px}
 <div id="salesHistoryPanel" class="sales-submodule">
   <div class="sales-submodule-head"><h3>📋 Ventas realizadas</h3><button class="sales-submodule-close" onclick="returnToSalesMenu()">Cerrar</button></div>
   <div id="soldList"></div>
-</div>
-<div id="salesReceivablesPanel" class="sales-submodule">
-  <div class="sales-submodule-head"><h3>💳 Cartera por cobrar</h3><button class="sales-submodule-close" onclick="returnToSalesMenu()">Cerrar</button></div>
-  <div class="label" style="margin-bottom:10px">Aquí se muestran únicamente las ventas que tienen un saldo pendiente por cobrar.</div>
-  <div id="salesReceivablesList"></div>
 </div>
 <div id="saleForm" class="sale-invoice-shell" style="display:none;margin:16px 0">
   <div class="sale-invoice-head">
@@ -1146,7 +1554,7 @@ body{padding-bottom:78px}
 </div><div id="invList"></div>
 </section>
 
-<section id="movimientos" class="view">
+<section id="movimientos" class="view" style="display:none!important" aria-hidden="true">
 <div class="row"><h2>💰 Movimientos</h2><button onclick="toggleForm('formMov')">+ Registrar</button></div>
 <div id="formMov" class="form" style="display:none">
 <select id="mt" onchange="toggleExpenseType()"><option value="ingreso">Ingreso</option><option value="gasto">Gasto</option></select>
@@ -1176,6 +1584,282 @@ body{padding-bottom:78px}
 </div>
 </section>
 
+
+
+<section id="cajaCapital" class="view">
+  <div class="unified-module-header">
+    <div class="unified-module-title-row">
+      <div class="unified-module-brand">
+        <img class="unified-module-logo" id="cashCapitalLogo" alt="MULTI INVERSIONES JCP">
+        <h2 class="unified-module-title"><span class="unified-module-icon">💵</span> CAJA Y CAPITAL</h2>
+      </div>
+    </div>
+    <div class="unified-module-gold-line"></div>
+    <div class="unified-module-note">💡 Resumen financiero y accesos rápidos para administrar el dinero del negocio.</div>
+  </div>
+
+  <div class="cf-period-row">
+    <b>RESUMEN FINANCIERO</b>
+    <span id="cfToday"></span>
+  </div>
+
+  <div class="cf-summary-grid">
+    <div class="cf-card cf-green">
+      <div class="cf-card-label">💵 DISPONIBLE</div>
+      <div class="cf-card-value" id="ccAvailable">$0</div>
+      <small>Capital + financiación − inversión − pagos</small>
+    </div>
+    <div class="cf-card cf-blue">
+      <div class="cf-card-label">📈 GANANCIA NETA</div>
+      <div class="cf-card-value" id="ccGananciaNeta">$0</div>
+      <small>Ganancia realizada − gastos operacionales</small>
+    </div>
+    <div class="cf-card cf-purple">
+      <div class="cf-card-label">🚗 INVERTIDO</div>
+      <div class="cf-card-value" id="ccInvested">$0</div>
+      <small>Vehículos + gastos asociados + inversiones</small>
+    </div>
+    <div class="cf-card cf-orange">
+      <div class="cf-card-label">🏦 DEUDAS</div>
+      <div class="cf-card-value" id="ccDeuda">$0</div>
+      <small>Créditos y préstamos pendientes</small>
+    </div>
+  </div>
+
+  <div class="cf-actions">
+    <div class="cf-actions-title">ACCESOS RÁPIDOS</div>
+    <div class="cf-action-grid">
+      <button class="cf-action" onclick="show('capitalFinanciacion')"><span>🏦</span><div><b>Capital y financiación</b><small>Aportes, créditos y préstamos</small></div></button>
+      <button class="cf-action" onclick="show('extractos')"><span>📑</span><div><b>Extractos</b><small>Gastos operacionales y resultados</small></div></button>
+      <button class="cf-action" onclick="show('pagoDeudas')"><span>💳</span><div><b>Pagar deudas</b><small>Devolver créditos y préstamos</small></div></button>
+      <button class="cf-action" onclick="show('carteraCaja')"><span>💰</span><div><b>Cuentas por cobrar</b><small>Ventas a crédito y préstamos pendientes</small></div></button>
+      <button class="cf-action" onclick="show('cierreCaja')"><span>🧮</span><div><b>Cierre de caja</b><small>Cuadrar efectivo, bancos y resultados</small></div></button>
+      <button class="cf-action cf-wide" onclick="show('historialFinanciero')"><span>📄</span><div><b>Historial y reportes</b><small>Capital, cierres y soportes guardados</small></div></button>
+    </div>
+  </div>
+</section>
+
+
+<section id="capitalFinanciacion" class="view">
+  <div class="unified-module-header">
+    <div class="unified-module-title-row"><div class="unified-module-brand">
+      <img class="unified-module-logo" id="capitalFinLogo" alt="MULTI INVERSIONES JCP">
+      <h2 class="unified-module-title"><span class="unified-module-icon">🏦</span> CAPITAL Y FINANCIACIÓN</h2>
+    </div></div>
+    <div class="unified-module-gold-line"></div>
+    <div class="unified-module-note">💡 Registra capital inicial, aportes, créditos y préstamos recibidos.</div>
+  </div>
+  <div class="v80-back-to-cash">
+    <button type="button" onclick="show('cajaCapital')">← VOLVER A CAJA Y CAPITAL</button>
+  </div>
+  <div class="cf-detail-panel cf-standalone-v78"><select id="ccSourceType">
+      <option value="capital_inicial">CAPITAL INICIAL</option>
+      <option value="aporte_capital">APORTE ADICIONAL PROPIO</option>
+      <option value="credito">CRÉDITO RECIBIDO</option>
+      <option value="prestamo_recibido">PRÉSTAMO RECIBIDO</option>
+    </select>
+    <input id="ccSourceConcept" placeholder="CONCEPTO / ENTIDAD">
+    <input id="ccSourceValue" type="text" inputmode="numeric" data-money="1" placeholder="VALOR">
+    <textarea id="ccSourceObs" placeholder="OBSERVACIÓN"></textarea>
+    <button onclick="saveCapitalSource()">GUARDAR ENTRADA</button></div>
+</section>
+
+<section id="pagoDeudas" class="view">
+  <div class="unified-module-header">
+    <div class="unified-module-title-row"><div class="unified-module-brand">
+      <img class="unified-module-logo" id="pagoDeudaLogo" alt="MULTI INVERSIONES JCP">
+      <h2 class="unified-module-title"><span class="unified-module-icon">💳</span> PAGAR DEUDAS</h2>
+    </div></div>
+    <div class="unified-module-gold-line"></div>
+    <div class="unified-module-note">💡 Registra pagos y devoluciones de créditos o préstamos recibidos.</div>
+  </div>
+  <div class="v80-back-to-cash">
+    <button type="button" onclick="show('cajaCapital')">← VOLVER A CAJA Y CAPITAL</button>
+  </div>
+  <div class="cf-detail-panel cf-standalone-v78"><select id="ccDebtSelect"></select>
+    <input id="ccDebtValue" type="text" inputmode="numeric" data-money="1" placeholder="VALOR A PAGAR">
+    <select id="ccDebtMethod">
+      <option value="transferencia">TRANSFERENCIA</option>
+      <option value="efectivo">EFECTIVO</option>
+    </select>
+    <textarea id="ccDebtObs" placeholder="OBSERVACIÓN"></textarea>
+    <button onclick="saveDebtPayment()">REGISTRAR PAGO</button></div>
+</section>
+
+<section id="cierreCaja" class="view">
+  <div class="unified-module-header">
+    <div class="unified-module-title-row"><div class="unified-module-brand">
+      <img class="unified-module-logo" id="cierreCajaLogo" alt="MULTI INVERSIONES JCP">
+      <h2 class="unified-module-title"><span class="unified-module-icon">🧮</span> CIERRE DE CAJA</h2>
+    </div></div>
+    <div class="unified-module-gold-line"></div>
+    <div class="unified-module-note">💡 Compara caja esperada con efectivo y saldos reales de tus cuentas.</div>
+  </div>
+  <div class="v80-back-to-cash">
+    <button type="button" onclick="show('cajaCapital')">← VOLVER A CAJA Y CAPITAL</button>
+  </div>
+  <div class="cf-detail-panel cf-standalone-v78"><div class="cash-close-info" id="ccClosePeriod">PERÍODO: —</div>
+    <div class="cash-form-grid">
+      <input id="ccCashCount" type="text" inputmode="numeric" data-money="1" placeholder="EFECTIVO CONTADO">
+      <input id="ccBancolombia" type="text" inputmode="numeric" data-money="1" placeholder="BANCOLOMBIA">
+      <input id="ccDaviplata" type="text" inputmode="numeric" data-money="1" placeholder="DAVIPLATA">
+      <input id="ccDavivienda" type="text" inputmode="numeric" data-money="1" placeholder="DAVIVIENDA">
+      <input id="ccNequi" type="text" inputmode="numeric" data-money="1" placeholder="NEQUI">
+      <textarea id="ccCloseObs" class="full" placeholder="OBSERVACIONES DEL CIERRE"></textarea>
+    </div>
+    <div class="cash-close-summary">
+      <div><span>Caja esperada</span><b id="ccCloseExpected">$0</b></div>
+      <div><span>Total cuentas</span><b id="ccCloseBanks">$0</b></div>
+      <div><span>Total real</span><b id="ccCloseActual">$0</b></div>
+      <div id="ccDifferenceCard"><span>Diferencia</span><b id="ccCloseDifference">$0</b></div>
+    </div>
+    <div class="cash-close-actions">
+      <button onclick="previewCashClosure()">ACTUALIZAR CUADRE</button>
+      <button class="cash-save-close" onclick="saveCashClosure()">💾 GUARDAR CIERRE Y PDF</button>
+    </div></div>
+</section>
+
+<section id="historialFinanciero" class="view">
+  <div class="unified-module-header">
+    <div class="unified-module-title-row"><div class="unified-module-brand">
+      <img class="unified-module-logo" id="histFinLogo" alt="MULTI INVERSIONES JCP">
+      <h2 class="unified-module-title"><span class="unified-module-icon">📄</span> HISTORIAL Y REPORTES</h2>
+    </div></div>
+    <div class="unified-module-gold-line"></div>
+    <div class="unified-module-note">💡 Consulta cierres guardados, capital, financiación y soportes.</div>
+  </div>
+  <div class="v80-back-to-cash">
+    <button type="button" onclick="show('cajaCapital')">← VOLVER A CAJA Y CAPITAL</button>
+  </div>
+  <div class="cf-detail-panel cf-standalone-v78"><h4>CIERRES GUARDADOS</h4>
+    <div id="ccClosuresList"></div>
+    <h4 style="margin-top:14px">CAPITAL Y FINANCIACIÓN</h4>
+    <div id="ccCapitalHistory"></div></div>
+</section>
+
+<section id="carteraCaja" class="view">
+  <div class="unified-module-header">
+    <div class="unified-module-title-row"><div class="unified-module-brand">
+      <img class="unified-module-logo" id="carteraCajaLogo" alt="MULTI INVERSIONES JCP">
+      <h2 class="unified-module-title"><span class="unified-module-icon">💳</span> CARTERA POR COBRAR</h2>
+    </div></div>
+    <div class="unified-module-gold-line"></div>
+    <div class="unified-module-note">💡 Aquí se muestran las ventas con saldo pendiente y los préstamos por cobrar.</div>
+  </div>
+  <div class="v80-back-to-cash">
+    <button type="button" onclick="show('cajaCapital')">← VOLVER A CAJA Y CAPITAL</button>
+  </div>
+  <div class="cf-detail-panel cf-standalone-v78">
+    <div id="salesReceivablesList"></div>
+    <div id="loanReceivablesListV78" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<section id="extractos" class="view">
+  <div class="unified-module-header">
+    <div class="unified-module-title-row">
+      <div class="unified-module-brand">
+        <img class="unified-module-logo" id="extractosLogo" alt="MULTI INVERSIONES JCP">
+        <h2 class="unified-module-title"><span class="unified-module-icon">📑</span> EXTRACTOS</h2>
+      </div>
+    </div>
+    <div class="unified-module-gold-line"></div>
+    <div class="unified-module-note">💡 Historial financiero oficial de todas las entradas y salidas reales del negocio.</div>
+  </div>
+
+  <div class="ext-pro-filter">
+    <select id="extPeriod" onchange="renderExtractos()">
+      <option value="week">ÚLTIMOS 7 DÍAS</option>
+      <option value="month">ESTE MES</option>
+      <option value="all">TODO EL HISTORIAL</option>
+    </select>
+    <select id="extFlowType" onchange="renderExtractos()">
+      <option value="all">TODOS</option>
+      <option value="income">ENTRADAS</option>
+      <option value="expense">SALIDAS</option>
+    </select>
+    <select id="extCategoryFilter" onchange="renderExtractos()">
+      <option value="all">TODAS LAS CATEGORÍAS</option>
+    </select>
+    <select id="extAccountFilter" onchange="renderExtractos()">
+      <option value="all">TODOS LOS MEDIOS / CUENTAS</option>
+    </select>
+    <input id="extSearch" placeholder="BUSCAR CONCEPTO, PLACA, CLIENTE..." oninput="renderExtractos()">
+  </div>
+
+  <div class="ext-pro-summary">
+    <div class="ext-pro-card green"><span>↑ ENTRADAS</span><b id="extCashIn">$0</b><small id="extInCount">0 movimientos</small></div>
+    <div class="ext-pro-card red"><span>↓ SALIDAS</span><b id="extCashOut">$0</b><small id="extOutCount">0 movimientos</small></div>
+    <div class="ext-pro-card blue"><span>📈 NETO DEL PERÍODO</span><b id="extCashFlow">$0</b><small>Entradas − salidas</small></div>
+    <div class="ext-pro-card gold"><span>💼 DISPONIBLE</span><b id="extAvailable">$0</b><small>Mismo valor de la pantalla Inicio</small></div>
+  </div>
+
+  <div class="ext-pro-results">
+    <div><span>Ganancia bruta</span><b id="extGross">$0</b></div>
+    <div><span>Gastos operacionales</span><b id="extExpenses">$0</b></div>
+    <div class="net"><span>Ganancia neta</span><b id="extNet">$0</b></div>
+  </div>
+
+  <div class="ext-pro-main">
+    <div class="ext-pro-table-wrap">
+      <div class="ext-pro-table-head">
+        <span>FECHA</span><span>TIPO / CATEGORÍA</span><span>CONCEPTO</span><span>MEDIO / CUENTA</span><span>ENTRADA / SALIDA</span>
+      </div>
+      <div id="extRows"></div>
+    </div>
+
+    <div id="extDetail" class="ext-detail-card">
+      <h3>DETALLE DEL MOVIMIENTO</h3>
+      <div class="empty">Selecciona un movimiento para ver su información.</div>
+    </div>
+  </div>
+
+  <div class="ext-panel ext-operating-box">
+    <div class="ext-box-head">
+      <h3>🧾 GASTOS OPERACIONALES</h3>
+      <button type="button" onclick="toggleExtExpenseForm()">＋ NUEVO GASTO</button>
+    </div>
+    <div id="extExpenseForm" style="display:none">
+      <div class="cash-form-grid">
+        <select id="ccExpenseCategory">
+          <option value="ARRIENDO">ARRIENDO</option>
+          <option value="SERVICIOS">SERVICIOS</option>
+          <option value="NÓMINA / EMPLEADO">NÓMINA / EMPLEADO</option>
+          <option value="INTERNET / TELEFONÍA">INTERNET / TELEFONÍA</option>
+          <option value="CONTABILIDAD">CONTABILIDAD</option>
+          <option value="PUBLICIDAD">PUBLICIDAD</option>
+          <option value="TRANSPORTE">TRANSPORTE</option>
+          <option value="COMISIONES BANCARIAS">COMISIONES BANCARIAS</option>
+          <option value="IMPUESTOS / TRÁMITES">IMPUESTOS / TRÁMITES</option>
+          <option value="OTROS">OTROS</option>
+        </select>
+        <input id="ccExpenseConcept" placeholder="CONCEPTO">
+        <input id="ccExpenseValue" type="text" inputmode="numeric" data-money="1" placeholder="VALOR">
+        <select id="ccExpenseMethod">
+          <option value="transferencia">TRANSFERENCIA</option>
+          <option value="efectivo">EFECTIVO</option>
+        </select>
+        <textarea id="ccExpenseObs" class="full" placeholder="OBSERVACIÓN"></textarea>
+      </div>
+      <button onclick="saveOperatingExpense()">GUARDAR GASTO OPERACIONAL</button>
+    </div>
+  </div>
+
+  <div class="ext-pro-bottom">
+    <div class="ext-panel">
+      <h3>📊 GASTOS OPERACIONALES POR CATEGORÍA</h3>
+      <div id="extCategories"></div>
+    </div>
+    <div class="ext-panel">
+      <h3>ℹ️ ¿QUÉ ES EXTRACTOS?</h3>
+      <div class="label">
+        Aquí se registran todas las entradas y salidas reales de dinero del negocio.
+        Las cuentas por cobrar no aumentan caja hasta que efectivamente sean pagadas.
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="patrimonioView" class="view"><h2>🏦 Patrimonio</h2><div class="grid">
 <div class="card"><div class="label">Activos</div><div class="value" id="activos">$0</div></div>
 <div class="card"><div class="label">Pasivos</div><div class="value" id="pasivos">$0</div></div>
@@ -1198,8 +1882,14 @@ body{padding-bottom:78px}
         <img class="unified-module-logo" id="supportsLogoClone" alt="MULTI INVERSIONES JCP">
         <h2 class="unified-module-title"><span class="unified-module-icon">📄</span> SOPORTES</h2>
       </div>
+      <div class="supports-module-menu-wrap top-menu-wrap">
+        <button class="dots-btn" type="button" onclick="toggleSupportsMenu(event)" aria-label="Más opciones de soportes">⋮</button>
+        <div id="supportsTopMenu" class="top-menu">
+          <button onclick="show('reportes');closeSupportsMenu()">← Volver a reportes</button>
+        </div>
+      </div>
     </div>
-    <div class="unified-module-line"></div>
+    <div class="unified-module-gold-line"></div>
     <div class="unified-module-note">💡 Consulta y genera copias PDF de ventas y permutas sin salir de la aplicación.</div>
   </div>
   <div class="supports-shell">
@@ -1208,6 +1898,11 @@ body{padding-bottom:78px}
     <div id="supportSearchStatus" class="label"></div>
     <div id="supportResults" class="supports-results"></div>
     <div id="supportDetail" class="support-detail"></div>
+  </div>
+  <div class="supports-shell" style="margin-top:12px">
+    <div style="font-weight:900;color:#d4af37">🧮 SOPORTES DE CIERRE DE CAJA</div>
+    <div class="label" style="margin:5px 0 10px">Descarga nuevamente cualquier cierre semanal guardado.</div>
+    <div id="supportCashClosures"></div>
   </div>
 </section>
 
@@ -1227,7 +1922,7 @@ let authMode='login';
 
 function cloudHasRecords(obj){
   if(!obj||typeof obj!=='object') return false;
-  return ['veh','sold','clientes','pres','inv','mov'].some(k=>Array.isArray(obj[k])&&obj[k].length>0);
+  return ['veh','sold','clientes','pres','inv','mov','permutas','capitalOps','cashClosures'].some(k=>Array.isArray(obj[k])&&obj[k].length>0);
 }
 function normalizeCloudData(obj){
   const d=(obj&&typeof obj==='object')?obj:{};
@@ -1237,7 +1932,10 @@ function normalizeCloudData(obj){
     clientes:Array.isArray(d.clientes)?d.clientes:[],
     pres:Array.isArray(d.pres)?d.pres:[],
     inv:Array.isArray(d.inv)?d.inv:[],
-    mov:Array.isArray(d.mov)?d.mov:[]
+    mov:Array.isArray(d.mov)?d.mov:[],
+    permutas:Array.isArray(d.permutas)?d.permutas:[],
+    capitalOps:Array.isArray(d.capitalOps)?d.capitalOps:[],
+    cashClosures:Array.isArray(d.cashClosures)?d.cashClosures:[]
   };
 }
 function setCloudStatus(text,ok=false){
@@ -1483,10 +2181,15 @@ async function cerrarSesionCloud(){
 const KEY='jcp_app_v1';
 let data=JSON.parse(localStorage.getItem(KEY)||'{"veh":[],"sold":[],"clientes":[],"pres":[],"inv":[],"mov":[]}');
 data.sold=data.sold||[];data.permutas=data.permutas||[];data.clientes=data.clientes||[];data.mov=data.mov||[];data.veh=data.veh||[];
+data.capitalOps=Array.isArray(data.capitalOps)?data.capitalOps:[];
+data.cashClosures=Array.isArray(data.cashClosures)?data.cashClosures:[];
 if(!Array.isArray(data.clientes))data.clientes=[];
 // Compatibilidad: cualquier gasto que ya esté relacionado con un vehículo por
 // vehicleId se considera gasto de vehículo, aunque provenga de una versión anterior.
-data.mov.forEach(x=>{if(x.t==='gasto' && x.vehicleId && !x.subtype)x.subtype='vehiculos'; else if(x.t==='ingreso' && (!x.subtype || x.subtype==='capital_inicial'))x.subtype='ingreso_vario';});
+data.mov.forEach(x=>{
+  if(x.t==='gasto' && x.vehicleId && !x.subtype)x.subtype='vehiculos';
+  else if(x.t==='ingreso' && !x.subtype)x.subtype='ingreso_vario';
+});
 // Migración y normalización de vehículos: todos los vehículos del inventario
 // deben tener un ID único para poder aparecer y relacionarse con gastos.
 (function normalizeVehicleIds(){
@@ -1668,7 +2371,8 @@ function importBackup(event){
       localStorage.setItem(KEY,JSON.stringify(incoming));
       data={
         veh:incoming.veh||[],sold:incoming.sold||[],clientes:incoming.clientes||[],
-        pres:incoming.pres||[],inv:incoming.inv||[],mov:incoming.mov||[]
+        pres:incoming.pres||[],inv:incoming.inv||[],mov:incoming.mov||[],
+        permutas:incoming.permutas||[],capitalOps:incoming.capitalOps||[],cashClosures:incoming.cashClosures||[]
       };
       render();
       programarGuardadoAutomatico();
@@ -1690,6 +2394,7 @@ function show(id){
  document.getElementById(id).classList.add('active');
  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.id===id));
  document.getElementById('nav').style.display=id==='dashboard'?'none':'flex';
+ document.body.classList.toggle('internal-module-open', id!=='dashboard');
  // Cada vez que se entra a Movimientos, refrescar el selector desde el inventario
  // actual. Esto evita que quede una lista vieja si se agregó un vehículo mientras
  // el formulario de gastos estaba abierto.
@@ -1970,7 +2675,7 @@ function addMov(){
  document.getElementById('mc').focus();
  success('EL REGISTRO DEL MOVIMIENTO HA SIDO');
 }
-function resetDemo(){if(confirm('¿Borrar todos los datos de esta demo?')){data={veh:[],sold:[],clientes:[],pres:[],inv:[],mov:[]};save()}}
+function resetDemo(){if(confirm('¿Borrar todos los datos de esta demo?')){data={veh:[],sold:[],clientes:[],pres:[],inv:[],mov:[],permutas:[],capitalOps:[],cashClosures:[]};save()}}
 function list(arr,headers,rows){if(!arr.length)return '<div class="empty">No hay registros todavía.</div>';return '<table><thead><tr>'+headers.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'+arr.map(x=>'<tr>'+rows(x).map(v=>'<td>'+v+'</td>').join('')+'</tr>').join('')+'</tbody></table>'}
 
 
@@ -2695,8 +3400,11 @@ function updatePermutaCalculations(){
   const incomingValue=numericValue('permutaInTotalCost');
   const signedDifference=outgoingSalePrice-incomingValue;
   const difference=Math.abs(signedDifference);
-  const profit=outgoingSalePrice-outgoingInvestment;
+  const rawProfit=outgoingSalePrice-outgoingInvestment;
   const status=signedDifference>0?'receive':(signedDifference<0?'pay':'even');
+  // Regla V71: si MULTI INVERSIONES JCP debe dar encima, no se reconoce
+  // utilidad en la salida. El resultado se reconocerá al vender el vehículo recibido.
+  const profit=status==='pay'?0:rawProfit;
   const statusText=status==='receive'?'DIFERENCIA A RECIBIR':(status==='pay'?'DIFERENCIA A PAGAR':'PERMUTA MANO A MANO');
   // V57: el costo contable del vehículo que entra parte de la inversión real del
   // vehículo que sale. Si recibimos encima, se resta; si pagamos encima, se suma.
@@ -2707,14 +3415,14 @@ function updatePermutaCalculations(){
       <div class="permuta-balance-card"><span>Valor venta vehículo que sale</span><b>${money(outgoingSalePrice)}</b></div>
       <div class="permuta-balance-card"><span>Valor acordado vehículo que ingresa</span><b>${money(incomingValue)}</b></div>
       <div class="permuta-balance-card highlight"><span>${statusText}</span><b>${money(difference)}</b><div class="permuta-diff-status ${status}">${statusText}</div></div>
-      <div class="permuta-balance-card profit"><span>Utilidad del vehículo que sale</span><b>${money(profit)}</b></div>
+      <div class="permuta-balance-card profit"><span>Utilidad del vehículo que sale</span><b>${money(profit)}</b>${status==='pay'?'<small style="display:block;margin-top:5px;color:#aaa">UTILIDAD DIFERIDA HASTA LA VENTA DEL VEHÍCULO RECIBIDO</small>':''}</div>
       <div class="permuta-balance-card"><span>Inversión real vehículo que sale</span><b>${money(outgoingInvestment)}</b></div>
       <div class="permuta-balance-card"><span>Costo de entrada ajustado (costo ± encima)</span><b>${money(incomingInventoryCost)}</b></div>`;
   }
   const block=document.getElementById('permutaPaymentBlock');
   if(block)block.style.display=difference>0?'block':'none';
   if(difference<=0){const method=document.getElementById('permutaPayMethod');if(method)method.value='efectivo';togglePermutaMixedPayment();}
-  return {outgoingInvestment,outgoingSalePrice,incomingValue,incomingInventoryCost,signedDifference,difference,profit,status,statusText};
+  return {outgoingInvestment,outgoingSalePrice,incomingValue,incomingInventoryCost,signedDifference,difference,profit,rawProfit,status,statusText};
 }
 async function previewPermutaPhotos(){
   const input=document.getElementById('permutaInPhotos');
@@ -2791,22 +3499,32 @@ function renderPermutaHistory(){
 }
 
 async function savePermuta(){
+  const saveBtn=document.getElementById('savePermutaBtn');
+  if(saveBtn?.disabled)return false;
+  if(saveBtn){saveBtn.disabled=true;saveBtn.textContent='GUARDANDO...';}
   try{
-    data.veh=Array.isArray(data.veh)?data.veh:[];data.sold=Array.isArray(data.sold)?data.sold:[];data.mov=Array.isArray(data.mov)?data.mov:[];data.permutas=Array.isArray(data.permutas)?data.permutas:[];
+    const veh=Array.isArray(data.veh)?data.veh:[];
+    const mov=Array.isArray(data.mov)?data.mov:[];
+    const perms=Array.isArray(data.permutas)?data.permutas:[];
+
     const outgoingId=selectedPermutaVehicleId;
     if(!outgoingId){alert('SELECCIONA EL VEHÍCULO QUE SALE.');return false;}
-    const idx=data.veh.findIndex(v=>String(v.id)===String(outgoingId));
+    const idx=veh.findIndex(v=>String(v.id)===String(outgoingId));
     if(idx<0){alert('NO SE ENCONTRÓ EL VEHÍCULO SELECCIONADO.');return false;}
-    const outgoing=data.veh[idx],calc=updatePermutaCalculations();
+
+    const outgoing=veh[idx];
+    const calc=updatePermutaCalculations();
     const inMarca=(document.getElementById('permutaInMarca')?.value||'').trim().toUpperCase();
     const inRef=(document.getElementById('permutaInRef')?.value||'').trim().toUpperCase();
     const inModelo=(document.getElementById('permutaInModelo')?.value||'').trim().toUpperCase();
     const inPlaca=(document.getElementById('permutaInPlaca')?.value||'').trim().toUpperCase();
     const obs=(document.getElementById('permutaObs')?.value||'').trim().toUpperCase();
+
     if(calc.outgoingSalePrice<=0){alert('INGRESA EL VALOR DE VENTA ACORDADO DEL VEHÍCULO QUE SALE.');return false;}
     if(!inMarca||!inRef||!inModelo){alert('COMPLETA MARCA, REFERENCIA Y MODELO DEL VEHÍCULO QUE INGRESA.');return false;}
     if(calc.incomingValue<=0){alert('INGRESA EL VALOR ACORDADO DEL VEHÍCULO QUE INGRESA.');return false;}
-    if(calc.incomingInventoryCost<0){alert('EL COSTO AJUSTADO DEL VEHÍCULO QUE INGRESA NO PUEDE SER NEGATIVO. REVISA LOS VALORES DE LA PERMUTA.');return false;}
+    if(calc.incomingInventoryCost<0){alert('EL COSTO AJUSTADO DEL VEHÍCULO QUE INGRESA NO PUEDE SER NEGATIVO.');return false;}
+
     const payMethod=document.getElementById('permutaPayMethod')?.value||'efectivo';
     let cash=0,transfer=0;
     if(calc.difference>0){
@@ -2817,30 +3535,84 @@ async function savePermuta(){
         if(cash+transfer!==calc.difference){alert('EN PAGO MIXTO, EFECTIVO + TRANSFERENCIA DEBE SER IGUAL A '+money(calc.difference)+'.');return false;}
       }
     }
-    const photos=await getPermutaCompressedPhotos();
-    const nowDate=new Date();
-    const dateTime=nowDate.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'});
-    const now=Date.now(),permutaId='perm_'+now+'_'+Math.random().toString(36).slice(2,7),incomingId='veh_'+now+'_'+Math.random().toString(36).slice(2,7);
-    const incoming={id:incomingId,marca:inMarca,ref:inRef,modelo:inModelo,pl:inPlaca,c:calc.incomingInventoryCost,g:0,v:0,photo:photos[0]||'',photos,purchaseDate:dateTime,createdAt:nowDate.toISOString(),origen:'permuta',permutaId,permutaAgreedValue:calc.incomingValue};
-    const record={id:permutaId,date:dateTime,createdAt:nowDate.toISOString(),outgoingVehicleId:outgoing.id,outgoingVehicle:{marca:outgoing.marca||outgoing.m||'',ref:outgoing.ref||'',modelo:outgoing.modelo||'',pl:outgoing.pl||'',photo:outgoing.photo||''},outgoingInvestment:calc.outgoingInvestment,outgoingSalePrice:calc.outgoingSalePrice,profit:calc.profit,incomingVehicleId:incoming.id,incomingVehicle:{marca:inMarca,ref:inRef,modelo:inModelo,pl:inPlaca,photo:incoming.photo,photos},incomingValue:calc.incomingValue,incomingInventoryCost:calc.incomingInventoryCost,difference:calc.difference,differenceDirection:calc.status,payMethod:calc.difference?payMethod:'ninguno',cash,transfer,obs};
-    outgoing.status='permuta';outgoing.permutaId=permutaId;outgoing.permuta=record;
-    data.veh.splice(idx,1);
-    data.veh.unshift(incoming);
-    data.permutas.unshift(record);
+
+    const files=Array.from(document.getElementById('permutaInPhotos')?.files||[]).slice(0,4);
+    const photos=[];
+    for(const file of files){
+      try{const pic=await compressVehicleImage(file,900,650,.55);if(pic)photos.push(pic);}
+      catch(e){console.warn('Foto de permuta omitida',e);}
+    }
+
+    const d=new Date(),dateTime=d.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),iso=d.toISOString(),now=Date.now();
+    const permutaId='perm_'+now+'_'+Math.random().toString(36).slice(2,7);
+    const incomingId='veh_'+now+'_'+Math.random().toString(36).slice(2,7);
+
+    const incoming={
+      id:incomingId,
+      marca:inMarca,m:inMarca,
+      ref:inRef,modelo:inModelo,pl:inPlaca,
+      c:calc.incomingInventoryCost,g:0,v:0,
+      photo:photos[0]||'',photos,
+      purchaseDate:dateTime,createdAt:iso,
+      origen:'permuta',status:'inventario',active:true,
+      permutaId,permutaAgreedValue:calc.incomingValue
+    };
+    const record={id:permutaId,date:dateTime,createdAt:iso,outgoingVehicleId:outgoing.id,
+      outgoingVehicle:{marca:outgoing.marca||outgoing.m||'',ref:outgoing.ref||'',modelo:outgoing.modelo||'',pl:outgoing.pl||'',photo:outgoing.photo||'',photos:Array.isArray(outgoing.photos)?outgoing.photos:[]},
+      outgoingInvestment:calc.outgoingInvestment,outgoingSalePrice:calc.outgoingSalePrice,profit:calc.profit,rawProfit:calc.rawProfit,
+      incomingVehicleId:incoming.id,incomingVehicle:{
+        id:incoming.id,marca:inMarca,m:inMarca,ref:inRef,modelo:inModelo,pl:inPlaca,
+        c:calc.incomingInventoryCost,g:0,v:0,photo:incoming.photo,photos,
+        purchaseDate:dateTime,createdAt:iso,origen:'permuta',status:'inventario',active:true,permutaId
+      },
+      incomingValue:calc.incomingValue,incomingInventoryCost:calc.incomingInventoryCost,difference:calc.difference,differenceDirection:calc.status,
+      payMethod:calc.difference?payMethod:'ninguno',cash,transfer,obs};
+
+    const nextVeh=veh.slice();nextVeh.splice(idx,1);nextVeh.unshift(incoming);
+    const nextPerms=perms.slice();nextPerms.unshift(record);
+    const nextMov=mov.slice();
+
     if(calc.difference>0){
       if(calc.status==='receive'){
-        data.mov.unshift({id:'mov_'+(now+1),t:'ingreso',subtype:'permuta_diferencia',c:'PERMUTA — DIFERENCIA RECIBIDA ('+payMethod.toUpperCase()+') '+(outgoing.pl||''),v:calc.difference,vehicleId:'',permutaId,date:dateTime,createdAt:nowDate.toISOString(),cash,transfer});
+        nextMov.unshift({id:'mov_'+(now+1),t:'ingreso',subtype:'permuta_diferencia',c:'PERMUTA — DIFERENCIA RECIBIDA ('+payMethod.toUpperCase()+') '+(outgoing.pl||''),v:calc.difference,vehicleId:'',permutaId,date:dateTime,createdAt:iso,cash,transfer});
       }else if(calc.status==='pay'){
-        // Egreso de caja por diferencia de permuta. No se relaciona como gasto del vehículo
-        // para evitar duplicar el costo de adquisición que ya está registrado en incoming.c.
-        data.mov.unshift({id:'mov_'+(now+2),t:'gasto',subtype:'permuta_diferencia',c:'PERMUTA — DIFERENCIA PAGADA ('+payMethod.toUpperCase()+') '+inMarca+' '+inRef+(inPlaca?' — '+inPlaca:''),v:calc.difference,vehicleId:'',permutaId,date:dateTime,createdAt:nowDate.toISOString(),cash,transfer,nonCapitalExpense:true});
+        nextMov.unshift({id:'mov_'+(now+2),t:'gasto',subtype:'permuta_diferencia',c:'PERMUTA — DIFERENCIA PAGADA ('+payMethod.toUpperCase()+') '+inMarca+' '+inRef+(inPlaca?' — '+inPlaca:''),v:calc.difference,vehicleId:'',permutaId,date:dateTime,createdAt:iso,cash,transfer,nonCapitalExpense:true});
       }
     }
-    localStorage.setItem(KEY,JSON.stringify(data));
-    render();populateVehicleSelect();renderPermutaHistory();clearPermutaForm();closePermutaForm();
-    alert('PERMUTA GUARDADA CORRECTAMENTE. EL VEHÍCULO RECIBIDO YA ESTÁ EN INVENTARIO.');
+
+    const nextData={...data,veh:nextVeh,mov:nextMov,permutas:nextPerms};
+    let localSaved=false;
+    try{localStorage.setItem(KEY,JSON.stringify(nextData));localSaved=true;}
+    catch(storageErr){console.warn('LocalStorage lleno; guardando permuta en nube.',storageErr);}
+
+    data=nextData;
+
+    if(!localSaved){
+      if(cloudUser&&cloudReady){
+        const payload={user_id:cloudUser.id,data:normalizeCloudData(data),updated_at:new Date().toISOString()};
+        const {error}=await supabaseClient.from('app_data').upsert(payload,{onConflict:'user_id'});
+        if(error)throw error;
+        setCloudStatus('Permuta guardada en la nube',true);
+      }else{
+        throw new Error('No hay espacio local suficiente y la nube no está disponible.');
+      }
+    }else{
+      programarGuardadoAutomatico();
+    }
+
+    try{render();}catch(e){console.warn('Permuta guardada; error solo al refrescar vista',e);}
+    try{populateVehicleSelect();renderPermutaHistory();}catch(e){}
+    try{clearPermutaForm();closePermutaForm();returnToSalesMenu();}catch(e){}
+
+    alert('✅ PERMUTA GUARDADA CORRECTAMENTE. INVENTARIO Y EXTRACTOS FUERON ACTUALIZADOS.');
     return true;
-  }catch(err){console.error('ERROR AL GUARDAR PERMUTA:',err);alert('NO FUE POSIBLE GUARDAR LA PERMUTA. REVISA LOS DATOS E INTENTA DE NUEVO.');return false;}
+  }catch(err){
+    console.error('ERROR AL GUARDAR PERMUTA:',err);
+    alert('NO FUE POSIBLE GUARDAR LA PERMUTA.\n\nDETALLE: '+(err?.message||String(err)));
+    return false;
+  }finally{
+    if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='💾 GUARDAR PERMUTA';}
+  }
 }
 
 function saveVehicleSale(){
@@ -2889,7 +3661,9 @@ function saveVehicleSale(){
   const operationNow=new Date();
   const operationDateTime=operationNow.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'});
   const operationCreatedAt=operationNow.toISOString();
+  const commercialSaleId='sale_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
   x.sale={
+    id:commercialSaleId,
     date:operationDateTime,
     dateTime:operationDateTime,
     createdAt:operationCreatedAt,
@@ -2913,10 +3687,15 @@ function saveVehicleSale(){
     data.mov.unshift({
       id:'mov_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
       t:'ingreso',
+      subtype:'venta',
       c:'VENTA '+(x.marca||x.m||'')+' '+(x.ref||'')+(x.pl?' — '+x.pl:''),
       v:received,
       vehicleId:'',
       saleVehicleId:x.id,
+      commercialSaleId:commercialSaleId,
+      method:method,
+      cash:cash,
+      transfer:transfer,
       date:operationDateTime,
       createdAt:operationCreatedAt
     });
@@ -2930,6 +3709,7 @@ function saveVehicleSale(){
       v:pending,
       vehicleId:'',
       saleVehicleId:x.id,
+      commercialSaleId:commercialSaleId,
       date:operationDateTime,
       createdAt:operationCreatedAt
     });
@@ -2937,6 +3717,8 @@ function saveVehicleSale(){
 
   data.sold=data.sold||[];
   data.sold.unshift(x);
+  // Mantener el historial de ventas de la más reciente a la más antigua.
+  data.sold.sort((a,b)=>saleTimestamp(b)-saleTimestamp(a));
 
   // Save the complete transaction FIRST.
   save();
@@ -3111,6 +3893,7 @@ function saveBatchExpenses(){
   }
   closeBatchExpense();
   openVehicleDetail(veh.id);
+  if(typeof renderVehicleExpenseSelector==='function')renderVehicleExpenseSelector();
   success(rows.length===1?'EL GASTO DEL VEHÍCULO HA SIDO':'LOS GASTOS DEL VEHÍCULO HAN SIDO');
 }
 function closeVehicleDetail(){
@@ -3283,19 +4066,44 @@ async function saveVehicleEdits(){
   }finally{if(btn){btn.disabled=false;btn.textContent=oldText||'💾 GUARDAR CAMBIOS';}}
 }
 
+function parseJcpDateTime(value){
+  if(!value)return NaN;
+  const direct=Date.parse(value);
+  if(Number.isFinite(direct))return direct;
+
+  const raw=String(value).trim().toLowerCase().replace(/\u00a0/g,' ');
+  const m=raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:,?\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(a\.?\s*m\.?|p\.?\s*m\.?)?)?/i);
+  if(!m)return NaN;
+
+  let day=+m[1],month=+m[2]-1,year=+m[3],hour=+(m[4]||0),min=+(m[5]||0),sec=+(m[6]||0);
+  if(year<100)year+=2000;
+  const ap=(m[7]||'').replace(/[^apm]/g,'');
+  if(ap.startsWith('p')&&hour<12)hour+=12;
+  if(ap.startsWith('a')&&hour===12)hour=0;
+
+  const t=new Date(year,month,day,hour,min,sec).getTime();
+  return Number.isFinite(t)?t:NaN;
+}
 function saleTimestamp(x,index=0){
-  const iso=Date.parse(x?.sale?.createdAt||x?.permuta?.createdAt||x?.createdAt||'');
-  if(Number.isFinite(iso))return iso;
-  // Los registros antiguos pueden no tener ISO. Como respaldo, conserva el orden
-  // actual del arreglo (los nuevos se insertan con unshift desde V57).
-  return Number.MAX_SAFE_INTEGER-index;
+  const candidates=[x?.sale?.createdAt,x?.sale?.dateTime,x?.sale?.date,x?.createdAt];
+  for(const value of candidates){
+    const t=parseJcpDateTime(value);
+    if(Number.isFinite(t))return t;
+  }
+  return -index;
+}
+function saleDisplayDate(x){
+  return x?.sale?.dateTime||x?.sale?.date||'SIN FECHA';
 }
 function renderSalesHistory(){
   const el=document.getElementById('soldList');
   if(!el)return;
-  const sold=(data.sold||[]).map((x,i)=>({x,i})).filter(o=>o.x.status!=='permuta'&&!o.x.permuta).sort((a,b)=>saleTimestamp(b.x,b.i)-saleTimestamp(a.x,a.i)).map(o=>o.x);
-  el.innerHTML=list(sold,['Vehículo','Placa','Venta','Ganancia','Recibido','Por cobrar'],x=>[
-    (x.marca||x.m||'')+' '+(x.ref||''),x.pl||'SIN PLACA',money(x.sale?.price||0),money((x.sale?.price||0)-((+x.c||0)+(+x.g||0))),money(x.sale?.received||0),money(x.sale?.pending||0)
+  const sold=(data.sold||[]).map((x,i)=>({x,i}))
+    .filter(o=>o.x.status!=='permuta'&&!o.x.permuta)
+    .sort((a,b)=>saleTimestamp(b.x,b.i)-saleTimestamp(a.x,a.i))
+    .map(o=>o.x);
+  el.innerHTML=list(sold,['Fecha','Vehículo','Placa','Venta','Ganancia','Recibido','Por cobrar'],x=>[
+    saleDisplayDate(x),(x.marca||x.m||'')+' '+(x.ref||''),x.pl||'SIN PLACA',money(x.sale?.price||0),money((x.sale?.price||0)-((+x.c||0)+(+x.g||0))),money(x.sale?.received||0),money(x.sale?.pending||0)
   ]);
 }
 function renderSalesReceivables(){
@@ -3306,6 +4114,94 @@ function renderSalesReceivables(){
     (x.marca||x.m||'')+' '+(x.ref||'')+(x.pl?' — '+x.pl:''),
     x.sale?.buyer||'SIN REGISTRAR',x.sale?.date||'',money(x.sale?.price||0),money(x.sale?.received||0),money(x.sale?.pending||0)
   ]);
+}
+
+
+function getFinancialSnapshotV75(){
+  const m=Array.isArray(data.mov)?data.mov:[];
+  data.veh=Array.isArray(data.veh)?data.veh:[];
+  data.sold=Array.isArray(data.sold)?data.sold:[];
+  data.permutas=Array.isArray(data.permutas)?data.permutas:[];
+  data.pres=Array.isArray(data.pres)?data.pres:[];
+  data.inv=Array.isArray(data.inv)?data.inv:[];
+
+  // Los movimientos de gasto ligados a un vehículo son la fuente oficial del
+  // gasto capitalizado. Si el vehículo es histórico y no tiene movimientos,
+  // conserva el acumulado guardado en x.g.
+  const expenseByVehicle={};
+  m.filter(x=>x.t==='gasto'&&x.subtype==='vehiculos'&&x.vehicleId).forEach(x=>{
+    expenseByVehicle[String(x.vehicleId)]=(expenseByVehicle[String(x.vehicleId)]||0)+(+x.v||0);
+  });
+  data.veh.forEach(x=>{
+    const k=String(x.id||'');
+    if(Object.prototype.hasOwnProperty.call(expenseByVehicle,k))x.g=+(expenseByVehicle[k]||0);
+    else x.g=+(x.g||0);
+  });
+
+  const initial=m.filter(x=>x.t==='ingreso'&&x.subtype==='capital_inicial').reduce((a,x)=>a+(+x.v||0),0);
+  const contributions=m.filter(x=>x.t==='ingreso'&&(x.subtype==='aporte_capital'||x.subtype==='ingreso_vario')).reduce((a,x)=>a+(+x.v||0),0);
+  const financing=m.filter(x=>x.t==='ingreso'&&(x.subtype==='credito'||x.subtype==='prestamo_recibido')).reduce((a,x)=>a+(+x.v||0),0);
+  const debtPaid=m.filter(x=>x.t==='gasto'&&x.subtype==='pago_deuda').reduce((a,x)=>a+(+x.v||0),0);
+
+  const vehicleInvestment=data.veh.reduce((a,x)=>a+(+x.c||0)+(+x.g||0),0);
+  const otherInvestment=data.inv.reduce((a,x)=>a+(+x.c||0),0);
+  const invested=vehicleInvestment+otherInvestment;
+
+  const loanReceivable=data.pres.reduce((a,x)=>a+Math.max(0,(+x.c||0)-(+x.p||0)),0);
+  const saleReceivable=m.filter(x=>x.t==='cuenta_por_cobrar').reduce((a,x)=>a+(+x.v||0),0);
+  const receivable=loanReceivable+saleReceivable;
+
+  const saleProfit=data.sold
+    .filter(x=>x.status!=='permuta'&&!x.permuta)
+    .reduce((a,x)=>a+((+x.sale?.price||0)-((+x.c||0)+(+x.g||0))),0);
+  const permutaProfit=data.permutas.reduce((a,x)=>a+(+x.profit||0),0);
+  const grossProfit=saleProfit+permutaProfit;
+
+  const operatingExpenses=m
+    .filter(x=>x.t==='gasto'&&(x.subtype==='gasto_operativo'||x.subtype==='varios'))
+    .reduce((a,x)=>a+(+x.v||0),0);
+  const netProfit=grossProfit-operatingExpenses;
+
+  const ownCapital=initial+contributions;
+  const capitalSources=ownCapital+financing;
+  const debt=Math.max(0,financing-debtPaid);
+
+  // Esta es la ÚNICA fórmula de Disponible utilizada en toda la aplicación.
+  const available=capitalSources-invested-loanReceivable-saleReceivable+netProfit-debtPaid;
+  const assets=available+invested+receivable;
+  const equity=assets-debt;
+
+  return {
+    initial,contributions,ownCapital,financing,debtPaid,debt,
+    vehicleInvestment,otherInvestment,invested,
+    loanReceivable,saleReceivable,receivable,
+    saleProfit,permutaProfit,grossProfit,operatingExpenses,netProfit,
+    capitalSources,available,assets,equity
+  };
+}
+
+
+function syncFinancialUiV76(){
+  const f=getFinancialSnapshotV75();
+  const set=(id,v)=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent=money(v);
+  };
+  // La misma cifra exacta en todos los lugares.
+  set('disponible',f.available);
+  set('ccAvailable',f.available);
+  set('ccExpectedCash',f.available);
+  set('ccCloseExpected',f.available);
+  set('extAvailable',f.available);
+
+  set('invertido',f.invested);
+  set('ccInvested',f.invested);
+  set('deudas',f.debt);
+  set('ccDeuda',f.debt);
+  set('cobrar',f.receivable);
+  set('patrimonio',f.equity);
+  set('ccGananciaNeta',f.netProfit);
+  return f;
 }
 
 function render(){
@@ -3321,38 +4217,19 @@ data.veh.forEach((x,i)=>{
 data.sold=data.sold||[];
 populateVehicleSelect();
 bindMoneyInputs();
-let ingresos=data.mov.filter(x=>x.t==='ingreso').reduce((a,x)=>a+(+x.v||0),0), gastos=data.mov.filter(x=>x.t==='gasto').reduce((a,x)=>a+(+x.v||0),0);
-let ingresoVario=data.mov.filter(x=>x.t==='ingreso' && x.subtype==='ingreso_vario').reduce((a,x)=>a+(+x.v||0),0);
-let creditos=data.mov.filter(x=>x.t==='ingreso' && x.subtype==='credito').reduce((a,x)=>a+(+x.v||0),0);
-// El crédito/préstamo aporta efectivo, pero representa una obligación.
-// Por eso entra al capital disponible y, simultáneamente, se reconoce como deuda.
-let capital=ingresoVario+creditos;
-// PATRIMONIO: para cada vehículo se toma el costo de adquisición + ÚNICAMENTE
-// los gastos registrados como "Gastos vehículos" y relacionados con ese vehículo.
-// Los "Gastos varios" NO se capitalizan en el patrimonio del vehículo.
-const gastosVehiculoPorId={};
-data.mov.filter(x=>x.t==='gasto' && x.subtype==='vehiculos' && x.vehicleId).forEach(x=>{
-  gastosVehiculoPorId[x.vehicleId]=(gastosVehiculoPorId[x.vehicleId]||0)+(+x.v||0);
-});
-// Sincroniza el acumulado del vehículo con sus movimientos para que el patrimonio
-// siempre refleje los gastos realmente relacionados con la placa.
-// Si un vehículo viene de una versión anterior y no tiene movimientos de gastos,
-// conserva su acumulado histórico; si sí tiene movimientos, estos son la fuente oficial.
-data.veh.forEach(x=>{
-  if(Object.prototype.hasOwnProperty.call(gastosVehiculoPorId,x.id)) x.g=+(gastosVehiculoPorId[x.id]||0);
-  else x.g=+(x.g||0);
-});
-let gastosVehiculo=Object.values(gastosVehiculoPorId).reduce((a,v)=>a+v,0);
-let gastosNoVehiculo=gastos-gastosVehiculo;
-let vehInv=data.veh.reduce((a,x)=>a+(+x.c||0)+(+x.g||0),0), inv=data.inv.reduce((a,x)=>a+(+x.c||0),0);
-let cobrarPrestamos=data.pres.reduce((a,x)=>a+Math.max(0,(+x.c||0)-(+x.p||0)),0);
-let cobrarVentas=data.mov.filter(x=>x.t==='cuenta_por_cobrar').reduce((a,x)=>a+(+x.v||0),0);
-let cobrar=cobrarPrestamos+cobrarVentas;
-// Los gastos de vehículos se capitalizan: se suman al valor del activo del vehículo.
-// Los gastos varios no se capitalizan y sí reducen el disponible.
-let deudas=creditos, disponible=capital-(vehInv+inv), activos=disponible+vehInv+inv+cobrar, patrimonio=activos-deudas, utilidad=ingresos-gastos;
+const fin=getFinancialSnapshotV75();
+let ingresos=data.mov.filter(x=>x.t==='ingreso').reduce((a,x)=>a+(+x.v||0),0);
+let gastos=data.mov.filter(x=>x.t==='gasto').reduce((a,x)=>a+(+x.v||0),0);
+let capital=fin.capitalSources;
+let vehInv=fin.vehicleInvestment, inv=fin.otherInvestment;
+let cobrarPrestamos=fin.loanReceivable, cobrarVentas=fin.saleReceivable, cobrar=fin.receivable;
+let creditos=fin.financing, pagosDeuda=fin.debtPaid;
+let gastosOperacionales=fin.operatingExpenses;
+let resultadoNeto=fin.netProfit;
+let deudas=fin.debt, disponible=fin.available, activos=fin.assets, patrimonio=fin.equity, utilidad=fin.netProfit;
 document.getElementById('patrimonio').textContent=money(patrimonio);document.getElementById('disponible').textContent=money(disponible);document.getElementById('invertido').textContent=money(vehInv+inv);document.getElementById('cobrar').textContent=money(cobrar);document.getElementById('deudas').textContent=money(deudas);
-document.getElementById('ingresos').textContent=money(capital);document.getElementById('gastos').textContent=money(gastos);document.getElementById('utilidad').textContent=money(utilidad);document.getElementById('nveh').textContent=data.veh.length;
+document.getElementById('ingresos').textContent=money(capital);document.getElementById('gastos').textContent=money(gastosOperacionales);document.getElementById('utilidad').textContent=money(utilidad);document.getElementById('nveh').textContent=data.veh.length;
+syncFinancialUiV76();
 if(!data.veh.length){
   vehList.innerHTML='<div class="vehicle-empty">🚗 No hay vehículos en inventario todavía.</div>';
 }else{
@@ -3384,7 +4261,7 @@ rIng.textContent=money(ingresos);rGas.textContent=money(gastos);rUtil.textConten
 localStorage.setItem(KEY,JSON.stringify(data));
 let rent=data.veh.filter(x=>x.v).reduce((a,x)=>a+x.v-(x.c+x.g),0), base=data.veh.filter(x=>x.v).reduce((a,x)=>a+x.c+x.g,0);rRent.textContent=(base?((rent/base)*100).toFixed(1):0)+'%';bar.style.width=Math.min(100,Math.max(0,patrimonio?((disponible/patrimonio)*100):0))+'%';
 }
-function toggleTopMenu(e){e.stopPropagation();document.getElementById('topMenu').classList.toggle('open')}function closeTopMenu(){document.getElementById('topMenu').classList.remove('open')}function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[['dashboard','🏠<br>Inicio'],['vehiculos','🚗<br>Vehículos'],['ventas','💰<br>Ventas'],['prestamos','🤝<br>Préstamos'],['reportes','•••<br>Más']];
+function toggleTopMenu(e){e.stopPropagation();document.getElementById('topMenu').classList.toggle('open')}function closeTopMenu(){document.getElementById('topMenu').classList.remove('open')}function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[['dashboard','🏠<br>Inicio'],['vehiculos','🚗<br>Vehículos'],['ventas','💰<br>Ventas'],['extractos','📑<br>Extractos'],['reportes','•••<br>Más']];
 nav.innerHTML=navItems.map(([id,t])=>`<button data-id="${id}" onclick="show('${id}')">${t}</button>`).join('');
 nav.style.display='none';
 render();
@@ -3421,7 +4298,6 @@ if ('serviceWorker' in navigator) {
     clientes:{icon:'📋',title:'BASE DE DATOS',note:'💡 Consulta y administra la información de clientes registrados.'},
     prestamos:{icon:'🤝',title:'PRÉSTAMOS',note:'💡 Control de capital prestado, intereses y pagos recibidos.'},
     inversiones:{icon:'📈',title:'INVERSIONES',note:'💡 Seguimiento del capital invertido y las ganancias esperadas.'},
-    movimientos:{icon:'💰',title:'MOVIMIENTOS',note:'💡 Registra y consulta los ingresos y gastos del negocio.'},
     patrimonioView:{icon:'🏦',title:'PATRIMONIO',note:'💡 Resumen de activos, pasivos y patrimonio total.'},
     reportes:{icon:'📊',title:'REPORTES',note:'💡 Los reportes se actualizan automáticamente con los registros.'}
   };
@@ -3508,6 +4384,21 @@ document.addEventListener('DOMContentLoaded',function(){
 </script>
 
 
+<script id="v69-supports-menu-script">
+function toggleSupportsMenu(e){
+  if(e)e.stopPropagation();
+  const m=document.getElementById('supportsTopMenu');
+  if(m)m.classList.toggle('open');
+}
+function closeSupportsMenu(){
+  const m=document.getElementById('supportsTopMenu');
+  if(m)m.classList.remove('open');
+}
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.supports-module-menu-wrap'))closeSupportsMenu();
+});
+</script>
+
 <script id="v63-supports-script">
 let selectedSupportRecord=null;
 function supportNormalizePlate(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'');}
@@ -3592,6 +4483,658 @@ async function autoGenerateSaleSupports(id){
 }
 // Enter sobre el buscador
 window.addEventListener('DOMContentLoaded',()=>{supportsInitLogo();const i=document.getElementById('supportPlate');if(i)i.addEventListener('keydown',e=>{if(e.key==='Enter')searchSupportRecords();});});
+</script>
+
+
+<script id="v70-initial-header-state">
+window.addEventListener('load',function(){
+  const active=document.querySelector('.view.active');
+  document.body.classList.toggle('internal-module-open', !!active && active.id!=='dashboard');
+});
+</script>
+
+
+<script id="v72-cash-capital-script">
+(function(){
+  const ensure=()=>{
+    data.capitalOps=Array.isArray(data.capitalOps)?data.capitalOps:[];
+    data.cashClosures=Array.isArray(data.cashClosures)?data.cashClosures:[];
+    data.permutas=Array.isArray(data.permutas)?data.permutas:[];
+    data.mov=Array.isArray(data.mov)?data.mov:[];
+  };
+  const stamp=x=>{const t=Date.parse(x?.createdAt||x?.date||'');return Number.isFinite(t)?t:0;};
+  const nowInfo=()=>{const d=new Date();return {iso:d.toISOString(),label:d.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'})};};
+  const val=id=>numericValue(id);
+  const labelType=t=>({capital_inicial:'CAPITAL INICIAL',aporte_capital:'APORTE PROPIO',credito:'CRÉDITO RECIBIDO',prestamo_recibido:'PRÉSTAMO RECIBIDO',pago_deuda:'PAGO / DEVOLUCIÓN DE DEUDA'}[t]||t);
+
+  function debts(){
+    ensure();
+    const financing=data.mov.filter(x=>x.t==='ingreso'&&(x.subtype==='credito'||x.subtype==='prestamo_recibido'));
+    const payments=data.mov.filter(x=>x.t==='gasto'&&x.subtype==='pago_deuda');
+    return financing.map(f=>{
+      const key=f.capitalOpId||f.id;
+      const paid=payments.filter(p=>p.financingId===key).reduce((a,p)=>a+(+p.v||0),0);
+      return {id:key,concept:f.c||'FINANCIACIÓN',value:+f.v||0,paid,balance:Math.max(0,(+f.v||0)-paid)};
+    }).filter(x=>x.balance>0);
+  }
+
+  function stats(){
+    ensure();
+    const f=getFinancialSnapshotV75();
+    return {
+      initial:f.initial,contrib:f.contributions,own:f.ownCapital,
+      finance:f.financing,debtPaid:f.debtPaid,debt:f.debt,
+      vehicleInv:f.vehicleInvestment,otherInv:f.otherInvestment,
+      loanRecv:f.loanReceivable,saleRecv:f.saleReceivable,
+      saleProfit:f.saleProfit,permProfit:f.permutaProfit,
+      gross:f.grossProfit,opExp:f.operatingExpenses,net:f.netProfit,
+      expected:f.available
+    };
+  }
+
+  window.saveCapitalSource=function(){
+    ensure();
+    const type=document.getElementById('ccSourceType')?.value||'capital_inicial';
+    const concept=(document.getElementById('ccSourceConcept')?.value||'').trim().toUpperCase();
+    const amount=val('ccSourceValue');
+    const obs=(document.getElementById('ccSourceObs')?.value||'').trim().toUpperCase();
+    if(!concept||amount<=0){alert('COMPLETA EL CONCEPTO Y EL VALOR.');return;}
+    if(type==='capital_inicial'&&data.mov.some(x=>x.t==='ingreso'&&x.subtype==='capital_inicial')&&!confirm('YA EXISTE UN CAPITAL INICIAL. ¿DESEAS REGISTRAR OTRO AJUSTE?'))return;
+    const d=nowInfo(),id='cap_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+    data.capitalOps.unshift({id,type,concept,value:amount,obs,date:d.label,createdAt:d.iso});
+    data.mov.unshift({id:'mov_'+id,t:'ingreso',subtype:type,c:labelType(type)+' — '+concept,v:amount,vehicleId:'',capitalOpId:id,date:d.label,createdAt:d.iso});
+    save();
+    const typeEl=document.getElementById('ccSourceType');
+    if(typeEl)typeEl.selectedIndex=0;
+    ['ccSourceConcept','ccSourceValue','ccSourceObs'].forEach(i=>{
+      const e=document.getElementById(i);
+      if(e){e.value='';e.dispatchEvent(new Event('input',{bubbles:true}));}
+    });
+    renderCashCapital();
+    if(window.renderExtractos)renderExtractos();
+    alert('✅ ENTRADA DE CAPITAL GUARDADA Y REGISTRADA EN EXTRACTOS.');
+  };
+
+  window.saveDebtPayment=function(){
+    ensure();
+    const financingId=document.getElementById('ccDebtSelect')?.value||'';
+    const amount=val('ccDebtValue');
+    const method=document.getElementById('ccDebtMethod')?.value||'transferencia';
+    const obs=(document.getElementById('ccDebtObs')?.value||'').trim().toUpperCase();
+    const f=debts().find(x=>x.id===financingId);
+    if(!f||amount<=0){alert('SELECCIONA UNA DEUDA E INGRESA EL VALOR A PAGAR.');return;}
+    if(amount>f.balance){alert('EL PAGO NO PUEDE SUPERAR EL SALDO DE '+money(f.balance)+'.');return;}
+    const d=nowInfo(),id='cap_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+    data.capitalOps.unshift({id,type:'pago_deuda',financingId,concept:'PAGO '+f.concept,value:amount,method,obs,date:d.label,createdAt:d.iso});
+    data.mov.unshift({id:'mov_'+id,t:'gasto',subtype:'pago_deuda',c:'PAGO DEUDA — '+f.concept+' ('+method.toUpperCase()+')',v:amount,vehicleId:'',capitalOpId:id,financingId,method,date:d.label,createdAt:d.iso,nonOperatingExpense:true});
+    save();
+    document.getElementById('ccDebtValue').value='';document.getElementById('ccDebtObs').value='';
+    renderCashCapital();alert('✅ PAGO DE DEUDA REGISTRADO.');
+  };
+
+  window.saveOperatingExpense=function(){
+    ensure();
+    const category=document.getElementById('ccExpenseCategory')?.value||'OTROS';
+    const concept=(document.getElementById('ccExpenseConcept')?.value||'').trim().toUpperCase();
+    const amount=val('ccExpenseValue');
+    const method=document.getElementById('ccExpenseMethod')?.value||'transferencia';
+    const obs=(document.getElementById('ccExpenseObs')?.value||'').trim().toUpperCase();
+    if(!concept||amount<=0){alert('COMPLETA EL CONCEPTO Y EL VALOR DEL GASTO.');return;}
+    const d=nowInfo(),id='mov_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+    data.mov.unshift({id,t:'gasto',subtype:'gasto_operativo',category,c:category+' — '+concept,v:amount,vehicleId:'',method,obs,date:d.label,createdAt:d.iso});
+    save();
+    ['ccExpenseConcept','ccExpenseValue','ccExpenseObs'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';});
+    const extForm=document.getElementById('extExpenseForm');if(extForm)extForm.style.display='none';
+    renderCashCapital();if(window.renderExtractos)renderExtractos();alert('✅ GASTO OPERACIONAL REGISTRADO EN EXTRACTOS.');
+  };
+
+  function periodStats(start,end){
+    const inRange=x=>{const t=stamp(x);return t>=start&&t<=end;};
+    const sales=(data.sold||[]).filter(x=>inRange(x.sale||x));
+    const sProfit=sales.reduce((a,x)=>a+((+x.sale?.price||0)-((+x.c||0)+(+x.g||0))),0);
+    const perms=(data.permutas||[]).filter(inRange);
+    const pProfit=perms.reduce((a,x)=>a+(+x.profit||0),0);
+    const op=(data.mov||[]).filter(x=>inRange(x)&&x.t==='gasto'&&(x.subtype==='gasto_operativo'||x.subtype==='varios')).reduce((a,x)=>a+(+x.v||0),0);
+    return {salesCount:sales.length,permutaCount:perms.length,gross:sProfit+pProfit,op,net:sProfit+pProfit-op};
+  }
+
+  function draft(){
+    const s=stats();
+    const prev=(data.cashClosures||[]).slice().sort((a,b)=>stamp(b)-stamp(a))[0];
+    const end=Date.now(),start=prev?Math.min(end,stamp(prev)+1000):end-7*24*60*60*1000;
+    const cash=val('ccCashCount');
+    const accounts={
+      bancolombia:val('ccBancolombia'),
+      daviplata:val('ccDaviplata'),
+      davivienda:val('ccDavivienda'),
+      nequi:val('ccNequi')
+    };
+    const bank=Object.values(accounts).reduce((a,v)=>a+(+v||0),0);
+    const actual=cash+bank,difference=actual-s.expected;
+    return {s,start,end,cash,accounts,bank,actual,difference,p:periodStats(start,end)};
+  }
+
+  window.previewCashClosure=function(){
+    const d=draft(),fmt=x=>new Date(x).toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'});
+    const shared=syncFinancialUiV76();
+    d.s.expected=shared.available;
+    d.difference=d.actual-shared.available;
+    const p=document.getElementById('ccClosePeriod');if(p)p.textContent='PERÍODO: '+fmt(d.start)+' → '+fmt(d.end);
+    const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=money(v);};
+    set('ccCloseExpected',d.s.expected);set('ccCloseBanks',d.bank);set('ccCloseActual',d.actual);set('ccCloseDifference',d.difference);
+    const c=document.getElementById('ccDifferenceCard');if(c){c.classList.remove('ok','bad');c.classList.add(Math.abs(d.difference)<1?'ok':'bad');}
+    return d;
+  };
+
+  window.saveCashClosure=function(){
+    ensure();
+    const d=previewCashClosure(),obs=(document.getElementById('ccCloseObs')?.value||'').trim().toUpperCase();
+    if(d.actual<=0&&!confirm('EL TOTAL REAL ESTÁ EN $0. ¿DESEAS GUARDAR EL CIERRE?'))return;
+    const nfo=nowInfo(),id='close_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+    data.cashClosures.unshift({id,date:nfo.label,createdAt:nfo.iso,periodStart:new Date(d.start).toISOString(),periodEnd:new Date(d.end).toISOString(),
+      expected:d.s.expected,cash:d.cash,bank:d.bank,accounts:d.accounts,actual:d.actual,difference:d.difference,grossProfit:d.p.gross,operatingExpenses:d.p.op,netProfit:d.p.net,
+      salesCount:d.p.salesCount,permutaCount:d.p.permutaCount,debt:d.s.debt,ownCapital:d.s.own,financing:d.s.finance,obs});
+    save();
+    ['ccCashCount','ccBancolombia','ccDaviplata','ccDavivienda','ccNequi','ccCloseObs'].forEach(id=>{
+      const e=document.getElementById(id);if(e)e.value='';
+    });
+    renderCashCapital();
+    try{generateCashClosurePdf(id);}catch(e){console.error(e);}
+    alert('✅ CIERRE DE CAJA GUARDADO.');
+  };
+
+  function pdfEsc(s){return String(s??'').replace(/[()\\]/g,m=>'\\'+m).replace(/[^\x20-\x7E]/g,' ');}
+  function pdfDownload(lines,name){
+    const enc=new TextEncoder();let y=800;const c=['BT','/F1 11 Tf'];
+    lines.forEach(l=>{if(y<50)return;c.push('/F1 '+(l.size||10)+' Tf');c.push('1 0 0 1 '+(l.x||45)+' '+y+' Tm ('+pdfEsc(l.text)+') Tj');y-=l.gap||16;});c.push('ET');
+    const stream=c.join('\n'),objs=[];
+    objs[1]='<< /Type /Catalog /Pages 2 0 R >>';objs[2]='<< /Type /Pages /Kids [3 0 R] /Count 1 >>';
+    objs[3]='<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>';
+    objs[4]='<< /Length '+enc.encode(stream).length+' >>\nstream\n'+stream+'\nendstream';objs[5]='<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>';
+    let pdf='%PDF-1.4\n',off=[0];
+    for(let i=1;i<=5;i++){off[i]=enc.encode(pdf).length;pdf+=i+' 0 obj\n'+objs[i]+'\nendobj\n';}
+    const xref=enc.encode(pdf).length;pdf+='xref\n0 6\n0000000000 65535 f \n';
+    for(let i=1;i<=5;i++)pdf+=String(off[i]).padStart(10,'0')+' 00000 n \n';
+    pdf+='trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF';
+    const blob=new Blob([pdf],{type:'application/pdf'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+  }
+
+  window.generateCashClosurePdf=function(id){
+    const c=(data.cashClosures||[]).find(x=>x.id===id);if(!c){alert('NO SE ENCONTRÓ EL CIERRE.');return;}
+    const start=new Date(c.periodStart).toLocaleString('es-CO'),end=new Date(c.periodEnd).toLocaleString('es-CO');
+    const lines=[
+      {text:'MULTI INVERSIONES JCP',size:17,gap:22},{text:'SOPORTE INTERNO - CIERRE DE CAJA',size:14,gap:24},
+      {text:'Fecha de cierre: '+(c.date||'')},{text:'Periodo: '+start+' - '+end,gap:22},
+      {text:'RESULTADO DEL PERIODO',size:12,gap:19},{text:'Ventas registradas: '+(c.salesCount||0)},{text:'Permutas registradas: '+(c.permutaCount||0)},
+      {text:'Ganancia bruta: '+money(c.grossProfit||0)},{text:'Gastos operativos: '+money(c.operatingExpenses||0)},{text:'Ganancia neta: '+money(c.netProfit||0),gap:22},
+      {text:'CUADRE DE CAJA',size:12,gap:19},{text:'Caja teorica esperada: '+money(c.expected||0)},{text:'Efectivo contado: '+money(c.cash||0)},
+      {text:'Bancolombia: '+money(c.accounts?.bancolombia||0)},
+      {text:'DaviPlata: '+money(c.accounts?.daviplata||0)},
+      {text:'Davivienda: '+money(c.accounts?.davivienda||0)},
+      {text:'Nequi: '+money(c.accounts?.nequi||0)},
+      {text:'Total en cuentas: '+money(c.bank||0)},{text:'Total real: '+money(c.actual||0)},{text:'Diferencia: '+money(c.difference||0),gap:22},
+      {text:'Capital propio: '+money(c.ownCapital||0)},{text:'Financiacion recibida: '+money(c.financing||0)},{text:'Deuda vigente: '+money(c.debt||0),gap:22},
+      {text:'Observaciones: '+(c.obs||'SIN OBSERVACIONES')},{text:'Generado por MULTI INVERSIONES JCP',size:9}
+    ];
+    pdfDownload(lines,'CIERRE_CAJA_'+String(c.createdAt||'').slice(0,10)+'.pdf');
+  };
+
+  window.renderCashCapital=function(){
+    ensure();const s=stats(),put=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=money(v);};
+    put('ccCapitalPropio',s.own);put('ccFinanciacion',s.finance);put('ccDeuda',s.debt);put('ccGananciaNeta',s.net);
+    put('ccGrossProfit',s.gross);put('ccOpExpenses',s.opExp);put('ccNetProfit',s.net);put('ccExpectedCash',s.expected);
+
+    const sel=document.getElementById('ccDebtSelect');
+    if(sel){const ds=debts();sel.innerHTML=ds.length?'<option value="">SELECCIONA UNA DEUDA...</option>'+ds.map(x=>'<option value="'+x.id+'">'+x.concept+' — SALDO '+money(x.balance)+'</option>').join(''):'<option value="">NO HAY DEUDAS ACTIVAS</option>';}
+
+    const hist=document.getElementById('ccCapitalHistory');
+    if(hist){
+      const rows=[
+        ...(data.capitalOps||[]).map(x=>({date:x.date||'',label:labelType(x.type)+' — '+(x.concept||''),value:(x.type==='pago_deuda'?-1:1)*(+x.value||0),createdAt:x.createdAt})),
+        ...(data.mov||[]).filter(x=>x.subtype==='gasto_operativo').map(x=>({date:x.date||'',label:'GASTO OPERATIVO — '+(x.c||''),value:-(+x.v||0),createdAt:x.createdAt}))
+      ].sort((a,b)=>stamp(b)-stamp(a)).slice(0,40);
+      hist.innerHTML=rows.length?rows.map(x=>'<div class="cc-row"><small>'+x.date+'</small><b>'+x.label+'</b><span class="cc-value">'+(x.value<0?'- ':'+ ')+money(Math.abs(x.value))+'</span></div>').join(''):'<div class="empty">No hay movimientos todavía.</div>';
+    }
+
+    const renderClosures=id=>{
+      const el=document.getElementById(id);if(!el)return;
+      const cls=(data.cashClosures||[]).slice().sort((a,b)=>stamp(b)-stamp(a));
+      el.innerHTML=cls.length?cls.map(c=>'<div class="cc-close-row"><div><b>'+c.date+'</b><div class="label">Esperada '+money(c.expected)+' · Real '+money(c.actual)+' · Diferencia '+money(c.difference)+'</div></div><button onclick="generateCashClosurePdf(\''+c.id+'\')">📄 PDF</button></div>').join(''):'<div class="empty">Aún no hay cierres guardados.</div>';
+    };
+    renderClosures('ccClosuresList');renderClosures('supportCashClosures');
+    previewCashClosure();
+  };
+
+  const oldShow=window.show;
+  window.show=function(id){
+    oldShow(id);
+    if(id==='cajaCapital'||id==='soportes'){
+      const src=document.querySelector('#vehiculos .inventory-inline-logo'),dst=document.getElementById('cashCapitalLogo');
+      if(src&&dst)dst.src=src.src;
+      renderCashCapital();
+    }
+  };
+
+  window.addEventListener('load',()=>{
+    const src=document.querySelector('#vehiculos .inventory-inline-logo'),dst=document.getElementById('cashCapitalLogo');
+    if(src&&dst)dst.src=src.src;
+    renderCashCapital();
+  });
+})();
+</script>
+
+
+<script id="v73-center-financial-script">
+(function(){
+  const ts=x=>{const t=Date.parse(x?.createdAt||x?.date||'');return Number.isFinite(t)?t:0;};
+
+  window.closeCfPanels=function(){
+    ['cfPanelCapital','cfPanelDeudas','cfPanelCierre','cfPanelHistorial'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+  };
+  window.openCfPanel=function(which){
+    closeCfPanels();
+    const map={capital:'cfPanelCapital',deudas:'cfPanelDeudas',cierre:'cfPanelCierre',historial:'cfPanelHistorial'};
+    const e=document.getElementById(map[which]);if(e){e.style.display='block';e.scrollIntoView({behavior:'smooth',block:'start'});}
+    if(which==='cierre'&&window.previewCashClosure)previewCashClosure();
+  };
+
+  function financialSnapshot(){
+    const f=getFinancialSnapshotV75();
+    return {
+      initial:f.initial,contrib:f.contributions,finance:f.financing,
+      debtPaid:f.debtPaid,debt:f.debt,vehInv:f.vehicleInvestment,
+      otherInv:f.otherInvestment,invested:f.invested,
+      loanRecv:f.loanReceivable,saleRecv:f.saleReceivable,
+      gross:f.grossProfit,opExp:f.operatingExpenses,net:f.netProfit,
+      available:f.available
+    };
+  }
+
+  function rangeFor(period){
+    const now=new Date(),end=Date.now();
+    if(period==='all')return [0,end];
+    if(period==='month')return [new Date(now.getFullYear(),now.getMonth(),1).getTime(),end];
+    return [end-7*24*60*60*1000,end];
+  }
+
+  window.renderExtractos=function(){
+    const period=document.getElementById('extPeriod')?.value||'week';
+    const flowType=document.getElementById('extFlowType')?.value||'all';
+    const categoryFilter=document.getElementById('extCategoryFilter')?.value||'all';
+    const accountFilter=document.getElementById('extAccountFilter')?.value||'all';
+    const query=(document.getElementById('extSearch')?.value||'').trim().toUpperCase();
+    const [start,end]=rangeFor(period);
+    const inRange=x=>{const t=ts(x);return t>=start&&t<=end;};
+
+    const movementCategory=x=>{
+      if(x.subtype==='venta'||(x.t==='ingreso'&&x.saleVehicleId))return 'VENTA';
+      if(x.subtype==='vehiculos')return 'GASTO VEHÍCULO';
+      if(x.subtype==='gasto_operativo'||x.subtype==='varios')return 'GASTO OPERACIONAL';
+      if(x.subtype==='permuta_diferencia')return 'PERMUTA';
+      if(x.subtype==='capital_inicial')return 'CAPITAL INICIAL';
+      if(x.subtype==='aporte_capital')return 'APORTE CAPITAL';
+      if(x.subtype==='credito')return 'CRÉDITO RECIBIDO';
+      if(x.subtype==='prestamo_recibido')return 'PRÉSTAMO RECIBIDO';
+      if(x.subtype==='pago_deuda')return 'PAGO DE DEUDA';
+      if(x.subtype==='ingreso_vario')return 'OTRO INGRESO';
+      return x.t==='ingreso'?'ENTRADA':'SALIDA';
+    };
+    const movementAccount=x=>{
+      if(x.method)return String(x.method).toUpperCase();
+      if((+x.cash||0)>0&&(+x.transfer||0)>0)return 'MIXTO';
+      if((+x.cash||0)>0)return 'EFECTIVO';
+      if((+x.transfer||0)>0)return 'TRANSFERENCIA';
+      const c=String(x.c||'').toUpperCase();
+      if(c.includes('EFECTIVO'))return 'EFECTIVO';
+      if(c.includes('TRANSFERENCIA'))return 'TRANSFERENCIA';
+      return 'NO ESPECIFICADO';
+    };
+
+    // Resultado contable.
+    const sales=(data.sold||[]).filter(x=>inRange(x.sale||x));
+    const saleProfit=sales.reduce((a,x)=>a+((+x.sale?.price||0)-((+x.c||0)+(+x.g||0))),0);
+    const perms=(data.permutas||[]).filter(inRange);
+    const permProfit=perms.reduce((a,x)=>a+(+x.profit||0),0);
+    const opExpenses=(data.mov||[]).filter(x=>inRange(x)&&x.t==='gasto'&&(x.subtype==='gasto_operativo'||x.subtype==='varios'));
+    const expenseTotal=opExpenses.reduce((a,x)=>a+(+x.v||0),0);
+    const gross=saleProfit+permProfit,net=gross-expenseTotal;
+
+    // Extractos contiene únicamente flujo real.
+    const allCash=(data.mov||[]).filter(x=>inRange(x)&&(x.t==='ingreso'||x.t==='gasto'));
+    const cashIn=allCash.filter(x=>x.t==='ingreso').reduce((a,x)=>a+(+x.v||0),0);
+    const cashOut=allCash.filter(x=>x.t==='gasto').reduce((a,x)=>a+(+x.v||0),0);
+    const cashFlow=cashIn-cashOut;
+    const f=getFinancialSnapshotV75();
+
+    const put=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=money(v);};
+    put('extCashIn',cashIn);put('extCashOut',cashOut);put('extCashFlow',cashFlow);put('extAvailable',f.available);
+    put('extGross',gross);put('extExpenses',expenseTotal);put('extNet',net);
+    const inCount=document.getElementById('extInCount'),outCount=document.getElementById('extOutCount');
+    if(inCount)inCount.textContent=allCash.filter(x=>x.t==='ingreso').length+' movimientos';
+    if(outCount)outCount.textContent=allCash.filter(x=>x.t==='gasto').length+' movimientos';
+
+    // Poblar filtros dinámicos sin perder la selección actual.
+    const categories=[...new Set(allCash.map(movementCategory))].sort();
+    const catSel=document.getElementById('extCategoryFilter');
+    if(catSel){
+      const keep=categoryFilter;
+      catSel.innerHTML='<option value="all">TODAS LAS CATEGORÍAS</option>'+categories.map(c=>'<option value="'+c+'">'+c+'</option>').join('');
+      if([...catSel.options].some(o=>o.value===keep))catSel.value=keep;
+    }
+    const accounts=[...new Set(allCash.map(movementAccount))].sort();
+    const accSel=document.getElementById('extAccountFilter');
+    if(accSel){
+      const keep=accountFilter;
+      accSel.innerHTML='<option value="all">TODOS LOS MEDIOS / CUENTAS</option>'+accounts.map(c=>'<option value="'+c+'">'+c+'</option>').join('');
+      if([...accSel.options].some(o=>o.value===keep))accSel.value=keep;
+    }
+
+    const cats={};
+    opExpenses.forEach(x=>{
+      const c=x.category||String(x.c||'OTROS').split(' — ')[0]||'OTROS';
+      cats[c]=(cats[c]||0)+(+x.v||0);
+    });
+    const catEl=document.getElementById('extCategories');
+    if(catEl)catEl.innerHTML=Object.keys(cats).length
+      ?Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'<div class="ext-cat-row"><b>'+k+'</b><span>'+money(v)+'</span></div>').join('')
+      :'<div class="empty">No hay gastos operacionales en este período.</div>';
+
+    let rows=allCash.slice().sort((a,b)=>ts(b)-ts(a));
+    if(flowType==='income')rows=rows.filter(x=>x.t==='ingreso');
+    if(flowType==='expense')rows=rows.filter(x=>x.t==='gasto');
+    if(categoryFilter!=='all')rows=rows.filter(x=>movementCategory(x)===categoryFilter);
+    if(accountFilter!=='all')rows=rows.filter(x=>movementAccount(x)===accountFilter);
+    if(query)rows=rows.filter(x=>(String(x.c||'')+' '+String(x.vehicleId||'')+' '+String(x.saleVehicleId||'')+' '+movementCategory(x)+' '+movementAccount(x)).toUpperCase().includes(query));
+
+    window.__extRowsV75=rows;
+    const rowsEl=document.getElementById('extRows');
+    if(rowsEl)rowsEl.innerHTML=rows.length?rows.map((x,i)=>{
+      const incoming=x.t==='ingreso',cat=movementCategory(x),account=movementAccount(x);
+      return '<div class="ext-pro-row" onclick="showExtractDetailV75('+i+')">'+
+        '<small>'+((x.date||'').replace(',','<br>'))+'</small>'+
+        '<span class="category">'+(incoming?'↑ ':'↓ ')+cat+'</span>'+
+        '<b>'+(x.c||cat)+'</b>'+
+        '<span class="account">'+account+'</span>'+
+        '<span class="amount '+(incoming?'in':'out')+'">'+(incoming?'+ ':'- ')+money(+x.v||0)+'</span>'+
+      '</div>';
+    }).join(''):'<div class="empty" style="padding:14px">No hay movimientos financieros para mostrar.</div>';
+  };
+
+  const oldRenderCash=window.renderCashCapital;
+  window.renderCashCapital=function(){
+    if(oldRenderCash)oldRenderCash();
+    const f=syncFinancialUiV76();
+    const today=document.getElementById('cfToday');
+    if(today)today.textContent='HOY · '+new Date().toLocaleDateString('es-CO');
+    renderExtractos();
+    return f;
+  };
+
+  const previousShow=window.show;
+  window.show=function(id){
+    previousShow(id);
+    if(id==='cajaCapital'||id==='extractos'||id==='soportes'){
+      const src=document.querySelector('#vehiculos .inventory-inline-logo');
+      const cash=document.getElementById('cashCapitalLogo'),ext=document.getElementById('extractosLogo');
+      if(src&&cash)cash.src=src.src;if(src&&ext)ext.src=src.src;
+      renderCashCapital();
+      if(id==='extractos')renderExtractos();
+    }
+  };
+
+  window.addEventListener('load',()=>{
+    const src=document.querySelector('#vehiculos .inventory-inline-logo'),ext=document.getElementById('extractosLogo');
+    if(src&&ext)ext.src=src.src;
+    renderCashCapital();
+  });
+})();
+</script>
+
+
+<script id="v74-movimientos-to-extractos">
+(function(){
+  const originalShowV74=window.show;
+  window.show=function(id){
+    if(id==='movimientos')id='extractos';
+    return originalShowV74(id);
+  };
+})();
+</script>
+
+
+<script id="v75-extractos-detail">
+function toggleExtExpenseForm(){
+  const e=document.getElementById('extExpenseForm');
+  if(e)e.style.display=e.style.display==='none'?'block':'none';
+}
+function showExtractDetailV75(index){
+  const x=(window.__extRowsV75||[])[index],el=document.getElementById('extDetail');
+  if(!x||!el)return;
+  const incoming=x.t==='ingreso';
+  const method=x.method?String(x.method).toUpperCase():((+x.cash||0)>0&&(+x.transfer||0)>0?'MIXTO':((+x.cash||0)>0?'EFECTIVO':((+x.transfer||0)>0?'TRANSFERENCIA':'NO ESPECIFICADO')));
+  el.innerHTML='<h3>DETALLE DEL MOVIMIENTO</h3>'+
+    '<div class="ext-detail-line"><span>Fecha</span><b>'+(x.date||'—')+'</b></div>'+
+    '<div class="ext-detail-line"><span>Tipo</span><b>'+(incoming?'ENTRADA':'SALIDA')+'</b></div>'+
+    '<div class="ext-detail-line"><span>Concepto</span><b>'+(x.c||'—')+'</b></div>'+
+    '<div class="ext-detail-line"><span>Medio / cuenta</span><b>'+method+'</b></div>'+
+    '<div class="ext-detail-line"><span>Valor</span><b style="color:'+(incoming?'#43d38b':'#ff7777')+'">'+(incoming?'+ ':'- ')+money(+x.v||0)+'</b></div>'+
+    '<div class="ext-detail-line"><span>Referencia</span><b>'+(x.saleVehicleId||x.vehicleId||x.permutaId||x.capitalOpId||'—')+'</b></div>';
+}
+</script>
+
+<div id="buildVersionV76" style="display:none">V76-FINANCIAL-SYNC</div>
+
+<script id="v78-vehicle-expense-selector">
+function renderVehicleExpenseSelector(){
+  const el=document.getElementById('vehicleExpenseSelectorGrid');
+  if(!el)return;
+  const vehicles=Array.isArray(data.veh)?data.veh:[];
+  if(!vehicles.length){
+    el.innerHTML='<div class="empty" style="grid-column:1/-1">NO HAY VEHÍCULOS DISPONIBLES EN INVENTARIO.</div>';
+    return;
+  }
+  el.innerHTML=vehicles.map(v=>{
+    const photo=v.photo||v.foto||((v.photos||[])[0])||'';
+    const safePhoto=photo||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
+    return `<div class="vehicle-card" onclick="selectVehicleForExpense('${String(v.id).replace(/'/g,"\\'")}')">
+      <img src="${safePhoto}" alt="Foto">
+      <div class="vc-body">
+        <div class="label">${(v.pl||'SIN PLACA').toUpperCase()}</div>
+        <b>${(v.marca||v.m||'').toUpperCase()} ${(v.ref||'').toUpperCase()}</b>
+        <div class="label">${v.modelo||''}</div>
+        <div class="vc-price">${money((+v.c||0)+(+v.g||0))}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function openVehicleExpenseSelector(){
+  show('vehiculos');
+  closeVehicleDetail();
+  const box=document.getElementById('vehicleExpenseSelector');
+  if(!box)return;
+  renderVehicleExpenseSelector();
+  box.style.display='block';
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function closeVehicleExpenseSelector(){
+  const box=document.getElementById('vehicleExpenseSelector');
+  if(box)box.style.display='none';
+}
+function selectVehicleForExpense(id){
+  const veh=(data.veh||[]).find(v=>String(v.id)===String(id));
+  if(!veh){alert('NO SE ENCONTRÓ EL VEHÍCULO EN INVENTARIO.');return;}
+  selectedVehicleDetailId=veh.id;
+  closeVehicleExpenseSelector();
+  openVehicleDetail(veh.id);
+  // Usamos el formulario REAL existente de gastos, no uno paralelo.
+  openBatchExpenseFromDetail();
+}
+</script>
+
+
+<script id="v78-financial-routing">
+function openSalesReceivables(){
+  show('carteraCaja');
+  renderSalesReceivables();
+  renderLoanReceivablesV78();
+}
+function renderLoanReceivablesV78(){
+  const el=document.getElementById('loanReceivablesListV78');
+  if(!el)return;
+  const loans=(data.pres||[])
+    .map(x=>({...x,__pending:Math.max(0,(+x.c||0)-(+x.p||0))}))
+    .filter(x=>x.__pending>0);
+  if(!loans.length){
+    el.innerHTML='<div class="empty">NO HAY PRÉSTAMOS PENDIENTES POR COBRAR.</div>';
+    return;
+  }
+  el.innerHTML='<div class="section" style="margin-top:0">🤝 Préstamos por cobrar</div>'+
+    '<table><thead><tr><th>CLIENTE / CONCEPTO</th><th>PRESTADO</th><th>ABONADO</th><th>PENDIENTE</th></tr></thead><tbody>'+
+    loans.map(x=>`<tr><td>${(x.n||x.nombre||x.cliente||x.c||'PRÉSTAMO')}</td><td>${money(+x.c||0)}</td><td>${money(+x.p||0)}</td><td>${money(x.__pending)}</td></tr>`).join('')+
+    '</tbody></table>';
+}
+
+(function(){
+  const previousShowV78=window.show;
+  window.show=function(id){
+    const result=previousShowV78(id);
+    const src=document.querySelector('#vehiculos .inventory-inline-logo');
+    const logos={
+      capitalFinanciacion:'capitalFinLogo',
+      pagoDeudas:'pagoDeudaLogo',
+      cierreCaja:'cierreCajaLogo',
+      historialFinanciero:'histFinLogo',
+      carteraCaja:'carteraCajaLogo'
+    };
+    if(src&&logos[id]){
+      const dst=document.getElementById(logos[id]);
+      if(dst)dst.src=src.src;
+    }
+    if(id==='capitalFinanciacion'||id==='pagoDeudas'||id==='historialFinanciero'){
+      if(typeof renderCashCapital==='function')renderCashCapital();
+    }
+    if(id==='cierreCaja'){
+      if(typeof renderCashCapital==='function')renderCashCapital();
+      if(typeof previewCashClosure==='function')previewCashClosure();
+    }
+    if(id==='carteraCaja'){
+      renderSalesReceivables();
+      renderLoanReceivablesV78();
+      if(typeof syncFinancialUiV76==='function')syncFinancialUiV76();
+    }
+    return result;
+  };
+})();
+</script>
+
+
+<script id="v79-permuta-inventory-repair">
+function repairPermutaInventoryV79(){
+  if(!data || !Array.isArray(data.permutas)) return 0;
+  data.veh = Array.isArray(data.veh) ? data.veh : [];
+  data.sold = Array.isArray(data.sold) ? data.sold : [];
+
+  const norm = v => String(v||'').trim().toUpperCase();
+  const soldMatches = (id, plate) => data.sold.some(s=>{
+    const sid = String(s?.id||s?.vehicleId||s?.saleVehicleId||'');
+    const spl = norm(s?.pl||s?.placa||s?.plate||'');
+    return (id && sid===String(id)) || (plate && spl===norm(plate));
+  });
+  const inventoryMatches = (id, plate) => data.veh.some(v=>{
+    const vid=String(v?.id||'');
+    const vpl=norm(v?.pl||v?.placa||'');
+    return (id && vid===String(id)) || (plate && vpl===norm(plate));
+  });
+
+  let repaired=0;
+  for(const p of data.permutas){
+    const inc=p?.incomingVehicle||{};
+    const id=p?.incomingVehicleId||inc.id||'';
+    const plate=inc.pl||inc.placa||'';
+
+    // No duplicar y, muy importante, no revivir un vehículo que ya fue vendido después.
+    if(inventoryMatches(id,plate) || soldMatches(id,plate)) continue;
+
+    const marca=inc.marca||inc.m||'';
+    const ref=inc.ref||'';
+    const modelo=inc.modelo||'';
+    if(!marca && !ref && !plate) continue;
+
+    const cost=Number(
+      inc.c ?? p.incomingInventoryCost ?? p.incomingValue ?? 0
+    )||0;
+    const photos=Array.isArray(inc.photos)?inc.photos.filter(Boolean):[];
+    const photo=inc.photo||photos[0]||'';
+
+    data.veh.unshift({
+      id:id||('veh_repair_'+Date.now()+'_'+repaired),
+      marca:marca,m:marca,ref,modelo,pl:plate,
+      c:cost,g:Number(inc.g||0)||0,v:Number(inc.v||0)||0,
+      photo,photos:photos.length?photos:(photo?[photo]:[]),
+      purchaseDate:inc.purchaseDate||p.date||'',
+      createdAt:inc.createdAt||p.createdAt||new Date().toISOString(),
+      origen:'permuta',status:'inventario',active:true,
+      permutaId:p.id||inc.permutaId||'',
+      permutaAgreedValue:Number(p.incomingValue||inc.permutaAgreedValue||0)||0,
+      repairedFromPermuta:true
+    });
+    repaired++;
+  }
+
+  if(repaired){
+    try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){console.warn('Inventario reparado; no fue posible persistir localmente.',e);}
+    try{programarGuardadoAutomatico();}catch(e){}
+  }
+  return repaired;
+}
+
+// Ejecutar después de que la aplicación ya cargó sus datos.
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    try{
+      const repaired=repairPermutaInventoryV79();
+      if(repaired){
+        try{render();}catch(e){}
+        try{populateVehicleSelect();}catch(e){}
+        try{renderVehicleExpenseSelector();}catch(e){}
+        console.info('V79: vehículos de permuta restaurados al inventario:',repaired);
+      }
+    }catch(e){console.error('V79 repairPermutaInventory:',e);}
+  },350);
+});
+</script>
+
+
+<script id="v80-remove-dak574">
+function removeProblemVehicleDAK574V80(){
+  if(!data || !Array.isArray(data.veh)) return false;
+  const normalize=v=>String(v||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  const before=data.veh.length;
+
+  data.veh=data.veh.filter(v=>{
+    const plate=normalize(v?.pl||v?.placa||v?.plate||'');
+    const make=normalize(v?.marca||v?.m||'');
+    const ref=normalize(v?.ref||v?.referencia||'');
+    // Eliminar únicamente el Sandero DAK574 problemático.
+    return !(plate==='DAK574' && (ref.includes('SANDERO') || make.includes('RENAULT') || !ref));
+  });
+
+  const removed=before-data.veh.length;
+  if(removed>0){
+    try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){console.warn('DAK574 eliminado de inventario, pero no se pudo persistir localmente.',e);}
+    try{programarGuardadoAutomatico();}catch(e){}
+    try{render();}catch(e){}
+    try{populateVehicleSelect();}catch(e){}
+    try{renderVehicleExpenseSelector();}catch(e){}
+    console.info('V80: Renault Sandero DAK574 eliminado del inventario:',removed);
+    return true;
+  }
+  return false;
+}
+window.addEventListener('load',()=>{
+  setTimeout(()=>{try{removeProblemVehicleDAK574V80();}catch(e){console.error('V80 cleanup DAK574',e);}},650);
+});
 </script>
 
 </body>
