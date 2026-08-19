@@ -295,8 +295,55 @@ function processNatural(raw){
 
   setStatus(`${jayName().toUpperCase()} TE ESCUCHÓ`,raw);
 
-  q=q.replace(new RegExp(`\\b(hey|oye|hola)?\\s*${n}\\b`,'g'),'').trim();
+q=q.replace(new RegExp(`\\b(hey|oye|hola)?\\s*(${n}|jay|jey|jei|jane|jein)\\b`,'g'),'').trim();
 
+// ÓRDENES DE NAVEGACIÓN TIENEN PRIORIDAD SOBRE UNA CONVERSACIÓN ANTERIOR
+
+if(
+  /\b(inicio|principal|home)\b/.test(q) &&
+  /\b(vamos|ve|ir|abre|abrir|llevame|lleva|volver|regresa|regresar)\b/.test(q)
+){
+  ctx=null;
+  openModule('dashboard','Volví al inicio.');
+  return;
+}
+
+if(
+  /\b(vehiculo|vehiculos|inventario|carro|carros|auto|autos)\b/.test(q) &&
+  (
+    /\b(vamos|ve|ir|abre|abrir|llevame|lleva|muestra|mostrar|ver)\b/.test(q) ||
+    /^(vehiculo|vehiculos|inventario|carro|carros|auto|autos)$/.test(q)
+  )
+){
+  ctx=null;
+  openModule('vehiculos','Abrí Vehículos.');
+  return;
+}
+
+if(
+  /\b(modulo|modulos|operaciones)\b/.test(q) &&
+  /\b(vamos|ve|ir|abre|abrir|llevame|lleva|muestra|mostrar)\b/.test(q)
+){
+  ctx=null;
+  try{
+    if(typeof openOperationsHub==='function')openOperationsHub();
+  }catch(e){}
+  speak('Abrí Operaciones.');
+  return;
+}
+
+if(
+  /\b(finanzas|financiero|caja)\b/.test(q) &&
+  /\b(vamos|ve|ir|abre|abrir|llevame|lleva|muestra|mostrar)\b/.test(q)
+){
+  ctx=null;
+  openModule('cajaCapital','Abrí Finanzas.');
+  return;
+}
+
+
+
+  
   if(ctx && continueSale(q))return;
 
   if(!q){
