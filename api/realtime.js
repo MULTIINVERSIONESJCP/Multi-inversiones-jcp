@@ -77,33 +77,32 @@ Responde de forma breve cuando la conversación sea por voz.
       }
     };
 
-    const form = new FormData();
+    const boundary = '----JAYBOUNDARY' + Date.now();
 
-    form.append(
-      'sdp',
-      new Blob([sdp], { type: 'application/sdp' }),
-      'offer.sdp'
-    );
+const multipartBody =
+  `--${boundary}\r\n` +
+  `Content-Disposition: form-data; name="sdp"\r\n` +
+  `Content-Type: application/sdp\r\n\r\n` +
+  sdp + `\r\n` +
 
-    form.append(
-      'session',
-      new Blob(
-        [JSON.stringify(session)],
-        { type: 'application/json' }
-      ),
-      'session.json'
-    );
+  `--${boundary}\r\n` +
+  `Content-Disposition: form-data; name="session"\r\n` +
+  `Content-Type: application/json\r\n\r\n` +
+  JSON.stringify(session) + `\r\n` +
 
-    const response = await fetch(
-      'https://api.openai.com/v1/realtime/calls',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${apiKey}`
-        },
-        body: form
-      }
-    );
+  `--${boundary}--\r\n`;
+
+const response = await fetch(
+  'https://api.openai.com/v1/realtime/calls',
+  {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': `multipart/form-data; boundary=${boundary}`
+    },
+    body: multipartBody
+  }
+);
 
     const result = await response.text();
 
