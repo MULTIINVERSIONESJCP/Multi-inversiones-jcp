@@ -1,6 +1,8 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Método no permitido' });
+    return res.status(405).json({
+      error: 'Método no permitido'
+    });
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
@@ -26,130 +28,224 @@ export default async function handler(req, res) {
       output_modalities: ['audio'],
 
       instructions: `
-Eres JAY, el asistente inteligente integrado dentro de MULTI INVERSIONES JCP.
-
-MULTI INVERSIONES JCP es una aplicación de gestión empresarial en Colombia.
-
-El negocio administra principalmente:
-
-- Compra y venta de vehículos.
-- Inventario de vehículos.
-- Gastos asociados a vehículos.
-- Gastos operacionales.
-- Permutas.
-- Capital.
-- Financiación.
-- Créditos y préstamos recibidos.
-- Obligaciones pendientes.
-- Pagos y abonos de obligaciones.
-- Préstamos realizados a clientes.
-- Cuentas por cobrar.
-- Ventas financiadas.
-- Clientes.
-- Extractos.
-- Soportes.
-- Cierres de caja.
-- Utilidades.
-- Disponible.
-- Patrimonio e inversión.
-
-Tu función es ser el copiloto inteligente de MULTI INVERSIONES JCP.
+Eres JAY, el asistente inteligente integrado dentro de
+MULTI INVERSIONES JCP.
 
 Habla siempre en español colombiano.
 
-Tu manera de hablar debe ser:
-natural,
-cercana,
-profesional,
-clara,
-conversacional
-y breve cuando estás hablando por voz.
+Tu forma de hablar debe ser natural, cercana,
+profesional, clara y breve cuando uses voz.
 
-REGLAS MUY IMPORTANTES:
+MULTI INVERSIONES JCP administra:
 
-1. Mantén el contexto de la conversación.
+- compra de vehículos
+- venta de vehículos
+- inventario
+- gastos asociados a vehículos
+- gastos operacionales
+- permutas
+- capital
+- financiación
+- créditos
+- préstamos recibidos
+- obligaciones
+- pagos y abonos
+- préstamos realizados a clientes
+- cuentas por cobrar
+- clientes
+- caja
+- disponible
+- extractos
+- soportes
+- cierres de caja
+- utilidades
 
-2. El usuario NO necesita decir comandos exactos.
+Mantén siempre el contexto de la conversación.
 
-Debe poder hablar naturalmente, por ejemplo:
+El usuario puede hablar normalmente.
+No necesita usar comandos exactos.
 
-"Muéstrame los carros que tengo."
+Cuando el usuario pregunte por información real
+de MULTI INVERSIONES debes consultar las herramientas.
 
-"¿Cuánta plata tengo disponible?"
+Nunca inventes:
 
-"¿Cuánto tengo metido en vehículos?"
+- dinero
+- vehículos
+- placas
+- clientes
+- deudas
+- saldos
+- disponible
+- inversiones
+- utilidades
+- cuentas por cobrar
 
-"Abre operaciones."
+Para información financiera usa:
+obtener_resumen_financiero.
 
-"Busca el BMW."
+Para vehículos usa:
+obtener_inventario.
 
-"Muéstrame la Murano."
+Para abrir un vehículo usa:
+abrir_vehiculo.
 
-"¿Cuánto debo?"
+Para navegar usa:
+abrir_modulo.
 
-"¿Cuánto me deben?"
+Para conocer la hora y zona horaria del dispositivo usa:
+obtener_hora_dispositivo.
 
-3. Cuando el usuario pregunte por información REAL de MULTI INVERSIONES,
-debes usar una herramienta antes de responder.
+Ahora también puedes ayudar a preparar operaciones.
 
-NUNCA inventes:
+Las operaciones permitidas son:
 
-- valores financieros,
-- vehículos,
-- placas,
-- clientes,
-- inversiones,
-- deudas,
-- utilidades,
-- disponible,
-- cuentas por cobrar.
+- venta
+- gasto_operacional
+- gasto_vehiculo
+- compra_vehiculo
+- pago_obligacion
+- permuta
 
-4. Para preguntas financieras utiliza obtener_resumen_financiero.
+Para preparar cualquiera de ellas usa:
+preparar_operacion.
 
-5. Para consultar vehículos utiliza obtener_inventario.
+PREPARAR NO SIGNIFICA GUARDAR.
 
-6. Cuando el usuario quiera abrir un vehículo utiliza abrir_vehiculo.
+Cuando prepares una operación:
 
-7. Cuando quiera navegar por la aplicación utiliza abrir_modulo.
+1. Recoge los datos necesarios conversando con el usuario.
 
-8. Si hay varias coincidencias de vehículos,
-pregunta cuál vehículo quiere.
+2. No inventes información faltante.
 
-9. No digas que abriste un módulo o un vehículo
-si la herramienta no confirmó que pudo hacerlo.
+3. Usa preparar_operacion.
 
-10. En esta etapa puedes:
+4. La aplicación enviará la operación a una segunda IA
+supervisora independiente.
 
-CONSULTAR DATOS REALES.
+5. Si la supervisora responde APROBADA,
+explica al usuario un resumen breve y exacto.
 
-BUSCAR VEHÍCULOS.
+6. Después pide confirmación explícita.
 
-ABRIR VEHÍCULOS.
+7. Para guardar, el usuario debe confirmar claramente.
 
-NAVEGAR POR LOS MÓDULOS.
+Ejemplos válidos:
 
-11. Todavía NO debes guardar automáticamente:
+"Confirmo."
 
-ventas,
-gastos,
-préstamos,
-pagos,
-permutas,
-movimientos de capital
-ni otros movimientos financieros.
+"Sí, confirmo."
 
-Si el usuario pide registrar una operación,
-puedes llevarlo al módulo correspondiente,
-pero explícale que el guardado por voz será habilitado posteriormente
-con confirmación explícita.
+"Guárdalo."
 
-12. Responde usando la información obtenida de las herramientas.
+"Sí, guárdalo."
 
-13. Cuando des cifras monetarias,
-exprésalas de manera natural en pesos colombianos.
+"Confirma la operación."
 
-14. No leas listas enormes por voz.
-Resume primero y ofrece ampliar si el usuario quiere.
+8. Nunca interpretes silencio, una respuesta ambigua,
+"ok" aislado durante otra explicación,
+o una pregunta como autorización para guardar.
+
+9. Solamente después de una confirmación explícita
+puedes utilizar confirmar_operacion.
+
+10. La aplicación tiene controles adicionales y puede
+rechazar la confirmación si no detecta autorización
+explícita del usuario.
+
+11. Si la supervisora devuelve ADVERTENCIA,
+explica el problema y pide corregir los datos.
+No guardes.
+
+12. Si devuelve BLOQUEADA,
+explica el error y no guardes.
+
+13. Si el usuario dice cancelar, no, déjalo así,
+no guardar o algo equivalente,
+usa cancelar_operacion.
+
+14. No modifiques valores para hacer que una operación
+sea aprobada.
+
+15. Si detectas un posible error de reconocimiento de voz,
+por ejemplo una cifra extraña,
+confirma primero el valor con el usuario.
+
+VENTAS:
+
+Antes de preparar una venta debes conocer:
+
+- vehículo
+- precio de venta
+- comprador
+- documento
+- forma de pago
+
+Si es pago mixto también necesitas:
+
+- valor en efectivo
+- valor por transferencia
+
+Si es crédito necesitas:
+
+- abono recibido
+
+COMPRAS:
+
+Necesitas:
+
+- marca
+- referencia
+- modelo
+- placa
+- precio de compra
+
+La foto puede agregarse manualmente después si hace falta.
+
+GASTO OPERACIONAL:
+
+Necesitas:
+
+- categoría
+- concepto
+- valor
+- medio de pago
+
+GASTO DE VEHÍCULO:
+
+Necesitas:
+
+- vehículo
+- concepto
+- valor
+
+PAGO DE OBLIGACIÓN:
+
+Necesitas:
+
+- obligación
+- tipo de pago: abono o pago total
+- valor si es abono
+- medio de pago
+
+PERMUTA:
+
+Necesitas:
+
+- vehículo que sale
+- precio acordado de salida
+- marca del vehículo que ingresa
+- referencia
+- modelo
+- placa si está disponible
+- valor acordado del vehículo recibido
+- forma de pago de la diferencia si existe
+
+Nunca afirmes que una operación quedó guardada
+hasta que confirmar_operacion devuelva éxito.
+
+Después del guardado explica brevemente
+qué operación quedó registrada.
       `,
 
       tool_choice: 'auto',
@@ -159,7 +255,7 @@ Resume primero y ofrece ampliar si el usuario quiere.
           type: 'function',
           name: 'obtener_resumen_financiero',
           description:
-            'Obtiene las cifras reales y actuales de MULTI INVERSIONES JCP: capital, financiación, deuda, inversión, cuentas por cobrar, utilidad, gastos y disponible. Debe utilizarse antes de responder preguntas financieras del negocio.',
+            'Obtiene las cifras reales y actuales de MULTI INVERSIONES JCP.',
 
           parameters: {
             type: 'object',
@@ -172,7 +268,7 @@ Resume primero y ofrece ampliar si el usuario quiere.
           type: 'function',
           name: 'obtener_inventario',
           description:
-            'Consulta el inventario real de vehículos de MULTI INVERSIONES JCP. Puede listar todo el inventario o buscar por placa, marca, referencia o modelo.',
+            'Consulta el inventario real de vehículos. Puede buscar por placa, marca, referencia o modelo.',
 
           parameters: {
             type: 'object',
@@ -181,7 +277,7 @@ Resume primero y ofrece ampliar si el usuario quiere.
               consulta: {
                 type: 'string',
                 description:
-                  'Texto opcional para buscar por placa, marca, referencia o modelo. Déjalo vacío para consultar todo el inventario.'
+                  'Placa, marca, referencia o modelo. Puede dejarse vacío para listar todo.'
               }
             },
 
@@ -193,16 +289,14 @@ Resume primero y ofrece ampliar si el usuario quiere.
           type: 'function',
           name: 'abrir_vehiculo',
           description:
-            'Busca un vehículo real del inventario y abre su ficha en MULTI INVERSIONES JCP.',
+            'Busca un vehículo real y abre su ficha.',
 
           parameters: {
             type: 'object',
 
             properties: {
               consulta: {
-                type: 'string',
-                description:
-                  'Placa, marca, referencia o modelo del vehículo.'
+                type: 'string'
               }
             },
 
@@ -215,7 +309,7 @@ Resume primero y ofrece ampliar si el usuario quiere.
           type: 'function',
           name: 'abrir_modulo',
           description:
-            'Abre y muestra un módulo real de MULTI INVERSIONES JCP.',
+            'Abre un módulo de MULTI INVERSIONES JCP.',
 
           parameters: {
             type: 'object',
@@ -241,14 +335,212 @@ Resume primero y ofrece ampliar si el usuario quiere.
                   'cartera',
                   'cierre_caja',
                   'historial_financiero'
-                ],
-
-                description:
-                  'Módulo de MULTI INVERSIONES que debe abrirse.'
+                ]
               }
             },
 
             required: ['modulo'],
+            additionalProperties: false
+          }
+        },
+
+        {
+          type: 'function',
+          name: 'obtener_hora_dispositivo',
+          description:
+            'Obtiene la fecha, hora y zona horaria configurada en el celular, tablet o computador donde está abierta MULTI INVERSIONES.',
+
+          parameters: {
+            type: 'object',
+            properties: {},
+            additionalProperties: false
+          }
+        },
+
+        {
+          type: 'function',
+          name: 'preparar_operacion',
+          description:
+            'Prepara una operación financiera o comercial. No la guarda. La operación será revisada por la IA supervisora antes de solicitar confirmación.',
+
+          parameters: {
+            type: 'object',
+
+            properties: {
+              tipo: {
+                type: 'string',
+
+                enum: [
+                  'venta',
+                  'gasto_operacional',
+                  'gasto_vehiculo',
+                  'compra_vehiculo',
+                  'pago_obligacion',
+                  'permuta'
+                ]
+              },
+
+              vehiculo: {
+                type: 'string',
+                description:
+                  'Placa, marca, referencia o modelo del vehículo relacionado.'
+              },
+
+              precio_venta: {
+                type: 'number'
+              },
+
+              comprador: {
+                type: 'string'
+              },
+
+              documento: {
+                type: 'string'
+              },
+
+              telefono: {
+                type: 'string'
+              },
+
+              forma_pago: {
+                type: 'string',
+
+                enum: [
+                  'efectivo',
+                  'transferencia',
+                  'mixto',
+                  'credito'
+                ]
+              },
+
+              efectivo: {
+                type: 'number'
+              },
+
+              transferencia: {
+                type: 'number'
+              },
+
+              recibido: {
+                type: 'number'
+              },
+
+              categoria: {
+                type: 'string'
+              },
+
+              concepto: {
+                type: 'string'
+              },
+
+              valor: {
+                type: 'number'
+              },
+
+              medio_pago: {
+                type: 'string',
+
+                enum: [
+                  'efectivo',
+                  'transferencia'
+                ]
+              },
+
+              observaciones: {
+                type: 'string'
+              },
+
+              marca: {
+                type: 'string'
+              },
+
+              referencia: {
+                type: 'string'
+              },
+
+              modelo: {
+                type: 'string'
+              },
+
+              placa: {
+                type: 'string'
+              },
+
+              precio_compra: {
+                type: 'number'
+              },
+
+              obligacion: {
+                type: 'string',
+                description:
+                  'Nombre, concepto o identificador de la obligación.'
+              },
+
+              tipo_pago: {
+                type: 'string',
+
+                enum: [
+                  'abono',
+                  'pago_total'
+                ]
+              },
+
+              vehiculo_ingresa_marca: {
+                type: 'string'
+              },
+
+              vehiculo_ingresa_referencia: {
+                type: 'string'
+              },
+
+              vehiculo_ingresa_modelo: {
+                type: 'string'
+              },
+
+              vehiculo_ingresa_placa: {
+                type: 'string'
+              },
+
+              valor_vehiculo_ingresa: {
+                type: 'number'
+              }
+            },
+
+            required: ['tipo'],
+            additionalProperties: false
+          }
+        },
+
+        {
+          type: 'function',
+          name: 'confirmar_operacion',
+          description:
+            'Solicita guardar la operación que ya fue preparada y aprobada por la IA supervisora. Solo puede utilizarse después de una confirmación explícita del usuario.',
+
+          parameters: {
+            type: 'object',
+
+            properties: {
+              confirmacion: {
+                type: 'string',
+                enum: ['CONFIRMO']
+              }
+            },
+
+            required: ['confirmacion'],
+            additionalProperties: false
+          }
+        },
+
+        {
+          type: 'function',
+          name: 'cancelar_operacion',
+          description:
+            'Cancela la operación pendiente sin guardar cambios.',
+
+          parameters: {
+            type: 'object',
+            properties: {},
             additionalProperties: false
           }
         }
@@ -280,19 +572,20 @@ Resume primero y ofrece ampliar si el usuario quiere.
       }
     };
 
-    const boundary = '----JAYBOUNDARY' + Date.now();
+    const boundary =
+      '----JAYBOUNDARY' + Date.now();
 
     const multipartBody =
       `--${boundary}\r\n` +
       `Content-Disposition: form-data; name="sdp"\r\n` +
       `Content-Type: application/sdp\r\n\r\n` +
-      sdp + `\r\n` +
-
+      sdp +
+      `\r\n` +
       `--${boundary}\r\n` +
       `Content-Disposition: form-data; name="session"\r\n` +
       `Content-Type: application/json\r\n\r\n` +
-      JSON.stringify(session) + `\r\n` +
-
+      JSON.stringify(session) +
+      `\r\n` +
       `--${boundary}--\r\n`;
 
     const response = await fetch(
@@ -301,35 +594,55 @@ Resume primero y ofrece ampliar si el usuario quiere.
         method: 'POST',
 
         headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': `multipart/form-data; boundary=${boundary}`
+          Authorization:
+            `Bearer ${apiKey}`,
+
+          'Content-Type':
+            `multipart/form-data; boundary=${boundary}`
         },
 
         body: multipartBody
       }
     );
 
-    const result = await response.text();
+    const result =
+      await response.text();
 
     if (!response.ok) {
-      console.error('OpenAI Realtime:', result);
+      console.error(
+        'OpenAI Realtime:',
+        result
+      );
 
-      return res.status(response.status).json({
-        error: 'No fue posible iniciar JAY IA',
-        detail: result
-      });
+      return res
+        .status(response.status)
+        .json({
+          error:
+            'No fue posible iniciar JAY IA',
+
+          detail:
+            result
+        });
     }
 
-    res.setHeader('Content-Type', 'application/sdp');
+    res.setHeader(
+      'Content-Type',
+      'application/sdp'
+    );
 
-    return res.status(201).send(result);
+    return res
+      .status(201)
+      .send(result);
 
   } catch (error) {
-
-    console.error('JAY IA:', error);
+    console.error(
+      'JAY IA:',
+      error
+    );
 
     return res.status(500).json({
-      error: 'Error interno iniciando JAY IA'
+      error:
+        'Error interno iniciando JAY IA'
     });
   }
 }
