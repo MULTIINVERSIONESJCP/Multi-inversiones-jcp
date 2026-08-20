@@ -604,7 +604,69 @@ function getDeviceContext() {
       };
     }
   }
+function buildSupervisorSnapshot(operation) {
+  return {
+    financiero:
+      getFinancialSummary(),
 
+    inventario:
+      vehicleRows('')
+        .slice(0, 60),
+
+    operacion:
+      operation
+  };
+}
+
+async function verifyOperation(operation) {
+  const response =
+    await fetch(
+      '/api/verify-operation',
+      {
+        method: 'POST',
+
+        headers: {
+          'Content-Type':
+            'application/json'
+        },
+
+        body:
+          JSON.stringify({
+            operation:
+              operation,
+
+            snapshot:
+              buildSupervisorSnapshot(
+                operation
+              ),
+
+            context:
+              getDeviceContext()
+          })
+      }
+    );
+
+  let result = null;
+
+  try {
+    result =
+      await response.json();
+  } catch (e) {}
+
+  if (
+    !response.ok ||
+    !result ||
+    !result.ok ||
+    !result.verification
+  ) {
+    throw new Error(
+      result?.error ||
+      'La IA supervisora no pudo verificar la operación.'
+    );
+  }
+
+  return result.verification;
+}
   async function executeTool(
     name,
     args
