@@ -1090,7 +1090,10 @@ function getDeviceContext() {
         openModule,
 
       abrirVehiculo:
-        openVehicle
+  openVehicle,
+
+obtenerHoraDispositivo:
+  getDeviceContext
     }
   };
 
