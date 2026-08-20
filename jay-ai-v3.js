@@ -6,9 +6,10 @@
   let micStream = null;
   let remoteAudio = null;
   let active = false;
-  let connecting = false;
+let connecting = false;
+let pendingOperation = null;
 
-  const processedCalls = new Set();
+const processedCalls = new Set();
 
   function setStatus(title, detail, state) {
     const t = document.getElementById('jcpVoiceStatus');
