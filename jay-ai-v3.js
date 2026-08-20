@@ -72,7 +72,48 @@
       .replace(/[^A-Z0-9]+/g, ' ')
       .trim();
   }
+function getDeviceContext() {
+  const now = new Date();
 
+  let timeZone = 'UTC';
+
+  try {
+    timeZone =
+      Intl.DateTimeFormat()
+        .resolvedOptions()
+        .timeZone || 'UTC';
+  } catch (e) {}
+
+  const locale =
+    navigator.language || 'es-CO';
+
+  let localDateTime = '';
+
+  try {
+    localDateTime =
+      now.toLocaleString(
+        locale,
+        {
+          timeZone: timeZone,
+          dateStyle: 'short',
+          timeStyle: 'medium'
+        }
+      );
+  } catch (e) {
+    localDateTime =
+      now.toString();
+  }
+
+  return {
+    ok: true,
+    timeZone: timeZone,
+    locale: locale,
+    localDateTime: localDateTime,
+    iso: now.toISOString(),
+    offsetMinutes:
+      -now.getTimezoneOffset()
+  };
+}
   function getAppData() {
     try {
       if (typeof data !== 'undefined' && data) {
@@ -571,6 +612,9 @@
     switch (name) {
       case 'obtener_resumen_financiero':
         return getFinancialSummary();
+        
+        case 'obtener_hora_dispositivo':
+  return getDeviceContext();
 
       case 'obtener_inventario': {
         const rows =
