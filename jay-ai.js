@@ -922,9 +922,27 @@
     }
   }
 
-  function buildSupervisorSnapshot(
-    operation
+  function buildSupervisorSnapshot(operation) {
+  const tipo = String(operation?.tipo || '').toLowerCase();
+
+  const snapshot = {
+    financiero: getFinancialSummary(),
+    operacion: operation
+  };
+
+  if (
+    tipo === 'venta' ||
+    tipo === 'gasto_vehiculo' ||
+    tipo === 'permuta' ||
+    tipo === 'compra_vehiculo'
   ) {
+    snapshot.inventario = vehicleRows('').slice(0, 80);
+  } else {
+    snapshot.inventario = [];
+  }
+
+  return snapshot;
+}
     const app =
       getAppData();
 
