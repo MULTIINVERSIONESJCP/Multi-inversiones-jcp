@@ -943,54 +943,7 @@
 
   return snapshot;
 }
-    const app =
-      getAppData();
-
-    return {
-      financiero:
-        getFinancialSummary(),
-
-      inventario:
-        vehicleRows('')
-          .slice(
-            0,
-            80
-          ),
-
-      movimientos_recientes:
-        Array.isArray(
-          app.mov
-        )
-          ? app.mov.slice(
-              0,
-              25
-            )
-          : [],
-
-      ventas_recientes:
-        Array.isArray(
-          app.sold
-        )
-          ? app.sold.slice(
-              0,
-              15
-            )
-          : [],
-
-      permutas_recientes:
-        Array.isArray(
-          app.permutas
-        )
-          ? app.permutas.slice(
-              0,
-              10
-            )
-          : [],
-
-      operacion:
-        operation
-    };
-  }
+    
 
   async function verifyOperation(
     operation
