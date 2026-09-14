@@ -4887,6 +4887,13 @@ function hasOfficialReset(state){
   return String(state?._sync?.resetId||'')===JCP_OFFICIAL_RESET_ID;
 }
 
+function isOfficialEmptyState(state){
+  if(!state || !hasOfficialReset(state))return false;
+  const d=normalizeCloudData(state);
+  const arrays=['veh','sold','clientes','pres','inv','mov','permutas','capitalOps','cashClosures','receipts','treasuryAccounts','treasuryMovements'];
+  return arrays.every(key=>Array.isArray(d[key])&&d[key].length===0) && d.treasuryConfig?.initialized!==true;
+}
+
 function stateFreshness(value,fallbackUpdatedAt=''){
   const rev=syncRevision(value);
   const ownTime=syncUpdatedAt(value);
@@ -5090,7 +5097,13 @@ function jcpWithTimeout(promise,ms=15000,label='Supabase'){
 
 async function handleCloudSession(session){
   cloudUser=session?.user||null;
-  if(!cloudUser)return;
+  if(!cloudUser){
+    cloudReady=false;
+    window.jcpCloudBootstrapReady=false;
+    jcpHideCloudGate();
+    showAuth('login');
+    return;
+  }
 
   const overlay=document.getElementById('authOverlay');
   const emailEl=document.getElementById('cloudUserEmail');
@@ -5111,9 +5124,9 @@ async function handleCloudSession(session){
 
     let remote=row?.data?normalizeCloudData(row.data):null;
 
-    // Reinicio oficial solicitado por el usuario: se aplica UNA sola vez en la nube.
-    // Ninguna copia local puede competir con este proceso.
-    if(!remote || !hasOfficialReset(remote)){
+    // Estado oficial solicitado por el usuario: Supabase debe quedar realmente en cero.
+    // La operación solo se considera completada después de volver a leer y verificar la nube.
+    if(!remote || !isOfficialEmptyState(remote)){
       const empty=buildOfficialEmptyState();
       const {error:resetError}=await jcpWithTimeout(
         supabaseClient.from('app_data').upsert({
@@ -5125,12 +5138,26 @@ async function handleCloudSession(session){
         'El reinicio oficial de Supabase'
       );
       if(resetError)throw resetError;
-      remote=empty;
-      window.jcpCloudBootstrapMode='official-reset';
-      setCloudStatus('Nube conectada · reinicio oficial aplicado',true);
+
+      const {data:verifyRow,error:verifyError}=await jcpWithTimeout(
+        supabaseClient.from('app_data')
+          .select('user_id,data,updated_at')
+          .eq('user_id',cloudUser.id)
+          .maybeSingle(),
+        15000,
+        'La verificación del reinicio en Supabase'
+      );
+      if(verifyError)throw verifyError;
+      const verified=verifyRow?.data?normalizeCloudData(verifyRow.data):null;
+      if(!verified || !isOfficialEmptyState(verified)){
+        throw new Error('Supabase no confirmó el estado oficial en cero. No se cargaron datos locales.');
+      }
+      remote=verified;
+      window.jcpCloudBootstrapMode='official-reset-verified';
+      setCloudStatus('Nube conectada · estado cero verificado',true);
     }else{
-      window.jcpCloudBootstrapMode='remote';
-      setCloudStatus('Nube conectada · datos centrales cargados',true);
+      window.jcpCloudBootstrapMode='remote-verified';
+      setCloudStatus('Nube conectada · estado central verificado',true);
     }
 
     // Supabase es la única fuente al iniciar. localStorage queda solo como caché.
@@ -5165,6 +5192,9 @@ async function handleCloudSession(session){
   }
 }
 async function initSupabase(){
+  jcpShowCloudGate('Validando sesión y estado central en Supabase…',false);
+  cloudReady=false;
+  window.jcpCloudBootstrapReady=false;
   try{
     const {data:sessionData,error}=await jcpWithTimeout(
       supabaseClient.auth.getSession(),
@@ -10416,15 +10446,6 @@ window.addEventListener('pagehide', ()=>{
   }catch(e){ console.warn('Respaldo automático no disponible',e); }
 });
 </script>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('./service-worker.js').catch(function (err) {
-      console.warn('Service Worker no registrado:', err);
-    });
-  });
-}
-</script>
 <script id="v46-unified-modules-script">
 (function(){
   const config={
@@ -14761,6 +14782,6 @@ window.openRecordCopy=function(number){
   window.refreshHomeAfterDataLoad=refreshHomeAfterDataLoad;
 })();
 </script>
-<script src="./app-update.js?v=2026.09.12.3"></script>
+<script src="./app-update.js?v=2026.09.13.1"></script>
 </body>
 </html>

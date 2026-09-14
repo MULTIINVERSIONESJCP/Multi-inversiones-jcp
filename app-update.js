@@ -1,9 +1,10 @@
 (()=>{
   'use strict';
-  const APP_VERSION='2026.09.12.3';
+  const APP_VERSION='2026.09.13.1';
   const CHECK_EVERY_MS=10*60*1000;
   let banner=null;
   let reloading=false;
+
   function ensureBanner(registration){
     if(banner || !registration || !registration.waiting) return;
     banner=document.createElement('div');
@@ -15,29 +16,64 @@
     const actions=document.createElement('div');
     actions.style.cssText='display:flex;gap:8px;margin-top:12px;flex-wrap:wrap';
     const updateBtn=document.createElement('button');
-    updateBtn.type='button'; updateBtn.textContent='Actualizar ahora';
+    updateBtn.type='button';
+    updateBtn.textContent='Actualizar ahora';
     updateBtn.style.cssText='flex:1;min-width:140px;padding:10px 12px;border:0;border-radius:10px;background:#d4af37;color:#111;font-weight:700';
-    updateBtn.addEventListener('click',()=>{updateBtn.disabled=true;updateBtn.textContent='Actualizando…';const waiting=registration.waiting;if(waiting) waiting.postMessage({type:'SKIP_WAITING'});else location.reload();});
+    updateBtn.addEventListener('click',()=>{
+      updateBtn.disabled=true;
+      updateBtn.textContent='Actualizando…';
+      const waiting=registration.waiting;
+      if(waiting)waiting.postMessage({type:'SKIP_WAITING'});
+      else location.reload();
+    });
     const laterBtn=document.createElement('button');
-    laterBtn.type='button'; laterBtn.textContent='Más tarde';
+    laterBtn.type='button';
+    laterBtn.textContent='Más tarde';
     laterBtn.style.cssText='padding:10px 12px;border:1px solid #666;border-radius:10px;background:#222;color:#fff';
     laterBtn.addEventListener('click',()=>{banner?.remove();banner=null;});
-    actions.append(updateBtn,laterBtn); banner.append(text,actions); document.body.appendChild(banner);
+    actions.append(updateBtn,laterBtn);
+    banner.append(text,actions);
+    document.body.appendChild(banner);
   }
-  async function checkForUpdate(registration){try{await registration.update();if(registration.waiting) ensureBanner(registration);}catch(err){console.warn('JCP: no fue posible comprobar actualizaciones',err);}}
+
+  async function checkForUpdate(registration){
+    try{
+      await registration.update();
+      if(registration.waiting)ensureBanner(registration);
+    }catch(err){
+      console.warn('JCP: no fue posible comprobar actualizaciones',err);
+    }
+  }
+
   async function initUpdater(){
-    if(!('serviceWorker' in navigator)) return;
+    if(!('serviceWorker' in navigator))return;
     try{
       const registration=await navigator.serviceWorker.register('./service-worker.js');
-      if(registration.waiting) ensureBanner(registration);
-      registration.addEventListener('updatefound',()=>{const worker=registration.installing;if(!worker)return;worker.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)ensureBanner(registration);});});
-      navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloading)return;reloading=true;location.reload();});
+      if(registration.waiting)ensureBanner(registration);
+      registration.addEventListener('updatefound',()=>{
+        const worker=registration.installing;
+        if(!worker)return;
+        worker.addEventListener('statechange',()=>{
+          if(worker.state==='installed'&&navigator.serviceWorker.controller)ensureBanner(registration);
+        });
+      });
+      navigator.serviceWorker.addEventListener('controllerchange',()=>{
+        if(reloading)return;
+        reloading=true;
+        location.reload();
+      });
       window.addEventListener('focus',()=>checkForUpdate(registration));
-      document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkForUpdate(registration);});
+      document.addEventListener('visibilitychange',()=>{
+        if(document.visibilityState==='visible')checkForUpdate(registration);
+      });
       setInterval(()=>checkForUpdate(registration),CHECK_EVERY_MS);
       checkForUpdate(registration);
-    }catch(err){console.warn('JCP: actualizador no disponible',err);}
+    }catch(err){
+      console.warn('JCP: actualizador no disponible',err);
+    }
   }
+
   window.JCP_APP_VERSION=APP_VERSION;
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initUpdater,{once:true});else initUpdater();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initUpdater,{once:true});
+  else initUpdater();
 })();
