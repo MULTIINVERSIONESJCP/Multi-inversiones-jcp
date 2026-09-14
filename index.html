@@ -4828,7 +4828,8 @@ function normalizeCloudData(obj){
     _sync:{
       rev:Number(sync.rev||0),
       updatedAt:String(sync.updatedAt||''),
-      schema:Number(sync.schema||2)
+      schema:Number(sync.schema||3),
+      resetId:String(sync.resetId||'')
     }
   };
 }
@@ -4857,8 +4858,35 @@ function nextSyncMeta(base){
   const rev=Math.max(Date.now(),current+1);
   const updatedAt=new Date().toISOString();
   try{localStorage.setItem('jcp_app_rev_v2',String(rev));}catch(e){}
-  return {rev,updatedAt,schema:2};
+  return {
+    rev,
+    updatedAt,
+    schema:3,
+    resetId:String(base?._sync?.resetId||'')
+  };
 }
+
+
+// FUENTE ÚNICA JCP 2026-09-12
+// Esta generación marca el reinicio total que el usuario definió como estado oficial.
+// Una vez aplicado en Supabase, todos los dispositivos descargan exactamente el mismo estado.
+const JCP_OFFICIAL_RESET_ID='2026-09-12-zero-v1';
+
+function buildOfficialEmptyState(){
+  const empty=normalizeCloudData({
+    veh:[],sold:[],clientes:[],pres:[],inv:[],mov:[],permutas:[],capitalOps:[],
+    cashClosures:[],receipts:[],treasuryAccounts:[],treasuryMovements:[],
+    treasuryConfig:{initialized:false},
+    _sync:{resetId:JCP_OFFICIAL_RESET_ID,schema:3}
+  });
+  empty._sync={...nextSyncMeta(empty),resetId:JCP_OFFICIAL_RESET_ID,schema:3};
+  return empty;
+}
+
+function hasOfficialReset(state){
+  return String(state?._sync?.resetId||'')===JCP_OFFICIAL_RESET_ID;
+}
+
 function stateFreshness(value,fallbackUpdatedAt=''){
   const rev=syncRevision(value);
   const ownTime=syncUpdatedAt(value);
@@ -5071,80 +5099,51 @@ async function handleCloudSession(session){
   jcpShowCloudGate('Cargando los datos oficiales desde Supabase…',false);
 
   try{
-    if(localStorage.getItem(RESET_PENDING_KEY)==='1'){
-      const empty=normalizeCloudData({});
-      empty._sync=nextSyncMeta(empty);
-      data=empty;
-      localStorage.setItem(KEY,JSON.stringify(empty));
-      const up=await supabaseClient.from('app_data').upsert({
-        user_id:cloudUser.id,data:empty,updated_at:empty._sync.updatedAt
-      },{onConflict:'user_id'});
-      if(up.error)throw up.error;
-      localStorage.removeItem(RESET_PENDING_KEY);
-      localStorage.removeItem(CLOUD_PENDING_KEY);
-      cloudReady=true;
-      window.jcpCloudBootstrapReady=true;
-      window.jcpCloudBootstrapMode='reset';
-      lastPersistedState=cloneAppData(empty);
-      setCloudStatus('Datos reiniciados · nube en cero',true);
-      try{render();}catch(e){console.error(e);}
-      if(overlay){overlay.classList.remove('open');overlay.style.display='none';}
-      const loginBtn=document.getElementById('btnLoginCloud');
-      if(loginBtn)loginBtn.textContent='☁ '+(cloudUser.email||'CUENTA');
-      window.dispatchEvent(new Event('jcp-cloud-bootstrap-ready'));
-      return;
-    }
-
-    const {data:row,error}=await jcpWithTimeout(supabaseClient
-      .from('app_data').select('user_id,data,updated_at')
-      .eq('user_id',cloudUser.id).maybeSingle(),15000,'La lectura de Supabase');
+    const {data:row,error}=await jcpWithTimeout(
+      supabaseClient.from('app_data')
+        .select('user_id,data,updated_at')
+        .eq('user_id',cloudUser.id)
+        .maybeSingle(),
+      15000,
+      'La lectura de Supabase'
+    );
     if(error)throw error;
 
-    // IMPORTANTE: resolver el arranque contra la copia capturada al abrir la
-    // aplicación, no contra localStorage actual. Así una migración temprana no
-    // puede alterar el candidato local mientras Supabase está respondiendo.
-    const local=normalizeCloudData(cloneAppData(JCP_BOOT_LOCAL_SNAPSHOT));
+    let remote=row?.data?normalizeCloudData(row.data):null;
 
-    if(!row){
-      throw new Error('La cuenta no tiene una base central en Supabase. Por seguridad no se cargaron ni subieron datos locales automáticamente.');
+    // Reinicio oficial solicitado por el usuario: se aplica UNA sola vez en la nube.
+    // Ninguna copia local puede competir con este proceso.
+    if(!remote || !hasOfficialReset(remote)){
+      const empty=buildOfficialEmptyState();
+      const {error:resetError}=await jcpWithTimeout(
+        supabaseClient.from('app_data').upsert({
+          user_id:cloudUser.id,
+          data:empty,
+          updated_at:empty._sync.updatedAt
+        },{onConflict:'user_id'}),
+        15000,
+        'El reinicio oficial de Supabase'
+      );
+      if(resetError)throw resetError;
+      remote=empty;
+      window.jcpCloudBootstrapMode='official-reset';
+      setCloudStatus('Nube conectada · reinicio oficial aplicado',true);
     }else{
-      const remote=normalizeCloudData(row.data);
-      let usePendingLocal=false;
-
-      // Regla central: una copia local solo puede subir durante el arranque si
-      // YA estaba marcada como pendiente antes de abrir esta versión y es más
-      // reciente que la nube. Sin esa marca, Supabase gana siempre al iniciar.
-      if(CLOUD_PENDING_AT_BOOT){
-        const cmp=compareStateFreshness(local,remote,'',row.updated_at||'');
-        usePendingLocal=cmp>0;
-      }
-
-      if(usePendingLocal){
-        const outgoing=cloneAppData(local);
-        if(!syncRevision(outgoing))outgoing._sync=nextSyncMeta(outgoing);
-        const up=await supabaseClient.from('app_data').upsert({
-          user_id:cloudUser.id,data:outgoing,updated_at:outgoing._sync.updatedAt
-        },{onConflict:'user_id'});
-        if(up.error)throw up.error;
-        data=outgoing;
-        localStorage.setItem(KEY,JSON.stringify(data));
-        localStorage.removeItem(CLOUD_PENDING_KEY);
-        setCloudStatus('Nube conectada · cambios locales pendientes sincronizados',true);
-        window.jcpCloudBootstrapMode='pending-local-upload';
-      }else{
-        // Fuente central normal: descargar Supabase y refrescar la copia local.
-        data=remote;
-        localStorage.setItem(KEY,JSON.stringify(data));
-        localStorage.removeItem(CLOUD_PENDING_KEY);
-        setCloudStatus('Nube conectada · datos centrales cargados',true);
-        window.jcpCloudBootstrapMode='remote';
-      }
+      window.jcpCloudBootstrapMode='remote';
+      setCloudStatus('Nube conectada · datos centrales cargados',true);
     }
 
-    lastPersistedState=cloneAppData(normalizeCloudData(data));
+    // Supabase es la única fuente al iniciar. localStorage queda solo como caché.
+    data=remote;
+    localStorage.setItem(KEY,JSON.stringify(data));
+    localStorage.removeItem(CLOUD_PENDING_KEY);
+    localStorage.removeItem('jcp_app_reset_pending_v1');
+
+    lastPersistedState=cloneAppData(data);
     cloudReady=true;
     window.jcpCloudBootstrapReady=true;
     jcpHideCloudGate();
+
     try{render();}catch(e){console.error('REFRESCO INICIAL',e);}
     try{syncFinancialUiV76();}catch(e){}
     if(overlay){overlay.classList.remove('open');overlay.style.display='none';}
@@ -5157,33 +5156,45 @@ async function handleCloudSession(session){
     window.jcpCloudBootstrapReady=false;
     window.jcpCloudBootstrapMode='cloud-error';
     setCloudStatus('No fue posible validar los datos centrales');
-    jcpShowCloudGate('No fue posible leer Supabase. Por seguridad la aplicación NO mostrará una copia local como si fuera oficial. Revisa Internet y pulsa REINTENTAR.\n\nDetalle: '+String(e?.message||e),true);
+    jcpShowCloudGate(
+      'No fue posible leer Supabase. Por seguridad la aplicación NO mostrará una copia local como si fuera oficial. Revisa Internet y pulsa REINTENTAR.\n\nDetalle: '+String(e?.message||e),
+      true
+    );
     const err=document.getElementById('authError');
     if(err)err.textContent='No fue posible consultar la nube. No se cargaron datos locales.';
   }
 }
 async function initSupabase(){
   try{
-    const {data:sessionData,error}=await supabaseClient.auth.getSession();
+    const {data:sessionData,error}=await jcpWithTimeout(
+      supabaseClient.auth.getSession(),
+      15000,
+      'La sesión de Supabase'
+    );
     if(error)throw error;
-    if(sessionData.session) await handleCloudSession(sessionData.session);
-    else {
-      // Sin sesión NO hay bootstrap resuelto: no ejecutar migraciones, auditorías
-      // ni operaciones sobre una copia local hasta que el usuario se autentique.
+
+    if(sessionData?.session){
+      await handleCloudSession(sessionData.session);
+    }else{
       window.jcpCloudBootstrapReady=false;
       window.jcpCloudBootstrapMode='auth-required';
       setCloudStatus('Inicia sesión para cargar los datos centrales');
+      jcpHideCloudGate();
       showAuth('login');
     }
+
     supabaseClient.auth.onAuthStateChange((event,session)=>{
       if(event==='SIGNED_OUT'){
         cloudUser=null;
         cloudReady=false;
+        window.jcpCloudBootstrapReady=false;
         setCloudStatus('Sin conexión a la nube');
         setTimeout(()=>showAuth('login'),0);
         return;
       }
-      if(session && event!=='INITIAL_SESSION') setTimeout(()=>handleCloudSession(session),0);
+      if(session && event!=='INITIAL_SESSION'){
+        setTimeout(()=>handleCloudSession(session),0);
+      }
     });
   }catch(e){
     console.error(e);
@@ -5191,12 +5202,15 @@ async function initSupabase(){
     window.jcpCloudBootstrapReady=false;
     window.jcpCloudBootstrapMode='cloud-error';
     setCloudStatus('No fue posible iniciar Supabase');
-    jcpShowCloudGate('No fue posible iniciar la conexión con Supabase. Por seguridad no se mostrarán datos locales como oficiales. Revisa Internet y pulsa REINTENTAR.\n\nDetalle: '+String(e?.message||e),true);
+    jcpShowCloudGate(
+      'No fue posible iniciar la conexión con Supabase. Por seguridad no se mostrarán datos locales como oficiales. Revisa Internet y pulsa REINTENTAR.\n\nDetalle: '+String(e?.message||e),
+      true
+    );
   }
 }
 async function guardarEnNube(){
-  if(destructiveResetInProgress || localStorage.getItem(RESET_PENDING_KEY)==='1'){
-    throw new Error('Hay un reinicio de datos pendiente. Primero debe completarse el borrado de la nube.');
+  if(destructiveResetInProgress){
+    throw new Error('Hay un reinicio de datos en curso. Espera a que Supabase confirme la operación.');
   }
   if(!cloudUser){showAuth('login');throw new Error('Debes iniciar sesión para guardar en la nube.');}
   if(!cloudReady)throw new Error('La conexión con la nube todavía no está lista.');
@@ -5220,7 +5234,6 @@ const KEY='jcp_app_v1';
 // viejos en una copia aparentemente nueva antes de resolver Supabase.
 const JCP_BOOT_LOCAL_RAW=localStorage.getItem(KEY);
 const JCP_BOOT_LOCAL_SNAPSHOT=JSON.parse(JCP_BOOT_LOCAL_RAW||'{"veh":[],"sold":[],"clientes":[],"pres":[],"inv":[],"mov":[]}');
-const JCP_CLOUD_PENDING_AT_PAGE_LOAD=localStorage.getItem('jcp_cloud_pending_v1')==='1';
 let data=cloneAppData(JCP_BOOT_LOCAL_SNAPSHOT);
 data.sold=data.sold||[];data.permutas=data.permutas||[];data.clientes=data.clientes||[];data.mov=data.mov||[];data.veh=data.veh||[];
 data.capitalOps=Array.isArray(data.capitalOps)?data.capitalOps:[];
@@ -5323,12 +5336,10 @@ const CLOUD_PENDING_KEY='jcp_cloud_pending_v1';
 // Blindaje de arranque: solo una marca pendiente que YA existía al abrir
 // la versión puede competir con la nube. Migraciones de esta versión no
 // pueden convertir una copia local antigua en una escritura válida.
-const CLOUD_PENDING_AT_BOOT=JCP_CLOUD_PENDING_AT_PAGE_LOAD;
 window.jcpCloudBootstrapReady=false;
 window.jcpCloudBootstrapMode='resolving';
 
 // B2.2: coordinación de reinicio destructivo de REGISTROS.
-const RESET_PENDING_KEY='jcp_app_reset_pending_v1';
 let destructiveResetInProgress=false;
 
 function buildPersistedSnapshot(source){
@@ -5359,7 +5370,7 @@ async function resolveCloudUserForWrite(){
 }
 
 async function guardarAutomaticoEnNube(snapshot=null){
-  if(destructiveResetInProgress || localStorage.getItem(RESET_PENDING_KEY)==='1') return false;
+  if(destructiveResetInProgress) return false;
 
   const requested=validateAppState(cloneAppData(snapshot||data));
   const activeUser=await resolveCloudUserForWrite();
@@ -7255,9 +7266,7 @@ async function resetDemo(){
     'No se modificarán botones, módulos, fórmulas, diseño, configuración, usuario ni seguridad.\n\n'+
     'Ingresa la clave de seguridad:'
   );
-
   if(clave===null)return;
-
   if(String(clave).trim()!=='1526'){
     alert('CLAVE INCORRECTA. NO SE ELIMINÓ NINGÚN REGISTRO.');
     return;
@@ -7265,177 +7274,62 @@ async function resetDemo(){
 
   const confirmar=confirm(
     '⚠️ CONFIRMACIÓN FINAL\n\n'+
-    'Se eliminarán TODOS los registros operativos:\n'+
-    '• Inventario y vehículos\n'+
-    '• Compras\n'+
-    '• Ventas y permutas\n'+
-    '• Clientes\n'+
-    '• Préstamos e inversiones\n'+
-    '• Gastos y movimientos\n'+
-    '• Capital y financiación\n'+
-    '• Cuentas por cobrar\n'+
-    '• Cierres de caja e historial\n\n'+
+    'Se eliminarán TODOS los registros operativos de TODOS los dispositivos porque Supabase quedará en cero.\n\n'+
     'La programación, fórmulas, botones y configuración NO se modificarán.\n\n'+
     '¿Deseas continuar?'
   );
-
   if(!confirmar)return;
 
-  const emptyData=normalizeCloudData({
-    veh:[],
-    sold:[],
-    clientes:[],
-    pres:[],
-    inv:[],
-    mov:[],
-    permutas:[],
-    capitalOps:[],
-    cashClosures:[],
-    receipts:[],
-    treasuryAccounts:[],
-    treasuryMovements:[],
-    treasuryConfig:{initialized:false}
-  });
+  if(window.jcpCloudBootstrapReady!==true || !cloudReady || !cloudUser){
+    alert('NO SE PUEDE REINICIAR SIN UNA CONEXIÓN CONFIRMADA CON SUPABASE.\n\nConéctate a Internet e inicia sesión. No se eliminó ningún dato.');
+    return;
+  }
 
   destructiveResetInProgress=true;
-
-  // Anular cualquier guardado automático pendiente.
   clearTimeout(cloudSaveTimer);
   cloudSaveTimer=null;
-  cloudSaveQueued=false;
+  cloudSaveQueuedSnapshot=null;
 
+  const before=cloneAppData(data);
   try{
-    // Esperar un guardado que ya hubiera salido hacia la nube ANTES del clic.
-    // Así el borrado definitivo siempre es la última escritura.
-    const waitStart=Date.now();
-    while(cloudSaveRunning && Date.now()-waitStart<5000){
-      await new Promise(resolve=>setTimeout(resolve,80));
-    }
+    const empty=buildOfficialEmptyState();
+    setCloudStatus('Reiniciando registros en Supabase...');
 
-    // Marca persistente: si se pierde conexión, impide que los datos viejos de
-    // Supabase vuelvan a descargarse en la siguiente apertura.
-    localStorage.setItem(RESET_PENDING_KEY,'1');
+    // Nube primero: solo si Supabase confirma el borrado se cambia la copia local.
+    const {error}=await jcpWithTimeout(
+      supabaseClient.from('app_data').upsert({
+        user_id:cloudUser.id,
+        data:empty,
+        updated_at:empty._sync.updatedAt
+      },{onConflict:'user_id'}),
+      15000,
+      'El reinicio de Supabase'
+    );
+    if(error)throw error;
 
-    // Vaciar memoria y almacenamiento local.
-    data=emptyData;
-    localStorage.setItem(KEY,JSON.stringify(emptyData));
-
-    // El respaldo antiguo también contiene registros operativos.
-    // Se elimina para que no exista una copia local capaz de restaurarlos por error.
+    data=empty;
+    localStorage.setItem(KEY,JSON.stringify(empty));
+    localStorage.removeItem(CLOUD_PENDING_KEY);
     localStorage.removeItem(KEY+'_BACKUP');
+    lastPersistedState=cloneAppData(empty);
 
-    // Limpiar estados temporales de selección/edición.
     try{selectedVehicleDetailId=null;}catch(e){}
     try{selectedSaleVehicleId=null;}catch(e){}
     try{selectedPermutaVehicleId=null;}catch(e){}
     try{editingVehicleId=null;}catch(e){}
     try{window.__extRowsV75=[];}catch(e){}
 
-    // Si existe una sesión autenticada, borrar la copia remota AHORA.
-    // No dependemos de cloudReady: con cloudUser basta para intentar el upsert.
-    if(cloudUser){
-      setCloudStatus('Reiniciando registros en la nube...');
-
-      const payload={
-        user_id:cloudUser.id,
-        data:emptyData,
-        updated_at:new Date().toISOString()
-      };
-
-      const {error}=await supabaseClient
-        .from('app_data')
-        .upsert(payload,{onConflict:'user_id'});
-
-      if(error)throw error;
-
-      localStorage.removeItem(RESET_PENDING_KEY);
-      setCloudStatus('Datos reiniciados · local y nube en cero',true);
-    }else{
-      setCloudStatus('Datos locales en cero · nube pendiente de sincronización');
-    }
-
-    // Cerrar paneles/modalidades que pudieran conservar HTML anterior visible.
-    [
-      'vehicleDetail','vehicleExpenseSelector','salesHistoryPanel','saleForm','saleGrid',
-      'permutaForm','vehicleEditPanel','vehicleEditor','operationsVehicleExpenseModule',
-      'operationsOperatingExpenseForm','extDetail'
-    ].forEach(id=>{
-      const el=document.getElementById(id);
-      if(!el)return;
-      el.classList.remove('open');
-      if('style' in el)el.style.display='none';
-    });
-
-    // Refrescar TODOS los módulos que contienen registros.
     try{render();}catch(e){console.error('render',e);}
-    try{renderClientes();}catch(e){console.error('clientes',e);}
-    try{populateVehicleSelect();}catch(e){}
-    try{renderVehicleEditGrid();}catch(e){}
-    try{renderSalesHistory();}catch(e){}
-    try{renderSalesReceivables();}catch(e){}
-    try{renderPermutaHistory();}catch(e){}
-    try{renderCashCapital();}catch(e){}
-    try{renderCapitalDetail();}catch(e){}
-    try{renderPendingObligations();}catch(e){}
-    try{renderLoanReceivablesV78();}catch(e){}
-    try{renderExtractos();}catch(e){}
-    try{renderSupportsCashClosures();}catch(e){}
-    try{renderOperationsVehicleExpenseGrid();}catch(e){}
     try{syncFinancialUiV76();}catch(e){}
-    try{previewCashClosure();}catch(e){}
-
-    // Garantizar visualmente los contenedores de listas incluso si algún render
-    // legado no escribe nada cuando la colección está vacía.
-    const emptyContainers={
-      vehList:'NO HAY VEHÍCULOS EN INVENTARIO.',
-      vehicleEditGrid:'NO HAY VEHÍCULOS DISPONIBLES.',
-      soldList:'NO HAY VENTAS REGISTRADAS.',
-      clientesList:'NO HAY CLIENTES REGISTRADOS TODAVÍA.',
-      presList:'NO HAY PRÉSTAMOS REGISTRADOS.',
-      invList:'NO HAY INVERSIONES REGISTRADAS.',
-      movList:'NO HAY MOVIMIENTOS REGISTRADOS.',
-      ccCapitalHistory:'No hay movimientos todavía.',
-      ccClosuresList:'Aún no hay cierres guardados.',
-      supportCashClosures:'Aún no hay cierres guardados.',
-      salesReceivablesList:'NO HAY CUENTAS POR COBRAR.',
-      loanReceivablesListV78:'NO HAY PRÉSTAMOS PENDIENTES POR COBRAR.'
-    };
-
-    Object.entries(emptyContainers).forEach(([id,msg])=>{
-      const el=document.getElementById(id);
-      if(el)el.innerHTML='<div class="empty">'+msg+'</div>';
-    });
-
-    // Volver al inicio con todos los indicadores calculados desde arreglos vacíos.
     try{show('dashboard');}catch(e){}
     try{closeSecurity();}catch(e){}
-
-    if(localStorage.getItem(RESET_PENDING_KEY)==='1'){
-      alert(
-        '✅ TODOS LOS REGISTROS LOCALES FUERON ELIMINADOS Y LA APLICACIÓN QUEDÓ EN CERO.\n\n'+
-        'La nube no estaba disponible. El borrado remoto quedó marcado como PENDIENTE y se ejecutará automáticamente antes de cualquier descarga cuando vuelva la conexión.'
-      );
-    }else{
-      alert('✅ TODOS LOS REGISTROS FUERON ELIMINADOS. LA APLICACIÓN Y LA NUBE QUEDARON EN CERO.');
-    }
+    setCloudStatus('Datos reiniciados · Supabase y dispositivo en cero',true);
+    alert('✅ TODOS LOS REGISTROS FUERON ELIMINADOS.\n\nSUPABASE ES LA FUENTE CENTRAL Y TODOS LOS DISPOSITIVOS CARGARÁN ESTE ESTADO EN CERO.');
   }catch(err){
-    console.error('Error al reiniciar datos:',err);
-
-    // IMPORTANTE: lo local permanece vacío y la marca de borrado permanece.
-    // Al reconectar, handleCloudSession vaciará la nube antes de descargar nada.
-    data=emptyData;
-    try{localStorage.setItem(KEY,JSON.stringify(emptyData));}catch(e){}
-    try{localStorage.setItem(RESET_PENDING_KEY,'1');}catch(e){}
-
+    data=before;
     try{render();}catch(e){}
-    try{show('dashboard');}catch(e){}
-    try{closeSecurity();}catch(e){}
-
-    alert(
-      '✅ LOS DATOS DEL DISPOSITIVO QUEDARON EN CERO.\n\n'+
-      'No se pudo confirmar todavía el borrado de la nube. Quedó protegido como REINICIO PENDIENTE: cuando vuelva la conexión, la nube se vaciará ANTES de poder restaurar cualquier dato antiguo.\n\n'+
-      'Detalle: '+(err?.message||String(err))
-    );
+    setCloudStatus('No se pudo confirmar el reinicio en Supabase');
+    alert('NO SE REALIZÓ EL REINICIO.\n\nSupabase no confirmó el borrado, por lo tanto se conservaron los datos anteriores.\n\nDetalle: '+String(err?.message||err));
   }finally{
     destructiveResetInProgress=false;
   }
@@ -14867,6 +14761,6 @@ window.openRecordCopy=function(number){
   window.refreshHomeAfterDataLoad=refreshHomeAfterDataLoad;
 })();
 </script>
-<script src="./app-update.js?v=2026.09.12.2"></script>
+<script src="./app-update.js?v=2026.09.12.3"></script>
 </body>
 </html>
