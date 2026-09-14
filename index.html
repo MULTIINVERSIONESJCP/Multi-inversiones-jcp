@@ -4,8 +4,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - BASE LIMPIA TRANSACCIONAL FINAL</title>
-<style>
+<title>MULTI INVERSIONES JCP - BASE MAESTRA CONSOLIDADA 2026.09.14.1</title>
+<style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
 .app{max-width:1100px;margin:auto;min-height:100vh;padding:22px}
@@ -394,8 +394,7 @@ table{width:100%;border-collapse:collapse;background:var(--card);border-radius:1
 .audit-empty{border:1px dashed #3d3d3d;border-radius:10px;padding:14px;color:#8f8f8f;font-size:10px;text-align:center}
 .audit-actions{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin-top:14px}.audit-actions button{min-width:0;white-space:normal}
 @media(max-width:380px){.audit-grid{grid-template-columns:minmax(0,1fr)}}
-</style>
-<style>
+
 .expense-sheet{border:1px solid #333;border-radius:10px;overflow:hidden;background:#0b0b0b}
 .expense-sheet-head,.vehicle-exp-row{display:grid!important;grid-template-columns:42px minmax(0,1.7fr) minmax(130px,1fr)!important;align-items:center!important}
 .expense-sheet-head{min-height:36px;background:#171717;border-bottom:1px solid #333;color:var(--gold);font-size:12px;font-weight:800}
@@ -406,8 +405,9 @@ table{width:100%;border-collapse:collapse;background:var(--card);border-radius:1
 .vehicle-exp-row input:focus{background:#171717!important;box-shadow:inset 0 0 0 1px var(--gold)}
 .vehicle-exp-row .vehicle-exp-value{text-align:right}
 @media(max-width:700px){.expense-sheet-head,.vehicle-exp-row{grid-template-columns:34px minmax(0,1fr) minmax(110px,1fr)!important}.vehicle-exp-row input{font-size:13px}}
-</style>
-<style id="jcp-main-logo-style">
+
+/* ===== jcp-main-logo-style ===== */
+
 .jcp-main-logo{
   width:100%;
   display:flex;
@@ -430,8 +430,9 @@ table{width:100%;border-collapse:collapse;background:var(--card);border-radius:1
   .jcp-main-logo{padding:8px 8px 4px}
   .jcp-main-logo img{width:100%;max-height:76px}
 }
-</style>
-<style id="guardar-cambios-style">
+
+/* ===== guardar-cambios-style ===== */
+
 .btn-guardar-cambios{
   position:relative;
   z-index:20;
@@ -448,30 +449,27 @@ table{width:100%;border-collapse:collapse;background:var(--card);border-radius:1
 }
 .btn-guardar-cambios:hover{filter:brightness(1.08)}
 .btn-guardar-cambios.guardado{background:#1f9d45;border-color:#1f9d45}
-</style>
-<style id="supabase-auth-style">
+
+/* ===== supabase-auth-style ===== */
+
 .auth-overlay{display:none;position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.82);align-items:center;justify-content:center;padding:18px}.auth-overlay.open{display:flex}.auth-box{width:min(430px,100%);background:#141414;border:1px solid #444;border-radius:18px;padding:22px;box-shadow:0 20px 70px rgba(0,0,0,.65)}.auth-title{font-size:22px;font-weight:800;color:var(--gold);margin-bottom:6px}.auth-sub{font-size:12px;color:#aaa;margin-bottom:18px}.auth-box input{width:100%;padding:13px;margin-bottom:10px;background:#0d0d0d;border:1px solid #333;border-radius:9px;color:#fff;text-transform:none}.auth-box button{width:100%;margin-top:4px}.auth-passkey{background:#1b1b1b!important;color:#fff!important;border:1px solid #d4af37!important}.auth-passkey:hover{filter:brightness(1.12)}.auth-secondary{background:transparent!important;color:#ddd!important;border:1px solid #333!important}.auth-error{min-height:20px;color:#ff8888;font-size:12px;margin:7px 0}.cloud-status{font-size:11px;color:#aaa;margin-top:6px;text-align:center}.cloud-status.ok{color:#39d98a}.cloud-user{font-size:11px;color:#aaa;margin:8px 12px 0;text-align:right}.cloud-user button{background:transparent;color:#aaa;padding:0;font-size:11px}.cloud-user button:hover{color:#fff}
-</style>
-<style id="v43-sales-separated-style">
+
+/* ===== v43-sales-separated-style ===== */
+
 /* V43 — Ventas separadas: sin bloque de vehículos vendidos ni permutas dentro del módulo Ventas */
 #ventas > .grid{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
 @media(max-width:700px){#ventas > .grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}}
-</style>
-<link href="./manifest.json" rel="manifest"/>
-<meta content="#111111" name="theme-color"/>
-<meta content="yes" name="mobile-web-app-capable"/>
-<meta content="yes" name="apple-mobile-web-app-capable"/>
-<meta content="MULTI JCP" name="apple-mobile-web-app-title"/>
-<link href="./icon-192.png" rel="apple-touch-icon"/>
-<link href="./icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
-<style id="v41-inventory-compact-style">
+
+/* ===== v41-inventory-compact-style ===== */
+
 #vehiculos .inventory-title-row{margin-top:-8px!important;margin-bottom:0!important;align-items:center!important}
 #vehiculos .inventory-title-row h2{margin:0!important;line-height:1.05!important}
 #vehiculos .inventory-gold-line{height:1px;background:var(--gold);width:100%;margin:4px 0 0!important}
 #vehiculos .vehicle-expense-note{margin:1px 0 7px!important;padding:2px 4px!important;color:#ddd!important;font-size:10px!important;line-height:1.15!important;background:transparent!important;border:0!important;border-radius:0!important}
 @media(max-width:700px){#vehiculos .inventory-title-row{margin-top:-10px!important}#vehiculos .vehicle-expense-note{font-size:9px!important;margin-top:1px!important;padding:1px 3px!important}}
-</style>
-<style id="sales-v42-style">
+
+/* ===== sales-v42-style ===== */
+
 /* V42 — Ventas organizadas en submódulos independientes */
 .sales-submodule{display:none;margin:16px 0;padding:14px;background:#0d0d0d;border:1px solid #333;border-radius:14px}
 .sales-submodule.open{display:block}
@@ -482,8 +480,9 @@ table{width:100%;border-collapse:collapse;background:var(--card);border-radius:1
 #saleGrid .vehicle-card{cursor:pointer}
 #salesReceivablesList table td:last-child,#salesReceivablesList table th:last-child{color:var(--gold);font-weight:800}
 @media(max-width:600px){.sales-submodule{padding:10px}.sales-submodule-head h3{font-size:17px}}
-</style>
-<style id="v58-permuta-independent-style">
+
+/* ===== v58-permuta-independent-style ===== */
+
 #ventas .permuta-history-btn{background:#111!important;color:var(--gold)!important;border:1px solid #6a5520!important;padding:9px 11px!important;font-size:11px!important;white-space:nowrap}
 #permutaHistoryPanel table{font-size:11px}
 #permutaHistoryPanel th,#permutaHistoryPanel td{padding:9px 8px}
@@ -491,8 +490,9 @@ table{width:100%;border-collapse:collapse;background:var(--card);border-radius:1
 #permutaHistoryPanel .permuta-pay{color:#ff8888;font-weight:800}
 #permutaHistoryPanel .permuta-even{color:var(--gold);font-weight:800}
 @media(max-width:600px){#ventas .permuta-history-btn{font-size:10px!important;padding:8px 9px!important}#permutaHistoryPanel{overflow-x:auto}}
-</style>
-<style id="v56-permuta-completa-style">
+
+/* ===== v56-permuta-completa-style ===== */
+
 /* V56 — Permuta completa con diferencia automática y vehículo entrante */
 #ventas .permuta-balance-card{background:#090909;border:1px solid #333;border-radius:10px;padding:10px;min-height:74px;display:flex;flex-direction:column;justify-content:center}
 #ventas .permuta-balance-card span{font-size:10px;color:#aaa;margin-bottom:5px}
@@ -510,8 +510,9 @@ table{width:100%;border-collapse:collapse;background:var(--card);border-radius:1
 #ventas .permuta-diff-status.pay{color:#ff8888}
 #ventas .permuta-diff-status.even{color:var(--gold)}
 @media(max-width:600px){#ventas #permutaSummary{grid-template-columns:repeat(2,minmax(0,1fr))}#ventas .permuta-photo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#ventas .permuta-photo-grid img{height:92px}}
-</style>
-<style id="v44-sales-design">
+
+/* ===== v44-sales-design ===== */
+
 #ventas{padding-bottom:92px}
 #ventas .sales-title-block{margin-top:-10px;margin-bottom:12px}
 #ventas .sales-title-block h2{margin:0;font-size:30px;line-height:1.05;display:flex;align-items:center;gap:7px}
@@ -531,8 +532,9 @@ table{width:100%;border-collapse:collapse;background:var(--card);border-radius:1
 #nav button[data-id="__back__"] .jcp-back-nav-svg{width:20px!important;height:20px!important;display:block!important;margin:auto!important;fill:none!important;stroke:currentColor!important;stroke-width:2.4!important;stroke-linecap:round!important;stroke-linejoin:round!important}
 #nav button[data-id="__back__"] small{display:none!important}
 body{padding-bottom:78px}
-</style>
-<style id="v45-inventory-inline-header-style">
+
+/* ===== v45-inventory-inline-header-style ===== */
+
 .app:has(#vehiculos.view.active) > header{display:none!important}
 #vehiculos .inventory-title-row{margin-top:-2px!important;margin-bottom:0!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:10px!important;align-items:center!important}
 #vehiculos .inventory-inline-brand{min-width:0;display:flex;align-items:center;gap:14px}
@@ -544,8 +546,9 @@ body{padding-bottom:78px}
 #vehiculos #vehList{margin-top:8px!important}
 @media(max-width:700px){#vehiculos .inventory-title-row{margin-top:-4px!important;gap:6px!important}#vehiculos .inventory-inline-brand{gap:8px!important}#vehiculos .inventory-inline-logo{width:145px!important;height:48px!important}#vehiculos .inventory-inline-title{font-size:25px!important;letter-spacing:0!important}#vehiculos .inventory-car-icon{font-size:.78em!important;margin-right:2px!important}#vehiculos .inventory-gold-line{margin-top:1px!important;height:1.5px!important}#vehiculos .vehicle-expense-note{font-size:9px!important;line-height:1!important;margin:0!important;padding:0 2px!important}#vehiculos #vehList{margin-top:6px!important}}
 @media(max-width:390px){#vehiculos .inventory-inline-logo{width:128px!important;height:44px!important}#vehiculos .inventory-inline-title{font-size:21px!important}}
-</style>
-<style id="v46-unified-modules-style">
+
+/* ===== v46-unified-modules-style ===== */
+
 /* V46 — Todos los módulos con el encabezado compacto aprobado en Inventario */
 .app:has(#ventas.view.active) > header,
 .app:has(#clientes.view.active) > header,
@@ -583,8 +586,9 @@ body{padding-bottom:78px}
   .unified-module-logo{width:128px!important;height:44px!important}
   .unified-module-title{font-size:21px!important}
 }
-</style>
-<style id="v47-invoice-premium-style">
+
+/* ===== v47-invoice-premium-style ===== */
+
 /* V47 — Facturación / Nueva venta: clásico premium */
 #ventas .sale-invoice-shell{background:#080808;border:1px solid #4a3b13;border-radius:18px;padding:14px;box-shadow:0 22px 55px rgba(0,0,0,.38)}
 #ventas .sale-invoice-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:4px 2px 12px;border-bottom:1px solid #6a5520}
@@ -634,8 +638,9 @@ body{padding-bottom:78px}
   #ventas #saleSummary .sale-summary-card{min-height:65px;padding:8px}
   #ventas #saleSummary .sale-summary-card b{font-size:14px}
 }
-</style>
-<style id="v51-expense-edit-style">
+
+/* ===== v51-expense-edit-style ===== */
+
 #vehicleDetail > .row > div{display:grid!important;grid-template-columns:repeat(2,140px)!important;gap:8px!important}
 #vehicleDetail > .row > div button{width:140px!important;height:44px!important;padding:0 12px!important;display:flex!important;align-items:center!important;justify-content:center!important}
 .vehicle-edit-panel{display:none;margin-top:16px;background:#0d0d0d;border:1px solid #3b321c;border-radius:16px;padding:14px}.vehicle-edit-panel.open{display:block}
@@ -646,8 +651,9 @@ body{padding-bottom:78px}
 .vehicle-editor-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.vehicle-editor-actions button{width:100%}.vehicle-editor-cancel{background:#111!important;color:#fff!important;border:1px solid #444!important}
 @media(max-width:650px){.vehicle-edit-panel{padding:12px}.vehicle-edit-head{align-items:center}.vehicle-edit-head h3{font-size:21px;line-height:1.15}.vehicle-edit-head button{padding:9px 12px;white-space:nowrap}.vehicle-edit-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.vehicle-edit-grid .vehicle-card img{height:128px}.vehicle-edit-grid .vehicle-card b{font-size:13px}.vehicle-edit-grid .vehicle-card .label{font-size:10px}.vehicle-edit-grid .vehicle-card .vc-price{font-size:14px}.vehicle-editor-form{grid-template-columns:1fr}.vehicle-editor-photo{grid-template-columns:90px 1fr}.vehicle-editor-photo img{width:90px;height:70px}.vehicle-editor-exp-head,.vehicle-editor-exp-row{grid-template-columns:105px minmax(0,1fr) 105px;font-size:10px}}
 @media(max-width:390px){.vehicle-edit-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.vehicle-edit-grid .vehicle-card img{height:108px}.vehicle-edit-grid .vehicle-card .vc-body{padding:8px}.vehicle-edit-grid .vehicle-card b{font-size:12px}.vehicle-edit-grid .vehicle-card .vc-price{font-size:13px}}
-</style>
-<style id="v52-vehicle-detail-buttons">
+
+/* ===== v52-vehicle-detail-buttons ===== */
+
 #vehicleDetail .vehicle-detail-compact-btn{
   width:132px!important;min-width:132px!important;height:40px!important;padding:0 12px!important;
   display:inline-flex!important;align-items:center!important;justify-content:center!important;
@@ -657,8 +663,9 @@ body{padding-bottom:78px}
   #vehicleDetail .vehicle-detail-compact-btn{width:118px!important;min-width:118px!important;height:38px!important;font-size:12px!important;padding:0 8px!important}
   #vehicleDetail>.row>div{gap:6px!important}
 }
-</style>
-<style id="v53-vehicle-detail-buttons-final">
+
+/* ===== v53-vehicle-detail-buttons-final ===== */
+
 /* V53 — botones compactos definitivos en detalle del vehículo */
 #vehicleDetail > .row > div > .vehicle-detail-compact-btn{
   width:106px!important;
@@ -680,8 +687,9 @@ body{padding-bottom:78px}
     width:98px!important;min-width:98px!important;flex-basis:98px!important;height:32px!important;font-size:10px!important;padding:0 6px!important;
   }
 }
-</style>
-<style id="v54-vehicle-detail-layout-fix">
+
+/* ===== v54-vehicle-detail-layout-fix ===== */
+
 /* V54 — Detalle de vehículo proporcionado y sin desbordes */
 #vehicleDetail{
   width:100%!important;
@@ -768,8 +776,9 @@ body{padding-bottom:78px}
   #vehicleDetail > .row > div > .vehicle-detail-compact-btn{width:100%!important;min-width:0!important;max-width:none!important}
   #vehicleDetail > .grid .value{font-size:19px!important}
 }
-</style>
-<style id="v59-sales-clean-style">
+
+/* ===== v59-sales-clean-style ===== */
+
 #ventas.sales-option-open > .sales-title-block,
 #ventas.sales-option-open > .sales-menu-grid{display:none!important}
 #ventas:not(.sales-option-open) > #permutaGrid,
@@ -780,9 +789,9 @@ body{padding-bottom:78px}
 #ventas:not(.sales-option-open) > #salesReceivablesPanel,
 #ventas:not(.sales-option-open) > #saleForm{display:none!important}
 .sales-back-menu-btn{background:#111!important;color:var(--gold)!important;border:1px solid #6a5520!important}
-</style>
-<!-- V61: cuadrícula de edición responsive + cierre automático al guardar -->
-<style id="v69-header-polish">
+
+/* ===== v69-header-polish ===== */
+
 /* V69 — Encabezados compactos consistentes: logo | título | menú */
 #vehiculos .inventory-title-row,
 .unified-module-title-row{
@@ -907,8 +916,9 @@ body{padding-bottom:78px}
     font-size:19px!important;
   }
 }
-</style>
-<style id="v70-header-fix">
+
+/* ===== v70-header-fix ===== */
+
 /* V70 — corrección real de encabezados en móvil */
 
 /* En módulos internos no se usa el encabezado global grande.
@@ -1002,8 +1012,9 @@ body.internal-module-open .app > header{
   #movimientos .unified-module-logo{width:138px !important;}
   #movimientos .unified-module-title{font-size:19px !important;}
 }
-</style>
-<style id="v72-cash-capital-style">
+
+/* ===== v72-cash-capital-style ===== */
+
 .cash-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
 .cash-kpi{background:#111;border:1px solid #333;border-radius:11px;padding:11px 8px;text-align:center;min-width:0}
 .cash-kpi span{display:block;color:#aaa;font-size:10px;line-height:1.2}.cash-kpi b{display:block;color:#fff;font-size:15px;margin-top:5px;white-space:nowrap}
@@ -1031,8 +1042,9 @@ body.internal-module-open .app > header{
   .cc-row{grid-template-columns:78px 1fr}.cc-row .cc-value{grid-column:2}
 }
 @media(max-width:390px){#cajaCapital .unified-module-title{font-size:15px!important}}
-</style>
-<style id="v73-center-financial-style">
+
+/* ===== v73-center-financial-style ===== */
+
 .cf-period-row{display:flex;justify-content:space-between;align-items:center;margin:12px 2px 8px;color:#ddd;font-size:11px}
 .cf-period-row span{color:#999}
 .cf-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1082,8 +1094,9 @@ body.internal-module-open .app > header{
 .ext-row{display:grid;grid-template-columns:82px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #242424}.ext-row:last-child{border-bottom:0}
 .ext-row small{font-size:8px;color:#999}.ext-row b{font-size:10px}.ext-row span{font-size:10px;color:#ff7777;font-weight:800;white-space:nowrap}
 @media(max-width:390px){.cf-card-value{font-size:18px}.cf-action-grid:not(#cajaCapital .cf-action-grid){grid-template-columns:1fr}.cf-action.cf-wide{grid-column:auto}.ext-summary{grid-template-columns:1fr}.ext-row{grid-template-columns:70px 1fr}.ext-row span{grid-column:2}}
-</style>
-<style id="v74-extractos-flujo-style">
+
+/* ===== v74-extractos-flujo-style ===== */
+
 .ext-cash-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
 .ext-cash-summary>div{background:#111;border:1px solid #303030;border-radius:11px;padding:11px 7px;text-align:center}
 .ext-cash-summary span{display:block;color:#999;font-size:9px}
@@ -1109,8 +1122,9 @@ body.internal-module-open .app > header{
   .ext-flow-row b{grid-column:2}
   .ext-flow-row .flow-value{grid-column:3;grid-row:1 / span 2}
 }
-</style>
-<style id="v75-extractos-redesign">
+
+/* ===== v75-extractos-redesign ===== */
+
 .ext-search-first{margin:12px 0 8px}
 .ext-search-first input{width:100%;padding:12px;border-radius:10px;border:1px solid #3a3422;background:#0c0c0c;color:#fff;text-transform:uppercase}
 .ext-pro-filter{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}
@@ -1165,8 +1179,9 @@ body.internal-module-open .app > header{
   .ext-pro-summary .ext-pro-card.blue{grid-column:1/-1}
   .ext-pro-results{grid-template-columns:1fr}
 }
-</style>
-<style id="v78-direct-module-styles">
+
+/* ===== v78-direct-module-styles ===== */
+
 .vehicle-expense-selector-v78{margin-top:12px;background:#0d0d0d;border:1px solid #363020;border-radius:13px;padding:12px}
 .vehicle-expense-selector-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
 .vehicle-expense-selector-head h3{margin:0;color:var(--gold);font-size:15px}
@@ -1200,8 +1215,9 @@ body.internal-module-open .app > header{
   .pending-obligations-summary{grid-template-columns:1fr}
   .pending-debt-grid{grid-template-columns:1fr 1fr}
 }
-</style>
-<style id="v80-back-buttons-style">
+
+/* ===== v80-back-buttons-style ===== */
+
 .v80-back-to-cash{
   display:flex;
   justify-content:flex-start;
@@ -1221,8 +1237,9 @@ body.internal-module-open .app > header{
 .v80-back-to-cash button:active{
   transform:scale(.98);
 }
-</style>
-<style id="v86-home-debtpay-style">
+
+/* ===== v86-home-debtpay-style ===== */
+
 .home-kpi-button{font:inherit;color:inherit;width:100%;text-align:left;cursor:pointer;appearance:none;-webkit-appearance:none;position:relative;transition:transform .14s ease,border-color .14s ease}
 .home-kpi-button:active{transform:scale(.985)}
 .home-kpi-link{display:block;margin-top:9px;font-size:9px;font-weight:900;letter-spacing:.35px;color:var(--gold)}
@@ -1255,8 +1272,9 @@ body.internal-module-open .app > header{
  .debt-pay-secondary{grid-template-columns:1fr}
  .debt-pay-summary-grid{grid-template-columns:1fr 1fr}
 }
-</style>
-<style id="v87-capital-obligations-style">
+
+/* ===== v87-capital-obligations-style ===== */
+
 .capital-detail-total{margin:12px 0;padding:18px 14px;border:1px solid #82691e;border-radius:15px;background:linear-gradient(135deg,#1a160b,#0d0d0d);text-align:center}
 .capital-detail-total span{display:block;color:#b9a257;font-size:10px;font-weight:900;letter-spacing:.8px}
 .capital-detail-total strong{display:block;color:var(--gold);font-size:29px;margin:5px 0;font-weight:950}
@@ -1273,12 +1291,14 @@ body.internal-module-open .app > header{
 .capital-movement-row strong{white-space:nowrap;font-size:12px}.capital-in{color:#55d98a}.capital-out{color:#ff7777}
 .pending-debt-pay-btn{width:100%;margin-top:11px;min-height:43px;border-radius:10px;border:1px solid #b89227;background:#17130a;color:var(--gold);font-weight:950}
 @media(max-width:420px){.capital-detail-total strong{font-size:24px}.capital-source-card b{font-size:14px}}
-</style>
-<style id="v16-title-fix">
+
+/* ===== v16-title-fix ===== */
+
 .sales-title-block h2,.section-title,.inventory-title,h1,h2,h3{overflow-wrap:normal;word-break:normal;hyphens:none}
 .sales-title-block h2{white-space:normal;line-height:1.15}
-</style>
-<style id="b24-operations-visual">
+
+/* ===== b24-operations-visual ===== */
+
 #ventas .sales-title-block{
   text-align:center;
 }
@@ -1343,8 +1363,9 @@ body.internal-module-open .app > header{
 #ventas #operationsVehicleExpenseModule .vehicle-card:active{
   transform:scale(.985);
 }
-</style>
-<style id="b241-operations-visual">
+
+/* ===== b241-operations-visual ===== */
+
 #ventas > .unified-module-header .unified-module-title-row{
   display:flex!important;
   justify-content:center!important;
@@ -1391,8 +1412,9 @@ body.internal-module-open .app > header{
     height:43px!important;
   }
 }
-</style>
-<style id="b11-op-vehicle-expense-style">
+
+/* ===== b11-op-vehicle-expense-style ===== */
+
 #gastoVehiculoOperacion{padding-bottom:92px}
 
 
@@ -1422,16 +1444,18 @@ body.internal-module-open .app > header{
   .opveh-expense-row{grid-template-columns:30px 1fr}
   .opveh-expense-row input[data-op-exp-value]{grid-column:2}
 }
-</style>
-<style id="b12-independent-vehicle-detail">
+
+/* ===== b12-independent-vehicle-detail ===== */
+
 #vehicleDetailView{padding-bottom:90px}
 .vehicle-detail-independent-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .vehicle-detail-independent-head button{width:auto!important;background:#111!important;color:var(--gold)!important;border:1px solid #6a5520!important;padding:9px 11px!important}
 #vehicleDetailView #vehicleDetail{display:block;margin-top:14px!important}
 #vehicleDetailView #vehicleDetail > .row > div{display:none!important}
 @media(max-width:600px){.vehicle-detail-independent-head h2{font-size:19px}.vehicle-detail-independent-head button{font-size:9px!important;padding:7px!important}}
-</style>
-<style id="b13-inventory-mini-summary">
+
+/* ===== b13-inventory-mini-summary ===== */
+
 #vehiculos .inventory-mini-summary{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1468,8 +1492,9 @@ body.internal-module-open .app > header{
   #vehiculos .inventory-mini-card span{font-size:8px}
   #vehiculos .inventory-mini-card b{font-size:14px}
 }
-</style>
-<style id="b14-unified-branding">
+
+/* ===== b14-unified-branding ===== */
+
 /* Un solo tamaño visual para la marca en Inicio y módulos. */
 .app > header .brand-logo,
 #vehiculos .inventory-inline-logo,
@@ -1523,8 +1548,9 @@ body.internal-module-open .app > header{
     max-height:44px!important;
   }
 }
-</style>
-<style id="b15-capital-history-list">
+
+/* ===== b15-capital-history-list ===== */
+
 .capital-history-summary{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -1676,8 +1702,9 @@ body.internal-module-open .app > header{
     min-width:540px;
   }
 }
-</style>
-<style id="b151-date-time-stack">
+
+/* ===== b151-date-time-stack ===== */
+
 .capital-history-date span,
 .capital-history-date em{
   display:block;
@@ -1689,8 +1716,9 @@ body.internal-module-open .app > header{
   font-style:normal;
   line-height:1.2;
 }
-</style>
-<style id="b16-cash-profit-style">
+
+/* ===== b16-cash-profit-style ===== */
+
 .cash-expected-breakdown .cc-breakdown-group{
   margin-top:10px;
   padding-top:8px;
@@ -1794,14 +1822,16 @@ body.internal-module-open .app > header{
     grid-column:auto;
   }
 }
-</style>
-<style id="b17-cash-period-tabs">
+
+/* ===== b17-cash-period-tabs ===== */
+
 .cash-period-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}
 .cash-period-tabs button{min-height:42px;border:1px solid #343434;border-radius:9px;background:#111;color:#aaa;font-size:10px;font-weight:900;letter-spacing:.4px}
 .cash-period-tabs button.active{border-color:#8a6d1d;background:#1b170b;color:var(--gold)}
 @media(max-width:480px){.cash-period-tabs button{font-size:9px;min-height:39px}}
-</style>
-<style id="b18-global-search-profit-history">
+
+/* ===== b18-global-search-profit-history ===== */
+
 .global-search-bar{
   position:relative;
   width:100%;
@@ -1992,11 +2022,13 @@ body.internal-module-open .app > header{
   .profit-history-row b{font-size:9px}
   .profit-history-row strong{font-size:9px}
 }
-</style>
-<style id="mod20-2-real-head">
+
+/* ===== mod20-2-real-head ===== */
+
 #topMenu{z-index:999999!important}
-</style>
-<style id="jcp-clean-settings-theme-icons-sounds">
+
+/* ===== jcp-clean-settings-theme-icons-sounds ===== */
+
 /* ===== Variables de tema (sin alterar datos ni lógica de negocio) ===== */
 :root{
   --jcp-ui-bg:#080808;
@@ -2214,8 +2246,9 @@ nav button{display:flex!important;flex-direction:column!important;align-items:ce
   .jcp-two-color-grid{grid-template-columns:1fr}
   .jcp-sound-packs{grid-template-columns:1fr 1fr}
 }
-</style>
-<style id="jcp-settings-clean-navigation-v25">
+
+/* ===== jcp-settings-clean-navigation-v25 ===== */
+
 /* navegación de Configuración */
 #settingsPanel .jcp-settings-page{display:none!important}
 #settingsPanel .jcp-settings-page.jcp-page-visible{display:block!important}
@@ -2286,11 +2319,13 @@ body.jcp-settings-open .jcp-assistant-float{display:none!important}
  #settingsPanel .jcp-voice-actions{grid-template-columns:1fr!important}
  .jcp-assistant-float{right:10px!important;bottom:72px!important}
 }
-</style>
-<style id="client-edit-secure-style">
+
+/* ===== client-edit-secure-style ===== */
+
 .client-edit-panel{display:none;margin-top:14px;background:#0d0d0d;border:1px solid #5b4a1d;border-radius:14px;padding:12px}.client-edit-panel.open{display:block}.client-edit-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}.client-edit-head h3{margin:0;color:var(--gold);font-size:15px}.client-edit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.client-edit-grid input{width:100%;padding:11px;background:#090909;border:1px solid #333;color:#fff;border-radius:8px}.client-edit-grid .full{grid-column:1/-1}.client-edit-select{width:100%;padding:11px;background:#090909;border:1px solid #333;color:#fff;border-radius:8px;margin-bottom:10px}.client-edit-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.client-edit-actions button{width:100%}.client-edit-cancel{background:#111!important;color:#fff!important;border:1px solid #444!important}.client-edit-note{font-size:9px;color:#999;line-height:1.35;margin-top:8px}.client-edit-lock{color:var(--gold);font-size:9px;font-weight:900;margin-bottom:8px}@media(max-width:520px){.client-edit-grid{grid-template-columns:1fr}.client-edit-grid .full{grid-column:auto}.client-edit-actions{grid-template-columns:1fr}}
-</style>
-<style id="jcp-adaptive-theme-contrast-v1">
+
+/* ===== jcp-adaptive-theme-contrast-v1 ===== */
+
 /* =========================================================
    CONTRASTE AUTOMÁTICO DE TEMA
    El texto se adapta al color de fondo seleccionado.
@@ -2482,8 +2517,9 @@ body.jcp-custom-theme #settingsPanel .jcp-settings-list-copy small,
 body.jcp-custom-theme #settingsPanel .jcp-settings-note{
   color:var(--jcp-ui-muted)!important;
 }
-</style>
-<style id="jcp-accounting-engine-style">
+
+/* ===== jcp-accounting-engine-style ===== */
+
 .app:has(#contabilidad.view.active) > header{display:none!important}
 .acc-shell{padding-bottom:92px}
 .acc-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-bottom:8px}
@@ -2551,8 +2587,9 @@ body.jcp-custom-theme #contabilidad .acc-table,
 body.jcp-custom-theme #contabilidad .acc-filter input{
   background:var(--jcp-ui-input)!important;color:var(--jcp-ui-text)!important
 }
-</style>
-<style id="jcp-internal-receipts-style">
+
+/* ===== jcp-internal-receipts-style ===== */
+
 .app:has(#recibosInternos.view.active) > header{display:none!important}
 .receipt-shell{padding-bottom:92px}
 .receipt-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:center}
@@ -2590,14 +2627,16 @@ body.jcp-custom-theme #recibosInternos .receipt-filters input,
 body.jcp-custom-theme #recibosInternos .receipt-filters select{
  background:var(--jcp-ui-input)!important;color:var(--jcp-ui-text)!important;border-color:var(--jcp-ui-border)!important
 }
-</style>
-<style id="jcp-treasury-core-style">.app:has(#tesoreria.view.active)>header{display:none!important}.treasury-shell{padding-bottom:92px}.treasury-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.treasury-brand{display:flex;align-items:center;gap:10px;min-width:0}.treasury-logo{width:145px;height:44px;object-fit:contain}.treasury-title{font-size:19px;font-weight:950}.treasury-gold{height:2px;background:var(--gold);margin:6px 0 5px}.treasury-note{font-size:9px;color:#999;line-height:1.4;margin-bottom:10px}.treasury-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.treasury-card{background:#111;border:1px solid #303030;border-radius:11px;padding:10px}.treasury-card span{display:block;font-size:8px;color:#999;font-weight:900}.treasury-card b{display:block;margin-top:5px;color:var(--gold);font-size:14px}.treasury-total{margin-top:8px;border:1px solid #6a5520;border-radius:12px;padding:12px;display:flex;justify-content:space-between;background:#15120b}.treasury-total b{font-size:19px;color:var(--gold)}.treasury-panel{background:#0d0d0d;border:1px solid #303030;border-radius:13px;padding:12px;margin-top:10px}.treasury-panel h3{margin:0 0 10px;color:var(--gold);font-size:12px}.treasury-form{display:grid;grid-template-columns:1fr 1fr;gap:8px}.treasury-form .full{grid-column:1/-1}.treasury-form label{font-size:8px;color:#aaa;font-weight:900}.treasury-form input,.treasury-form select{width:100%;margin-top:4px;padding:10px;border:1px solid #333;background:#090909;color:#fff;border-radius:8px}.treasury-table-wrap{overflow:auto;border:1px solid #2d2d2d;border-radius:10px}.treasury-table{width:100%;min-width:780px;border-collapse:collapse}.treasury-table th{background:#151515;color:var(--gold);font-size:8px;padding:8px}.treasury-table td{font-size:8.5px;padding:8px;border-top:1px solid #242424}.treasury-table .num{text-align:right}.treasury-in{color:#55d98a;font-weight:900}.treasury-out{color:#ff7777;font-weight:900}.treasury-init-warning{padding:10px;border:1px solid #674b24;border-radius:9px;background:#1b1309;color:#e8bd82;font-size:9px}.treasury-account-field{display:none;margin-top:7px}.treasury-account-field.visible{display:block}.treasury-account-field select{width:100%;padding:10px;background:#0b0b0b;border:1px solid #333;color:#fff;border-radius:8px}.treasury-close-table{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:5px;font-size:9px}.treasury-close-table>div{padding:7px;border-bottom:1px solid #292929}.treasury-close-table .head{color:var(--gold);font-weight:900}@media(max-width:700px){.treasury-grid{grid-template-columns:1fr 1fr}.treasury-form{grid-template-columns:1fr}.treasury-form .full{grid-column:auto}.treasury-title{font-size:15px}}
+
+/* ===== jcp-treasury-core-style ===== */
+.app:has(#tesoreria.view.active)>header{display:none!important}.treasury-shell{padding-bottom:92px}.treasury-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.treasury-brand{display:flex;align-items:center;gap:10px;min-width:0}.treasury-logo{width:145px;height:44px;object-fit:contain}.treasury-title{font-size:19px;font-weight:950}.treasury-gold{height:2px;background:var(--gold);margin:6px 0 5px}.treasury-note{font-size:9px;color:#999;line-height:1.4;margin-bottom:10px}.treasury-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.treasury-card{background:#111;border:1px solid #303030;border-radius:11px;padding:10px}.treasury-card span{display:block;font-size:8px;color:#999;font-weight:900}.treasury-card b{display:block;margin-top:5px;color:var(--gold);font-size:14px}.treasury-total{margin-top:8px;border:1px solid #6a5520;border-radius:12px;padding:12px;display:flex;justify-content:space-between;background:#15120b}.treasury-total b{font-size:19px;color:var(--gold)}.treasury-panel{background:#0d0d0d;border:1px solid #303030;border-radius:13px;padding:12px;margin-top:10px}.treasury-panel h3{margin:0 0 10px;color:var(--gold);font-size:12px}.treasury-form{display:grid;grid-template-columns:1fr 1fr;gap:8px}.treasury-form .full{grid-column:1/-1}.treasury-form label{font-size:8px;color:#aaa;font-weight:900}.treasury-form input,.treasury-form select{width:100%;margin-top:4px;padding:10px;border:1px solid #333;background:#090909;color:#fff;border-radius:8px}.treasury-table-wrap{overflow:auto;border:1px solid #2d2d2d;border-radius:10px}.treasury-table{width:100%;min-width:780px;border-collapse:collapse}.treasury-table th{background:#151515;color:var(--gold);font-size:8px;padding:8px}.treasury-table td{font-size:8.5px;padding:8px;border-top:1px solid #242424}.treasury-table .num{text-align:right}.treasury-in{color:#55d98a;font-weight:900}.treasury-out{color:#ff7777;font-weight:900}.treasury-init-warning{padding:10px;border:1px solid #674b24;border-radius:9px;background:#1b1309;color:#e8bd82;font-size:9px}.treasury-account-field{display:none;margin-top:7px}.treasury-account-field.visible{display:block}.treasury-account-field select{width:100%;padding:10px;background:#0b0b0b;border:1px solid #333;color:#fff;border-radius:8px}.treasury-close-table{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:5px;font-size:9px}.treasury-close-table>div{padding:7px;border-bottom:1px solid #292929}.treasury-close-table .head{color:var(--gold);font-weight:900}@media(max-width:700px){.treasury-grid{grid-template-columns:1fr 1fr}.treasury-form{grid-template-columns:1fr}.treasury-form .full{grid-column:auto}.treasury-title{font-size:15px}}
 .treasury-transfer-list{display:grid;gap:7px}
 .treasury-transfer-row{display:grid;grid-template-columns:minmax(150px,1.5fr) minmax(100px,1fr) 28px minmax(100px,1fr) 120px;gap:8px;align-items:center;padding:10px;border-bottom:1px solid #292929}
 .treasury-transfer-row:last-child{border-bottom:0}.treasury-transfer-row small{display:block;color:#888;font-size:8px;margin-bottom:3px}.treasury-transfer-row b{display:block;color:#eee;font-size:10px;overflow-wrap:anywhere}.treasury-transfer-row span{display:block;color:#888;font-size:8px;margin-bottom:3px}.treasury-transfer-row strong{text-align:right;color:var(--gold);font-size:11px;white-space:nowrap}.treasury-transfer-arrow{text-align:center;color:var(--gold);font-size:18px}
 @media(max-width:700px){.treasury-transfer-row{grid-template-columns:1fr 1fr 22px 1fr;padding:9px 4px}.treasury-transfer-row>div:first-child{grid-column:1/-1}.treasury-transfer-row strong{grid-column:1/-1;text-align:left;padding-top:3px}}
-</style>
-<style id="jcp-sale-title-compact">
+
+/* ===== jcp-sale-title-compact ===== */
+
 #ventas .unified-module-title{font-size:18px!important;line-height:1.1!important}
 #ventas .sale-invoice-head h3{font-size:17px!important;line-height:1.15!important}
 #ventas .sale-invoice-kicker{font-size:9px!important;letter-spacing:1px!important}
@@ -2605,8 +2644,9 @@ body.jcp-custom-theme #recibosInternos .receipt-filters select{
   #ventas .unified-module-title{font-size:15px!important}
   #ventas .sale-invoice-head h3{font-size:15px!important}
 }
-</style>
-<style id="jcp-complete-info-style">
+
+/* ===== jcp-complete-info-style ===== */
+
 .complete-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .complete-info-grid label{font-size:10px;color:#aaa;font-weight:900}
 .complete-info-grid input,.complete-info-grid select{width:100%;margin-top:5px;padding:11px;background:#090909;border:1px solid #333;color:#fff;border-radius:9px}
@@ -2616,11 +2656,13 @@ body.jcp-custom-theme #recibosInternos .receipt-filters select{
 .complete-info-summary .card{margin:0}
 @media(max-width:600px){.complete-info-grid{grid-template-columns:1fr}.complete-vehicle-card{grid-template-columns:86px 1fr}.complete-vehicle-card img{width:86px;height:68px}.complete-info-summary{grid-template-columns:1fr}}
 
-</style>
-<style id="jcp-payment-distribution-core">
+
+/* ===== jcp-payment-distribution-core ===== */
+
 .paydist{display:none;margin-top:10px;padding:12px;border:1px solid #3a3a3a;border-radius:12px;background:#0d0d0d}.paydist.open{display:block}.paydist-title{font-size:10px;font-weight:950;color:var(--gold);margin-bottom:9px}.paydist-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.paydist-row{display:grid;grid-template-columns:1fr 145px;gap:8px;align-items:center;padding:7px 9px;border:1px solid #2e2e2e;border-radius:9px;background:#121212}.paydist-row span{font-size:9px;font-weight:900;color:#bbb}.paydist-row input{width:100%;padding:9px!important;margin:0!important;text-align:right}.paydist-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:9px}.paydist-summary>div{padding:8px;border:1px solid #333;border-radius:8px;background:#111}.paydist-summary span{display:block;font-size:7.5px;color:#999;font-weight:900}.paydist-summary b{display:block;margin-top:3px;font-size:11px}.paydist-summary .ok b{color:#55d98a}.paydist-summary .bad b{color:#ff7f7f}.paydist-hint{margin-top:7px;font-size:8px;color:#999}.paydist-locked:disabled{opacity:.45!important}@media(max-width:650px){.paydist-grid{grid-template-columns:1fr}.paydist-row{grid-template-columns:1fr 130px}}
-</style>
-<style id="jcp-database-module-v1">
+
+/* ===== jcp-database-module-v1 ===== */
+
 /* ===== BASE DE DATOS: implementación única ===== */
 #clientes.database-view,
 #editarClientes.database-view{
@@ -2857,8 +2899,9 @@ body.jcp-custom-theme .database-actions-list button{
   color:var(--jcp-ui-text)!important;
   border-color:var(--jcp-ui-border)!important;
 }
-</style>
-<style id="jcp-next-receipt-indicator-style">
+
+/* ===== jcp-next-receipt-indicator-style ===== */
+
 .next-receipt-indicator{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;margin:12px 0;padding:12px 14px;background:linear-gradient(145deg,#111,#171717);border:1px solid #6a5520;border-radius:15px}
 .next-receipt-indicator.expense{border-color:#5d5420}
 .next-receipt-icon{width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#24200f;font-size:22px}
@@ -2866,8 +2909,9 @@ body.jcp-custom-theme .database-actions-list button{
 .next-receipt-number{margin-top:2px;color:#e3b72c;font-size:23px;line-height:1;font-weight:950;letter-spacing:.5px}
 .next-receipt-note{max-width:210px;padding-left:12px;border-left:1px solid #565656;color:#b8b8b8;font-size:10px;line-height:1.35}
 @media(max-width:560px){.next-receipt-indicator{grid-template-columns:auto 1fr}.next-receipt-note{grid-column:1/-1;max-width:none;padding:8px 0 0;border-left:0;border-top:1px solid #343434}}
-</style>
-<style id="jcp-treasury-responsive-history-style">
+
+/* ===== jcp-treasury-responsive-history-style ===== */
+
 .treasury-mobile-history{display:none}
 .treasury-mobile-card{
   background:#101010;
@@ -3008,8 +3052,9 @@ body.jcp-custom-theme .database-actions-list button{
   .treasury-mobile-history{display:block!important}
   #treasuryHistory{overflow:visible!important}
 }
-</style>
-<style id="jcp-accounting-document-actions-style">
+
+/* ===== jcp-accounting-document-actions-style ===== */
+
 #contabilidad .accounting-document-actions{margin:12px 0 14px}
 #contabilidad .accounting-document-action-card{margin:0 0 14px}
 #contabilidad .acc-document-found{
@@ -3024,9 +3069,9 @@ body.jcp-custom-theme .database-actions-list button{
   #contabilidad .acc-document-found{grid-template-columns:1fr}
   #contabilidad .acc-document-found strong{text-align:left}
 }
-</style>
 
-<style id="jcp-registros-mobile-fix-real">
+/* ===== jcp-registros-mobile-fix-real ===== */
+
 /* MODIFICACIÓN 1 — REGISTROS
    Corrección aplicada en el HEAD PRINCIPAL de la aplicación */
 #registros .records-filter-card{
@@ -3124,10 +3169,9 @@ body.jcp-custom-theme .database-actions-list button{
     font-size:14px !important;
   }
 }
-</style>
 
+/* ===== jcp-registros-results-fix ===== */
 
-<style id="jcp-registros-results-fix">
 #registros .records-list{
   width:100%!important;
   margin-top:18px!important;
@@ -3170,11 +3214,9 @@ body.jcp-custom-theme .database-actions-list button{
     grid-template-columns:90px minmax(0,1fr) 88px!important;
   }
 }
-</style>
 
+/* ===== jcp-accounting-auxiliary-style ===== */
 
-
-<style id="jcp-accounting-auxiliary-style">
 #contabilidadDetalle{padding-bottom:92px}
 #contabilidad .acc-main-menu{margin-top:14px}
 #contabilidad .acc-main-menu button{min-height:72px!important;border-radius:12px!important;font-size:10px!important}
@@ -3229,9 +3271,9 @@ body.jcp-custom-theme .database-actions-list button{
   #contabilidadDetalle .acc-aux-summary-row{gap:4px!important}
   #contabilidadDetalle .acc-aux-summary b{font-size:8.5px!important}
 }
-</style>
 
-<style id="jcp-obligations-module-style">
+/* ===== jcp-obligations-module-style ===== */
+
 #obligaciones,#historialObligaciones{padding-bottom:92px}
 .obligations-summary-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;margin:12px 0 16px!important}
 .obligations-summary-card{min-width:0!important;min-height:96px!important;box-sizing:border-box!important;background:#111!important;border:1px solid #3c321d!important;border-radius:14px!important;padding:14px 8px!important;text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;overflow:hidden!important}
@@ -3308,7 +3350,420 @@ body.jcp-custom-theme .database-actions-list button{
   .available-movement-row{grid-template-columns:72px minmax(0,1fr) auto;gap:6px}
 }
 
+
+
+
+/* ===== b1-home-search-position (restaurado desde plantilla de impresión) ===== */
+#dashboard > #globalSearchBar{
+  display:block;
+  margin:0 0 12px!important;
+}
+
+/* ===== mod20-top-menu-over-search (restaurado desde plantilla de impresión) ===== */
+/* MODIFICACIÓN 20 — prioridad visual del menú superior */
+.app > header{
+  position:relative!important;
+  z-index:10000!important;
+  overflow:visible!important;
+}
+.app > header .top-menu-wrap{
+  position:relative!important;
+  z-index:10001!important;
+}
+.app > header #topMenu,
+.app > header .top-menu{
+  z-index:10002!important;
+}
+#dashboard > #globalSearchBar,
+#globalSearchBar{
+  position:relative;
+  z-index:2500!important;
+}
+#globalSearchResults{
+  z-index:2501!important;
+}
+
+/* ===== extractos-dos-filtros-ajuste (restaurado desde plantilla de impresión) ===== */
+#extractos .ext-two-filters{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important}
+#extractos .ext-pro-summary{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+#extractos .ext-pro-summary .ext-pro-card.blue{grid-column:auto!important}
+#extractos .ext-pro-card{padding:9px 7px!important}
+#extractos .ext-pro-card span{font-size:8px!important;line-height:1.15}
+#extractos .ext-pro-card b{font-size:15px!important;margin:6px 0 3px!important}
+#extractos .ext-pro-card small{font-size:7px!important;line-height:1.15;display:block}
+@media(max-width:520px){
+  #extractos .ext-pro-summary{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #extractos .ext-pro-summary .ext-pro-card.blue{grid-column:auto!important}
+}
+@media(max-width:390px){
+  #extractos .ext-pro-summary{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #extractos .ext-pro-summary .ext-pro-card.blue{grid-column:auto!important}
+  #extractos .ext-pro-card{padding:8px 5px!important}
+  #extractos .ext-pro-card b{font-size:13px!important}
+  #extractos .ext-pro-card span{font-size:7px!important}
+  #extractos .ext-pro-card small{font-size:6.5px!important}
+}
+
+/* ===== jcp-extractos-final-layout (restaurado desde plantilla de impresión) ===== */
+/* =========================================================
+   EXTRACTOS — DISEÑO APROBADO
+   ========================================================= */
+
+/* Dos filtros uniformes, misma altura y estilo */
+#extractos .ext-clean-filterbar{
+  display:grid!important;
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;
+  gap:8px!important;
+  width:100%!important;
+  margin:10px 0 12px!important;
+  align-items:start!important;
+}
+#extractos .ext-date-control{
+  position:relative!important;
+  min-width:0!important;
+}
+#extractos .ext-uniform-select{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  height:46px!important;
+  min-height:46px!important;
+  max-height:46px!important;
+  margin:0!important;
+  padding:0 26px 0 10px!important;
+  box-sizing:border-box!important;
+  border:1px solid #5a491a!important;
+  border-radius:10px!important;
+  background:#101010!important;
+  color:#fff!important;
+  font-family:inherit!important;
+  font-size:10px!important;
+  font-weight:700!important;
+  line-height:44px!important;
+  text-align:center!important;
+  text-align-last:center!important;
+  white-space:nowrap!important;
+}
+#extractos #extDateMenu{
+  font-size:11px!important;
+}
+#extractos #extCategoryFilter{
+  font-size:8.6px!important;
+  padding-left:5px!important;
+  padding-right:20px!important;
+}
+#extractos .ext-uniform-select option{
+  text-align:center!important;
+  font-size:12px!important;
+}
+
+/* Fechas permanecen replegadas hasta seleccionar Fecha */
+#extractos .ext-date-range-panel{
+  position:absolute!important;
+  z-index:30!important;
+  left:0!important;
+  right:0!important;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:7px;
+  margin-top:6px;
+  padding:8px;
+  box-sizing:border-box;
+  border:1px solid #5a491a;
+  border-radius:10px;
+  background:#0d0d0d;
+  box-shadow:0 10px 25px rgba(0,0,0,.55);
+}
+#extractos .ext-date-range-panel[hidden]{display:none!important}
+#extractos .ext-date-range-panel label span{
+  display:block;
+  margin:0 0 4px 1px;
+  color:#aaa;
+  font-size:8px;
+  font-weight:900;
+}
+#extractos .ext-date-range-panel input{
+  width:100%;
+  height:40px;
+  box-sizing:border-box;
+  padding:7px;
+  border:1px solid #333;
+  border-radius:7px;
+  background:#090909;
+  color:#fff;
+  color-scheme:dark;
+}
+
+/* Tres tarjetas iguales y EN UNA SOLA FILA */
+#extractos .ext-pro-summary.ext-filter-summary{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-auto-flow:column!important;
+  gap:7px!important;
+  width:100%!important;
+  margin:10px 0 12px!important;
+}
+#extractos .ext-pro-summary.ext-filter-summary > .ext-pro-card,
+#extractos .ext-pro-summary.ext-filter-summary > .ext-pro-card.blue{
+  grid-column:auto!important;
+  grid-row:1!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  min-height:108px!important;
+  margin:0!important;
+  padding:12px 9px!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  border-radius:12px!important;
+}
+
+/* Títulos */
+#extractos .ext-pro-summary.ext-filter-summary .ext-pro-card span{
+  display:block!important;
+  font-size:8px!important;
+  font-weight:900!important;
+  line-height:1.15!important;
+  white-space:normal!important;
+  overflow:visible!important;
+}
+
+/* Valores: el tamaño inline grande prevalece; aquí solo aseguramos espacio */
+#extractos .ext-pro-summary.ext-filter-summary .ext-pro-card b{
+  min-height:18px!important;
+}
+
+/* Texto inferior */
+#extractos .ext-pro-summary.ext-filter-summary .ext-pro-card small{
+  display:block!important;
+  font-size:7px!important;
+  line-height:1.2!important;
+  color:#999!important;
+}
+
+/* Teléfonos */
+@media(max-width:420px){
+  #extractos .ext-clean-filterbar{
+    grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;
+    gap:6px!important;
+  }
+  #extractos .ext-uniform-select{
+    height:42px!important;
+    min-height:42px!important;
+    max-height:42px!important;
+    line-height:40px!important;
+  }
+  #extractos #extDateMenu{font-size:10px!important}
+  #extractos #extCategoryFilter{font-size:7.7px!important}
+
+  #extractos .ext-pro-summary.ext-filter-summary{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    grid-auto-flow:column!important;
+    gap:5px!important;
+  }
+  #extractos .ext-pro-summary.ext-filter-summary > .ext-pro-card,
+  #extractos .ext-pro-summary.ext-filter-summary > .ext-pro-card.blue{
+    grid-column:auto!important;
+    grid-row:1!important;
+    min-height:100px!important;
+    padding:10px 7px!important;
+  }
+  #extractos .ext-pro-summary.ext-filter-summary .ext-pro-card span{
+    font-size:7.2px!important;
+  }
+  #extractos .ext-pro-summary.ext-filter-summary .ext-pro-card small{
+    font-size:6.4px!important;
+  }
+}
+
+/* ===== jcp-operations-centralized-style (restaurado desde plantilla de impresión) ===== */
+#ventas .operations-register-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin:14px 0 16px;
+}
+#ventas .operations-register-grid .sales-menu-card{
+  min-height:138px;
+}
+#ventas .operations-register-grid .operations-wide-card{
+  grid-column:1/-1;
+  min-height:96px;
+}
+#gestionDocumentos{padding-bottom:92px}
+#gestionDocumentos .accounting-document-actions{
+  margin:14px 0;
+}
+#gestionDocumentos .accounting-document-action-card{
+  margin-top:12px;
+}
+@media(max-width:520px){
+  #ventas .operations-register-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+  #ventas .operations-register-grid .sales-menu-card{
+    min-height:126px;
+    padding:12px 8px;
+  }
+  #ventas .operations-register-grid .operations-wide-card{
+    grid-column:1/-1;
+    min-height:88px;
+  }
+}
+
+/* ===== jcp-debt-payment-mod1-style (restaurado desde plantilla de impresión) ===== */
+#pagoObligaciones .debt-pay-secondary{
+  grid-template-columns:1fr!important;
+}
+#pagoObligaciones #debtPayDist.open{
+  display:block!important;
+  margin-top:10px!important;
+}
+#pagoObligaciones #ccDebtValue[readonly]{
+  border-color:#7b6420!important;
+  color:var(--gold)!important;
+  font-weight:900!important;
+  background:#17140c!important;
+}
+#pagoObligaciones .paydist-title{
+  font-size:11px!important;
+  letter-spacing:.4px!important;
+}
+
+/* ===== jcp-records-module-style (restaurado desde plantilla de impresión) ===== */
+#registros{padding-bottom:92px}
+.records-filter-card{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin:11px 0;
+  padding:10px;
+  background:#0d0d0d;
+  border:1px solid #303030;
+  border-radius:11px;
+}
+.records-filter-card label{color:#999;font-size:8px;font-weight:900}
+.records-filter-card select,
+.records-filter-card input{
+  width:100%;
+  min-height:40px;
+  margin-top:4px;
+  padding:8px;
+  box-sizing:border-box;
+  border:1px solid #333;
+  border-radius:8px;
+  background:#090909;
+  color:#fff;
+}
+.records-list{
+  overflow:hidden;
+  border:1px solid #2d2d2d;
+  border-radius:11px;
+  background:#0d0d0d;
+}
+.records-row{
+  display:grid;
+  grid-template-columns:100px minmax(0,1fr) 105px 90px;
+  gap:7px;
+  align-items:center;
+  padding:9px;
+  border-bottom:1px solid #252525;
+}
+.records-row:last-child{border-bottom:0}
+.records-doc b{display:block;color:var(--gold);font-size:10px;overflow-wrap:anywhere}
+.records-doc small,.records-main small{display:block;margin-top:3px;color:#888;font-size:7px}
+.records-main strong{display:block;color:#fff;font-size:9px;line-height:1.25;overflow-wrap:anywhere}
+.records-amount{text-align:right;font-size:9px;font-weight:900;white-space:nowrap}
+.records-copy-btn{
+  min-height:34px!important;
+  padding:7px 5px!important;
+  background:#111!important;
+  color:var(--gold)!important;
+  border:1px solid #5c4a18!important;
+  font-size:7.5px!important;
+}
+.records-empty{padding:22px;text-align:center;color:#999;font-size:9px}
+@media(max-width:600px){
+  .records-filter-card{grid-template-columns:1fr!important}
+  .records-row{grid-template-columns:90px minmax(0,1fr) 85px}
+  .records-copy-btn{grid-column:1/-1;width:100%!important}
+}
 </style>
+
+
+
+
+
+<link href="./manifest.json" rel="manifest"/>
+<meta content="#111111" name="theme-color"/>
+<meta content="yes" name="mobile-web-app-capable"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="MULTI JCP" name="apple-mobile-web-app-title"/>
+<link href="./icon-192.png" rel="apple-touch-icon"/>
+<link href="./icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- V61: cuadrícula de edición responsive + cierre automático al guardar -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </head>
 <body>
 <div id="jcpCleanBuild" style="display:none">JCP-CLEAN-EXTRACTOS-TREASURY-20260830</div>
@@ -4793,6 +5248,9 @@ const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHA
 let cloudUser=null;
 let cloudReady=false;
 let cloudBusy=false;
+let cloudKnownRevision=0;
+let cloudConflictDetected=false;
+window.jcpCloudConflictDetected=false;
 let authMode='login';
 
 function cloudHasRecords(obj){
@@ -5124,20 +5582,22 @@ async function handleCloudSession(session){
 
     let remote=row?.data?normalizeCloudData(row.data):null;
 
-    // Estado oficial solicitado por el usuario: Supabase debe quedar realmente en cero.
-    // La operación solo se considera completada después de volver a leer y verificar la nube.
-    if(!remote || !isOfficialEmptyState(remote)){
+    // Arranque seguro: Supabase es la fuente única. Un registro existente NUNCA se borra
+    // automáticamente al iniciar sesión. El estado vacío oficial solo se crea si la fila
+    // del usuario todavía no existe. Esto evita que datos reales posteriores al reinicio
+    // inicial sean eliminados en un inicio futuro.
+    if(!remote){
       const empty=buildOfficialEmptyState();
-      const {error:resetError}=await jcpWithTimeout(
+      const {error:initError}=await jcpWithTimeout(
         supabaseClient.from('app_data').upsert({
           user_id:cloudUser.id,
           data:empty,
           updated_at:empty._sync.updatedAt
         },{onConflict:'user_id'}),
         15000,
-        'El reinicio oficial de Supabase'
+        'La inicialización segura de Supabase'
       );
-      if(resetError)throw resetError;
+      if(initError)throw initError;
 
       const {data:verifyRow,error:verifyError}=await jcpWithTimeout(
         supabaseClient.from('app_data')
@@ -5145,16 +5605,14 @@ async function handleCloudSession(session){
           .eq('user_id',cloudUser.id)
           .maybeSingle(),
         15000,
-        'La verificación del reinicio en Supabase'
+        'La verificación de la inicialización en Supabase'
       );
       if(verifyError)throw verifyError;
       const verified=verifyRow?.data?normalizeCloudData(verifyRow.data):null;
-      if(!verified || !isOfficialEmptyState(verified)){
-        throw new Error('Supabase no confirmó el estado oficial en cero. No se cargaron datos locales.');
-      }
+      if(!verified)throw new Error('Supabase no confirmó la creación del estado inicial.');
       remote=verified;
-      window.jcpCloudBootstrapMode='official-reset-verified';
-      setCloudStatus('Nube conectada · estado cero verificado',true);
+      window.jcpCloudBootstrapMode='initialized-empty';
+      setCloudStatus('Nube conectada · estado inicial creado',true);
     }else{
       window.jcpCloudBootstrapMode='remote-verified';
       setCloudStatus('Nube conectada · estado central verificado',true);
@@ -5162,6 +5620,9 @@ async function handleCloudSession(session){
 
     // Supabase es la única fuente al iniciar. localStorage queda solo como caché.
     data=remote;
+    cloudKnownRevision=syncRevision(remote);
+    cloudConflictDetected=false;
+    window.jcpCloudConflictDetected=false;
     localStorage.setItem(KEY,JSON.stringify(data));
     localStorage.removeItem(CLOUD_PENDING_KEY);
     localStorage.removeItem('jcp_app_reset_pending_v1');
@@ -5437,16 +5898,32 @@ async function guardarAutomaticoEnNube(snapshot=null){
 
     if(existing?.data){
       const remote=normalizeCloudData(existing.data);
+      const remoteRevision=syncRevision(remote);
+
+      // Control optimista de concurrencia. Si este dispositivo cargó la revisión X y
+      // Supabase ya está en otra revisión, NO se permite sobrescribir toda la empresa.
+      // Se conserva el cambio local como pendiente y se obliga a recargar antes de seguir.
+      if(cloudKnownRevision>0 && remoteRevision>0 && remoteRevision!==cloudKnownRevision){
+        cloudConflictDetected=true;
+        window.jcpCloudConflictDetected=true;
+        try{localStorage.setItem(CLOUD_PENDING_KEY,'1');}catch(e){}
+        setCloudStatus('CONFLICTO DE DATOS · recarga antes de continuar');
+        console.error('JCP CONCURRENCIA: revisión local base',cloudKnownRevision,'revisión remota',remoteRevision);
+        return false;
+      }
+
       if(compareStateFreshness(remote,requested,existing.updated_at||'','')>0){
-        // Nunca pisa una versión remota más nueva con un snapshot viejo en cola.
-        try{localStorage.removeItem(CLOUD_PENDING_KEY);}catch(e){}
-        setCloudStatus('Nube protegida · se descartó una escritura antigua',true);
+        try{localStorage.setItem(CLOUD_PENDING_KEY,'1');}catch(e){}
+        setCloudStatus('Nube protegida · existe una versión remota más nueva');
         return false;
       }
     }
 
     const {error}=await supabaseClient.from('app_data').upsert(payload,{onConflict:'user_id'});
     if(error)throw error;
+    cloudKnownRevision=syncRevision(requested);
+    cloudConflictDetected=false;
+    window.jcpCloudConflictDetected=false;
     try{localStorage.removeItem(CLOUD_PENDING_KEY);}catch(e){}
     setCloudStatus('Nube actualizada · '+new Date().toLocaleTimeString('es-CO'),true);
     return true;
@@ -5481,6 +5958,7 @@ function programarGuardadoAutomatico(snapshot=null){
 if(typeof window!=='undefined'){
   const retryPendingCloudSave=()=>{
     try{
+      if(cloudConflictDetected || window.jcpCloudConflictDetected===true)return;
       if(localStorage.getItem(CLOUD_PENDING_KEY)!=='1')return;
       const current=normalizeCloudData(JSON.parse(localStorage.getItem(KEY)||JSON.stringify(data)));
       programarGuardadoAutomatico(current);
@@ -5659,7 +6137,7 @@ function renderIntegrityAudit(report=window.jcpLastAuditReport||jcpAuditState(da
   ].map(([k,v])=>'<div class="audit-kpi"><span>'+k.toUpperCase()+'</span><b>'+v+'</b></div>').join('');
   if(!report.issues.length){issuesEl.innerHTML='<div class="audit-empty">✓ No se detectaron inconsistencias en las verificaciones activas.</div>';return;}
   const order={critical:0,warning:1,info:2};
-  issuesEl.innerHTML=report.issues.slice().sort((a,b)=>(order[a.severity]??9)-(order[b.severity]??9)).map(x=>'<div class="audit-issue '+x.severity+'"><b>'+(x.severity==='critical'?'⛔ ':'⚠️ ')+x.title+'</b><span>'+x.detail+'</span></div>').join('');
+  issuesEl.innerHTML=report.issues.slice().sort((a,b)=>(order[a.severity]??9)-(order[b.severity]??9)).map(x=>'<div class="audit-issue '+x.severity+'"><b>'+(x.severity==='critical'?'⛔ ':'⚠️ ')+clientEsc(x.title)+'</b><span>'+clientEsc(x.detail)+'</span></div>').join('');
 }
 
 window.addEventListener('jcp-cloud-bootstrap-ready',()=>{
@@ -5667,6 +6145,12 @@ window.addEventListener('jcp-cloud-bootstrap-ready',()=>{
 });
 
 function save(){
+  if(cloudConflictDetected || window.jcpCloudConflictDetected===true){
+    const err=new Error('CONFLICTO DE DATOS: otro dispositivo actualizó Supabase. Recarga la aplicación antes de registrar otro movimiento.');
+    console.error(err.message);
+    alert(err.message);
+    throw err;
+  }
   // BLOQUEO DE ARRANQUE: ninguna operación ni migración puede persistir datos
   // mientras la fuente de verdad (Supabase o respaldo offline) no esté resuelta.
   if(window.jcpCloudBootstrapReady!==true){
@@ -5823,7 +6307,7 @@ function renderAvailableDetail(){
 
   grid.innerHTML=defs.map(def=>`
     <div class="available-account-card">
-      <span>${String(def.name||def.id||'CUENTA').toUpperCase()}</span>
+      <span>${clientEsc(String(def.name||def.id||'CUENTA').toUpperCase())}</span>
       <b>${money(Number(balances[def.id]||0))}</b>
     </div>
   `).join('');
@@ -5843,8 +6327,8 @@ function renderAvailableDetail(){
     const direction=x.direction==='out'?'out':'in';
     const sign=direction==='out'?'−':'+';
     return `<div class="available-movement-row ${direction}">
-      <small>${String(x.date||'SIN FECHA')}</small>
-      <b>${String(x.concept||x.operationType||'MOVIMIENTO').toUpperCase()}<br><small>${String(treasuryAccountName(x.accountId)||'')}</small></b>
+      <small>${clientEsc(String(x.date||'SIN FECHA'))}</small>
+      <b>${clientEsc(String(x.concept||x.operationType||'MOVIMIENTO').toUpperCase())}<br><small>${clientEsc(String(treasuryAccountName(x.accountId)||''))}</small></b>
       <strong>${sign} ${money(amount)}</strong>
     </div>`;
   }).join(''):'<div class="empty">NO HAY MOVIMIENTOS FINANCIEROS REGISTRADOS.</div>';
@@ -5926,8 +6410,8 @@ function renderVehicleUtilityHistory(){
     <div class="vehicle-utility-card">
       <div class="vehicle-utility-card-head">
         <div>
-          <b>${u.name}</b>
-          <span>${u.plate} · ${u.date}</span>
+          <b>${clientEsc(u.name)}</b>
+          <span>${clientEsc(u.plate)} · ${clientEsc(u.date)}</span>
         </div>
         <strong class="${u.profit>=0?'positive':'negative'}">${money(u.profit)}</strong>
       </div>
@@ -5940,6 +6424,8 @@ function renderVehicleUtilityHistory(){
 }
 
 function show(id){
+  // Enrutamiento centralizado: una sola implementación de navegación.
+  if(id==='movimientos')id='extractos';
   const target=document.getElementById(id);
   if(!target)return;
 
@@ -5992,6 +6478,53 @@ function show(id){
     try{renderUnifiedProfitAvailable();}catch(e){}
     try{updatePaymentDistribution('profitWithdraw');}catch(e){}
   }
+
+  // Hooks de navegación consolidados. Sustituyen las antiguas cadenas de
+  // window.show = function(...) que dependían del orden de carga.
+  try{
+    const src=document.querySelector('#vehiculos .inventory-inline-logo');
+    const logoMap={
+      cajaCapital:'cashCapitalLogo',extractos:'extractosLogo',detalleCapital:'detalleCapitalLogo',
+      capitalFinanciacion:'capitalFinLogo',pagoObligaciones:'pagoObligLogo',nuevaFinanciacion:'nuevaFinLogo',
+      obligacionesPendientes:'obligPendLogo',cierreCaja:'cierreCajaLogo',historialFinanciero:'histFinLogo',
+      historialCapitalFinanciacion:'capitalFinHistLogo',carteraCaja:'carteraCajaLogo',
+      historialRetiroGanancia:'profitWithdrawalHistoryLogo'
+    };
+    if(src&&logoMap[id]){
+      const dst=document.getElementById(logoMap[id]);
+      if(dst)dst.src=src.src;
+    }
+  }catch(e){}
+
+  if(id==='cajaCapital'||id==='extractos'){
+    try{renderCashCapital();}catch(e){}
+    if(id==='extractos')try{renderExtractos();}catch(e){}
+  }
+  if(['detalleCapital','capitalFinanciacion','nuevaFinanciacion','pagoObligaciones','obligacionesPendientes','historialFinanciero'].includes(id)){
+    try{renderCashCapital();}catch(e){}
+  }
+  if(id==='detalleCapital')try{renderCapitalDetail();}catch(e){}
+  if(id==='nuevaFinanciacion')try{resetCapitalSourceForm();}catch(e){}
+  if(id==='obligaciones')try{renderObligationsHub();}catch(e){}
+  if(id==='historialObligaciones')try{renderObligationHistory();}catch(e){}
+  if(id==='obligacionesPendientes')try{renderPendingObligations();}catch(e){}
+  if(id==='historialCapitalFinanciacion')try{renderCapitalFinanceHistory();}catch(e){}
+  if(id==='cierreCaja'){
+    try{renderCashCapital();}catch(e){}
+    try{previewCashClosure();}catch(e){}
+    try{if(typeof window.bindCashCloseLive==='function')setTimeout(window.bindCashCloseLive,0);}catch(e){}
+  }
+  if(id==='carteraCaja'){
+    try{renderSalesReceivables();}catch(e){}
+    try{renderLoanReceivablesV78();}catch(e){}
+    try{syncFinancialUiV76();}catch(e){}
+  }
+  if(id==='vehiculos'){
+    const form=document.getElementById('formVeh');
+    if(form&&form.parentElement?.id==='vehiculos')form.style.display='none';
+  }
+  if(id==='historialRetiroGanancia')try{renderProfitWithdrawalHistory();}catch(e){}
+  try{if(typeof window.ensureOriginalBottomNav==='function')setTimeout(window.ensureOriginalBottomNav,0);}catch(e){}
 }
 
 
@@ -6165,7 +6698,7 @@ function vehicleOptions(){
     // uno para los vehículos antiguos que no lo tenían.
     const id=String(x.id||('veh_legacy_'+i));
     const label=[x.pl||'SIN PLACA', (x.marca||x.m||''), (x.ref||''), (x.modelo||'')].filter(Boolean).join(' — ');
-    return `<option value="${id}">${label}</option>`;
+    return `<option value="${jcpSafeAttr(id)}">${clientEsc(label)}</option>`;
   }).join('');
 }
 function populateVehicleSelect(){
@@ -6644,7 +7177,7 @@ function renderInternalReceipts(){
         <div>
           <div class="receipt-number">${priceEsc(r.number)}</div>
           <div class="receipt-meta">
-            ${receiptTypeLabel(r.type)} · ${priceEsc(r.date||'')}
+            ${clientEsc(receiptTypeLabel(r.type))} · ${priceEsc(r.date||'')}
           </div>
         </div>
         <span class="receipt-status">
@@ -6669,13 +7202,13 @@ function renderInternalReceipts(){
 
       <div class="receipt-actions">
         <button class="receipt-print-btn"
-                onclick="printInternalReceipt('${priceEsc(r.number)}')">
+                onclick="printInternalReceipt('${jcpInlineJsArg(r.number)}')">
           🖨️ GENERAR SOPORTE
         </button>
 
         ${r.status!=='ANULADO'
           ?`<button class="receipt-void-btn"
-                    onclick="voidInternalReceipt('${priceEsc(r.number)}')">
+                    onclick="voidInternalReceipt('${jcpInlineJsArg(r.number)}')">
               🔒 ANULAR RECIBO
             </button>`
           :''
@@ -6973,7 +7506,7 @@ function saleClientSupportHtml(r){
   const displayPays=pays.length?pays:[{label:d.method||'FORMA DE PAGO',value:d.received}];
 
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>${priceEsc(d.number)} · SOPORTE CLIENTE</title><style>${saleSupportStyles()}</style></head><body>
-  <div class="mode-switch"><button onclick="if(window.opener&&window.opener.openSaleSupportMode){window.opener.openSaleSupportMode('${priceEsc(d.number)}','internal')}">VER SOPORTE INTERNO</button></div>
+  <div class="mode-switch"><button onclick="if(window.opener&&window.opener.openSaleSupportMode){window.opener.openSaleSupportMode('${jcpInlineJsArg(d.number)}','internal')}">VER SOPORTE INTERNO</button></div>
   <section class="sale-page">
     <div class="sale-head">${logo?`<img class="sale-logo" src="${priceEsc(logo)}">`:''}<div class="sale-title"><h1>VENTA<br><span>DE VEHÍCULO</span></h1><div class="sale-number"><small>N° DE VENTA</small><b>${priceEsc(d.number)}</b></div></div></div>
 
@@ -7094,7 +7627,7 @@ function saleInternalSupportHtml(r){
   }).join('');
 
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>${priceEsc(d.number)} · SOPORTE INTERNO</title><style>${saleSupportStyles()}</style></head><body>
-    <div class="mode-switch"><button onclick="if(window.opener&&window.opener.openSaleSupportMode){window.opener.openSaleSupportMode('${priceEsc(d.number)}','client')}">VER SOPORTE PARA CLIENTE</button></div>${pages}</body></html>`;
+    <div class="mode-switch"><button onclick="if(window.opener&&window.opener.openSaleSupportMode){window.opener.openSaleSupportMode('${jcpInlineJsArg(d.number)}','client')}">VER SOPORTE PARA CLIENTE</button></div>${pages}</body></html>`;
 }
 
 function tradeSupportData(r){
@@ -7364,10 +7897,12 @@ async function resetDemo(){
     destructiveResetInProgress=false;
   }
 }
-function list(arr,headers,rows){if(!arr.length)return '<div class="empty">No hay registros todavía.</div>';return '<table><thead><tr>'+headers.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'+arr.map(x=>'<tr>'+rows(x).map(v=>'<td>'+v+'</td>').join('')+'</tr>').join('')+'</tbody></table>'}
 
-
-
+/* Seguridad de renderizado 2026.09.14.2:
+   - list() escapa texto por defecto.
+   - jcpSafeHtml() exige opt-in explícito para markup controlado por la aplicación.
+   - Los renderizadores de clientes, vehículos, búsquedas y filtros críticos escapan datos de usuario.
+*/
 function clientEsc(value){
   return String(value??'')
     .replace(/&/g,'&amp;')
@@ -7375,6 +7910,23 @@ function clientEsc(value){
     .replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;')
     .replace(/'/g,'&#39;');
+}
+function jcpSafeHtml(value){return {__jcpSafeHtml:true,value:String(value??'')};}
+function jcpSafeAttr(value){return clientEsc(value);}
+function jcpInlineJsArg(value){
+  return clientEsc(String(value??'')
+    .replace(/\\/g,'\\\\')
+    .replace(/'/g,"\\'")
+    .replace(/\r/g,'\\r')
+    .replace(/\n/g,'\\n')
+    .replace(/\u2028/g,'\\u2028')
+    .replace(/\u2029/g,'\\u2029'));
+}
+function jcpSafeImageSrc(value,fallback=''){const s=String(value||fallback||'');return /^(?:data:image\/|blob:|https?:|\.?\.?\/|\/)/i.test(s)?clientEsc(s):clientEsc(fallback||'');}
+function jcpHtmlCell(value){return value&&value.__jcpSafeHtml===true?String(value.value||''):clientEsc(value);}
+function list(arr,headers,rows){
+  if(!arr.length)return '<div class="empty">No hay registros todavía.</div>';
+  return '<table><thead><tr>'+headers.map(h=>'<th>'+clientEsc(h)+'</th>').join('')+'</tr></thead><tbody>'+arr.map(x=>'<tr>'+rows(x).map(v=>'<td>'+jcpHtmlCell(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
 }
 
 function ensureClientIds(){
@@ -7563,7 +8115,7 @@ function renderClientEditSearch(){
 
   el.innerHTML=rows.map(c=>
     '<div class="database-client-result'+(String(c.id)===String(editingClientId)?' selected':'')+'" '+
-    'onclick="loadClientForEdit(\''+String(c.id).replace(/'/g,"\\'")+'\')">'+
+    'onclick="loadClientForEdit(\''+jcpInlineJsArg(c.id)+'\')">'+
       '<div><b>'+clientEsc(c.nombre||'SIN NOMBRE')+'</b>'+
       '<small>CÉDULA: '+clientEsc(c.cedula||'—')+' · TEL: '+clientEsc(c.telefono||'—')+'</small></div>'+
       '<span>›</span>'+
@@ -7704,8 +8256,8 @@ function setupClientAutocomplete(){
       box.style.display='block';
       return;
     }
-    box.innerHTML=matches.map(x=>`<div class="client-suggestion" data-id="${x.id}">
-      <b>${x.nombre}</b><small>CÉDULA: ${x.cedula} · TEL: ${x.telefono}</small>
+    box.innerHTML=matches.map(x=>`<div class="client-suggestion" data-id="${clientEsc(x.id)}">
+      <b>${clientEsc(x.nombre)}</b><small>CÉDULA: ${clientEsc(x.cedula)} · TEL: ${clientEsc(x.telefono)}</small>
     </div>`).join('');
     box.style.display='block';
 
@@ -8015,7 +8567,7 @@ function openVehicleDetail(id){
     <div class="vd2-card">
       <div class="vd2-head">🚘 INFORMACIÓN GENERAL DEL VEHÍCULO</div>
       <div class="vd2-general">
-        <img class="vd2-photo" src="${photo}" alt="Foto del vehículo">
+        <img class="vd2-photo" src="${jcpSafeImageSrc(photo)}" alt="Foto del vehículo">
         <div class="vd2-fields">
           <div class="vd2-field"><small>MARCA</small><b>${esc(commercial.marca||'SIN REGISTRAR')}</b></div>
           <div class="vd2-field"><small>REFERENCIA</small><b>${esc(commercial.referencia||'SIN REGISTRAR')}</b></div>
@@ -8078,7 +8630,7 @@ function renderCompleteInfoVehicles(){
   const q=(document.getElementById('completeInfoSearch')?.value||'').trim().toUpperCase();
   let rows=(data.veh||[]).filter(v=>!q||[v.pl,v.marca||v.m,v.ref,v.modelo].join(' ').toUpperCase().includes(q));
   const noPhoto='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
-  el.innerHTML=rows.length?rows.map(v=>`<div class="vehicle-card" onclick="selectVehicleCompleteInfo('${String(v.id).replace(/'/g,"\\'")}')"><img src="${v.photo||noPhoto}" alt="Foto"><div class="vc-body"><div class="label">${v.pl||'SIN PLACA'}</div><b>${v.marca||v.m||''} ${v.ref||''}</b><div class="label">${v.modelo||''}</div></div></div>`).join(''):'<div class="empty" style="grid-column:1/-1">NO HAY VEHÍCULOS COINCIDENTES.</div>';
+  el.innerHTML=rows.length?rows.map(v=>`<div class="vehicle-card" onclick="selectVehicleCompleteInfo('${jcpInlineJsArg(v.id)}')"><img src="${jcpSafeImageSrc(v.photo,noPhoto)}" alt="Foto"><div class="vc-body"><div class="label">${clientEsc(v.pl||'SIN PLACA')}</div><b>${clientEsc(v.marca||v.m||'')} ${clientEsc(v.ref||'')}</b><div class="label">${clientEsc(v.modelo||'')}</div></div></div>`).join(''):'<div class="empty" style="grid-column:1/-1">NO HAY VEHÍCULOS COINCIDENTES.</div>';
 }
 function normalizeDocSelect(value){
   const x=String(value||'').trim().toUpperCase().replace('Í','I');
@@ -8123,7 +8675,7 @@ function selectVehicleCompleteInfo(id){
   const info=v.additionalInfo||{};
   const noPhoto='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250"><rect width="100%" height="100%" fill="#111"/></svg>');
   const card=document.getElementById('completeInfoVehicleCard');
-  if(card)card.innerHTML=`<div class="complete-vehicle-card"><img src="${v.photo||noPhoto}"><div><b>${v.marca||v.m||''} ${v.ref||''}</b><div class="label">${v.pl||'SIN PLACA'} · ${v.modelo||''}</div></div></div>`;
+  if(card)card.innerHTML=`<div class="complete-vehicle-card"><img src="${jcpSafeImageSrc(v.photo,noPhoto)}"><div><b>${clientEsc(v.marca||v.m||'')} ${clientEsc(v.ref||'')}</b><div class="label">${clientEsc(v.pl||'SIN PLACA')} · ${clientEsc(v.modelo||'')}</div></div></div>`;
   document.getElementById('completeSoat').value=info.soat??v.soat??'';
   document.getElementById('completeTecno').value=info.tecnomecanica??v.tecnomecanica??'';
   document.getElementById('completeTaxes').value=normalizeDocSelect(info.impuestos??v.impuestos??'');
@@ -8236,12 +8788,12 @@ function renderVehicleExportGrid(){
   const rows=(data.veh||[]).filter(v=>!q||[v.pl,v.marca||v.m,v.ref,v.modelo].join(' ').toUpperCase().includes(q));
   const noPhoto='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
   grid.innerHTML=rows.length?rows.map(v=>`
-    <div class="vehicle-card" onclick="selectVehicleForExport('${String(v.id).replace(/'/g,"\\'")}')">
-      <img src="${v.photo||noPhoto}" alt="Foto">
+    <div class="vehicle-card" onclick="selectVehicleForExport('${jcpInlineJsArg(v.id)}')">
+      <img src="${jcpSafeImageSrc(v.photo,noPhoto)}" alt="Foto">
       <div class="vc-body">
-        <div class="label">${v.pl||'SIN PLACA'}</div>
-        <b>${v.marca||v.m||''} ${v.ref||''}</b>
-        <div class="label">${v.modelo||''}</div>
+        <div class="label">${clientEsc(v.pl||'SIN PLACA')}</div>
+        <b>${clientEsc(v.marca||v.m||'')} ${clientEsc(v.ref||'')}</b>
+        <div class="label">${clientEsc(v.modelo||'')}</div>
       </div>
     </div>`).join(''):'<div class="empty" style="grid-column:1/-1">NO HAY VEHÍCULOS COINCIDENTES.</div>';
 }
@@ -8250,7 +8802,7 @@ function selectVehicleForExport(id){
   exportingVehicleId=v.id;
   const noPhoto='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250"><rect width="100%" height="100%" fill="#111"/></svg>');
   const box=document.getElementById('vehicleExportSelected');
-  if(box)box.innerHTML=`<div class="complete-vehicle-card"><img src="${v.photo||noPhoto}"><div><b>${v.marca||v.m||''} ${v.ref||''}</b><div class="label">${v.pl||'SIN PLACA'} · ${v.modelo||''}</div></div></div>`;
+  if(box)box.innerHTML=`<div class="complete-vehicle-card"><img src="${jcpSafeImageSrc(v.photo,noPhoto)}"><div><b>${clientEsc(v.marca||v.m||'')} ${clientEsc(v.ref||'')}</b><div class="label">${clientEsc(v.pl||'SIN PLACA')} · ${clientEsc(v.modelo||'')}</div></div></div>`;
   document.getElementById('vehicleExportSelector').style.display='none';
   document.getElementById('vehicleExportActions').style.display='block';
   return true;
@@ -8769,15 +9321,6 @@ function openSalesHistory(){
   const p=document.getElementById('salesHistoryPanel');
   if(p){p.classList.add('open'); renderSalesHistory(); p.scrollIntoView({behavior:'smooth',block:'start'});}
 }
-function openSalesReceivables(){
-  show('ventas');
-  enterSalesOption();
-  const sg=document.getElementById('saleGrid');if(sg)sg.style.display='none';
-  const f=document.getElementById('saleForm'); if(f)f.style.display='none';
-  closeSalesSubmodules();
-  const p=document.getElementById('salesReceivablesPanel');
-  if(p){p.classList.add('open'); renderSalesReceivables(); p.scrollIntoView({behavior:'smooth',block:'start'});}
-}
 function toggleSaleGrid(){
 show('ventas');
 enterSalesOption();
@@ -8794,7 +9337,7 @@ if(!data.veh.length){el.innerHTML='<div class="empty">No hay vehículos en inven
 el.innerHTML=data.veh.map(x=>{
 let img=x.photo||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
 const total=(+x.c||0)+(+x.g||0);
-return `<div class="vehicle-card" onclick="selectSaleVehicle('${x.id}')"><img src="${img}" alt="Foto del vehículo"><div class="vc-body"><div class="label">${x.pl||'SIN PLACA'}</div><div><b>${x.marca||x.m||''} ${x.ref||''}</b></div><div class="label">${x.modelo||''}</div><div class="label">Compra ${money(x.c||0)}</div><div class="label">Gastos ${money(x.g||0)}</div><div class="vc-price">Total ${money(total)}</div></div></div>`;
+return `<div class="vehicle-card" onclick="selectSaleVehicle('${jcpInlineJsArg(x.id)}')"><img src="${jcpSafeImageSrc(img)}" alt="Foto del vehículo"><div class="vc-body"><div class="label">${clientEsc(x.pl||'SIN PLACA')}</div><div><b>${clientEsc(x.marca||x.m||'')} ${clientEsc(x.ref||'')}</b></div><div class="label">${clientEsc(x.modelo||'')}</div><div class="label">Compra ${money(x.c||0)}</div><div class="label">Gastos ${money(x.g||0)}</div><div class="vc-price">Total ${money(total)}</div></div></div>`;
 }).join('');
 }
 function selectSaleVehicle(id){
@@ -8804,7 +9347,7 @@ const preview=document.getElementById('saleVehiclePreview');
 if(preview){
   const img=x.photo||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
   const inv=(+x.c||0)+(+x.g||0);
-  preview.innerHTML=`<img src="${img}" alt="Foto del vehículo"><div><div class="svp-name">${x.marca||x.m||''} ${x.ref||''}</div><div class="svp-meta">${x.modelo||''}${x.pl?' · PLACA: '+x.pl:''}<br>COMPRA: ${money(x.c||0)} · GASTOS: ${money(x.g||0)}</div><div class="svp-total">INVERSIÓN TOTAL: ${money(inv)}</div></div>`;
+  preview.innerHTML=`<img src="${jcpSafeImageSrc(img)}" alt="Foto del vehículo"><div><div class="svp-name">${clientEsc(x.marca||x.m||'')} ${clientEsc(x.ref||'')}</div><div class="svp-meta">${clientEsc(x.modelo||'')}${x.pl?' · PLACA: '+clientEsc(x.pl):''}<br>COMPRA: ${money(x.c||0)} · GASTOS: ${money(x.g||0)}</div><div class="svp-total">INVERSIÓN TOTAL: ${money(inv)}</div></div>`;
 }
 document.getElementById('saleGrid').style.display='none';
 document.getElementById('saleForm').style.display='block';
@@ -9221,8 +9764,8 @@ function renderPermutaCards(){
     const img=x.photo||x.foto||((Array.isArray(x.photos)&&x.photos[0])||'')||
       'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
     const total=(+x.c||0)+(+x.g||0);
-    const safeId=String(x.id||'').replace(/'/g,"\\'");
-    return `<div class="vehicle-card" onclick="selectPermutaVehicle('${safeId}')"><img src="${img}" alt="Foto del vehículo"><div class="vc-body"><div class="label">${x.pl||'SIN PLACA'}</div><div><b>${x.marca||x.m||''} ${x.ref||''}</b></div><div class="label">${x.modelo||''}</div><div class="label">Compra ${money(x.c||0)}</div><div class="label">Gastos ${money(x.g||0)}</div><div class="vc-price">Total ${money(total)}</div></div></div>`;
+    const safeId=jcpInlineJsArg(x.id||'');
+    return `<div class="vehicle-card" onclick="selectPermutaVehicle('${safeId}')"><img src="${jcpSafeImageSrc(img)}" alt="Foto del vehículo"><div class="vc-body"><div class="label">${clientEsc(x.pl||'SIN PLACA')}</div><div><b>${clientEsc(x.marca||x.m||'')} ${clientEsc(x.ref||'')}</b></div><div class="label">${clientEsc(x.modelo||'')}</div><div class="label">Compra ${money(x.c||0)}</div><div class="label">Gastos ${money(x.g||0)}</div><div class="vc-price">Total ${money(total)}</div></div></div>`;
   }).join('');
 }
 function selectPermutaVehicle(id){
@@ -9232,7 +9775,7 @@ function selectPermutaVehicle(id){
   if(preview){
     const img=x.photo||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
     const inv=(+x.c||0)+(+x.g||0);
-    preview.innerHTML=`<img src="${img}" alt="Foto del vehículo"><div><div class="svp-name">${x.marca||x.m||''} ${x.ref||''}</div><div class="svp-meta">${x.modelo||''}${x.pl?' · PLACA: '+x.pl:''}<br>COMPRA: ${money(x.c||0)} · GASTOS: ${money(x.g||0)}</div><div class="svp-total">INVERSIÓN TOTAL: ${money(inv)}</div></div>`;
+    preview.innerHTML=`<img src="${jcpSafeImageSrc(img)}" alt="Foto del vehículo"><div><div class="svp-name">${clientEsc(x.marca||x.m||'')} ${clientEsc(x.ref||'')}</div><div class="svp-meta">${clientEsc(x.modelo||'')}${x.pl?' · PLACA: '+clientEsc(x.pl):''}<br>COMPRA: ${money(x.c||0)} · GASTOS: ${money(x.g||0)}</div><div class="svp-total">INVERSIÓN TOTAL: ${money(inv)}</div></div>`;
   }
   document.getElementById('permutaGrid').style.display='none';
   const form=document.getElementById('permutaForm'); if(form){form.style.display='block';bindPermutaMoney();updatePermutaCalculations();form.scrollIntoView({behavior:'smooth',block:'start'});}
@@ -9373,7 +9916,7 @@ function renderPermutaHistory(){
       (out.marca||'')+' '+(out.ref||'')+(out.pl?' — '+out.pl:''),
       (inc.marca||'')+' '+(inc.ref||'')+(inc.pl?' — '+inc.pl:''),
       money(x.outgoingSalePrice||0),money(x.incomingValue||0),money(x.difference||0),
-      '<span class="'+cls+'">'+result+'</span>',money(x.incomingInventoryCost||0),money(x.profit||0)];
+      jcpSafeHtml('<span class="'+cls+'">'+clientEsc(result)+'</span>'),money(x.incomingInventoryCost||0),money(x.profit||0)];
   });
 }
 
@@ -9715,7 +10258,7 @@ function addBatchExpenseRow(concept='',value=''){
   const n=box.children.length+1;
   const row=document.createElement('div');
   row.className='expense-batch-row';
-  row.innerHTML=`<div class="num">${n}</div><input type="text" data-exp-concept placeholder="Concepto del gasto" value="${String(concept).replace(/"/g,'&quot;')}"><input type="text" inputmode="numeric" data-exp-value placeholder="$ Valor" value="${value?String(value):''}">`;
+  row.innerHTML=`<div class="num">${n}</div><input type="text" data-exp-concept placeholder="Concepto del gasto" value="${jcpSafeAttr(concept)}"><input type="text" inputmode="numeric" data-exp-value placeholder="$ Valor" value="${jcpSafeAttr(value?String(value):'')}">`;
   box.appendChild(row);
   const val=row.querySelector('[data-exp-value]');
   val.addEventListener('input',()=>{
@@ -9900,12 +10443,12 @@ function renderVehicleEditGrid(){
   );
 
   el.innerHTML=rows.length?rows.map(v=>`
-    <div class="vehicle-card" onclick="editVehicleFromMovements('${String(v.id).replace(/'/g,"\\'")}')">
-      <img src="${v.photo||noPhoto}" alt="Foto">
+    <div class="vehicle-card" onclick="editVehicleFromMovements('${jcpInlineJsArg(v.id)}')">
+      <img src="${jcpSafeImageSrc(v.photo,noPhoto)}" alt="Foto">
       <div class="vc-body">
-        <div class="label">${v.pl||'SIN PLACA'}</div>
-        <b>${v.marca||v.m||''} ${v.ref||''}</b>
-        <div class="label">${v.modelo||''}</div>
+        <div class="label">${clientEsc(v.pl||'SIN PLACA')}</div>
+        <b>${clientEsc(v.marca||v.m||'')} ${clientEsc(v.ref||'')}</b>
+        <div class="label">${clientEsc(v.modelo||'')}</div>
       </div>
     </div>
   `).join(''):'<div class="empty" style="grid-column:1/-1">NO HAY VEHÍCULOS COINCIDENTES.</div>';
@@ -9939,10 +10482,10 @@ function editVehicleFromMovements(id){
   const summary=document.getElementById('vehicleEditSelectedSummary');
   if(summary)summary.innerHTML=`
     <div class="complete-vehicle-card">
-      <img src="${x.photo||noPhoto}">
+      <img src="${jcpSafeImageSrc(x.photo,noPhoto)}">
       <div>
-        <b>${x.marca||x.m||''} ${x.ref||''}</b>
-        <div class="label">${x.pl||'SIN PLACA'} · ${x.modelo||''}</div>
+        <b>${clientEsc(x.marca||x.m||'')} ${clientEsc(x.ref||'')}</b>
+        <div class="label">${clientEsc(x.pl||'SIN PLACA')} · ${clientEsc(x.modelo||'')}</div>
       </div>
     </div>`;
 
@@ -10109,7 +10652,7 @@ function renderSalesHistory(){
       const s=x.sale||{},voided=!!s.voided||x.status==='venta_anulada';
       const number=s.receiptNumber||'LEGADO',receipt=number!=='LEGADO'?findInternalReceipt(number):null;
       const action=receipt&&!voided
-        ? `<button type="button" onclick="voidInternalReceipt('${priceEsc(number)}')" style="padding:7px 9px;font-size:10px;background:#1a0b0b;color:#ff7777;border:1px solid #633">🔒 ANULAR</button>`
+        ? `<button type="button" onclick="voidInternalReceipt('${jcpInlineJsArg(number)}')" style="padding:7px 9px;font-size:10px;background:#1a0b0b;color:#ff7777;border:1px solid #633">🔒 ANULAR</button>`
         : '—';
       return `<tr>
         <td>${priceEsc(number)}</td>
@@ -10347,7 +10890,7 @@ if(!data.veh.length){
   const noPhoto='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
   vehList.innerHTML='<div class="inventory-cards">'+data.veh.map(x=>{
     const img=x.photo||noPhoto; const total=(+x.c||0)+(+x.g||0);
-    return `<div class="vehicle-card" onclick="selectInventoryVehicle('${x.id}')"><img src="${img}" alt="Foto del vehículo"><div class="vc-body"><div class="label">${x.pl||'SIN PLACA'}</div><div><b>${x.marca||x.m||''} ${x.ref||''}</b></div><div class="label">${x.modelo||''}</div><div class="label">Compra ${money(x.c||0)}</div><div class="label">Gastos ${money(x.g||0)}</div><div class="vc-price">Total ${money(total)}</div></div></div>`;
+    return `<div class="vehicle-card" onclick="selectInventoryVehicle('${jcpInlineJsArg(x.id)}')"><img src="${jcpSafeImageSrc(img)}" alt="Foto del vehículo"><div class="vc-body"><div class="label">${clientEsc(x.pl||'SIN PLACA')}</div><div><b>${clientEsc(x.marca||x.m||'')} ${clientEsc(x.ref||'')}</b></div><div class="label">${clientEsc(x.modelo||'')}</div><div class="label">Compra ${money(x.c||0)}</div><div class="label">Gastos ${money(x.g||0)}</div><div class="vc-price">Total ${money(total)}</div></div></div>`;
   }).join('')+'</div>';
 }
 let sold=data.sold||[];
@@ -10421,7 +10964,7 @@ function openMainNavigation(id){
   }
   show(id);
 }
-nav.innerHTML=navItems.map(([id,label,icon])=>`<button data-id="${id}" onclick="openMainNavigation('${id}')"><span class="jcp-app-icon jcp-nav-icon" data-jcp-icon="${icon}"></span><small>${label}</small></button>`).join('');
+nav.innerHTML=navItems.map(([id,label,icon])=>`<button data-id="${jcpSafeAttr(id)}" onclick="openMainNavigation('${jcpInlineJsArg(id)}')"><span class="jcp-app-icon jcp-nav-icon" data-jcp-icon="${jcpSafeAttr(icon)}"></span><small>${clientEsc(label)}</small></button>`).join('');
 nav.style.display='flex';
 // No renderizar datos locales antes de resolver el bootstrap. La primera
 // renderización con información ocurre desde handleCloudSession() (Supabase)
@@ -10642,19 +11185,19 @@ window.renderObligationHistory=function(){
   }
 
   box.innerHTML=rows.map(x=>{
-    const safeId=String(x.id).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    const safeId=jcpInlineJsArg(x.id);
     const pending=x.status==='pending';
     return `<div class="pending-debt-card">
       <div class="pending-debt-card-head">
-        <div><div class="pending-debt-type">${x.type}</div><b>${x.concept}</b></div>
+        <div><div class="pending-debt-type">${clientEsc(x.type||'')}</div><b>${clientEsc(x.concept||'')}</b></div>
         <span class="obligation-status ${pending?'pending':'paid'}">${pending?'PENDIENTE':'PAGADA'}</span>
       </div>
       <div class="pending-debt-grid">
         <div><span>VALOR INICIAL</span><b>${money(x.value)}</b></div>
         <div><span>TOTAL ABONADO</span><b>${money(x.paid)}</b></div>
         <div><span>SALDO</span><b>${money(x.balance)}</b></div>
-        <div><span>FECHA</span><b>${x.date}</b></div>
-        <div><span>SOPORTE</span><b>${x.receiptNumber||'—'}</b></div>
+        <div><span>FECHA</span><b>${clientEsc(x.date||'—')}</b></div>
+        <div><span>SOPORTE</span><b>${clientEsc(x.receiptNumber||'—')}</b></div>
         <div><span>ESTADO</span><b>${pending?'ACTIVA':'CANCELADA'}</b></div>
       </div>
       ${pending?`<button class="pending-debt-pay-btn" onclick="openDebtPayment('${safeId}')" type="button">CANCELAR / ABONAR OBLIGACIÓN</button>`:''}
@@ -10697,16 +11240,16 @@ window.renderObligationHistory=function(){
     }
     box.innerHTML=list.map(x=>{
       const original=(data.mov||[]).find(m=>(m.capitalOpId||m.id)===x.id)||{};
-      const safeId=String(x.id).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      const safeId=jcpInlineJsArg(x.id);
       return `<div class="pending-debt-card">
-        <div class="pending-debt-card-head"><div><div class="pending-debt-type">${debtTypeFromConcept(original.c||x.concept)}</div><b>${x.concept}</b></div><span class="pending-debt-type">PENDIENTE</span></div>
+        <div class="pending-debt-card-head"><div><div class="pending-debt-type">${clientEsc(debtTypeFromConcept(original.c||x.concept))}</div><b>${clientEsc(x.concept||'')}</b></div><span class="pending-debt-type">PENDIENTE</span></div>
         <div class="pending-debt-grid">
           <div><span>VALOR INICIAL</span><b>${money(x.value)}</b></div>
           <div><span>TOTAL PAGADO</span><b>${money(x.paid)}</b></div>
           <div><span>SALDO PENDIENTE</span><b>${money(x.balance)}</b></div>
-          <div><span>FECHA DE REGISTRO</span><b>${original.date||'—'}</b></div>
+          <div><span>FECHA DE REGISTRO</span><b>${clientEsc(original.date||'—')}</b></div>
           <div><span>ESTADO</span><b>ACTIVA</b></div>
-          <div><span>REFERENCIA</span><b>${String(x.id).slice(-10)}</b></div>
+          <div><span>REFERENCIA</span><b>${clientEsc(String(x.id).slice(-10))}</b></div>
         </div>
       </div>`;
     }).join('');
@@ -10766,7 +11309,7 @@ window.renderObligationHistory=function(){
     box.innerHTML=rows.length?rows.map(x=>{
       const outgoing=x.subtype==='pago_deuda'||x.t==='gasto';
       return `<div class="capital-movement-row">
-        <div><small>${x.date||'—'}</small><b>${x.c||labelType(x.subtype)}</b></div>
+        <div><small>${clientEsc(x.date||'—')}</small><b>${clientEsc(x.c||labelType(x.subtype))}</b></div>
         <strong class="${outgoing?'capital-out':'capital-in'}">${outgoing?'−':'+'} ${money(+x.v||0)}</strong>
       </div>`;
     }).join(''):'<div class="empty">NO HAY MOVIMIENTOS DE CAPITAL REGISTRADOS.</div>';
@@ -11144,7 +11687,7 @@ h1{font-size:22px;margin:0}h2{font-size:14px;color:#555;margin:5px 0 18px}
     put('ccGrossProfit',s.gross);put('ccOpExpenses',s.opExp);put('ccNetProfit',s.net);put('ccExpectedCash',s.expected);
 
     const sel=document.getElementById('ccDebtSelect');
-    if(sel){const current=sel.value;const ds=debts();sel.innerHTML=ds.length?'<option value="">SELECCIONA UNA OBLIGACIÓN...</option>'+ds.map(x=>'<option value="'+String(x.id)+'" data-debt-id="'+String(x.id)+'" data-balance="'+Number(x.balance||0)+'">'+x.concept+' — SALDO '+money(x.balance)+'</option>').join(''):'<option value="">NO HAY OBLIGACIONES ACTIVAS</option>';if(ds.some(x=>String(x.id)===String(current)))sel.value=String(current);if(window.refreshDebtPaymentForm)refreshDebtPaymentForm();}
+    if(sel){const current=sel.value;const ds=debts();sel.innerHTML=ds.length?'<option value="">SELECCIONA UNA OBLIGACIÓN...</option>'+ds.map(x=>'<option value="'+clientEsc(String(x.id))+'" data-debt-id="'+clientEsc(String(x.id))+'" data-balance="'+Number(x.balance||0)+'">'+clientEsc(x.concept)+' — SALDO '+clientEsc(money(x.balance))+'</option>').join(''):'<option value="">NO HAY OBLIGACIONES ACTIVAS</option>';if(ds.some(x=>String(x.id)===String(current)))sel.value=String(current);if(window.refreshDebtPaymentForm)refreshDebtPaymentForm();}
 
     const hist=document.getElementById('ccCapitalHistory');
     if(hist){
@@ -11153,26 +11696,16 @@ h1{font-size:22px;margin:0}h2{font-size:14px;color:#555;margin:5px 0 18px}
         ...(data.mov||[]).filter(x=>x.subtype==='gasto_operativo').map(x=>({date:x.date||'',label:'GASTO OPERATIVO — '+(x.c||''),value:-(+x.v||0),createdAt:x.createdAt})),
         ...(data.mov||[]).filter(x=>x.subtype==='retiro_ganancias').map(x=>({date:x.date||'',label:'RETIRO DE GANANCIA — '+(x.c||''),value:-(+x.v||0),createdAt:x.createdAt}))
       ].sort((a,b)=>stamp(b)-stamp(a)).slice(0,40);
-      hist.innerHTML=rows.length?rows.map(x=>'<div class="cc-row"><small>'+x.date+'</small><b>'+x.label+'</b><span class="cc-value">'+(x.value<0?'- ':'+ ')+money(Math.abs(x.value))+'</span></div>').join(''):'<div class="empty">No hay movimientos todavía.</div>';
+      hist.innerHTML=rows.length?rows.map(x=>'<div class="cc-row"><small>'+clientEsc(x.date)+'</small><b>'+clientEsc(x.label)+'</b><span class="cc-value">'+(x.value<0?'- ':'+ ')+money(Math.abs(x.value))+'</span></div>').join(''):'<div class="empty">No hay movimientos todavía.</div>';
     }
 
     const renderClosures=id=>{
       const el=document.getElementById(id);if(!el)return;
       const cls=(data.cashClosures||[]).slice().sort((a,b)=>stamp(b)-stamp(a));
-      el.innerHTML=cls.length?cls.map(c=>'<div class="cc-close-row"><div><b>'+c.date+'</b><div class="label">Esperada '+money(c.expected)+' · Real '+money(c.actual)+' · Diferencia '+money(c.difference)+'</div></div><button onclick="generateCashClosurePdf(\''+c.id+'\')">📄 PDF</button></div>').join(''):'<div class="empty">Aún no hay cierres guardados.</div>';
+      el.innerHTML=cls.length?cls.map(c=>'<div class="cc-close-row"><div><b>'+clientEsc(c.date)+'</b><div class="label">Esperada '+money(c.expected)+' · Real '+money(c.actual)+' · Diferencia '+money(c.difference)+'</div></div><button onclick="generateCashClosurePdf(\''+jcpInlineJsArg(c.id)+'\')">📄 PDF</button></div>').join(''):'<div class="empty">Aún no hay cierres guardados.</div>';
     };
     renderClosures('ccClosuresList');renderClosures('supportCashClosures');
     previewCashClosure();
-  };
-
-  const oldShow=window.show;
-  window.show=function(id){
-    oldShow(id);
-    if(id==='cajaCapital'){
-      const src=document.querySelector('#vehiculos .inventory-inline-logo'),dst=document.getElementById('cashCapitalLogo');
-      if(src&&dst)dst.src=src.src;
-      renderCashCapital();
-    }
   };
 
   window.addEventListener('load',()=>{
@@ -11357,37 +11890,9 @@ td.in{color:#167a42;font-weight:bold}td.out{color:#b12626;font-weight:bold}.empt
 @media print{button{display:none}body{margin:12mm}}
 </style>
 
-<style id="b1-home-search-position">
-#dashboard > #globalSearchBar{
-  display:block;
-  margin:0 0 12px!important;
-}
-</style>
 
-<style id="mod20-top-menu-over-search">
-/* MODIFICACIÓN 20 — prioridad visual del menú superior */
-.app > header{
-  position:relative!important;
-  z-index:10000!important;
-  overflow:visible!important;
-}
-.app > header .top-menu-wrap{
-  position:relative!important;
-  z-index:10001!important;
-}
-.app > header #topMenu,
-.app > header .top-menu{
-  z-index:10002!important;
-}
-#dashboard > #globalSearchBar,
-#globalSearchBar{
-  position:relative;
-  z-index:2500!important;
-}
-#globalSearchResults{
-  z-index:2501!important;
-}
-</style>
+
+
 
 <style id="mod20-1-fixed-top-menu">
 #topMenu.top-menu{
@@ -11669,7 +12174,7 @@ window.renderRecordsModule=function(){
         '<div style="color:#fff;font-size:11px;margin-top:6px">'+(typeof priceEsc==='function'?priceEsc(t):t)+'</div>'+
         '<div style="color:#fff;font-size:11px;margin-top:4px">'+(typeof priceEsc==='function'?priceEsc(title):title)+'</div>'+
         '<div style="color:#fff;font-weight:900;font-size:14px;margin:10px 0">'+(typeof money==='function'?money(amount):amount)+'</div>'+
-        '<button type="button" style="width:100%;min-height:42px;border:1px solid #b89527;border-radius:8px;background:#111;color:#d7b43a;font-weight:900" onclick="openRecordCopy(\''+n+'\')">VER SOPORTE / COPIA</button>'+
+        '<button type="button" style="width:100%;min-height:42px;border:1px solid #b89527;border-radius:8px;background:#111;color:#d7b43a;font-weight:900" onclick="openRecordCopy(\''+jcpInlineJsArg(n)+'\')">VER SOPORTE / COPIA</button>'+
       '</div>';
     }).join('');
   };
@@ -11752,9 +12257,9 @@ window.renderExtractos=function(){
     };
     const allCash=(data.mov||[]).filter(x=>!x.voided&&inRange(x)&&(x.t==='ingreso'||x.t==='gasto'));
     const categories=[...new Set(allCash.map(movementCategory))].sort(),catSel=document.getElementById('extCategoryFilter');
-    if(catSel){const keep=categoryFilter;catSel.innerHTML='<option value="all">TODAS LAS CATEGORÍAS</option>'+categories.map(c=>'<option value="'+c+'">'+c+'</option>').join('');if([...catSel.options].some(o=>o.value===keep))catSel.value=keep;}
+    if(catSel){const keep=categoryFilter;catSel.innerHTML='<option value="all">TODAS LAS CATEGORÍAS</option>'+categories.map(c=>'<option value="'+clientEsc(c)+'">'+clientEsc(c)+'</option>').join('');if([...catSel.options].some(o=>o.value===keep))catSel.value=keep;}
     const accounts=[...new Set(allCash.map(movementAccount))].sort(),accSel=document.getElementById('extAccountFilter');
-    if(accSel){const keep=accountFilter;accSel.innerHTML='<option value="all">TODOS LOS MEDIOS / CUENTAS</option>'+accounts.map(c=>'<option value="'+c+'">'+c+'</option>').join('');if([...accSel.options].some(o=>o.value===keep))accSel.value=keep;}
+    if(accSel){const keep=accountFilter;accSel.innerHTML='<option value="all">TODOS LOS MEDIOS / CUENTAS</option>'+accounts.map(c=>'<option value="'+clientEsc(c)+'">'+clientEsc(c)+'</option>').join('');if([...accSel.options].some(o=>o.value===keep))accSel.value=keep;}
 
     // La misma selección que se muestra en la tabla alimenta el resumen superior.
     let rows=allCash.slice();
@@ -11778,10 +12283,10 @@ window.renderExtractos=function(){
       const incoming=x.t==='ingreso',cat=movementCategory(x),bal=balances.get(x)||{before:0,after:0};
       return '<div class="ext-pro-row">'+
         '<small class="ext-date-cell">'+
-          ((x.date||'').replace(',','<br>'))+
+          clientEsc(x.date||'').replace(',','<br>')+
           '<span class="ext-doc-number">'+priceEsc(String(x.receiptNumber||x.receipt||x.recibo||x.documentNumber||x.numeroDocumento||''))+'</span>'+
         '</small>'+
-        '<b><span class="category">'+(incoming?'↑ ':'↓ ')+cat+'</span><br>'+extractMovementConcept(x,cat)+'</b>'+
+        '<b><span class="category">'+(incoming?'↑ ':'↓ ')+clientEsc(cat)+'</span><br>'+clientEsc(extractMovementConcept(x,cat))+'</b>'+
         '<span class="amount '+(incoming?'in':'out')+'">'+(incoming?'+ ':'- ')+money(+x.v||0)+'</span>'+
         '<span class="amount">'+money(bal.before)+'</span>'+
         '<span class="amount '+(incoming?'in':'out')+'">'+money(bal.after)+'</span>'+
@@ -11799,18 +12304,6 @@ window.renderExtractos=function(){
     return f;
   };
 
-  const previousShow=window.show;
-  window.show=function(id){
-    previousShow(id);
-    if(id==='cajaCapital'||id==='extractos'){
-      const src=document.querySelector('#vehiculos .inventory-inline-logo');
-      const cash=document.getElementById('cashCapitalLogo'),ext=document.getElementById('extractosLogo');
-      if(src&&cash)cash.src=src.src;if(src&&ext)ext.src=src.src;
-      renderCashCapital();
-      if(id==='extractos')renderExtractos();
-    }
-  };
-
   window.addEventListener('load',()=>{
     const src=document.querySelector('#vehiculos .inventory-inline-logo'),ext=document.getElementById('extractosLogo');
     if(src&&ext)ext.src=src.src;
@@ -11819,13 +12312,6 @@ window.renderExtractos=function(){
 })();
 </script>
 <script id="v74-movimientos-to-extractos">
-(function(){
-  const originalShowV74=window.show;
-  window.show=function(id){
-    if(id==='movimientos')id='extractos';
-    return originalShowV74(id);
-  };
-})();
 </script>
 <script id="v75-extractos-detail">
 function toggleExtExpenseForm(){
@@ -11837,9 +12323,9 @@ function showExtractDetailV75(index){
   if(!x||!el)return;
   const incoming=x.t==='ingreso';
   el.innerHTML='<h3>DETALLE DEL MOVIMIENTO</h3>'+
-    '<div class="ext-detail-line"><span>Fecha</span><b>'+(x.date||'—')+'</b></div>'+
+    '<div class="ext-detail-line"><span>Fecha</span><b>'+clientEsc(x.date||'—')+'</b></div>'+
     '<div class="ext-detail-line"><span>Tipo</span><b>'+(incoming?'ENTRADA':'SALIDA')+'</b></div>'+
-    '<div class="ext-detail-line"><span>Concepto</span><b>'+extractMovementConcept(x,'—')+'</b></div>'+
+    '<div class="ext-detail-line"><span>Concepto</span><b>'+clientEsc(extractMovementConcept(x,'—'))+'</b></div>'+
     (()=>{const b=extractRunningBalances().get(x)||{before:0,after:0};return '<div class="ext-detail-line"><span>Saldo anterior</span><b>'+money(b.before)+'</b></div><div class="ext-detail-line"><span>Nuevo saldo</span><b>'+money(b.after)+'</b></div>';})()+
     '<div class="ext-detail-line"><span>Valor</span><b style="color:'+(incoming?'#43d38b':'#ff7777')+'">'+(incoming?'+ ':'- ')+money(+x.v||0)+'</b></div>';
 }
@@ -11857,12 +12343,12 @@ function renderVehicleExpenseSelector(){
   el.innerHTML=vehicles.map(v=>{
     const photo=v.photo||v.foto||((v.photos||[])[0])||'';
     const safePhoto=photo||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
-    return `<div class="vehicle-card" onclick="selectVehicleForExpense('${String(v.id).replace(/'/g,"\\'")}')">
-      <img src="${safePhoto}" alt="Foto">
+    return `<div class="vehicle-card" onclick="selectVehicleForExpense('${jcpInlineJsArg(v.id)}')">
+      <img src="${jcpSafeImageSrc(safePhoto)}" alt="Foto">
       <div class="vc-body">
-        <div class="label">${(v.pl||'SIN PLACA').toUpperCase()}</div>
-        <b>${(v.marca||v.m||'').toUpperCase()} ${(v.ref||'').toUpperCase()}</b>
-        <div class="label">${v.modelo||''}</div>
+        <div class="label">${clientEsc((v.pl||'SIN PLACA').toUpperCase())}</div>
+        <b>${clientEsc((v.marca||v.m||'').toUpperCase())} ${clientEsc((v.ref||'').toUpperCase())}</b>
+        <div class="label">${clientEsc(v.modelo||'')}</div>
         <div class="vc-price">${money((+v.c||0)+(+v.g||0))}</div>
       </div>
     </div>`;
@@ -11909,51 +12395,10 @@ function renderLoanReceivablesV78(){
   }
   el.innerHTML='<div class="section" style="margin-top:0">🤝 Préstamos por cobrar</div>'+
     '<table><thead><tr><th>CLIENTE / CONCEPTO</th><th>PRESTADO</th><th>ABONADO</th><th>PENDIENTE</th></tr></thead><tbody>'+
-    loans.map(x=>`<tr><td>${(x.n||x.nombre||x.cliente||x.c||'PRÉSTAMO')}</td><td>${money(+x.c||0)}</td><td>${money(+x.p||0)}</td><td>${money(x.__pending)}</td></tr>`).join('')+
+    loans.map(x=>`<tr><td>${clientEsc(x.n||x.nombre||x.cliente||x.c||'PRÉSTAMO')}</td><td>${money(+x.c||0)}</td><td>${money(+x.p||0)}</td><td>${money(x.__pending)}</td></tr>`).join('')+
     '</tbody></table>';
 }
 
-(function(){
-  const previousShowV78=window.show;
-  window.show=function(id){
-    const result=previousShowV78(id);
-    const src=document.querySelector('#vehiculos .inventory-inline-logo');
-    const logos={
-      detalleCapital:'detalleCapitalLogo',
-      capitalFinanciacion:'capitalFinLogo',
-      pagoObligaciones:'pagoObligLogo',
-      nuevaFinanciacion:'nuevaFinLogo',
-      obligacionesPendientes:'obligPendLogo',
-      cierreCaja:'cierreCajaLogo',
-      historialFinanciero:'histFinLogo',
-      historialCapitalFinanciacion:'capitalFinHistLogo',
-      carteraCaja:'carteraCajaLogo'
-    };
-    if(src&&logos[id]){
-      const dst=document.getElementById(logos[id]);
-      if(dst)dst.src=src.src;
-    }
-    if(id==='detalleCapital'||id==='capitalFinanciacion'||id==='nuevaFinanciacion'||id==='pagoObligaciones'||id==='obligacionesPendientes'||id==='historialFinanciero'){
-      if(typeof renderCashCapital==='function')renderCashCapital();
-    }
-    if(id==='detalleCapital'&&typeof renderCapitalDetail==='function')renderCapitalDetail();
-    if(id==='nuevaFinanciacion'&&typeof resetCapitalSourceForm==='function')resetCapitalSourceForm();
-    if(id==='obligaciones'&&typeof renderObligationsHub==='function')renderObligationsHub();
-    if(id==='historialObligaciones'&&typeof renderObligationHistory==='function')renderObligationHistory();
-    if(id==='obligacionesPendientes'&&typeof renderPendingObligations==='function')renderPendingObligations();
-    if(id==='historialCapitalFinanciacion'&&typeof renderCapitalFinanceHistory==='function')renderCapitalFinanceHistory();
-    if(id==='cierreCaja'){
-      if(typeof renderCashCapital==='function')renderCashCapital();
-      if(typeof previewCashClosure==='function')previewCashClosure();
-    }
-    if(id==='carteraCaja'){
-      renderSalesReceivables();
-      renderLoanReceivablesV78();
-      if(typeof syncFinancialUiV76==='function')syncFinancialUiV76();
-    }
-    return result;
-  };
-})();
 </script>
 <script id="v15-operations-module">
 function hideOperationMenus(){
@@ -12092,17 +12537,6 @@ function closeOperationsPurchase(){
   window.scrollTo({top:0,behavior:'smooth'});
   return true;
 }
-(function(){
-  const prevShow=window.show;
-  window.show=function(id){
-    const r=prevShow(id);
-    if(id==='vehiculos'){
-      const form=document.getElementById('formVeh');
-      if(form&&form.parentElement?.id==='vehiculos')form.style.display='none';
-    }
-    return r;
-  };
-})();
 </script>
 <script id="v18-cash-close-live">
 (function(){
@@ -12126,13 +12560,7 @@ function closeOperationsPurchase(){
     try{previewCashClosure();}catch(e){}
   }
 
-  const previousShowV18=window.show;
-  window.show=function(id){
-    const result=previousShowV18(id);
-    if(id==='cierreCaja')setTimeout(bindCashCloseLive,0);
-    return result;
-  };
-
+  window.bindCashCloseLive=bindCashCloseLive;
   window.addEventListener('load',bindCashCloseLive);
 })();
 </script>
@@ -12184,12 +12612,12 @@ function renderOpVehicleExpenseGrid(){
     const safe=img||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(
       '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>'
     );
-    return `<button type="button" class="vehicle-card" onclick="selectOpVehicleExpense('${String(v.id).replace(/'/g,"\\'")}')">
-      <img src="${safe}" alt="Foto">
+    return `<button type="button" class="vehicle-card" onclick="selectOpVehicleExpense('${jcpInlineJsArg(v.id)}')">
+      <img src="${jcpSafeImageSrc(safe)}" alt="Foto">
       <div class="vc-body">
-        <div class="label">${(v.pl||'SIN PLACA').toUpperCase()}</div>
-        <b>${(v.marca||v.m||'').toUpperCase()} ${(v.ref||'').toUpperCase()}</b>
-        <div class="label">${v.modelo||''}</div>
+        <div class="label">${clientEsc((v.pl||'SIN PLACA').toUpperCase())}</div>
+        <b>${clientEsc((v.marca||v.m||'').toUpperCase())} ${clientEsc((v.ref||'').toUpperCase())}</b>
+        <div class="label">${clientEsc(v.modelo||'')}</div>
         <div class="label">Compra ${money(+v.c||0)}</div>
         <div class="label">Gastos ${money(+v.g||0)}</div>
         <div class="vc-price">Total ${money((+v.c||0)+(+v.g||0))}</div>
@@ -12214,9 +12642,9 @@ function selectOpVehicleExpense(id){
     '<svg xmlns="http://www.w3.org/2000/svg" width="220" height="140"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#777" font-size="18" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>'
   );
   const summary=document.getElementById('opVehExpenseSummary');
-  if(summary)summary.innerHTML=`<img src="${safe}" alt="Vehículo"><div>
-    <b>${(veh.marca||veh.m||'').toUpperCase()} ${(veh.ref||'').toUpperCase()} ${veh.modelo||''}</b>
-    <div style="color:#aaa;font-size:12px;margin-top:4px">${(veh.pl||'SIN PLACA').toUpperCase()}</div>
+  if(summary)summary.innerHTML=`<img src="${jcpSafeImageSrc(safe)}" alt="Vehículo"><div>
+    <b>${clientEsc((veh.marca||veh.m||'').toUpperCase())} ${clientEsc((veh.ref||'').toUpperCase())} ${clientEsc(veh.modelo||'')}</b>
+    <div style="color:#aaa;font-size:12px;margin-top:4px">${clientEsc((veh.pl||'SIN PLACA').toUpperCase())}</div>
     <div class="mini-stats">
       <span>Compra <strong>${money(+veh.c||0)}</strong></span>
       <span>Gastos <strong>${money(+veh.g||0)}</strong></span>
@@ -12478,9 +12906,9 @@ function renderCapitalFinanceHistory(){
     const obs=(x.obs||'').toUpperCase();
     const dt=formatCapitalHistoryDateTime(x);
     return `<div class="capital-fin-history-row">
-      <small class="capital-history-date"><span>${dt.date}</span>${dt.time?`<em>${dt.time}</em>`:''}</small>
-      <span class="type">${type}</span>
-      <div><b>${concept}</b>${obs?`<small style="display:block;margin-top:3px">${obs}</small>`:''}</div>
+      <small class="capital-history-date"><span>${clientEsc(dt.date)}</span>${dt.time?`<em>${clientEsc(dt.time)}</em>`:''}</small>
+      <span class="type">${clientEsc(type)}</span>
+      <div><b>${clientEsc(concept)}</b>${obs?`<small style="display:block;margin-top:3px">${clientEsc(obs)}</small>`:''}</div>
       <span class="value">${money(+x.value||0)}</span>
       <span class="balance">${balance}</span>
     </div>`;
@@ -12525,8 +12953,8 @@ function renderProfitWithdrawalHistory(){
   list.innerHTML=rows.length?rows.map(x=>{
     const dt=formatProfitHistoryDate(x);
     return `<div class="profit-history-row">
-      <small class="profit-history-date"><span>${dt.date}</span>${dt.time?`<em>${dt.time}</em>`:''}</small>
-      <b>${(x.c||'RETIRO DE GANANCIA').toUpperCase()}</b>
+      <small class="profit-history-date"><span>${clientEsc(dt.date)}</span>${dt.time?`<em>${clientEsc(dt.time)}</em>`:''}</small>
+      <b>${clientEsc((x.c||'RETIRO DE GANANCIA').toUpperCase())}</b>
       <strong>${money(+x.v||0)}</strong>
     </div>`;
   }).join(''):'<div class="empty">NO HAY RETIROS DE GANANCIA REGISTRADOS.</div>';
@@ -12644,8 +13072,8 @@ function renderGlobalSearch(value){
 
   box.innerHTML=rows.length?rows.map((r,i)=>`
     <button type="button" class="global-search-result" onclick="openGlobalSearchResult(${i})">
-      <span class="global-search-type">${r.type}</span>
-      <span class="global-search-main"><b>${r.title}</b><small>${r.meta||''}</small></span>
+      <span class="global-search-type">${clientEsc(r.type)}</span>
+      <span class="global-search-main"><b>${clientEsc(r.title)}</b><small>${clientEsc(r.meta||'')}</small></span>
     </button>`).join(''):'<div class="global-search-empty">NO SE ENCONTRARON COINCIDENCIAS.</div>';
 
   window.__globalSearchCurrent=rows;
@@ -12681,19 +13109,6 @@ document.addEventListener('click',function(e){
   }
 });
 
-(function(){
-  const prevShowB18=window.show;
-  window.show=function(id){
-    const result=prevShowB18(id);
-    if(id==='historialRetiroGanancia'){
-      const src=document.querySelector('#vehiculos .inventory-inline-logo');
-      const dst=document.getElementById('profitWithdrawalHistoryLogo');
-      if(src&&dst)dst.src=src.src;
-      renderProfitWithdrawalHistory();
-    }
-    return result;
-  };
-})();
 </script>
 <script id="mod20-1-menu-safety">
 window.addEventListener('resize',function(){try{closeTopMenu();}catch(e){}});
@@ -12971,7 +13386,7 @@ window.addEventListener('orientationchange',function(){try{closeTopMenu();}catch
     return nativeAlert(message);
   };
 
-  function init(){
+  function initThemeSettings(){
     try{theme=JSON.parse(localStorage.getItem(THEME_KEY)||'null')||theme}catch(e){}
     try{iconFamily=localStorage.getItem(ICON_KEY)||'premium'}catch(e){}
     try{soundEnabled=localStorage.getItem(SOUND_ENABLED_KEY)!=='0';soundPack=localStorage.getItem(SOUND_PACK_KEY)||'professional'}catch(e){}
@@ -12986,7 +13401,7 @@ window.addEventListener('orientationchange',function(){try{closeTopMenu();}catch
   }
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
-  else init();
+  else initThemeSettings();
 })();
 </script>
 <script id="jcp-settings-clean-router-voice-v26">
@@ -13146,7 +13561,7 @@ window.addEventListener('orientationchange',function(){try{closeTopMenu();}catch
   };
   window.toggleJayListening=async function(){if(listening){stopRecognition();return;}await window.checkMicrophoneAndStart();};
 
-  function init(){
+  function initSettingsVoiceRouter(){
     enabled=localStorage.getItem(ENABLED)==='1';continuous=localStorage.getItem(CONT)==='1';name=localStorage.getItem(NAME)||'Jay';voiceURI=localStorage.getItem(VOICE)||'';
     const a=document.getElementById('jcpVoiceEnabled'),c=document.getElementById('jcpVoiceContinuous');if(a)a.checked=enabled;if(c)c.checked=continuous;
     const f=document.getElementById('jcpAssistantFloat');if(f)f.hidden=!enabled;
@@ -13154,7 +13569,7 @@ window.addEventListener('orientationchange',function(){try{closeTopMenu();}catch
     if(enabled)setStatus(`${safeName().toUpperCase()} ACTIVO`,'Toca el micrófono para hablar.');
     if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=populateVoices;setTimeout(populateVoices,200);}
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else initSettingsVoiceRouter();
 })();
 </script>
 <script id="jcp-accounting-engine-core">
@@ -13703,319 +14118,17 @@ function printAccountingReport(){
   const content=document.getElementById('accDetailContent');if(!content)return;
   const w=window.open('','_blank','width=960,height=780');if(!w){alert('EL NAVEGADOR BLOQUEÓ EL INFORME. HABILITA VENTANAS EMERGENTES.');return;}
   w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Contabilidad MULTI INVERSIONES JCP</title><style>body{font-family:Arial;color:#111;margin:25px}table{width:100%;border-collapse:collapse;font-size:10px}th,td{border:1px solid #bbb;padding:6px}.acc-entry{border:1px solid #bbb;margin:8px 0}.acc-entry-head,.acc-entry-line{display:grid;grid-template-columns:110px 1fr 110px 110px;gap:6px;padding:6px}.acc-entry-head{background:#eee}.acc-entry-line{border-top:1px solid #ddd}.acc-kpi,.acc-tabs,.acc-actions,.acc-filter{display:none}.acc-statement{display:grid;grid-template-columns:1fr 1fr;gap:12px}.acc-statement-card{border:1px solid #bbb;padding:10px}.acc-statement-row{display:flex;justify-content:space-between;border-bottom:1px solid #ddd;padding:5px}.acc-warning,.acc-good,.acc-reconcile{border:1px solid #bbb;padding:8px;margin:8px 0;font-size:9px}</style>
-<style id="extractos-dos-filtros-ajuste">
-#extractos .ext-two-filters{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important}
-#extractos .ext-pro-summary{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
-#extractos .ext-pro-summary .ext-pro-card.blue{grid-column:auto!important}
-#extractos .ext-pro-card{padding:9px 7px!important}
-#extractos .ext-pro-card span{font-size:8px!important;line-height:1.15}
-#extractos .ext-pro-card b{font-size:15px!important;margin:6px 0 3px!important}
-#extractos .ext-pro-card small{font-size:7px!important;line-height:1.15;display:block}
-@media(max-width:520px){
-  #extractos .ext-pro-summary{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-  #extractos .ext-pro-summary .ext-pro-card.blue{grid-column:auto!important}
-}
-@media(max-width:390px){
-  #extractos .ext-pro-summary{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-  #extractos .ext-pro-summary .ext-pro-card.blue{grid-column:auto!important}
-  #extractos .ext-pro-card{padding:8px 5px!important}
-  #extractos .ext-pro-card b{font-size:13px!important}
-  #extractos .ext-pro-card span{font-size:7px!important}
-  #extractos .ext-pro-card small{font-size:6.5px!important}
-}
-</style>
-
-<style id="jcp-extractos-final-layout">
-/* =========================================================
-   EXTRACTOS — DISEÑO APROBADO
-   ========================================================= */
-
-/* Dos filtros uniformes, misma altura y estilo */
-#extractos .ext-clean-filterbar{
-  display:grid!important;
-  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;
-  gap:8px!important;
-  width:100%!important;
-  margin:10px 0 12px!important;
-  align-items:start!important;
-}
-#extractos .ext-date-control{
-  position:relative!important;
-  min-width:0!important;
-}
-#extractos .ext-uniform-select{
-  display:block!important;
-  width:100%!important;
-  min-width:0!important;
-  height:46px!important;
-  min-height:46px!important;
-  max-height:46px!important;
-  margin:0!important;
-  padding:0 26px 0 10px!important;
-  box-sizing:border-box!important;
-  border:1px solid #5a491a!important;
-  border-radius:10px!important;
-  background:#101010!important;
-  color:#fff!important;
-  font-family:inherit!important;
-  font-size:10px!important;
-  font-weight:700!important;
-  line-height:44px!important;
-  text-align:center!important;
-  text-align-last:center!important;
-  white-space:nowrap!important;
-}
-#extractos #extDateMenu{
-  font-size:11px!important;
-}
-#extractos #extCategoryFilter{
-  font-size:8.6px!important;
-  padding-left:5px!important;
-  padding-right:20px!important;
-}
-#extractos .ext-uniform-select option{
-  text-align:center!important;
-  font-size:12px!important;
-}
-
-/* Fechas permanecen replegadas hasta seleccionar Fecha */
-#extractos .ext-date-range-panel{
-  position:absolute!important;
-  z-index:30!important;
-  left:0!important;
-  right:0!important;
-  display:grid;
-  grid-template-columns:1fr;
-  gap:7px;
-  margin-top:6px;
-  padding:8px;
-  box-sizing:border-box;
-  border:1px solid #5a491a;
-  border-radius:10px;
-  background:#0d0d0d;
-  box-shadow:0 10px 25px rgba(0,0,0,.55);
-}
-#extractos .ext-date-range-panel[hidden]{display:none!important}
-#extractos .ext-date-range-panel label span{
-  display:block;
-  margin:0 0 4px 1px;
-  color:#aaa;
-  font-size:8px;
-  font-weight:900;
-}
-#extractos .ext-date-range-panel input{
-  width:100%;
-  height:40px;
-  box-sizing:border-box;
-  padding:7px;
-  border:1px solid #333;
-  border-radius:7px;
-  background:#090909;
-  color:#fff;
-  color-scheme:dark;
-}
-
-/* Tres tarjetas iguales y EN UNA SOLA FILA */
-#extractos .ext-pro-summary.ext-filter-summary{
-  display:grid!important;
-  grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  grid-auto-flow:column!important;
-  gap:7px!important;
-  width:100%!important;
-  margin:10px 0 12px!important;
-}
-#extractos .ext-pro-summary.ext-filter-summary > .ext-pro-card,
-#extractos .ext-pro-summary.ext-filter-summary > .ext-pro-card.blue{
-  grid-column:auto!important;
-  grid-row:1!important;
-  width:100%!important;
-  min-width:0!important;
-  max-width:none!important;
-  min-height:108px!important;
-  margin:0!important;
-  padding:12px 9px!important;
-  box-sizing:border-box!important;
-  overflow:hidden!important;
-  border-radius:12px!important;
-}
-
-/* Títulos */
-#extractos .ext-pro-summary.ext-filter-summary .ext-pro-card span{
-  display:block!important;
-  font-size:8px!important;
-  font-weight:900!important;
-  line-height:1.15!important;
-  white-space:normal!important;
-  overflow:visible!important;
-}
-
-/* Valores: el tamaño inline grande prevalece; aquí solo aseguramos espacio */
-#extractos .ext-pro-summary.ext-filter-summary .ext-pro-card b{
-  min-height:18px!important;
-}
-
-/* Texto inferior */
-#extractos .ext-pro-summary.ext-filter-summary .ext-pro-card small{
-  display:block!important;
-  font-size:7px!important;
-  line-height:1.2!important;
-  color:#999!important;
-}
-
-/* Teléfonos */
-@media(max-width:420px){
-  #extractos .ext-clean-filterbar{
-    grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;
-    gap:6px!important;
-  }
-  #extractos .ext-uniform-select{
-    height:42px!important;
-    min-height:42px!important;
-    max-height:42px!important;
-    line-height:40px!important;
-  }
-  #extractos #extDateMenu{font-size:10px!important}
-  #extractos #extCategoryFilter{font-size:7.7px!important}
-
-  #extractos .ext-pro-summary.ext-filter-summary{
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    grid-auto-flow:column!important;
-    gap:5px!important;
-  }
-  #extractos .ext-pro-summary.ext-filter-summary > .ext-pro-card,
-  #extractos .ext-pro-summary.ext-filter-summary > .ext-pro-card.blue{
-    grid-column:auto!important;
-    grid-row:1!important;
-    min-height:100px!important;
-    padding:10px 7px!important;
-  }
-  #extractos .ext-pro-summary.ext-filter-summary .ext-pro-card span{
-    font-size:7.2px!important;
-  }
-  #extractos .ext-pro-summary.ext-filter-summary .ext-pro-card small{
-    font-size:6.4px!important;
-  }
-}
-</style>
 
 
-<style id="jcp-operations-centralized-style">
-#ventas .operations-register-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-  margin:14px 0 16px;
-}
-#ventas .operations-register-grid .sales-menu-card{
-  min-height:138px;
-}
-#ventas .operations-register-grid .operations-wide-card{
-  grid-column:1/-1;
-  min-height:96px;
-}
-#gestionDocumentos{padding-bottom:92px}
-#gestionDocumentos .accounting-document-actions{
-  margin:14px 0;
-}
-#gestionDocumentos .accounting-document-action-card{
-  margin-top:12px;
-}
-@media(max-width:520px){
-  #ventas .operations-register-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:10px;
-  }
-  #ventas .operations-register-grid .sales-menu-card{
-    min-height:126px;
-    padding:12px 8px;
-  }
-  #ventas .operations-register-grid .operations-wide-card{
-    grid-column:1/-1;
-    min-height:88px;
-  }
-}
-</style>
 
 
-<style id="jcp-debt-payment-mod1-style">
-#pagoObligaciones .debt-pay-secondary{
-  grid-template-columns:1fr!important;
-}
-#pagoObligaciones #debtPayDist.open{
-  display:block!important;
-  margin-top:10px!important;
-}
-#pagoObligaciones #ccDebtValue[readonly]{
-  border-color:#7b6420!important;
-  color:var(--gold)!important;
-  font-weight:900!important;
-  background:#17140c!important;
-}
-#pagoObligaciones .paydist-title{
-  font-size:11px!important;
-  letter-spacing:.4px!important;
-}
-</style>
 
-<style id="jcp-records-module-style">
-#registros{padding-bottom:92px}
-.records-filter-card{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin:11px 0;
-  padding:10px;
-  background:#0d0d0d;
-  border:1px solid #303030;
-  border-radius:11px;
-}
-.records-filter-card label{color:#999;font-size:8px;font-weight:900}
-.records-filter-card select,
-.records-filter-card input{
-  width:100%;
-  min-height:40px;
-  margin-top:4px;
-  padding:8px;
-  box-sizing:border-box;
-  border:1px solid #333;
-  border-radius:8px;
-  background:#090909;
-  color:#fff;
-}
-.records-list{
-  overflow:hidden;
-  border:1px solid #2d2d2d;
-  border-radius:11px;
-  background:#0d0d0d;
-}
-.records-row{
-  display:grid;
-  grid-template-columns:100px minmax(0,1fr) 105px 90px;
-  gap:7px;
-  align-items:center;
-  padding:9px;
-  border-bottom:1px solid #252525;
-}
-.records-row:last-child{border-bottom:0}
-.records-doc b{display:block;color:var(--gold);font-size:10px;overflow-wrap:anywhere}
-.records-doc small,.records-main small{display:block;margin-top:3px;color:#888;font-size:7px}
-.records-main strong{display:block;color:#fff;font-size:9px;line-height:1.25;overflow-wrap:anywhere}
-.records-amount{text-align:right;font-size:9px;font-weight:900;white-space:nowrap}
-.records-copy-btn{
-  min-height:34px!important;
-  padding:7px 5px!important;
-  background:#111!important;
-  color:var(--gold)!important;
-  border:1px solid #5c4a18!important;
-  font-size:7.5px!important;
-}
-.records-empty{padding:22px;text-align:center;color:#999;font-size:9px}
-@media(max-width:600px){
-  .records-filter-card{grid-template-columns:1fr!important}
-  .records-row{grid-template-columns:90px minmax(0,1fr) 85px}
-  .records-copy-btn{grid-column:1/-1;width:100%!important}
-}
-</style>
+
+
+
+
+
+
 
 
 
@@ -14391,7 +14504,7 @@ function voidAccountingDocument(){
       '<div style="color:#fff;font-size:11px;margin-top:6px">'+(typeof priceEsc==='function'?priceEsc(t):t)+'</div>'+
       '<div style="color:#fff;font-size:11px;margin-top:4px">'+(typeof priceEsc==='function'?priceEsc(title):title)+'</div>'+
       '<div style="color:#fff;font-weight:900;font-size:14px;margin:10px 0">'+(typeof money==='function'?money(amount):amount)+'</div>'+
-      '<button type="button" style="width:100%;min-height:42px;border:1px solid #b89527;border-radius:8px;background:#111;color:#d7b43a;font-weight:900" onclick="openRecordCopy(\''+n+'\')">VER SOPORTE / COPIA</button>'+
+      '<button type="button" style="width:100%;min-height:42px;border:1px solid #b89527;border-radius:8px;background:#111;color:#d7b43a;font-weight:900" onclick="openRecordCopy(\''+jcpInlineJsArg(n)+'\')">VER SOPORTE / COPIA</button>'+
     '</div>';
   }).join('');
 };
@@ -14677,15 +14790,6 @@ window.openRecordCopy=function(number){
     });
   }
 
-  const oldShow=window.show;
-  if(typeof oldShow==='function'){
-    window.show=function(id){
-      const r=oldShow.apply(this,arguments);
-      setTimeout(ensureOriginalBottomNav,0);
-      return r;
-    };
-  }
-
   if(document.readyState==='loading'){
     document.addEventListener('DOMContentLoaded',()=>setTimeout(ensureOriginalBottomNav,0));
   }else{
@@ -14782,6 +14886,6 @@ window.openRecordCopy=function(number){
   window.refreshHomeAfterDataLoad=refreshHomeAfterDataLoad;
 })();
 </script>
-<script src="./app-update.js?v=2026.09.13.1"></script>
+<script src="./app-update.js?v=2026.09.14.3"></script>
 </body>
 </html>
