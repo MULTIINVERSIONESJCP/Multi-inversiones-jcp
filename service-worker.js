@@ -1,4 +1,4 @@
-const APP_VERSION='2026.09.15.2';
+const APP_VERSION='2026.09.15.3';
 const CACHE_NAME='multi-jcp-'+APP_VERSION;
 const APP_SHELL=['/','/index.html','/app-update.js','/version.json'];
 const OPTIONAL_SHELL=['/manifest.json','/icon-192.png','/icon-512.png','/icon-maskable-192.png','/icon-maskable-512.png','/jay-natural.js'];

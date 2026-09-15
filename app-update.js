@@ -1,7 +1,7 @@
 (()=>{
   'use strict';
 
-  const APP_VERSION='2026.09.15.2';
+  const APP_VERSION='2026.09.15.3';
   const CHECK_EVERY_MS=10*60*1000;
   let registrationRef=null;
   let banner=null;
@@ -30,18 +30,46 @@
   }
 
   function appAccount(){
-    try{
-      const el=document.getElementById('cloudUserEmail');
-      const email=el?.textContent?.trim();
-      return email||'SIN SESIÓN';
-    }catch(e){return 'SIN SESIÓN';}
+    return 'Consultar con DIAGNÓSTICO DE CONEXIÓN';
   }
 
   function syncLabel(){
+    return window.jcpCloudBootstrapReady===true?'Carga central completada':'Carga central no confirmada';
+  }
+
+  async function diagnoseConnection(output){
+    const lines=[];
+    const add=(label,value)=>{lines.push(label+': '+value);output.textContent=lines.join('\n');};
+    const limited=promise=>new Promise((resolve,reject)=>{
+      const timer=setTimeout(()=>reject(new Error('Tiempo de espera agotado (15 segundos)')),15000);
+      Promise.resolve(promise).then(v=>{clearTimeout(timer);resolve(v);},e=>{clearTimeout(timer);reject(e);});
+    });
+    add('Versión',APP_VERSION);
+    add('Arranque',window.jcpCloudBootstrapMode||'Sin etapa registrada');
+    add('Carga central terminada',window.jcpCloudBootstrapReady===true?'Sí':'No');
     try{
-      const el=document.getElementById('cloudStatus');
-      return el?.textContent?.trim()||'Estado de nube no disponible';
-    }catch(e){return 'Estado de nube no disponible';}
+      const local=JSON.parse(localStorage.getItem('jcp_app_v1')||'null');
+      add('Vehículos en copia local',Array.isArray(local?.veh)?local.veh.length:'Sin copia válida');
+      add('Cambios pendientes',localStorage.getItem('jcp_cloud_pending_v1')==='1'?'Sí':'No');
+    }catch(e){add('Copia local','No se pudo leer');}
+    try{
+      if(typeof supabaseClient==='undefined')throw new Error('El cliente Supabase no se inicializó');
+      add('Proyecto',new URL(SUPABASE_URL).hostname);
+      add('Consulta','Comprobando sesión…');
+      const sessionResult=await limited(supabaseClient.auth.getSession());
+      if(sessionResult.error)throw sessionResult.error;
+      const user=sessionResult.data?.session?.user;
+      if(!user){add('Sesión','No hay sesión guardada. No se consultaron registros.');return;}
+      add('Cuenta',user.email||user.id);
+      add('ID de cuenta',user.id);
+      const result=await limited(supabaseClient.from('app_data').select('data,updated_at').eq('user_id',user.id).maybeSingle());
+      if(result.error)throw result.error;
+      if(!result.data){add('Supabase','No devolvió una fila visible para esta cuenta');return;}
+      add('Vehículos en Supabase',Array.isArray(result.data.data?.veh)?result.data.data.veh.length:'Formato no reconocido');
+      add('Actualización en Supabase',result.data.updated_at||'Sin fecha');
+      add('Reinicio registrado',result.data.data?._sync?.resetId||'Sin identificador');
+      add('Resultado','Lectura terminada; no se modificaron registros');
+    }catch(e){add('Error de conexión',String(e?.message||e));}
   }
 
   function updateMenuLabel(){
@@ -204,7 +232,7 @@
     const overlay=document.createElement('div');
     overlay.id='jcpVersionInfoOverlay';
     overlay.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:18px;font-family:Arial,sans-serif;color:#fff';
-    overlay.innerHTML=`<div style="width:min(480px,100%);background:#111;border:1px solid #d4af37;border-radius:18px;padding:18px;box-shadow:0 24px 70px #000">
+    overlay.innerHTML=`<div style="width:min(480px,100%);max-height:90vh;overflow:auto;background:#111;border:1px solid #d4af37;border-radius:18px;padding:18px;box-shadow:0 24px 70px #000">
       <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
         <div><div style="color:#d4af37;font-weight:900;font-size:18px">MULTI INVERSIONES JCP</div><div style="color:#aaa;font-size:11px;margin-top:3px">Información de versión y sincronización</div></div>
         <button id="jcpVersionClose" type="button" style="width:34px;height:34px;padding:0;border-radius:50%;border:1px solid #444;background:#222;color:#fff">×</button>
@@ -222,6 +250,13 @@
         ${versionStatus==='outdated'?'<button id="jcpApplyUpdateBtn" type="button" style="min-height:42px;border:0;border-radius:10px;background:#d4af37;color:#111;font-weight:900">ACTUALIZAR</button>':''}
       </div>
     </div>`;
+    const diagnosticBtn=document.createElement('button');
+    diagnosticBtn.textContent='DIAGNÓSTICO DE CONEXIÓN';
+    diagnosticBtn.style.cssText='width:100%;margin-top:12px;padding:12px;background:#d4af37;border:0;border-radius:10px;font-weight:bold';
+    const output=document.createElement('pre');
+    output.style.cssText='white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.6 Arial;color:#fff';
+    diagnosticBtn.onclick=async()=>{diagnosticBtn.disabled=true;try{await diagnoseConnection(output);}finally{diagnosticBtn.disabled=false;}};
+    overlay.firstElementChild.append(diagnosticBtn,output);
     document.body.appendChild(overlay);
     overlay.querySelector('#jcpVersionClose').onclick=closeVersionInfo;
     overlay.onclick=e=>{if(e.target===overlay)closeVersionInfo();};
