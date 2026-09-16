@@ -2179,6 +2179,13 @@ body.jcp-custom-theme .global-search-icon{color:var(--jcp-ui-accent)!important}
 .jcp-wheel-light input{width:100%;min-width:0}
 .jcp-wheel-selected{display:flex;justify-content:center;align-items:center;gap:7px;margin:9px 0}
 .jcp-wheel-selected span{width:28px;height:28px;border:2px solid #fff;border-radius:50%}.jcp-wheel-selected b{font-size:9px}
+.jcp-wheel-hex-row{display:flex;align-items:center;justify-content:center;gap:7px;margin:0 0 9px}
+.jcp-wheel-hex-row span{font-size:8px;color:var(--jcp-ui-muted,#999);font-weight:800}
+.jcp-wheel-hex-row input{width:90px!important;padding:8px!important;background:var(--jcp-ui-input,#0d0d0d)!important;border:1px solid var(--jcp-ui-border,#333)!important;color:var(--jcp-ui-text,#fff)!important;border-radius:8px!important;font-size:11px!important;text-align:center;text-transform:uppercase}
+.jcp-swatch-label{font-size:8px;color:var(--jcp-ui-muted,#999);font-weight:900;letter-spacing:.4px;margin:10px 0 6px;text-align:center}
+.jcp-swatch-row{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-bottom:4px}
+.jcp-swatch{width:26px;height:26px;min-width:26px;border-radius:50%;border:2px solid rgba(255,255,255,.55);padding:0!important;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.jcp-swatch:active{transform:scale(.9)}
 .jcp-primary-action{width:100%!important;background:var(--jcp-ui-accent,#d4af37)!important;color:var(--jcp-ui-bg,#080808)!important;font-size:9px!important;font-weight:900!important}
 .jcp-theme-preview{display:flex;justify-content:center;align-items:center;margin:10px 0 8px;min-width:0}
 .jcp-theme-preview span{width:42px;height:30px;border:2px solid rgba(255,255,255,.72)}
@@ -3878,10 +3885,39 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 <div class="jcp-wheel-light">
 <span>Oscuro</span>
-<input id="jcpWheelLightness" max="86" min="18" oninput="setWheelLightness(this.value)" type="range" value="52"/>
+<input id="jcpWheelLightness" max="100" min="0" oninput="setWheelLightness(this.value)" type="range" value="52"/>
 <span>Claro</span>
 </div>
 <div class="jcp-wheel-selected"><span id="jcpWheelCurrentChip"></span><b id="jcpWheelCurrentHex">#D4AF37</b></div>
+<div class="jcp-wheel-hex-row"><span>HEX</span><input id="jcpWheelHexInput" maxlength="7" oninput="setWheelHex(this.value)" placeholder="#000000" type="text"/></div>
+<div class="jcp-swatch-label">ESCALA DE GRISES</div>
+<div class="jcp-swatch-row">
+<button class="jcp-swatch" onclick="selectSwatch('#000000')" style="background:#000000" title="Negro" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#1A1A1A')" style="background:#1A1A1A" title="Negro suave" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#333333')" style="background:#333333" title="Gris muy oscuro" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#4D4D4D')" style="background:#4D4D4D" title="Gris oscuro" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#666666')" style="background:#666666" title="Gris" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#808080')" style="background:#808080" title="Gris medio" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#999999')" style="background:#999999" title="Gris claro" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#B3B3B3')" style="background:#B3B3B3" title="Gris muy claro" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#CCCCCC')" style="background:#CCCCCC" title="Plata" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#E6E6E6')" style="background:#E6E6E6" title="Casi blanco" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#FFFFFF')" style="background:#FFFFFF" title="Blanco" type="button"></button>
+</div>
+<div class="jcp-swatch-label">COLORES POPULARES</div>
+<div class="jcp-swatch-row">
+<button class="jcp-swatch" onclick="selectSwatch('#D4AF37')" style="background:#D4AF37" title="Dorado" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#C0C0C0')" style="background:#C0C0C0" title="Plateado" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#B87333')" style="background:#B87333" title="Bronce" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#8B0000')" style="background:#8B0000" title="Vino tinto" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#E63946')" style="background:#E63946" title="Rojo" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#FF7A00')" style="background:#FF7A00" title="Naranja" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#2E7D32')" style="background:#2E7D32" title="Verde" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#0D47A1')" style="background:#0D47A1" title="Azul" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#1B2A4A')" style="background:#1B2A4A" title="Azul marino" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#4A148C')" style="background:#4A148C" title="Morado" type="button"></button>
+<button class="jcp-swatch" onclick="selectSwatch('#00897B')" style="background:#00897B" title="Verde azulado" type="button"></button>
+</div>
 <button class="jcp-primary-action" onclick="useWheelColor()" type="button">USAR ESTE COLOR</button>
 </div>
 <div class="jcp-theme-preview">
@@ -4021,7 +4057,7 @@ body.jcp-custom-theme .database-actions-list button{
 <button onclick="openCompleteInfoSelector();closeVehicleModuleMenu()" type="button">📋 COMPLETAR INF.</button>
 <button onclick="openVehicleExportModule();closeVehicleModuleMenu()" type="button">🖼️ EXPORTAR</button>
 <button onclick="generateInventoryReportPDF();closeVehicleModuleMenu()" type="button">📋 INFORME GENERAL</button>
-<button onclick="openAppInfo();closeVehicleModuleMenu()" type="button">ℹ️ VERSIÓN 2026.09.16.4</button>
+<button onclick="openAppInfo();closeVehicleModuleMenu()" type="button">ℹ️ VERSIÓN 2026.09.16.5</button>
 </div>
 </div>
 </div>
@@ -11136,7 +11172,7 @@ window.addEventListener('pagehide', ()=>{
       menu.appendChild(actionBtn);
       const versionBtn=document.createElement('button');
       versionBtn.type='button';
-      versionBtn.textContent='ℹ️ VERSIÓN 2026.09.16.4';
+      versionBtn.textContent='ℹ️ VERSIÓN 2026.09.16.5';
       versionBtn.onclick=function(){closeUnifiedMenus();openAppInfo();};
       menu.appendChild(versionBtn);
 
@@ -13326,7 +13362,7 @@ window.addEventListener('orientationchange',function(){try{closeTopMenu();}catch
     wheelTarget=target;
     const color=target===1?theme.c1:theme.c2;
     const hsl=hexToHsl(color);
-    wheelHue=hsl[0];wheelSat=Math.max(12,hsl[1]);wheelLight=Math.max(18,Math.min(86,hsl[2]));wheelTemp=color.toUpperCase();
+    wheelHue=hsl[0];wheelSat=hsl[1];wheelLight=hsl[2];wheelTemp=color.toUpperCase();
     const p=document.getElementById('jcpColorWheelPanel');if(p)p.hidden=false;
     const t=document.getElementById('jcpWheelTitle');if(t)t.textContent='ESCOGER COLOR '+target;
     const l=document.getElementById('jcpWheelLightness');if(l)l.value=Math.round(wheelLight);
@@ -13334,10 +13370,29 @@ window.addEventListener('orientationchange',function(){try{closeTopMenu();}catch
   };
   window.closeColorWheel=function(){const p=document.getElementById('jcpColorWheelPanel');if(p)p.hidden=true};
   window.setWheelLightness=function(v){wheelLight=Number(v);wheelTemp=hslToHex(wheelHue,wheelSat,wheelLight);updateWheelUI()};
-  function updateWheelUI(){
+  window.selectSwatch=function(hex){
+    wheelTemp=String(hex).toUpperCase();
+    const hsl=hexToHsl(wheelTemp);
+    wheelHue=hsl[0];wheelSat=hsl[1];wheelLight=hsl[2];
+    const l=document.getElementById('jcpWheelLightness');if(l)l.value=Math.round(wheelLight);
+    updateWheelUI();
+  };
+  window.setWheelHex=function(v){
+    let val=String(v||'').trim();
+    if(!val)return;
+    if(val[0]!=='#')val='#'+val;
+    if(!/^#[0-9A-Fa-f]{6}$/.test(val))return;
+    wheelTemp=val.toUpperCase();
+    const hsl=hexToHsl(wheelTemp);
+    wheelHue=hsl[0];wheelSat=hsl[1];wheelLight=hsl[2];
+    const l=document.getElementById('jcpWheelLightness');if(l)l.value=Math.round(wheelLight);
+    updateWheelUI(true);
+  };
+  function updateWheelUI(skipHexInput){
     wheelTemp=hslToHex(wheelHue,wheelSat,wheelLight);
     const chip=document.getElementById('jcpWheelCurrentChip'),txt=document.getElementById('jcpWheelCurrentHex');
     if(chip)chip.style.background=wheelTemp;if(txt)txt.textContent=wheelTemp;
+    if(!skipHexInput){const hi=document.getElementById('jcpWheelHexInput');if(hi)hi.value=wheelTemp}
     const wheel=document.getElementById('jcpColorWheel'),cur=document.getElementById('jcpWheelCursor');
     if(wheel&&cur){
       const r=wheel.clientWidth/2,rad=(wheelHue-90)*Math.PI/180,dist=(wheelSat/100)*r*.86;
