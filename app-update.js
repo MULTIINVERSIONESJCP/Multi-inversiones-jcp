@@ -1,7 +1,7 @@
 (()=>{
   'use strict';
 
-  const APP_VERSION='2026.09.15.5';
+  const APP_VERSION='2026.09.16.1';
   const CHECK_EVERY_MS=10*60*1000;
   let registrationRef=null;
   let banner=null;
@@ -50,7 +50,9 @@
     try{
       const local=JSON.parse(localStorage.getItem('jcp_app_v1')||'null');
       add('Vehículos en copia local',Array.isArray(local?.veh)?local.veh.length:'Sin copia válida');
-      add('Cambios pendientes',localStorage.getItem('jcp_cloud_pending_v1')==='1'?'Sí':'No');
+      const pendingV2=localStorage.getItem('jcp_pending_write_v2');
+      const pendingLegacy=localStorage.getItem('jcp_cloud_pending_v1')==='1';
+      add('Cambios pendientes',pendingV2||pendingLegacy?'Sí':'No');
     }catch(e){add('Copia local','No se pudo leer');}
     try{
       if(typeof supabaseClient==='undefined')throw new Error('El cliente Supabase no se inicializó');
@@ -62,12 +64,15 @@
       if(!user){add('Sesión','No hay sesión guardada. No se consultaron registros.');return;}
       add('Cuenta',user.email||user.id);
       add('ID de cuenta',user.id);
-      const result=await limited(supabaseClient.from('app_data').select('data,updated_at').eq('user_id',user.id).maybeSingle());
+      if(typeof JcpSync==='undefined')throw new Error('Módulo de sincronización no se cargó');
+      const result=await limited(supabaseClient.rpc('jcp_read_state'));
       if(result.error)throw result.error;
-      if(!result.data){add('Supabase','No devolvió una fila visible para esta cuenta');return;}
-      add('Vehículos en Supabase',Array.isArray(result.data.data?.veh)?result.data.data.veh.length:'Formato no reconocido');
-      add('Actualización en Supabase',result.data.updated_at||'Sin fecha');
-      add('Reinicio registrado',result.data.data?._sync?.resetId||'Sin identificador');
+      const row=result.data;
+      if(!row||!row.data){add('Supabase','No existe una fila central para esta cuenta');return;}
+      add('Revisión central',Number.isSafeInteger(row.revision)?row.revision:'No disponible');
+      add('Vehículos en Supabase',Array.isArray(row.data?.veh)?row.data.veh.length:'Formato no reconocido');
+      add('Actualización en Supabase',row.updated_at||'Sin fecha');
+      add('Reinicio registrado',row.data?._sync?.resetId||'Sin identificador');
       add('Resultado','Lectura terminada; no se modificaron registros');
     }catch(e){add('Error de conexión',String(e?.message||e));}
   }
