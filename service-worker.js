@@ -1,9 +1,9 @@
-const APP_VERSION='2026.09.15.4';
+const APP_VERSION='2026.09.15.5';
 const CACHE_NAME='multi-jcp-'+APP_VERSION;
 const APP_BASE=self.registration.scope;
 const INDEX_URL=new URL('index.html',APP_BASE).href;
 const APP_SHELL=['./','index.html','app-update.js','version.json'].map(path=>new URL(path,APP_BASE).href);
-const OPTIONAL_SHELL=['manifest.json','icon-192.png','icon-512.png','icon-maskable-192.png','icon-maskable-512.png','jay-natural.js'].map(path=>new URL(path,APP_BASE).href);
+const OPTIONAL_SHELL=['manifest.json','icon-192.png','icon-512.png','icon-maskable-192.png','icon-maskable-512.png','jay-natural.js?v=2','jay-ai.js?v=4'].map(path=>new URL(path,APP_BASE).href);
 
 self.addEventListener('install',event=>{
   event.waitUntil((async()=>{
