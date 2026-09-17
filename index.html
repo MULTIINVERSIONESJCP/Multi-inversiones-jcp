@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.17.4</title>
+<title>MULTI INVERSIONES JCP - V2026.09.17.5</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -3741,6 +3741,42 @@ body.jcp-custom-theme .database-actions-list button{
   #extractos .ext-pro-table-wrap{overflow-x:auto!important;-webkit-overflow-scrolling:touch}
   #extractos .ext-pro-table-head,#extractos .ext-pro-row{min-width:760px!important}
   #extractos .ext-pro-table-head{position:sticky;top:0;z-index:2}
+}
+/* ===== v2026.09.17.5 — correcciones 1 a 4 ===== */
+@media (min-width:1100px){
+  #vehiculos #vehList>.inventory-cards{
+    grid-template-columns:repeat(auto-fit,minmax(300px,360px))!important;
+    justify-content:center!important;
+    align-items:stretch!important;
+    gap:16px!important;
+  }
+  #vehiculos #vehList .vehicle-card{width:100%!important;max-width:360px!important;height:100%!important}
+  #vehiculos #vehList .vehicle-card img{height:180px!important;aspect-ratio:2/1!important;object-fit:cover!important}
+}
+@media (min-width:1500px){
+  #vehiculos #vehList>.inventory-cards{grid-template-columns:repeat(auto-fit,minmax(300px,350px))!important}
+}
+.jcp-list-wrap{width:100%;overflow:hidden;border:1px solid #303030;border-radius:12px;background:#0d0d0d}
+.records-table-head,#registros .records-row{display:grid!important;grid-template-columns:115px 105px minmax(260px,1.55fr) 120px 120px!important;gap:10px!important;align-items:center!important;padding:11px 12px!important}
+.records-table-head{position:sticky;top:0;z-index:2;background:#151515;color:var(--gold);font-size:9px;font-weight:900}
+.records-row{border-bottom:1px solid #252525!important;border-radius:0!important;background:#0d0d0d!important;margin:0!important}
+.records-row:last-child{border-bottom:0!important}
+.records-row .records-doc b{font-size:11px!important}.records-row .records-doc small{font-size:8px!important}
+.records-row .records-main strong{font-size:10px!important}.records-row .records-main small{font-size:8px!important}
+.records-row .records-date{font-size:9px;color:#ddd;line-height:1.25}
+.records-row .records-amount{font-size:11px!important;color:#fff}
+.records-row .records-copy-btn{width:100%!important;min-height:34px!important;padding:7px 6px!important;font-size:8px!important}
+.obligation-list-wrap{width:100%;overflow:hidden;border:1px solid #303030;border-radius:12px;background:#0d0d0d;margin-top:10px}
+.obligation-list-head,.obligation-list-row{display:grid;grid-template-columns:minmax(210px,1.45fr) 120px 120px 120px 110px 105px 145px;gap:9px;align-items:center;padding:11px 12px}
+.obligation-list-head{position:sticky;top:0;z-index:2;background:#151515;color:var(--gold);font-size:8px;font-weight:900}
+.obligation-list-row{border-bottom:1px solid #252525;font-size:9px}.obligation-list-row:last-child{border-bottom:0}
+.obligation-list-main{min-width:0}.obligation-list-main b{display:block;font-size:10px;line-height:1.25;overflow-wrap:anywhere}.obligation-list-main small{display:block;color:var(--gold);font-size:8px;font-weight:900;margin-bottom:3px}
+.obligation-list-money{font-size:10px;font-weight:900;text-align:right;white-space:nowrap}.obligation-list-date{font-size:8.5px;color:#ddd;line-height:1.25}.obligation-list-support{font-size:9px;color:var(--gold);font-weight:900;overflow-wrap:anywhere}
+.obligation-list-action{min-height:34px!important;padding:7px 6px!important;border:1px solid #6a5520!important;background:#111!important;color:var(--gold)!important;font-size:8px!important}
+@media(max-width:800px){
+  #registros .records-list,.obligation-list-wrap{overflow-x:auto!important;-webkit-overflow-scrolling:touch}
+  .records-table-head,#registros .records-row{min-width:760px!important}
+  .obligation-list-head,.obligation-list-row{min-width:930px!important}
 }
 </style>
 
@@ -11229,7 +11265,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.17.4\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.17.5\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -11468,25 +11504,20 @@ window.renderObligationHistory=function(){
     return;
   }
 
-  box.innerHTML=rows.map(x=>{
+  const head='<div class="obligation-list-head"><span>TIPO / CONCEPTO</span><span>VALOR INICIAL</span><span>ABONADO</span><span>SALDO</span><span>FECHA</span><span>SOPORTE</span><span>ESTADO / ACCIÓN</span></div>';
+  box.innerHTML='<div class="obligation-list-wrap">'+head+rows.map(x=>{
     const safeId=jcpInlineJsArg(x.id);
     const pending=x.status==='pending';
-    return `<div class="pending-debt-card">
-      <div class="pending-debt-card-head">
-        <div><div class="pending-debt-type">${clientEsc(x.type||'')}</div><b>${clientEsc(x.concept||'')}</b></div>
-        <span class="obligation-status ${pending?'pending':'paid'}">${pending?'PENDIENTE':'PAGADA'}</span>
-      </div>
-      <div class="pending-debt-grid">
-        <div><span>VALOR INICIAL</span><b>${money(x.value)}</b></div>
-        <div><span>TOTAL ABONADO</span><b>${money(x.paid)}</b></div>
-        <div><span>SALDO</span><b>${money(x.balance)}</b></div>
-        <div><span>FECHA</span><b>${clientEsc(x.date||'—')}</b></div>
-        <div><span>SOPORTE</span><b>${clientEsc(x.receiptNumber||'—')}</b></div>
-        <div><span>ESTADO</span><b>${pending?'ACTIVA':'CANCELADA'}</b></div>
-      </div>
-      ${pending?`<button class="pending-debt-pay-btn" onclick="openDebtPayment('${safeId}')" type="button">CANCELAR / ABONAR OBLIGACIÓN</button>`:''}
+    return `<div class="obligation-list-row">
+      <div class="obligation-list-main"><small>${clientEsc(x.type||'')}</small><b>${clientEsc(x.concept||'')}</b></div>
+      <div class="obligation-list-money">${money(x.value)}</div>
+      <div class="obligation-list-money">${money(x.paid)}</div>
+      <div class="obligation-list-money">${money(x.balance)}</div>
+      <div class="obligation-list-date">${clientEsc(x.date||'—')}</div>
+      <div class="obligation-list-support">${clientEsc(x.receiptNumber||'—')}</div>
+      <div>${pending?`<button class="obligation-list-action" onclick="openDebtPayment('${safeId}')" type="button">ABONAR / CANCELAR</button>`:`<span class="obligation-status paid">PAGADA</span>`}</div>
     </div>`;
-  }).join('');
+  }).join('')+'</div>';
 };
 
   function debts(){
@@ -11522,21 +11553,19 @@ window.renderObligationHistory=function(){
       box.innerHTML='<div class="empty">NO HAY OBLIGACIONES PENDIENTES.</div>';
       return;
     }
-    box.innerHTML=list.map(x=>{
+    const head='<div class="obligation-list-head"><span>TIPO / CONCEPTO</span><span>VALOR INICIAL</span><span>ABONADO</span><span>SALDO</span><span>FECHA</span><span>REFERENCIA</span><span>ESTADO</span></div>';
+    box.innerHTML='<div class="obligation-list-wrap">'+head+list.map(x=>{
       const original=(data.mov||[]).find(m=>(m.capitalOpId||m.id)===x.id)||{};
-      const safeId=jcpInlineJsArg(x.id);
-      return `<div class="pending-debt-card">
-        <div class="pending-debt-card-head"><div><div class="pending-debt-type">${clientEsc(debtTypeFromConcept(original.c||x.concept))}</div><b>${clientEsc(x.concept||'')}</b></div><span class="pending-debt-type">PENDIENTE</span></div>
-        <div class="pending-debt-grid">
-          <div><span>VALOR INICIAL</span><b>${money(x.value)}</b></div>
-          <div><span>TOTAL PAGADO</span><b>${money(x.paid)}</b></div>
-          <div><span>SALDO PENDIENTE</span><b>${money(x.balance)}</b></div>
-          <div><span>FECHA DE REGISTRO</span><b>${clientEsc(original.date||'—')}</b></div>
-          <div><span>ESTADO</span><b>ACTIVA</b></div>
-          <div><span>REFERENCIA</span><b>${clientEsc(String(x.id).slice(-10))}</b></div>
-        </div>
+      return `<div class="obligation-list-row">
+        <div class="obligation-list-main"><small>${clientEsc(debtTypeFromConcept(original.c||x.concept))}</small><b>${clientEsc(x.concept||'')}</b></div>
+        <div class="obligation-list-money">${money(x.value)}</div>
+        <div class="obligation-list-money">${money(x.paid)}</div>
+        <div class="obligation-list-money">${money(x.balance)}</div>
+        <div class="obligation-list-date">${clientEsc(original.date||'—')}</div>
+        <div class="obligation-list-support">${clientEsc(original.receiptNumber||String(x.id).slice(-10))}</div>
+        <div><span class="obligation-status pending">PENDIENTE</span></div>
       </div>`;
-    }).join('');
+    }).join('')+'</div>';
   };
 
   window.resetCapitalSourceForm=function(){
@@ -12447,18 +12476,19 @@ window.renderRecordsModule=function(){
       return;
     }
 
-    list.innerHTML=rows.map(r=>{
+    const head='<div class="records-table-head"><span>REGISTRO</span><span>FECHA</span><span>TIPO / CONCEPTO</span><span>VALOR</span><span>ACCIÓN</span></div>';
+    list.innerHTML=head+rows.map(r=>{
       const n=String(r.recordNumber||'').toUpperCase();
       const t=recLabel(recType(r));
       const title=String(r.title||r.concept||t);
       const amount=Number(r.amount||0);
-
-      return '<div style="padding:12px;border:1px solid #3a3a3a;border-radius:10px;background:#0d0d0d;margin-bottom:10px">'+
-        '<div style="color:#d1aa34;font-weight:900;font-size:13px">'+(typeof priceEsc==='function'?priceEsc(n):n)+'</div>'+
-        '<div style="color:#fff;font-size:11px;margin-top:6px">'+(typeof priceEsc==='function'?priceEsc(t):t)+'</div>'+
-        '<div style="color:#fff;font-size:11px;margin-top:4px">'+(typeof priceEsc==='function'?priceEsc(title):title)+'</div>'+
-        '<div style="color:#fff;font-weight:900;font-size:14px;margin:10px 0">'+(typeof money==='function'?money(amount):amount)+'</div>'+
-        '<button type="button" style="width:100%;min-height:42px;border:1px solid #b89527;border-radius:8px;background:#111;color:#d7b43a;font-weight:900" onclick="openRecordCopy(\''+jcpInlineJsArg(n)+'\')">VER SOPORTE / COPIA</button>'+
+      const related=String(r.plate||r.vehiclePlate||r.snapshot?.plate||'').toUpperCase();
+      return '<div class="records-row">'+
+        '<div class="records-doc"><b>'+(typeof priceEsc==='function'?priceEsc(n):n)+'</b><small>'+(related?(typeof priceEsc==='function'?priceEsc(related):related):'SOPORTE')+'</small></div>'+
+        '<div class="records-date">'+(typeof priceEsc==='function'?priceEsc(String(r.date||'—')):String(r.date||'—'))+'</div>'+
+        '<div class="records-main"><small>'+(typeof priceEsc==='function'?priceEsc(t):t)+'</small><strong>'+(typeof priceEsc==='function'?priceEsc(title):title)+'</strong></div>'+
+        '<div class="records-amount">'+(typeof money==='function'?money(amount):amount)+'</div>'+
+        '<button type="button" class="records-copy-btn" onclick="openRecordCopy(\''+jcpInlineJsArg(n)+'\')">VER SOPORTE</button>'+
       '</div>';
     }).join('');
   };
@@ -14661,7 +14691,7 @@ function voidAccountingDocument(){
 };
 
   window.openSupportDocument=function(baseHtml,fileKey,shareTitle){
-  const w=window.open('','_blank','width=1000,height=860');
+  const w=window.open('','_blank');
   if(!w){alert('EL NAVEGADOR BLOQUEÓ EL SOPORTE. HABILITA VENTANAS EMERGENTES.');return false;}
   if(!baseHtml)baseHtml='<html><body>NO FUE POSIBLE GENERAR EL SOPORTE.</body></html>';
 
@@ -14678,7 +14708,7 @@ function voidAccountingDocument(){
   #jcpSupportTools button{min-height:46px;border:0;border-radius:7px;padding:8px;font-weight:900;font-size:11px;cursor:pointer}
   #jcpDownloadImage{background:#b89227;color:#111}#jcpShareImage{background:#111;color:#fff}#jcpPrintPdf{background:#333;color:#fff}
   #jcpSupportMsg{grid-column:1/-1;text-align:center;font-size:10px;color:#777;min-height:14px}
-  @media(max-width:700px){
+  @media(max-width:700px),(hover:none) and (pointer:coarse){
     html,body{min-width:0!important;width:100%!important;overflow-x:hidden!important}
     body{padding:8px!important}
     .sheet,.purchase-sheet,.sale-sheet,.sale-page,.tp{width:100%!important;max-width:100%!important;min-width:0!important;margin:0 auto!important;padding:16px!important;transform:none!important}
@@ -15026,7 +15056,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.17.4',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.17.5',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -15072,6 +15102,6 @@ window.openRecordCopy=function(number){
   document.addEventListener('DOMContentLoaded',()=>{install();const overlay=document.getElementById('jcpExcelOverlay');overlay.onclick=e=>{if(e.target===overlay)close();};document.getElementById('jcpExcelClose').onclick=close;document.getElementById('jcpExcelCancel').onclick=close;document.getElementById('jcpExcelGenerate').onclick=generate;document.getElementById('jcpExcelAll').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=true);document.getElementById('jcpExcelNone').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=false);document.querySelectorAll('[name="jcpExcelPeriod"]').forEach(x=>x.onchange=()=>document.getElementById('jcpExcelDates').hidden=x.value!=='range'||!x.checked);});
 })();
 </script>
-<script src="./app-update.js?v=2026.09.17.4"></script>
+<script src="./app-update.js?v=2026.09.17.5"></script>
 </body>
 </html>
