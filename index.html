@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.17.8</title>
+<title>MULTI INVERSIONES JCP - V2026.09.17.9</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5758,7 +5758,50 @@ function jcpRecordCount(state){
   return ['veh','sold','clientes','pres','inv','mov','permutas','capitalOps','cashClosures','receipts','treasuryMovements']
     .reduce((n,k)=>n+(Array.isArray(d[k])?d[k].length:0),0);
 }
-const cloudStore=JcpSync.create({client:supabaseClient,storage:localStorage,onStatus:({state,message,revision})=>{
+// Copia local liviana: Supabase conserva el estado completo, incluidas las
+// fotografías. En el navegador se omiten imágenes base64 para no duplicar
+// varios megabytes entre la copia principal y el cambio pendiente.
+function jcpLightweightLocalJson(snapshot){
+  return JSON.stringify(snapshot,(key,value)=>{
+    if(typeof value==='string' && /^data:image\//i.test(value))return '';
+    return value;
+  });
+}
+function jcpIsQuotaError(error){
+  return !!error&&(error.name==='QuotaExceededError'||error.code===22||error.code===1014||/quota|exceeded/i.test(String(error.message||error)));
+}
+const jcpMemoryStorage=new Map();
+const jcpResilientStorage={
+  getItem(key){
+    if(jcpMemoryStorage.has(key))return jcpMemoryStorage.get(key);
+    try{return localStorage.getItem(key);}catch(e){return null;}
+  },
+  setItem(key,value){
+    try{localStorage.setItem(key,value);jcpMemoryStorage.delete(key);return;}
+    catch(error){
+      if(!jcpIsQuotaError(error))throw error;
+      // Liberar la copia pesada antigua y volver a intentar guardar el
+      // pendiente durable. Nunca se borra información confirmada de Supabase.
+      try{localStorage.removeItem('jcp_app_v1');localStorage.setItem(key,value);jcpMemoryStorage.delete(key);window.jcpLocalQuotaFallback=true;return;}catch(e){}
+      jcpMemoryStorage.set(key,String(value));window.jcpLocalQuotaFallback=true;
+    }
+  },
+  removeItem(key){jcpMemoryStorage.delete(key);try{localStorage.removeItem(key);}catch(e){}},
+  clear(){jcpMemoryStorage.clear();try{localStorage.clear();}catch(e){}}
+};
+function jcpWriteLocalSnapshot(snapshot){
+  try{
+    localStorage.setItem('jcp_app_v1',jcpLightweightLocalJson(snapshot));
+    return true;
+  }catch(error){
+    if(!jcpIsQuotaError(error))throw error;
+    try{localStorage.removeItem('jcp_app_v1');localStorage.setItem('jcp_app_v1',jcpLightweightLocalJson(snapshot));return true;}catch(e){}
+    window.jcpLocalQuotaFallback=true;
+    console.warn('La copia local no cupo; Supabase continúa como fuente principal.',error);
+    return false;
+  }
+}
+const cloudStore=JcpSync.create({client:supabaseClient,storage:jcpResilientStorage,onStatus:({state,message,revision})=>{
   window.jcpSyncState=state;window.jcpServerRevision=revision;
   setCloudStatus(message,state==='confirmed');
   if(state==='conflict'){
@@ -5776,10 +5819,11 @@ async function jcpApplyConfirmedWrite(){
   const row=await cloudStore.read();
   if(row.revision<result.revision)throw new Error('La lectura no confirmó la revisión guardada.');
   const verified=validateAppState(row.data);
-  // Primero conservar la copia confirmada; luego retirar el pendiente durable.
-  localStorage.setItem(KEY,JSON.stringify(verified));
+  // Supabase ya confirmó: retirar primero el pendiente pesado y después crear
+  // una copia local liviana. Un fallo local no invalida la confirmación remota.
   data=verified;lastPersistedState=cloneAppData(verified);cloudKnownRevision=syncRevision(verified);
   cloudStore.finish();cloudStore.adopt(row,cloudUser.id);
+  jcpWriteLocalSnapshot(verified);
   window.jcpServerRevision=row.revision;
   jcpHideSyncBanner();
   try{render();syncFinancialUiV76();}catch(e){console.error('Actualización de pantalla',e);}
@@ -5814,8 +5858,8 @@ function jcpShowConflict(){
       if(pending&&!cloudStore.conflicted)throw new Error('Primero reintenta la conexión para confirmar si el guardado llegó.');
       // Archivo local adicional para revisión; si no hay espacio, no se descarta el pendiente.
       if(pending)localStorage.setItem('jcp_conflict_archive_'+pending.requestId,JSON.stringify(pending));
-      localStorage.setItem(KEY,JSON.stringify(row.data));
       cloudStore.clearAfterExport();
+      jcpWriteLocalSnapshot(row.data);
       panel.remove();jcpHideSyncBanner();
       await handleCloudSession({user:cloudUser});
     }catch(e){error.textContent=e.message;centralBtn.disabled=false;}
@@ -5842,7 +5886,7 @@ async function jcpLoadSession(session){
       if(!result.ok){jcpHideCloudGate();jcpShowConflict();return;}
       row=await cloudStore.read();
       if(row.revision<result.revision)throw new Error('No se pudo confirmar la revisión pendiente.');
-      localStorage.setItem(KEY,JSON.stringify(row.data));cloudStore.finish();cloudStore.adopt(row,cloudUser.id);
+      cloudStore.finish();cloudStore.adopt(row,cloudUser.id);jcpWriteLocalSnapshot(row.data);
     }else if(localStorage.getItem(CLOUD_PENDING_KEY)==='1'){
       const local=JSON.parse(localStorage.getItem(KEY)||'null');
       if(JcpSync.canonical(local)!==JcpSync.canonical(row.data)){
@@ -5856,10 +5900,10 @@ async function jcpLoadSession(session){
       cloudStore.stage(buildOfficialEmptyState());
       const result=await cloudStore.flush();
       if(!result.ok){jcpHideCloudGate();jcpShowConflict();return;}
-      row=await cloudStore.read();localStorage.setItem(KEY,JSON.stringify(row.data));cloudStore.finish();cloudStore.adopt(row,cloudUser.id);
+      row=await cloudStore.read();cloudStore.finish();cloudStore.adopt(row,cloudUser.id);jcpWriteLocalSnapshot(row.data);
     }
     data=validateAppState(row.data);lastPersistedState=cloneAppData(data);
-    localStorage.setItem(KEY,JSON.stringify(data));
+    jcpWriteLocalSnapshot(data);
     cloudKnownRevision=syncRevision(data);window.jcpServerRevision=row.revision;
     cloudConflictDetected=false;window.jcpCloudConflictDetected=false;
     cloudReady=true;window.jcpCloudBootstrapReady=true;window.jcpCloudBootstrapMode='remote-verified';
@@ -5932,8 +5976,8 @@ async function guardarEnNube(){
   if(!cloudUser){showAuth('login');throw new Error('Debes iniciar sesión para guardar en la nube.');}
   if(!cloudReady)throw new Error('La conexión con la nube todavía no está lista.');
   const snapshot=buildPersistedSnapshot(data);
+  jcpWriteLocalSnapshot(snapshot);
   jcpStageState(snapshot);
-  localStorage.setItem(KEY,JSON.stringify(snapshot));
   data=snapshot;
   lastPersistedState=cloneAppData(snapshot);
   const ok=await guardarAutomaticoEnNube(snapshot);
@@ -5990,7 +6034,7 @@ data.mov.forEach(x=>{
     }
     used.add(id);
   });
-  if(changed){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){console.warn('No fue posible guardar la normalización de IDs',e);}}
+  if(changed){try{jcpWriteLocalSnapshot(data);}catch(e){console.warn('No fue posible guardar la normalización de IDs',e);}}
 })();
 
 // Compatibilidad de fecha de compra para vehículos existentes.
@@ -6005,7 +6049,7 @@ data.mov.forEach(x=>{
     }
   });
   if(changed){
-    try{localStorage.setItem(KEY,JSON.stringify(data));}
+    try{jcpWriteLocalSnapshot(data);}
     catch(e){console.warn('No fue posible guardar las fechas de compra',e);}
   }
 })();
@@ -6026,7 +6070,7 @@ data.mov.forEach(x=>{
     }
   });
   if(changed){
-    try{localStorage.setItem(KEY,JSON.stringify(data));}
+    try{jcpWriteLocalSnapshot(data);}
     catch(e){console.warn('No fue posible normalizar las ventas históricas',e);}
   }
 })();
@@ -6105,7 +6149,7 @@ async function guardarAutomaticoEnNube(snapshot=null){
 }
 function programarGuardadoAutomatico(snapshot=null){
   const immutable=validateAppState(cloneAppData(snapshot||data));
-  jcpStageState(immutable);
+  if(!cloudStore.pending())jcpStageState(immutable);
   Promise.resolve().then(()=>guardarAutomaticoEnNube(immutable));
 }
 const retryPendingCloudSave=()=>{
@@ -6133,7 +6177,7 @@ async function pullLatestFromCloud(reason='manual'){
     if(!row.data)throw new Error('La fila central no está disponible.');
     cloudStore.adopt(row,cloudUser.id);
     data=validateAppState(row.data);lastPersistedState=cloneAppData(data);cloudKnownRevision=syncRevision(data);
-    localStorage.setItem(KEY,JSON.stringify(data));window.jcpServerRevision=row.revision;
+    jcpWriteLocalSnapshot(data);window.jcpServerRevision=row.revision;
     try{render();syncFinancialUiV76();}catch(e){console.error(e);}
     setCloudStatus('Datos centrales actualizados · revisión '+row.revision,true);
     window.dispatchEvent(new CustomEvent('jcp-cloud-data-refreshed',{detail:{reason,revision:row.revision}}));return true;
@@ -6483,8 +6527,10 @@ function save(){
 
     const snapshot=buildPersistedSnapshot(data);
     const finalReport=jcpAuditState(snapshot);
+    // Liberar primero la copia local pesada. El cambio completo queda en la
+    // cola de sincronización y se envía inmediatamente a Supabase.
+    jcpWriteLocalSnapshot(snapshot);
     jcpStageState(snapshot);
-    try{localStorage.setItem(KEY,JSON.stringify(snapshot));}catch(e){console.warn('Copia protegida en cola durable',e);}
     data=snapshot;
     lastPersistedState=cloneAppData(snapshot);
     jcpPersistAuditReport(finalReport);
@@ -7224,8 +7270,8 @@ async function persistVehicle(veh){
 
   const attempt=()=>{
     const snapshot=buildPersistedSnapshot(candidate);
+    jcpWriteLocalSnapshot(snapshot);
     jcpStageState(snapshot);
-    localStorage.setItem(KEY,JSON.stringify(snapshot));
     data=snapshot;
     lastPersistedState=cloneAppData(snapshot);
     try{render();}catch(uiErr){console.error('El vehículo fue guardado, pero falló un refresco visual:',uiErr);}
@@ -8194,12 +8240,12 @@ async function resetDemo(){
     if(verifiedRow.data?._sync?.resetId!==empty._sync.resetId || jcpRecordCount(verifiedRow.data)!==0){
       throw new Error('El reinicio no se pudo verificar o hubo un cambio posterior. Revisa el diagnóstico.');
     }
-    localStorage.setItem(KEY,JSON.stringify(verifiedRow.data));cloudStore.finish();cloudStore.adopt(verifiedRow,cloudUser.id);
+    cloudStore.finish();cloudStore.adopt(verifiedRow,cloudUser.id);jcpWriteLocalSnapshot(verifiedRow.data);
     data=empty;
     cloudKnownRevision=syncRevision(empty);
     cloudConflictDetected=false;
     window.jcpCloudConflictDetected=false;
-    localStorage.setItem(KEY,JSON.stringify(empty));
+    jcpWriteLocalSnapshot(empty);
     localStorage.removeItem(CLOUD_PENDING_KEY);
     localStorage.removeItem(KEY+'_BACKUP');
     lastPersistedState=cloneAppData(empty);
@@ -11044,7 +11090,7 @@ function jcpRemoveObsoleteProfitWithdrawal(){
     }
 
     if((Array.isArray(data.mov)?data.mov.length:0)!==beforeMov){
-      try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}
+      try{jcpWriteLocalSnapshot(data);}catch(e){}
     }
   }catch(e){console.warn('Corrección de retiro obsoleto',e);}
 }
@@ -11287,7 +11333,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.17.8\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.17.9\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -11327,7 +11373,7 @@ window.addEventListener('pagehide', ()=>{
     else if(typeof persist==='function') persist();
     else if(typeof KEY!=='undefined' && typeof data!=='undefined'){
       const committed=(typeof lastPersistedState!=='undefined'&&lastPersistedState)?lastPersistedState:data;
-      localStorage.setItem(KEY,JSON.stringify(committed));
+      jcpWriteLocalSnapshot(committed);
     }
   }catch(e){ console.warn('Respaldo automático no disponible',e); }
 });
@@ -15082,7 +15128,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.17.8',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.17.9',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -15128,6 +15174,6 @@ window.openRecordCopy=function(number){
   document.addEventListener('DOMContentLoaded',()=>{install();const overlay=document.getElementById('jcpExcelOverlay');overlay.onclick=e=>{if(e.target===overlay)close();};document.getElementById('jcpExcelClose').onclick=close;document.getElementById('jcpExcelCancel').onclick=close;document.getElementById('jcpExcelGenerate').onclick=generate;document.getElementById('jcpExcelAll').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=true);document.getElementById('jcpExcelNone').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=false);document.querySelectorAll('[name="jcpExcelPeriod"]').forEach(x=>x.onchange=()=>document.getElementById('jcpExcelDates').hidden=x.value!=='range'||!x.checked);});
 })();
 </script>
-<script src="./app-update.js?v=2026.09.17.8"></script>
+<script src="./app-update.js?v=2026.09.17.9"></script>
 </body>
 </html>
