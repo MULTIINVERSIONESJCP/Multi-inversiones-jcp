@@ -6656,7 +6656,7 @@ function openUtilitiesModule(){
 }
 function renderUtilitiesModule(){
   const f=getFinancialSnapshotV75();
-  const setMoney=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=money(v);};
+  const setMoney=(id,v)=>{const el=document.getElementById(id);if(el){el.textContent=money(v);jcpApplyNegativeColor(el,v);}};
   setMoney('utilitiesAccumulated',f.netProfit);
   setMoney('utilitiesWithdrawn',f.profitWithdrawals);
   setMoney('utilitiesAvailable',f.profitAvailable);
@@ -8304,6 +8304,13 @@ function jcpInlineJsArg(value){
 }
 function jcpSafeImageSrc(value,fallback=''){const s=String(value||fallback||'');return /^(?:data:image\/|blob:|https?:|\.?\.?\/|\/)/i.test(s)?clientEsc(s):clientEsc(fallback||'');}
 function jcpHtmlCell(value){return value&&value.__jcpSafeHtml===true?String(value.value||''):clientEsc(value);}
+
+// Aplica color rojo a un elemento cuando su valor monetario es negativo (pérdida),
+// y lo deja en el color por defecto cuando es cero o positivo.
+function jcpApplyNegativeColor(el,value){
+  if(!el)return;
+  el.style.color=(Number(value)<0)?'#ff6868':'';
+}
 function list(arr,headers,rows){
   if(!arr.length)return '<div class="empty">No hay registros todavía.</div>';
   return '<table><thead><tr>'+headers.map(h=>'<th>'+clientEsc(h)+'</th>').join('')+'</tr></thead><tbody>'+arr.map(x=>'<tr>'+rows(x).map(v=>'<td>'+jcpHtmlCell(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
@@ -11252,7 +11259,7 @@ let deudas=fin.debt, disponible=fin.available, activos=fin.assets, patrimonio=fi
   ['deudas',deudas]
 ].forEach(([id,value])=>{
   const el=document.getElementById(id);
-  if(el)el.textContent=money(value);
+  if(el){el.textContent=money(value);jcpApplyNegativeColor(el,value);}
 });
 [
   ['ingresos',capital],
@@ -11260,7 +11267,7 @@ let deudas=fin.debt, disponible=fin.available, activos=fin.assets, patrimonio=fi
   ['utilidad',utilidad]
 ].forEach(([id,value])=>{
   const el=document.getElementById(id);
-  if(el)el.textContent=money(value);
+  if(el){el.textContent=money(value);jcpApplyNegativeColor(el,value);}
 });
 const nvehEl=document.getElementById('nveh');
 if(nvehEl)nvehEl.textContent=data.veh.length;
@@ -11300,7 +11307,7 @@ let veh=x.vehicleId?data.veh.find(v=>String(v.id)===String(x.vehicleId)):null;
 let category=x.subtype==='permuta_diferencia'?'Permuta — diferencia':(x.t==='permuta'?'Permuta':(x.t==='ingreso'?(x.subtype==='credito'?'Crédito / préstamo':'Ingreso vario'):(x.subtype==='vehiculos'?'Gastos vehículos':'Gastos varios')));
 return [x.date||'SIN FECHA',x.t==='permuta'?'Permuta':(x.t==='ingreso'?'Ingreso':'Gasto'),category,x.c,money(x.v),veh?(veh.pl||'SIN PLACA')+' — '+(veh.marca||veh.m||''):'General'];
 });
-activos.textContent=money(activos);pasivos.textContent=money(deudas);patrimonio2.textContent=money(patrimonio);invTotal.textContent=money(inv);
+activos.textContent=money(activos);pasivos.textContent=money(deudas);patrimonio2.textContent=money(patrimonio);invTotal.textContent=money(inv);jcpApplyNegativeColor(patrimonio2,patrimonio);
 bar.style.width=Math.min(100,Math.max(0,patrimonio?((disponible/patrimonio)*100):0))+'%';
 }
 function toggleTopMenu(e){
@@ -11929,7 +11936,7 @@ window.renderObligationHistory=function(){
     d.difference=d.actual-shared.available;
     if(treasuryIsReady(data)){const tb=treasuryBalances(data),actualBy={cash:d.cash,bancolombia:d.accounts.bancolombia,daviplata:d.accounts.daviplata,davivienda:d.accounts.davivienda,nequi:d.accounts.nequi},box=document.getElementById('ccTreasuryExpectedBreakdown');if(box)box.innerHTML='<div class="head">CUENTA</div><div class="head">SISTEMA</div><div class="head">REAL</div><div class="head">DIF.</div>'+TREASURY_ACCOUNT_DEFS.map(a=>'<div>'+a.name+'</div><div>'+money(tb[a.id]||0)+'</div><div>'+money(actualBy[a.id]||0)+'</div><div>'+money((actualBy[a.id]||0)-(tb[a.id]||0))+'</div>').join('');}
     const p=document.getElementById('ccClosePeriod');if(p)p.textContent=(d.mode==='monthly'?'CIERRE MENSUAL: ':'CIERRE SEMANAL: ')+fmt(d.start)+' → '+fmt(d.end);
-    const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=money(v);};
+    const set=(id,v)=>{const e=document.getElementById(id);if(e){e.textContent=money(v);jcpApplyNegativeColor(e,v);}};
 
     set('ccCloseExpected',d.s.expected);
     set('ccCloseBanks',d.bank);
@@ -12040,7 +12047,7 @@ h1{font-size:22px;margin:0}h2{font-size:14px;color:#555;margin:5px 0 18px}
   <div class="card"><span>Permutas registradas</span><b>${safe(c.permutaCount||0)}</b></div>
   <div class="card"><span>Ganancia bruta</span><b>${safe(money(c.grossProfit||0))}</b></div>
   <div class="card"><span>Gastos operacionales</span><b>${safe(money(c.operatingExpenses||0))}</b></div>
-  <div class="card"><span>Ganancia neta</span><b>${safe(money(c.netProfit||0))}</b></div>
+  <div class="card"><span>Ganancia neta</span><b style="${(c.netProfit||0)<0?'color:#ff6868':''}">${safe(money(c.netProfit||0))}</b></div>
 </div>
 
 <div class="section">CUADRE DE CAJA</div>
@@ -14198,7 +14205,7 @@ function renderAccountingSummary(entries,m,bits){
       <div class="acc-statement-card"><h4>RESULTADO CONTABLE</h4>
         <div class="acc-statement-row"><span>Ingresos reconocidos</span><b>${accFmt(m.income)}</b></div>
         <div class="acc-statement-row"><span>Costos + gastos</span><b>${accFmt(m.expenses)}</b></div>
-        <div class="acc-statement-row acc-statement-total"><span>Resultado</span><b>${accFmt(m.result)}</b></div>
+        <div class="acc-statement-row acc-statement-total"><span>Resultado</span><b style="${m.result<0?'color:#ff6868':''}">${accFmt(m.result)}</b></div>
       </div>
     </div>
     <div class="acc-reconcile"><b>Conciliación con el tablero administrativo:</b> el tablero conserva su lógica operativa actual. En contabilidad, las permutas transfieren el costo y su utilidad se difiere hasta la venta del vehículo recibido; por eso el resultado contable puede diferir temporalmente del resultado administrativo (${accFmt(op.netProfit)}).</div>
@@ -14333,7 +14340,7 @@ function renderAccountingPosition(m,bits){
     <div class="acc-statement-card"><h4>PASIVOS Y PATRIMONIO</h4>
       <div class="acc-statement-row"><span>Obligaciones financieras</span><b>${accFmt(m.liabilities)}</b></div>
       <div class="acc-statement-row"><span>Capital y aportes</span><b>${accFmt(m.capital)}</b></div>
-      <div class="acc-statement-row"><span>Resultado acumulado</span><b>${accFmt(m.result)}</b></div>
+      <div class="acc-statement-row"><span>Resultado acumulado</span><b style="${m.result<0?'color:#ff6868':''}">${accFmt(m.result)}</b></div>
       <div class="acc-statement-row"><span>Utilidades retiradas</span><b>− ${accFmt(m.withdrawals||0)}</b></div>
       <div class="acc-statement-row acc-statement-total"><span>TOTAL PASIVO + PATRIMONIO</span><b>${accFmt(m.liabilities+m.equity)}</b></div>
     </div>
@@ -14348,7 +14355,7 @@ function renderAccountingResults(m,bits){
     <div class="acc-statement-row"><span>Costo de ventas</span><b>− ${accFmt(b('613505'))}</b></div>
     <div class="acc-statement-row"><span>Gastos operacionales</span><b>− ${accFmt(b('510505'))}</b></div>
     <div class="acc-statement-row"><span>Otros gastos / ajustes</span><b>− ${accFmt(b('519505'))}</b></div>
-    <div class="acc-statement-row acc-statement-total"><span>RESULTADO DEL PERÍODO</span><b>${accFmt(m.result)}</b></div>
+    <div class="acc-statement-row acc-statement-total"><span>RESULTADO DEL PERÍODO</span><b style="${m.result<0?'color:#ff6868':''}">${accFmt(m.result)}</b></div>
   </div>
   <div class="acc-reconcile"><b>Permutas:</b> el motor no reconoce utilidad al momento del intercambio. Traslada el costo al vehículo recibido y reconoce el resultado cuando ese vehículo se venda.</div></div>`;
 }
