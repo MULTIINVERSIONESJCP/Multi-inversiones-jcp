@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.18.2</title>
+<title>MULTI INVERSIONES JCP - V2026.09.18.3</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4401,6 +4401,11 @@ body.jcp-custom-theme .database-actions-list button{
 <label class="sale-field"><b>Movimiento de dinero *</b><select id="permutaDifferenceDirection" onchange="updatePermutaCalculations()"><option value="even">SIN DINERO DE ENCIMA</option><option value="receive">RECIBIMOS DINERO</option><option value="pay">ENTREGAMOS DINERO</option></select></label>
 <label class="sale-field"><b>Valor real del dinero de encima *</b><input data-money="1" id="permutaDifferenceAmount" inputmode="numeric" oninput="formatPermutaMoney(this);updatePermutaCalculations()" placeholder="$ 0" type="text"/></label>
 </div>
+<div class="sale-field-grid" id="permutaCollectionFields" style="display:none;margin-top:10px">
+<label class="sale-field"><b>Condición de pago</b><select id="permutaPaymentCondition" onchange="updatePermutaCalculations()"><option value="contado">TODO DE CONTADO</option><option value="credito">TODO A CRÉDITO</option><option value="mixto">MIXTO: PARTE AHORA Y PARTE A CRÉDITO</option></select></label>
+<label class="sale-field" id="permutaReceivedNowField" style="display:none"><b>Dinero recibido ahora</b><input data-money="1" id="permutaReceivedNow" inputmode="numeric" oninput="formatPermutaMoney(this);updatePermutaCalculations()" placeholder="$ 0" type="text"/></label>
+<label class="sale-field"><b>Pendiente por cobrar</b><input data-money="1" id="permutaPending" inputmode="numeric" readonly="" type="text"/></label>
+</div>
 <div id="permutaSummary"></div>
 <div id="permutaPaymentBlock" style="display:none;margin-top:10px"><div class="paydist" id="permutaPayDist"><div class="paydist-title">DISTRIBUCIÓN DE LA DIFERENCIA</div><div class="paydist-grid">
 <label class="paydist-row"><span>EFECTIVO</span><input data-money="1" id="permutaPayCash" inputmode="numeric" oninput="payDistInput('permuta',this)" placeholder="$ 0" type="text"/></label>
@@ -8091,7 +8096,7 @@ function tradeSupportData(r){
  const expenseTotal=Number(s.expenseTotal!==undefined?s.expenseTotal:expenses.reduce((a,x)=>a+Number(x.value||0),0)), purchasePrice=Number(first(s.purchasePrice,vo.c,0)||0), investment=Number(s.investment!==undefined?s.investment:purchasePrice+expenseTotal);
  const inheritedInvestment=Number(first(s.incomingInventoryValue,perm.incomingInventoryCost,perm.inheritedInvestment,investment-(direction==='receive'?difference:(direction==='pay'?-difference:0)),0)||0);
  return {co,ci,client,doc,phone:String(first(s.phone,s.clientPhone,perm.clientPhone,perm.phone,cl.telefono,'')||''),address:String(first(s.address,s.clientAddress,perm.clientAddress,perm.address,cl.direccion,'')||'').toUpperCase(),outValue,inValue,difference,differenceBy,
-  received:Number(first(s.received,differenceBy==='CLIENTE'?difference:0,0)||0),pending:Number(first(s.pending,0)||0),dist:s.paymentDistribution||{},expenses,expenseTotal,purchasePrice,investment,inheritedInvestment,direction,
+  received:Number(first(s.received,differenceBy==='CLIENTE'?difference:0,0)||0),pending:Number(first(s.pending,0)||0),paymentCondition:String(first(s.paymentCondition,perm.paymentCondition,'contado')).toUpperCase(),dist:s.paymentDistribution||{},expenses,expenseTotal,purchasePrice,investment,inheritedInvestment,direction,
   incomingExpenses:Number(first(s.incomingInitialExpenses,s.inExpenses,0)||0),incomingValue:inheritedInvestment,obs:String(first(s.obs,s.observations,'')||'').toUpperCase(),date:String(r.date||s.date||''),number:String(r.number||'')};
 }
 function tradeStyles(){return `*{box-sizing:border-box}html,body{margin:0;background:#050505;color:#fff;font-family:Arial,sans-serif}body{min-width:1180px;padding:15px}.tp{width:1140px;min-height:1540px;margin:0 auto 18px;padding:18px;border:1px solid #a47b14;border-radius:14px;background:#050505;position:relative;break-after:page}.th{display:grid;grid-template-columns:390px 1fr;align-items:center;border-bottom:3px solid #d8aa32;padding-bottom:12px}.logo{width:330px;max-height:90px;object-fit:contain}.title{text-align:right}.title h1{font-size:38px;line-height:.95;margin:0}.title span,h3{color:#d8aa32}.num{display:inline-block;margin-top:9px;border:1px solid #9f7718;border-radius:8px;padding:7px 24px}.num small{display:block;color:#d8aa32;font-weight:900}.num b{font-size:22px}.date{margin:12px 0;border:1px solid #8b6918;border-radius:8px;padding:9px;color:#d8aa32;font-weight:900}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.box{border:1px solid #967116;border-radius:9px;padding:11px;background:#090909}.box h3{margin:0 0 8px;font-size:13px;border-bottom:1px solid #624b13;padding-bottom:7px}.photo{width:100%;height:300px;object-fit:cover;border-radius:6px;border:1px solid #765912}.empty{height:300px;display:flex;align-items:center;justify-content:center;color:#777}.row,.doc{display:grid;grid-template-columns:140px 1fr;gap:6px;padding:3px 0;font-size:12px}.row span{color:#ccc}.doc span{color:#76df31;font-weight:900}.line{display:flex;justify-content:space-between;gap:15px;padding:6px 0;border-bottom:1px solid #33290d;font-size:12px}.line b{text-align:right}.total{background:linear-gradient(90deg,#bd8b1c,#e0b643);color:#111;font-weight:1000;padding:8px}.green{color:#7bea2a!important}.table{width:100%;border-collapse:collapse;font-size:10px}.table th,.table td{border:1px solid #49370e;padding:7px}.table th{color:#d8aa32}.table td:last-child,.table th:last-child{text-align:right}.foot{position:absolute;bottom:12px;left:18px;right:18px;text-align:center;color:#888;font-size:9px;border-top:1px solid #44340f;padding-top:7px}@media print{body{padding:0}.tp{border:0;margin:0;width:100%;min-height:0}@page{size:A4 portrait;margin:7mm}}`;}
@@ -8104,7 +8109,7 @@ function tradeClientSupportHtml(r){
  const d=tradeSupportData(r),logo=supportLogoSrc(),pays=[['EFECTIVO',d.dist.cash],['BANCOLOMBIA',d.dist.bancolombia],['DAVIVIENDA',d.dist.davivienda],['NEQUI',d.dist.nequi],['DAVIPLATA',d.dist.daviplata]].filter(x=>Number(x[1]||0)>0);
  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1180"><style>${tradeStyles()}</style></head><body><section class="tp"><div class="th">${logo?`<img class="logo" src="${priceEsc(logo)}">`:''}<div class="title"><h1>PERMUTA<br><span>DE VEHÍCULOS</span></h1><div class="num"><small>N° DE PERMUTA</small><b>${priceEsc(d.number)}</b></div></div></div><div class="date">📅 FECHA DE LA PERMUTA &nbsp; <b style="color:#fff">${priceEsc(d.date)}</b></div><div class="two">${tradeVehicle('🚘 VEHÍCULO ENTREGADO POR MULTI INVERSIONES JCP',d.co)}${tradeVehicle('🚘 VEHÍCULO RECIBIDO EN PERMUTA',d.ci)}</div>
  <div class="box" style="margin-top:12px"><h3>👤 DATOS DEL CLIENTE</h3><div class="two"><div><div class="line"><span>NOMBRE</span><b>${priceEsc(d.client)}</b></div><div class="line"><span>TELÉFONO</span><b>${priceEsc(d.phone||'SIN REGISTRAR')}</b></div></div><div><div class="line"><span>IDENTIFICACIÓN</span><b>${priceEsc(d.doc||'SIN REGISTRAR')}</b></div><div class="line"><span>DIRECCIÓN</span><b>${priceEsc(d.address||'SIN REGISTRAR')}</b></div></div></div></div>
- <div class="box" style="margin-top:12px"><h3>💱 LIQUIDACIÓN DE LA PERMUTA</h3><div class="line"><span>VALOR VEHÍCULO ENTREGADO</span><b>${priceMoney(d.outValue)}</b></div><div class="line"><span>VALOR VEHÍCULO RECIBIDO</span><b>${priceMoney(d.inValue)}</b></div><div class="line total"><span>DIFERENCIA</span><b>${priceMoney(d.difference)}</b></div><div class="line"><span>DIFERENCIA PAGADA POR</span><b>${priceEsc(d.differenceBy)}</b></div>${(pays.length?pays:[[String(r.method||'FORMA DE PAGO').toUpperCase(),d.received]]).map(x=>`<div class="line"><span>${priceEsc(x[0])}</span><b>${priceMoney(Number(x[1]||0))}</b></div>`).join('')}<div class="line"><span>SALDO PENDIENTE</span><b class="green">${priceMoney(d.pending)}</b></div></div>
+ <div class="box" style="margin-top:12px"><h3>💱 LIQUIDACIÓN DE LA PERMUTA</h3><div class="line"><span>VALOR VEHÍCULO ENTREGADO</span><b>${priceMoney(d.outValue)}</b></div><div class="line"><span>VALOR VEHÍCULO RECIBIDO</span><b>${priceMoney(d.inValue)}</b></div><div class="line total"><span>DIFERENCIA</span><b>${priceMoney(d.difference)}</b></div><div class="line"><span>DIFERENCIA PAGADA POR</span><b>${priceEsc(d.differenceBy)}</b></div><div class="line"><span>CONDICIÓN</span><b>${priceEsc(d.paymentCondition)}</b></div>${(pays.length?pays:[[String(r.method||'RECIBIDO AHORA').toUpperCase(),d.received]]).map(x=>`<div class="line"><span>${priceEsc(x[0])}</span><b>${priceMoney(Number(x[1]||0))}</b></div>`).join('')}<div class="line"><span>SALDO PENDIENTE</span><b class="green">${priceMoney(d.pending)}</b></div></div>
  <div class="box" style="margin-top:12px"><h3>📝 OBSERVACIONES</h3><div style="min-height:70px;font-size:10px">${priceEsc(d.obs||'SIN OBSERVACIONES REGISTRADAS.')}</div></div><div class="two" style="margin-top:15px"><div class="box" style="text-align:center;padding-top:38px"><b>MULTI INVERSIONES JCP</b><br><small>VENDEDOR</small></div><div class="box" style="text-align:center;padding-top:38px"><b>${priceEsc(d.client)}</b><br><small>CLIENTE</small></div></div><div class="foot">SOPORTE PARA CLIENTE · PERMUTA DE VEHÍCULOS</div></section></body></html>`;
 }
 function tradeInternalSupportHtml(r){
@@ -10271,6 +10276,11 @@ function updatePermutaCalculations(){
   const status=requestedStatus==='receive'?'receive':(requestedStatus==='pay'?'pay':'even');
   const difference=status==='even'?0:enteredDifference;
   const signedDifference=status==='receive'?difference:(status==='pay'?-difference:0);
+  const paymentCondition=status==='receive'?(document.getElementById('permutaPaymentCondition')?.value||'contado'):'contado';
+  const receivedEntered=numericValue('permutaReceivedNow');
+  const receivedNow=status!=='receive'?difference:(paymentCondition==='contado'?difference:(paymentCondition==='credito'?0:Math.min(difference,receivedEntered)));
+  const pending=status==='receive'?Math.max(0,difference-receivedNow):0;
+  const cashFlowAmount=status==='receive'?receivedNow:difference;
   const statusText=status==='receive'?'DIFERENCIA A RECIBIR':(status==='pay'?'DIFERENCIA A PAGAR':'PERMUTA MANO A MANO');
   // El vehículo recibido hereda el costo real pendiente de la cadena. El dinero
   // físico se descuenta o suma una sola vez; aquí no se reconoce utilidad.
@@ -10280,13 +10290,17 @@ function updatePermutaCalculations(){
     summary.innerHTML=`
       <div class="permuta-balance-card"><span>Inversión real acumulada que sale</span><b>${money(outgoingInvestment)}</b></div>
       <div class="permuta-balance-card highlight"><span>${statusText}</span><b>${money(difference)}</b><div class="permuta-diff-status ${status}">${statusText}</div></div>
+      ${status==='receive'?`<div class="permuta-balance-card"><span>Dinero recibido ahora</span><b>${money(receivedNow)}</b></div><div class="permuta-balance-card"><span>Pendiente por cobrar</span><b style="color:${pending>0?'#ffcf55':'#55d98a'}">${money(pending)}</b></div>`:''}
       <div class="permuta-balance-card"><span>Saldo heredado del vehículo recibido</span><b style="color:${incomingInventoryCost<0?'#ff6868':'#d8aa32'}">${money(incomingInventoryCost)}</b></div>
       <div class="permuta-balance-card profit"><span>Resultado de la permuta</span><b>UTILIDAD DIFERIDA</b><small style="display:block;margin-top:5px;color:#aaa">SE RECONOCERÁ ÚNICAMENTE EN LA VENTA FINAL POR DINERO</small></div>`;
   }
+  const collection=document.getElementById('permutaCollectionFields');if(collection)collection.style.display=status==='receive'&&difference>0?'grid':'none';
+  const receivedField=document.getElementById('permutaReceivedNowField');if(receivedField)receivedField.style.display=status==='receive'&&paymentCondition==='mixto'?'block':'none';
+  const pendingInput=document.getElementById('permutaPending');if(pendingInput)pendingInput.value=new Intl.NumberFormat('es-CO').format(pending);
   const block=document.getElementById('permutaPaymentBlock');
-  if(block){block.style.display=difference>0?'block':'none';block.dataset.total=String(difference);}
-  if(difference<=0)clearPaymentDistribution('permuta');else updatePaymentDistribution('permuta');
-  return {outgoingInvestment,incomingInventoryCost,signedDifference,difference,status,statusText};
+  if(block){block.style.display=cashFlowAmount>0?'block':'none';block.dataset.total=String(cashFlowAmount);}
+  if(cashFlowAmount<=0){clearPaymentDistribution('permuta');const btn=document.getElementById('savePermutaBtn');if(btn)btn.disabled=false;}else updatePaymentDistribution('permuta');
+  return {outgoingInvestment,incomingInventoryCost,signedDifference,difference,status,statusText,paymentCondition,receivedEntered,receivedNow,pending,cashFlowAmount};
 }
 async function previewPermutaPhotos(){
   const input=document.getElementById('permutaInPhotos');
@@ -10314,8 +10328,10 @@ function clearPermutaForm(){
   ['permutaClientName','permutaClientDoc','permutaClientPhone','permutaClientAddress'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   const pcs=document.getElementById('permutaClientSuggestions');if(pcs){pcs.innerHTML='';pcs.style.display='none';}
 
-  ['permutaInMarca','permutaInRef','permutaInModelo','permutaInPlaca','permutaDifferenceAmount','permutaCash','permutaTransfer','permutaObs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['permutaInMarca','permutaInRef','permutaInModelo','permutaInPlaca','permutaDifferenceAmount','permutaReceivedNow','permutaPending','permutaCash','permutaTransfer','permutaObs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   const differenceDirection=document.getElementById('permutaDifferenceDirection');if(differenceDirection)differenceDirection.value='even';
+  const paymentCondition=document.getElementById('permutaPaymentCondition');if(paymentCondition)paymentCondition.value='contado';
+  const collectionFields=document.getElementById('permutaCollectionFields');if(collectionFields)collectionFields.style.display='none';
   const method=document.getElementById('permutaPayMethod');if(method)method.value='efectivo';
   const photos=document.getElementById('permutaInPhotos');if(photos)photos.value='';
   const preview=document.getElementById('permutaPhotoPreview');if(preview)preview.innerHTML='';
@@ -10353,7 +10369,7 @@ function renderPermutaHistory(){
   const el=document.getElementById('permutaHistoryList');if(!el)return;
   const rows=(data.permutas||[]).map((x,i)=>({x,i})).sort((a,b)=>permutaTimestamp(b.x,b.i)-permutaTimestamp(a.x,a.i)).map(o=>o.x);
   if(!rows.length){el.innerHTML='<div class="empty">No hay permutas registradas.</div>';return;}
-  el.innerHTML=list(rows,['Fecha','Vehículo que salió','Vehículo que ingresó','Encima','Movimiento','Saldo heredado','Reconocimiento'],x=>{
+  el.innerHTML=list(rows,['Fecha','Vehículo que salió','Vehículo que ingresó','Encima','Recibido / pagado','Pendiente','Movimiento','Saldo heredado','Reconocimiento'],x=>{
     const out=x.outgoingVehicle||{}, inc=x.incomingVehicle||{};
     const dir=x.differenceDirection||'even';
     const result=dir==='receive'?'A RECIBIR':(dir==='pay'?'A PAGAR':'MANO A MANO');
@@ -10361,7 +10377,7 @@ function renderPermutaHistory(){
     return [x.date||'SIN FECHA',
       (out.marca||'')+' '+(out.ref||'')+(out.pl?' — '+out.pl:''),
       (inc.marca||'')+' '+(inc.ref||'')+(inc.pl?' — '+inc.pl:''),
-      money(x.difference||0),jcpSafeHtml('<span class="'+cls+'">'+clientEsc(result)+'</span>'),money(x.incomingInventoryCost||0),'DIFERIDO HASTA VENTA FINAL'];
+      money(x.difference||0),money(x.differenceDirection==='receive'?(x.received??x.difference):x.difference),money(x.pending||0),jcpSafeHtml('<span class="'+cls+'">'+clientEsc(result)+'</span>'),money(x.incomingInventoryCost||0),'DIFERIDO HASTA VENTA FINAL'];
   });
 }
 
@@ -10415,9 +10431,10 @@ async function savePermuta(){
 
     if(!inMarca||!inRef||!inModelo){alert('COMPLETA MARCA, REFERENCIA Y MODELO DEL VEHÍCULO QUE INGRESA.');return false;}
     if(calc.status!=='even'&&calc.difference<=0){alert('INGRESA EL VALOR REAL DEL DINERO DE ENCIMA.');return false;}
+    if(calc.status==='receive'&&calc.paymentCondition==='mixto'&&calc.receivedEntered>calc.difference){alert('EL DINERO RECIBIDO AHORA NO PUEDE SUPERAR LA DIFERENCIA TOTAL.');return false;}
 
-    if(calc.difference>0&&!validatePaymentDistribution('permuta',calc.difference))return false;
-    const differenceDistribution=calc.difference>0?paymentDistribution('permuta'):{};
+    if(calc.cashFlowAmount>0&&!validatePaymentDistribution('permuta',calc.cashFlowAmount))return false;
+    const differenceDistribution=calc.cashFlowAmount>0?paymentDistribution('permuta'):{};
 
     const files=Array.from(document.getElementById('permutaInPhotos')?.files||[]).slice(0,4);
     const photos=[];
@@ -10450,6 +10467,7 @@ async function savePermuta(){
         purchaseDate:dateTime,createdAt:iso,origen:'permuta',status:'inventario',active:true,permutaId
       },
       incomingInventoryCost:calc.incomingInventoryCost,inheritedInvestment:calc.incomingInventoryCost,difference:calc.difference,differenceDirection:calc.status,
+      paymentCondition:calc.paymentCondition,received:calc.receivedNow,pending:calc.pending,
       client,buyer:client,clientDoc,doc:clientDoc,clientPhone,phone:clientPhone,clientAddress,address:clientAddress,
       paymentDistribution:differenceDistribution,obs};
 
@@ -10458,11 +10476,14 @@ async function savePermuta(){
     const nextMov=mov.slice();
 
     if(calc.difference>0){
-      if(calc.status==='receive'){
-        nextMov.unshift({id:'mov_'+(now+1),t:'ingreso',subtype:'permuta_diferencia',c:'PERMUTA — DIFERENCIA RECIBIDA '+(outgoing.pl||''),v:calc.difference,paymentDistribution:differenceDistribution,vehicleId:'',permutaId,date:dateTime,createdAt:iso});
+      if(calc.status==='receive'&&calc.receivedNow>0){
+        nextMov.unshift({id:'mov_'+(now+1),t:'ingreso',subtype:'permuta_diferencia',c:'PERMUTA — DIFERENCIA RECIBIDA '+(outgoing.pl||''),v:calc.receivedNow,paymentDistribution:differenceDistribution,vehicleId:'',permutaId,date:dateTime,createdAt:iso});
       }else if(calc.status==='pay'){
         nextMov.unshift({id:'mov_'+(now+2),t:'gasto',subtype:'permuta_diferencia',c:'PERMUTA — DIFERENCIA PAGADA '+inMarca+' '+inRef+(inPlaca?' — '+inPlaca:''),v:calc.difference,paymentDistribution:differenceDistribution,vehicleId:'',permutaId,date:dateTime,createdAt:iso,nonCapitalExpense:true});
       }
+    }
+    if(calc.pending>0){
+      nextMov.unshift({id:'mov_'+(now+3)+'_cxc',t:'cuenta_por_cobrar',subtype:'permuta_pendiente',c:'SALDO PENDIENTE PERMUTA '+(outgoing.pl||'')+' — '+client,v:calc.pending,vehicleId:'',permutaId,client,clientDoc,date:dateTime,createdAt:iso,nonCash:true});
     }
 
     const nextData={...cloneAppData(data),veh:nextVeh,mov:nextMov,permutas:nextPerms};ensureTreasuryState(nextData);
@@ -10475,11 +10496,12 @@ async function savePermuta(){
       outgoingInvestment:calc.outgoingInvestment,incomingInventoryValue:calc.incomingInventoryCost,
       difference:calc.difference,differenceDirection:calc.status,
       differenceBy:calc.status==='receive'?'CLIENTE':'MULTI INVERSIONES JCP',
+      paymentCondition:calc.paymentCondition,received:calc.receivedNow,pending:calc.pending,
       client,buyer:client,clientDoc,doc:clientDoc,clientPhone,phone:clientPhone,clientAddress,address:clientAddress,
       paymentDistribution:cloneAppData(differenceDistribution),obs
     }});
     nextData.permutas[0].receiptNumber=receipt.number;nextData.mov.forEach(m=>{if(String(m.permutaId||'')===String(permutaId))m.receiptNumber=receipt.number;});
-    if(calc.difference>0)applyPaymentDistribution(nextData,{prefix:'permuta',direction:calc.status==='receive'?'in':'out',total:calc.difference,operationType:'PERMUTA',operationId:permutaId,receiptNumber:receipt.number,concept:'DIFERENCIA PERMUTA',date:dateTime,createdAt:iso});
+    if(calc.cashFlowAmount>0)applyPaymentDistribution(nextData,{prefix:'permuta',direction:calc.status==='receive'?'in':'out',total:calc.cashFlowAmount,operationType:'PERMUTA',operationId:permutaId,receiptNumber:receipt.number,concept:'DIFERENCIA PERMUTA',date:dateTime,createdAt:iso});
     if(nextData.veh.length!==veh.length)throw new Error('LA PERMUTA DEBE CONSERVAR LA CANTIDAD DE VEHÍCULOS.');
     const beforeIds=new Set(veh.map(v=>String(v.id)));
     const afterIds=new Set(nextData.veh.map(v=>String(v.id)));
@@ -11112,10 +11134,15 @@ function renderSalesHistory(){
 function renderSalesReceivables(){
   const el=document.getElementById('salesReceivablesList');
   if(!el)return;
-  const pending=(data.sold||[]).map((x,i)=>({x,i})).filter(o=>o.x.status!=='permuta'&&!o.x.permuta&&(+o.x.sale?.pending||0)>0).sort((a,b)=>saleTimestamp(b.x,b.i)-saleTimestamp(a.x,a.i)).map(o=>o.x);
-  el.innerHTML=list(pending,['Vehículo','Comprador','Fecha','Valor venta','Recibido','Pendiente'],x=>[
-    (x.marca||x.m||'')+' '+(x.ref||'')+(x.pl?' — '+x.pl:''),
-    x.sale?.buyer||'SIN REGISTRAR',x.sale?.date||'',money(x.sale?.price||0),money(x.sale?.received||0),money(x.sale?.pending||0)
+  const sales=(data.sold||[]).map((x,i)=>({x,i})).filter(o=>o.x.status!=='permuta'&&!o.x.permuta&&(+o.x.sale?.pending||0)>0).map(o=>({
+    time:saleTimestamp(o.x,o.i),type:'VENTA',vehicle:(o.x.marca||o.x.m||'')+' '+(o.x.ref||'')+(o.x.pl?' — '+o.x.pl:''),client:o.x.sale?.buyer||'SIN REGISTRAR',date:o.x.sale?.date||'',total:+o.x.sale?.price||0,received:+o.x.sale?.received||0,pending:+o.x.sale?.pending||0
+  }));
+  const trades=(data.permutas||[]).filter(x=>(+x.pending||0)>0).map((x,i)=>{const inc=x.incomingVehicle||{};return {
+    time:permutaTimestamp(x,i),type:'PERMUTA',vehicle:(inc.marca||inc.m||'')+' '+(inc.ref||'')+(inc.pl?' — '+inc.pl:''),client:x.client||x.buyer||'SIN REGISTRAR',date:x.date||'',total:+x.difference||0,received:+x.received||0,pending:+x.pending||0
+  }});
+  const pending=[...sales,...trades].sort((a,b)=>b.time-a.time);
+  el.innerHTML=list(pending,['Origen','Vehículo','Cliente','Fecha','Valor acordado','Recibido','Pendiente'],x=>[
+    x.type,x.vehicle,x.client,x.date,money(x.total),money(x.received),money(x.pending)
   ]);
 }
 
@@ -11399,7 +11426,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.18.2\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.18.3\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15201,7 +15228,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.18.2',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.18.3',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -15218,7 +15245,7 @@ window.openRecordCopy=function(number){
     {id:'vehicleExpenses',label:'Gastos de vehículos',sheet:'Gastos vehículos',build:()=>({headers:['Fecha','Placa','Marca','Referencia','Modelo','Concepto','Valor','Soporte','Usuario'],rows:(data.mov||[]).filter(isVehicleExpense).map(m=>{const v=findVehicle(m);return [fmtDate(recordDate(m)),val(m,'vehiclePlate','pl','placa')||val(v,'pl','placa'),val(m,'vehicleBrand','marca')||val(v,'marca','m'),val(m,'vehicleReference','referencia','ref')||val(v,'ref','referencia'),val(m,'vehicleModel','modelo')||val(v,'modelo'),val(m,'c','concept','concepto'),num(m,'v','value','valor','amount'),val(m,'receiptNumber','soporte'),actor(m)]})})},
     {id:'generalExpenses',label:'Gastos generales',sheet:'Gastos generales',build:()=>({headers:['Fecha','Categoría','Concepto','Valor','Soporte','Usuario'],rows:(data.mov||[]).filter(m=>m?.t==='gasto'&&!isVehicleExpense(m)&&!isVehiclePurchase(m)).map(m=>[fmtDate(recordDate(m)),cleanLabel(val(m,'subtype','category','categoria')),val(m,'c','concept','concepto'),num(m,'v','value','valor','amount'),val(m,'receiptNumber','soporte'),actor(m)])})},
     {id:'clients',label:'Clientes',sheet:'Clientes',build:()=>({headers:['Fecha registro','Nombre','Documento','Teléfono','Dirección','Ciudad','Usuario'],rows:(data.clientes||[]).map(c=>[fmtDate(recordDate(c)),val(c,'n','nombre','name'),val(c,'cedula','documento','document'),val(c,'tel','telefono','phone'),val(c,'dir','direccion','address'),val(c,'ciudad','city'),actor(c)])})},
-    {id:'receivables',label:'Cuentas por cobrar',sheet:'Cuentas por cobrar',build:()=>({headers:['Fecha','Cliente','Concepto','Valor inicial','Abonos','Saldo','Estado','Usuario'],rows:(data.sold||[]).filter(s=>num(s,'pending','saldo')>0).map(s=>[fmtDate(recordDate(s)),val(s,'clientName','cliente','comprador'),[val(s,'marca','m'),val(s,'ref','referencia'),val(s,'pl','placa')].filter(Boolean).join(' '),num(s,'v','salePrice','precioVenta'),num(s,'received','recibido'),num(s,'pending','saldo'),'PENDIENTE',actor(s)])})},
+    {id:'receivables',label:'Cuentas por cobrar',sheet:'Cuentas por cobrar',build:()=>({headers:['Fecha','Origen','Cliente','Concepto','Valor inicial','Abonos','Saldo','Estado','Usuario'],rows:[...(data.sold||[]).filter(s=>Number(s.sale?.pending||0)>0).map(s=>[fmtDate(recordDate(s.sale||s)),'VENTA',s.sale?.buyer||'Sin cliente',[val(s,'marca','m'),val(s,'ref','referencia'),val(s,'pl','placa')].filter(Boolean).join(' '),Number(s.sale?.price||0),Number(s.sale?.received||0),Number(s.sale?.pending||0),'PENDIENTE',actor(s.sale||s)]),...(data.permutas||[]).filter(p=>Number(p.pending||0)>0).map(p=>[fmtDate(recordDate(p)),'PERMUTA',p.client||p.buyer||'Sin cliente','DIFERENCIA DE PERMUTA '+(p.incomingVehicle?.pl||''),Number(p.difference||0),Number(p.received||0),Number(p.pending||0),'PENDIENTE',actor(p)])]})},
     {id:'loans',label:'Préstamos otorgados',sheet:'Préstamos',build:()=>({headers:['Fecha','Cliente','Capital','Interés','Total esperado','Pagado','Saldo','Estado','Usuario'],rows:(data.pres||[]).map(p=>{const capital=num(p,'c','capital','value'),interest=num(p,'i','interest','interes'),paid=num(p,'paid','pagado','abonos');const total=num(p,'total')||capital+interest;return [fmtDate(recordDate(p)),val(p,'n','nombre','client','cliente'),capital,interest,total,paid,Math.max(0,total-paid),val(p,'estado','status')||'VIGENTE',actor(p)]})})},
     {id:'obligations',label:'Obligaciones y financiaciones',sheet:'Obligaciones',build:()=>({headers:['Fecha','Tipo','Concepto / acreedor','Valor','Pagado','Saldo','Estado','Usuario'],rows:(data.capitalOps||[]).map(x=>[fmtDate(recordDate(x)),cleanLabel(val(x,'type','tipo')),val(x,'concept','concepto','creditor','acreedor'),num(x,'value','valor','capital'),num(x,'paid','pagado','abonos'),num(x,'balance','saldo')||Math.max(0,num(x,'value','valor','capital')-num(x,'paid','pagado','abonos')),val(x,'status','estado'),actor(x)])})},
     {id:'treasury',label:'Tesorería y cuentas',sheet:'Tesorería',build:()=>({headers:['Fecha','Cuenta','Tipo','Concepto','Entrada','Salida','Soporte','Usuario'],rows:(data.treasuryMovements||[]).map(x=>{const amount=num(x,'amount','valor','value'),incoming=String(val(x,'direction','tipo')).toLowerCase()==='in';return [fmtDate(recordDate(x)),val(x,'accountName','cuenta')||'Cuenta sin nombre',incoming?'ENTRADA':'SALIDA',val(x,'concept','concepto'),incoming?amount:0,incoming?0:amount,val(x,'receiptNumber','soporte'),actor(x)]})})},
@@ -15247,6 +15274,6 @@ window.openRecordCopy=function(number){
   document.addEventListener('DOMContentLoaded',()=>{install();const overlay=document.getElementById('jcpExcelOverlay');overlay.onclick=e=>{if(e.target===overlay)close();};document.getElementById('jcpExcelClose').onclick=close;document.getElementById('jcpExcelCancel').onclick=close;document.getElementById('jcpExcelGenerate').onclick=generate;document.getElementById('jcpExcelAll').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=true);document.getElementById('jcpExcelNone').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=false);document.querySelectorAll('[name="jcpExcelPeriod"]').forEach(x=>x.onchange=()=>document.getElementById('jcpExcelDates').hidden=x.value!=='range'||!x.checked);});
 })();
 </script>
-<script src="./app-update.js?v=2026.09.18.2"></script>
+<script src="./app-update.js?v=2026.09.18.3"></script>
 </body>
 </html>
