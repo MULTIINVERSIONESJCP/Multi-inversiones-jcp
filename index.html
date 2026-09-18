@@ -3127,7 +3127,10 @@ body.jcp-custom-theme .database-actions-list button{
 }
 
 #registros #recordsTypeFilter,
-#registros #recordsNumberFilter{
+#registros #recordsNumberFilter,
+#registros #recordsTextFilter,
+#registros #recordsDateFrom,
+#registros #recordsDateTo{
   display:block !important;
   position:static !important;
   float:none !important;
@@ -3149,7 +3152,25 @@ body.jcp-custom-theme .database-actions-list button{
   transform:none !important;
 }
 
-#registros #recordsNumberFilter::placeholder{
+#registros .records-date-range-row{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:12px !important;
+  width:100% !important;
+}
+#registros .records-date-range-row > label{
+  display:flex !important;
+  flex-direction:column !important;
+  color:#fff !important;
+  font-size:16px !important;
+  font-weight:500 !important;
+}
+#registros .records-date-range-row input{
+  line-height:normal !important;
+}
+
+#registros #recordsNumberFilter::placeholder,
+#registros #recordsTextFilter::placeholder{
   color:#777 !important;
   opacity:1 !important;
 }
@@ -3164,6 +3185,28 @@ body.jcp-custom-theme .database-actions-list button{
   width:100% !important;
   max-width:100% !important;
   margin-top:8px !important;
+}
+
+#registros .records-results-note{
+  color:#777 !important;
+  font-size:10px !important;
+  text-align:center !important;
+  padding:10px 0 4px !important;
+}
+
+#registros .records-load-more-btn{
+  width:100% !important;
+  min-height:48px !important;
+  margin-top:6px !important;
+  border:1px solid #b99428 !important;
+  border-radius:10px !important;
+  background:#171717 !important;
+  color:#d8b53c !important;
+  font-size:14px !important;
+  font-weight:900 !important;
+}
+#registros .records-load-more-btn:active{
+  transform:scale(0.97);
 }
 
 @media (max-width:600px){
@@ -3181,13 +3224,20 @@ body.jcp-custom-theme .database-actions-list button{
   }
 
   #registros #recordsTypeFilter,
-  #registros #recordsNumberFilter{
+  #registros #recordsNumberFilter,
+  #registros #recordsTextFilter,
+  #registros #recordsDateFrom,
+  #registros #recordsDateTo{
     width:100% !important;
     max-width:100% !important;
     height:48px !important;
     min-height:48px !important;
     margin-top:8px !important;
     font-size:14px !important;
+  }
+
+  #registros .records-date-range-row{
+    grid-template-columns:1fr !important;
   }
 }
 
@@ -5164,7 +5214,7 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 <div class="records-filter-card">
 <label>TIPO DE REGISTRO
-      <select id="recordsTypeFilter" onchange="renderRecordsModule()">
+      <select id="recordsTypeFilter" onchange="jcpRecordsResetPaging()">
 <option value="all">TODOS LOS REGISTROS</option>
 <option value="purchase">COMPRAS</option>
 <option value="sale">VENTAS / FACTURAS</option>
@@ -5182,8 +5232,19 @@ body.jcp-custom-theme .database-actions-list button{
 </select>
 </label>
 <label>NÚMERO DE REGISTRO
-      <input id="recordsNumberFilter" oninput="renderRecordsModule()" onkeyup="renderRecordsModule()" onchange="renderRecordsModule()" placeholder="EJ. RF-000005"/>
+      <input id="recordsNumberFilter" oninput="jcpRecordsResetPaging()" onkeyup="jcpRecordsResetPaging()" onchange="jcpRecordsResetPaging()" placeholder="EJ. RF-000005"/>
 </label>
+<label>BUSCAR POR CONCEPTO O PLACA
+      <input id="recordsTextFilter" oninput="jcpRecordsResetPaging()" onkeyup="jcpRecordsResetPaging()" onchange="jcpRecordsResetPaging()" placeholder="EJ. GASTOS VEHÍCULO, ABC123"/>
+</label>
+<div class="records-date-range-row">
+<label>DESDE
+      <input id="recordsDateFrom" onchange="jcpRecordsResetPaging()" type="date"/>
+</label>
+<label>HASTA
+      <input id="recordsDateTo" onchange="jcpRecordsResetPaging()" type="date"/>
+</label>
+</div>
 </div>
 <div class="records-list" id="recordsList"></div>
 </section>
@@ -7273,7 +7334,7 @@ function paymentDistribution(prefix){const out={};PAYMENT_ACCOUNT_FIELDS.forEach
 function paymentDistributedTotal(prefix){return Object.values(paymentDistribution(prefix)).reduce((s,v)=>s+Number(v||0),0);}
 function payDistInput(prefix,el){formatMoneyInput(el);updatePaymentDistribution(prefix);}
 function clearPaymentDistribution(prefix){PAYMENT_ACCOUNT_FIELDS.forEach(([,suffix])=>{const e=document.getElementById(prefix+'Pay'+suffix);if(e){e.value='';e.disabled=false;}});updatePaymentDistribution(prefix);}
-function updatePaymentDistribution(prefix){const cfg=PAYMENT_CONFIG[prefix];if(!cfg)return false;const total=Math.max(0,Number(cfg.total()||0)),distributed=paymentDistributedTotal(prefix),pending=total-distributed,box=document.getElementById(prefix+'PayDist');if(box)box.classList.toggle('open',total>0);const put=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=money(Math.max(0,v));};put(prefix+'PayTotal',total);put(prefix+'PayDistributed',distributed);const pe=document.getElementById(prefix+'PayPending');if(pe)pe.textContent=pending<0?'EXCEDE '+money(Math.abs(pending)):money(pending);const pb=document.getElementById(prefix+'PayPendingBox'),ok=total>0&&Math.abs(pending)<1;if(pb){pb.classList.toggle('ok',ok);pb.classList.toggle('bad',!ok);}const btn=document.getElementById(cfg.submit);if(btn)btn.disabled=!ok;return ok;}
+function updatePaymentDistribution(prefix){const cfg=PAYMENT_CONFIG[prefix];if(!cfg)return false;const isFullCreditSale=prefix==='sale'&&document.getElementById('saleMethod')?.value==='credito'&&Number(cfg.total()||0)<=0;if(isFullCreditSale){const priceOk=saleNumericValue('salePrice')>0;const box=document.getElementById(prefix+'PayDist');if(box)box.classList.remove('open');const btn=document.getElementById(cfg.submit);if(btn)btn.disabled=!priceOk;return priceOk;}const total=Math.max(0,Number(cfg.total()||0)),distributed=paymentDistributedTotal(prefix),pending=total-distributed,box=document.getElementById(prefix+'PayDist');if(box)box.classList.toggle('open',total>0);const put=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=money(Math.max(0,v));};put(prefix+'PayTotal',total);put(prefix+'PayDistributed',distributed);const pe=document.getElementById(prefix+'PayPending');if(pe)pe.textContent=pending<0?'EXCEDE '+money(Math.abs(pending)):money(pending);const pb=document.getElementById(prefix+'PayPendingBox'),ok=total>0&&Math.abs(pending)<1;if(pb){pb.classList.toggle('ok',ok);pb.classList.toggle('bad',!ok);}const btn=document.getElementById(cfg.submit);if(btn)btn.disabled=!ok;return ok;}
 function validatePaymentDistribution(prefix,totalOverride=null){const cfg=PAYMENT_CONFIG[prefix],total=totalOverride===null?Number(cfg?.total?.()||0):Number(totalOverride||0),distributed=paymentDistributedTotal(prefix),diff=total-distributed;if(total<=0){alert('INGRESA UN VALOR VÁLIDO.');return false;}if(Math.abs(diff)>=1){alert(diff>0?'FALTA DISTRIBUIR '+money(diff)+'.':'LA DISTRIBUCIÓN EXCEDE EL VALOR EN '+money(Math.abs(diff))+'.');return false;}return true;}
 function applyPaymentDistribution(state,{prefix,direction,total,operationType,operationId='',receiptNumber='',concept='',date='',createdAt=''}){if(!validatePaymentDistribution(prefix,total))throw new Error('DISTRIBUCIÓN INCOMPLETA.');const dist=paymentDistribution(prefix);Object.entries(dist).forEach(([accountId,amount])=>{if(amount>0)addTreasuryMovement(state,{accountId,direction,amount,operationType,operationId,receiptNumber,concept,date,createdAt,method:accountId==='cash'?'efectivo':'transferencia'});});return dist;}
 function updateSalePaymentTarget(){const price=saleNumericValue('salePrice'),credit=document.getElementById('saleMethod')?.value==='credito',received=credit?saleNumericValue('saleReceived'):price,pending=Math.max(0,price-received),p=document.getElementById('salePending');if(p)p.value=pending?new Intl.NumberFormat('es-CO').format(pending):'';updatePaymentDistribution('sale');try{updateSaleSummary();}catch(e){}}
@@ -14653,6 +14714,9 @@ function voidAccountingDocument(){
     });
   };
 
+  window.__recordsPageSize=40;
+  window.__recordsVisibleCount=window.__recordsPageSize;
+
   window.renderRecordsModule=function(){
   const list=document.getElementById('recordsList');
   if(!list)return;
@@ -14660,10 +14724,13 @@ function voidAccountingDocument(){
   const type=document.getElementById('recordsTypeFilter')?.value||'all';
   const raw=String(document.getElementById('recordsNumberFilter')?.value||'').trim();
   const q=raw.replace(/\s+/g,'').toUpperCase();
+  const textRaw=String(document.getElementById('recordsTextFilter')?.value||'').trim().toUpperCase();
+  const dateFrom=String(document.getElementById('recordsDateFrom')?.value||'').trim();
+  const dateTo=String(document.getElementById('recordsDateTo')?.value||'').trim();
 
   // REGLA PRINCIPAL:
-  // Al entrar al módulo NO se muestra ningún soporte.
-  if(type==='all' && q===''){
+  // Al entrar al módulo NO se muestra ningún soporte, hasta que se aplique algún filtro.
+  if(type==='all' && q==='' && textRaw==='' && !dateFrom && !dateTo){
     list.innerHTML='';
     list.style.display='none';
     return;
@@ -14686,6 +14753,29 @@ function voidAccountingDocument(){
     );
   }
 
+  // Búsqueda libre por concepto/título o placa.
+  if(textRaw!==''){
+    rows=rows.filter(r=>{
+      const title=String(r.title||r.concept||'').toUpperCase();
+      const plate=String(r.plate||r.vehiclePlate||r.snapshot?.plate||'').toUpperCase();
+      return title.includes(textRaw)||plate.includes(textRaw);
+    });
+  }
+
+  // Filtro por rango de fechas (usa la fecha de creación real del registro).
+  if(dateFrom||dateTo){
+    const fromTs=dateFrom?new Date(dateFrom+'T00:00:00').getTime():null;
+    const toTs=dateTo?new Date(dateTo+'T23:59:59').getTime():null;
+    rows=rows.filter(r=>{
+      const raw=r?.createdAt||r?.date;
+      const t=Date.parse(raw||'');
+      if(!Number.isFinite(t))return false;
+      if(fromTs!==null&&t<fromTs)return false;
+      if(toTs!==null&&t>toTs)return false;
+      return true;
+    });
+  }
+
   list.style.display='block';
 
   if(!rows.length){
@@ -14693,8 +14783,9 @@ function voidAccountingDocument(){
     return;
   }
 
+  const visible=rows.slice(0,window.__recordsVisibleCount);
   const head='<div class="records-table-head"><span>REGISTRO</span><span>FECHA</span><span>TIPO / CONCEPTO</span><span>VALOR</span><span>ACCIÓN</span></div>';
-  list.innerHTML=head+rows.map(r=>{
+  const body=visible.map(r=>{
     const n=String(r.recordNumber||'').toUpperCase();
     const t=recLabel(recType(r));
     const title=String(r.title||r.concept||t);
@@ -14708,7 +14799,25 @@ function voidAccountingDocument(){
       '<button type="button" class="records-copy-btn" onclick="openRecordCopy(\''+jcpInlineJsArg(n)+'\')">VER SOPORTE</button>'+
     '</div>';
   }).join('');
+
+  const remaining=rows.length-visible.length;
+  const footer='<div class="records-results-note">MOSTRANDO '+visible.length+' DE '+rows.length+' REGISTROS</div>'+
+    (remaining>0
+      ?'<button type="button" class="records-load-more-btn" onclick="jcpRecordsLoadMore()">VER '+Math.min(remaining,window.__recordsPageSize)+' MÁS ('+remaining+' RESTANTES)</button>'
+      :'');
+
+  list.innerHTML=head+body+footer;
 };
+
+  window.jcpRecordsLoadMore=function(){
+    window.__recordsVisibleCount+=window.__recordsPageSize;
+    window.renderRecordsModule();
+  };
+
+  window.jcpRecordsResetPaging=function(){
+    window.__recordsVisibleCount=window.__recordsPageSize;
+    window.renderRecordsModule();
+  };
 
   window.openSupportDocument=function(baseHtml,fileKey,shareTitle){
   const w=window.open('','_blank');
@@ -14829,79 +14938,24 @@ window.openRecordCopy=function(number){
   document.addEventListener('DOMContentLoaded',function(){
     const a=document.getElementById('recordsNumberFilter');
     const b=document.getElementById('recordsTypeFilter');
+    const c=document.getElementById('recordsTextFilter');
+    const d=document.getElementById('recordsDateFrom');
+    const e=document.getElementById('recordsDateTo');
     if(a){
-      ['input','keyup','change'].forEach(ev=>a.addEventListener(ev,window.renderRecordsModule));
+      ['input','keyup','change'].forEach(ev=>a.addEventListener(ev,window.jcpRecordsResetPaging));
     }
-    if(b)b.addEventListener('change',window.renderRecordsModule);
+    if(b)b.addEventListener('change',window.jcpRecordsResetPaging);
+    if(c){
+      ['input','keyup','change'].forEach(ev=>c.addEventListener(ev,window.jcpRecordsResetPaging));
+    }
+    if(d)d.addEventListener('change',window.jcpRecordsResetPaging);
+    if(e)e.addEventListener('change',window.jcpRecordsResetPaging);
   });
 })();
 </script>
 
 
-<script id="jcp-pagination-registros">
-(function(){
-  var PAGE=20, shown=20, busy=false;
 
-  function getList(){ return document.getElementById('recordsList'); }
-
-  function applyLimit(){
-    var list=getList();
-    if(!list)return;
-    var cards=Array.from(list.children).filter(function(el){
-      return el.id!=='jcpLoadMoreWrap';
-    });
-    if(!cards.length)return;
-
-    cards.forEach(function(card,i){
-      card.style.display = i < shown ? '' : 'none';
-    });
-
-    var old=document.getElementById('jcpLoadMoreWrap');
-    if(old)old.remove();
-
-    if(cards.length>shown){
-      var wrap=document.createElement('div');
-      wrap.id='jcpLoadMoreWrap';
-      wrap.style.cssText='padding:8px 0 18px;text-align:center';
-      var btn=document.createElement('button');
-      btn.type='button';
-      btn.textContent='CARGAR 20 MÁS';
-      btn.style.cssText='width:100%;min-height:48px;border:1px solid #b99428;border-radius:10px;background:#171717;color:#d8b53c;font-size:14px;font-weight:900';
-      btn.onclick=function(){
-        shown+=PAGE;
-        applyLimit();
-      };
-      var info=document.createElement('div');
-      info.style.cssText='color:#777;font-size:10px;margin-top:8px';
-      info.textContent='MOSTRANDO '+Math.min(shown,cards.length)+' DE '+cards.length;
-      wrap.appendChild(btn);
-      wrap.appendChild(info);
-      list.appendChild(wrap);
-    }
-  }
-
-  function resetAndApply(){
-    shown=PAGE;
-    setTimeout(applyLimit,0);
-  }
-
-  document.addEventListener('DOMContentLoaded',function(){
-    var list=getList();
-    if(list){
-      new MutationObserver(function(){
-        if(busy)return;
-        busy=true;
-        setTimeout(function(){ applyLimit(); busy=false; },0);
-      }).observe(list,{childList:true});
-    }
-    var type=document.getElementById('recordsTypeFilter');
-    var num=document.getElementById('recordsNumberFilter');
-    if(type)type.addEventListener('change',resetAndApply);
-    if(num)num.addEventListener('input',resetAndApply);
-    resetAndApply();
-  });
-})();
-</script>
 
 
 <div id="saleSupportChoiceOverlay" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.82);align-items:center;justify-content:center;padding:18px">
