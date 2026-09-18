@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.17.9</title>
+<title>MULTI INVERSIONES JCP - V2026.09.17.10</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -3732,12 +3732,12 @@ body.jcp-custom-theme .database-actions-list button{
   #vehiculos #vehList>.inventory-cards{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 }
 @media (max-width:700px){
-  #vehiculos #vehList>.inventory-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
-  #vehiculos #vehList .vehicle-card img{height:128px!important}
-  #vehiculos #vehList .vehicle-card .vc-body{padding:9px!important}
-  #vehiculos #vehList .vehicle-card .label{font-size:10px!important}
-  #vehiculos #vehList .vehicle-card b{font-size:12px!important}
-  #vehiculos #vehList .vehicle-card .vc-price{font-size:13px!important}
+  #vehiculos #vehList>.inventory-cards{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+  #vehiculos #vehList .vehicle-card{border-radius:9px!important;min-width:0!important}
+  #vehiculos #vehList .vehicle-card img{height:88px!important;aspect-ratio:4/3!important;object-fit:cover!important}
+  #vehiculos #vehList .vehicle-card .vc-body{padding:7px 6px!important;min-width:0!important}
+  #vehiculos #vehList .vehicle-card b{display:block;font-size:10px!important;line-height:1.15!important;overflow-wrap:anywhere!important}
+  #vehiculos #vehList .vehicle-card .vc-price{font-size:10px!important;line-height:1.15!important;margin-top:6px!important;white-space:normal!important;overflow-wrap:anywhere!important}
   #extractos .ext-pro-table-wrap{overflow-x:auto!important;-webkit-overflow-scrolling:touch}
   #extractos .ext-pro-table-head,#extractos .ext-pro-row{min-width:760px!important}
   #extractos .ext-pro-table-head{position:sticky;top:0;z-index:2}
@@ -8000,6 +8000,69 @@ function saleInternalSupportHtml(r){
     <div class="mode-switch"><button onclick="if(window.opener&&window.opener.openSaleSupportMode){window.opener.openSaleSupportMode('${jcpInlineJsArg(d.number)}','client')}">VER SOPORTE PARA CLIENTE</button></div>${pages}</body></html>`;
 }
 
+function saleInternalLandscapeStyles(){
+  return `
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#050505;color:#fff;font-family:Arial,sans-serif}
+  body{padding:12px}
+  .sale-page.sale-landscape{width:min(1040px,100%);aspect-ratio:1.414/1;min-height:0;margin:0 auto 16px;background:#050505;border:1px solid #8d6d1c;border-radius:12px;padding:20px;position:relative;break-after:page;page-break-after:always;overflow:hidden}
+  .sale-page.sale-landscape:last-child{break-after:auto;page-break-after:auto}
+  .land-head{height:88px;display:grid;grid-template-columns:280px 1fr 230px;align-items:center;gap:18px;border-bottom:3px solid #d5a72e;padding-bottom:12px}
+  .land-logo{width:255px;max-height:68px;object-fit:contain;object-position:left center}
+  .land-title{text-align:center}.land-title h1{margin:0;font-size:25px;line-height:1}.land-title h1 span{color:#d8aa32}.land-title b{display:block;color:#d8aa32;font-size:13px;margin-top:7px}
+  .land-meta{text-align:right;color:#aaa;font-size:10px;line-height:1.5}.land-meta strong{display:block;color:#fff;font-size:14px}
+  .land-main{display:grid;grid-template-columns:1.18fr .82fr;gap:13px;margin-top:13px}
+  .land-left,.land-right{display:grid;gap:10px;align-content:start}
+  .land-box{border:1px solid #745a18;border-radius:8px;background:#0a0a0a;padding:10px;min-width:0}
+  .land-box h3{margin:0 0 8px;color:#d8aa32;font-size:11px;border-bottom:1px solid #5f4a17;padding-bottom:7px}
+  .land-vehicle{display:grid;grid-template-columns:1.15fr .85fr;gap:10px}.land-photo{height:190px;border-radius:7px;overflow:hidden;background:#111}.land-photo img{width:100%;height:100%;object-fit:cover}.land-photo .empty-photo{height:100%;display:flex;align-items:center;justify-content:center;color:#777;font-size:11px;font-weight:900}
+  .land-row{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid #27210f;font-size:9px}.land-row span{color:#aaa}.land-row b{text-align:right;overflow-wrap:anywhere}
+  .land-docs{display:grid;grid-template-columns:1fr 1fr;column-gap:14px}.land-doc{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid #27210f;font-size:8px}.land-doc span{color:#75dd7d;font-weight:900}.land-doc b{text-align:right;overflow-wrap:anywhere}
+  .land-grid-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.land-obs{min-height:58px;color:#ddd;font-size:9px;line-height:1.45}
+  .land-pay-total{background:#d8aa32;color:#111;font-weight:900;padding:7px;margin-top:5px}
+  .land-expense-layout{display:grid;grid-template-columns:1.55fr .85fr;gap:14px;margin-top:14px;height:575px}
+  .land-expense-table{width:100%;border-collapse:collapse;font-size:9px}.land-expense-table th{color:#d8aa32;background:#111}.land-expense-table th,.land-expense-table td{border-bottom:1px solid #342a10;padding:5px 7px;text-align:left;height:24px}.land-expense-table td:first-child,.land-expense-table th:first-child{width:38px;text-align:center}.land-expense-table td:last-child,.land-expense-table th:last-child{text-align:right;white-space:nowrap}.land-expense-table .expense-total td{background:#d8aa32;color:#111;font-weight:1000;font-size:10px}
+  .land-summary{display:flex;flex-direction:column;height:100%}.land-result{margin-top:auto;border:2px solid;border-radius:10px;text-align:center;padding:18px 8px}.land-result small{display:block;font-size:9px;font-weight:900}.land-result b{display:block;font-size:27px;margin:7px 0}.land-result em{font-size:9px;font-style:normal;font-weight:900}.land-result.positive{background:#092117;border-color:#35b96b;color:#75ed9e}.land-result.negative{background:#2a0d0d;border-color:#e24e4e;color:#ff7373}
+  .land-footer{position:absolute;left:20px;right:20px;bottom:11px;border-top:1px solid #493a13;padding-top:6px;text-align:center;color:#888;font-size:8px}
+  .mode-switch{width:min(1040px,100%);margin:0 auto 8px;display:flex;justify-content:flex-end}.mode-switch button{border:1px solid #a77c17;background:#111;color:#d8aa32;padding:9px 13px;border-radius:8px;font-weight:900}
+  @media(max-width:700px){body{padding:5px}.sale-page.sale-landscape{width:100%;padding:7px;border-radius:6px}.land-head{height:55px;grid-template-columns:27% 46% 27%;gap:4px;padding-bottom:5px}.land-logo{width:100%;max-height:38px}.land-title h1{font-size:11px}.land-title b{font-size:6px;margin-top:3px}.land-meta{font-size:5px}.land-meta strong{font-size:7px}.land-main{gap:5px;margin-top:5px}.land-left,.land-right{gap:4px}.land-box{padding:4px;border-radius:4px}.land-box h3{font-size:5.5px;margin-bottom:3px;padding-bottom:3px}.land-vehicle{gap:4px}.land-photo{height:91px}.land-row{font-size:4.8px;padding:2px 0}.land-docs{column-gap:4px}.land-doc{font-size:4.3px;padding:2px 0}.land-grid-two{gap:4px}.land-obs{min-height:24px;font-size:4.5px}.land-expense-layout{gap:5px;margin-top:5px;height:auto}.land-expense-table{font-size:4.6px}.land-expense-table th,.land-expense-table td{height:auto;padding:2.5px 3px}.land-expense-table .expense-total td{font-size:5px}.land-result{padding:7px 3px}.land-result small,.land-result em{font-size:4.5px}.land-result b{font-size:12px;margin:3px 0}.land-footer{left:7px;right:7px;bottom:4px;font-size:4px;padding-top:2px}.mode-switch{width:100%}.mode-switch button{width:100%;min-height:42px}}
+  @media print{body{padding:0}.mode-switch{display:none!important}.sale-page.sale-landscape{border:0;margin:0;width:100%;aspect-ratio:1.414/1}@page{size:A4 landscape;margin:6mm}}
+  `;
+}
+
+function saleInternalSupportHtml(r){
+  const d=saleSupportData(r),c=d.commercial||{},logo=supportLogoSrc(),docs=saleDocRows(c),pays=salePayRows(d.distribution);
+  const displayPays=pays.length?pays:[{label:d.method||'FORMA DE PAGO',value:d.received}];
+  const resultPositive=Number(d.profit||0)>=0;
+  const expenseRows=(d.expenses||[]).map((x,i)=>`<tr><td>${i+1}</td><td>${priceEsc(x.concept||'GASTO VEHÍCULO')}</td><td>${priceMoney(Number(x.value||0))}</td></tr>`).join('');
+  const row=(label,value,extra='')=>`<div class="land-row ${extra}"><span>${priceEsc(label)}</span><b>${value}</b></div>`;
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${priceEsc(d.number)} · SOPORTE INTERNO</title><style>${saleInternalLandscapeStyles()}</style></head><body>
+  <div class="mode-switch"><button onclick="if(window.opener&&window.opener.openSaleSupportMode){window.opener.openSaleSupportMode('${jcpInlineJsArg(d.number)}','client')}">VER SOPORTE PARA CLIENTE</button></div>
+  <section class="sale-page sale-landscape">
+    <div class="land-head">${logo?`<img class="land-logo" src="${priceEsc(logo)}">`:''}<div class="land-title"><h1>VENTA <span>DE VEHÍCULO</span></h1><b>SOPORTE INTERNO · ${priceEsc(d.number)}</b></div><div class="land-meta"><strong>${priceEsc(d.date)}</strong>PÁGINA 1 DE 2</div></div>
+    <div class="land-main">
+      <div class="land-left">
+        <div class="land-box"><h3>🚘 INFORMACIÓN DEL VEHÍCULO</h3><div class="land-vehicle"><div class="land-photo">${c.photo?`<img src="${priceEsc(c.photo)}" alt="Foto principal del vehículo">`:`<div class="empty-photo">SIN FOTO PRINCIPAL</div>`}</div><div>${row('MARCA',priceEsc(c.marca||'SIN REGISTRAR'))}${row('REFERENCIA',priceEsc(c.referencia||'SIN REGISTRAR'))}${row('MODELO',priceEsc(c.modelo||'SIN REGISTRAR'))}${row('CILINDRAJE',priceEsc(c.cilindraje||'SIN REGISTRAR'))}${row('PLACA',priceEsc(c.placa||r.plate||'SIN REGISTRAR'))}${row('KILOMETRAJE',Number(c.kilometraje||0)>0?priceEsc(Number(c.kilometraje).toLocaleString('es-CO')+' KM'):'SIN REGISTRAR')}</div></div></div>
+        <div class="land-box"><h3>📋 DOCUMENTACIÓN Y ESTADO</h3><div class="land-docs">${docs.map(([k,v])=>`<div class="land-doc"><span>✓ ${priceEsc(k)}</span><b>${priceEsc(v)}</b></div>`).join('')}</div></div>
+      </div>
+      <div class="land-right">
+        <div class="land-box"><h3>👤 INFORMACIÓN DEL CLIENTE</h3>${row('NOMBRE',priceEsc(d.buyer))}${row('IDENTIFICACIÓN',priceEsc(d.doc||'SIN REGISTRAR'))}${row('TELÉFONO',priceEsc(d.phone||'SIN REGISTRAR'))}${row('DIRECCIÓN',priceEsc(d.address||'SIN REGISTRAR'))}</div>
+        <div class="land-box"><h3>💳 FORMA DE PAGO</h3>${displayPays.map(x=>row(x.label,priceMoney(x.value))).join('')}${row('TOTAL RECIBIDO',priceMoney(d.received))}${row('SALDO PENDIENTE',priceMoney(d.pending),'land-pay-total')}</div>
+        <div class="land-box"><h3>📝 OBSERVACIONES INTERNAS</h3><div class="land-obs">${priceEsc(d.obs||'SIN OBSERVACIONES REGISTRADAS.')}</div></div>
+      </div>
+    </div>
+    <div class="land-footer">SOPORTE INTERNO (CONTROL) · MULTI INVERSIONES JCP · CONTINÚA EN PÁGINA 2</div>
+  </section>
+  <section class="sale-page sale-landscape">
+    <div class="land-head"><div></div><div class="land-title"><h1>DESGLOSE DE <span>GASTOS RELACIONADOS</span></h1><b>CONTINUACIÓN · ${priceEsc(d.number)}</b></div><div class="land-meta"><strong>${priceEsc(d.date)}</strong>PÁGINA 2 DE 2</div></div>
+    <div class="land-expense-layout">
+      <div class="land-box"><h3>💲 GASTOS DEL VEHÍCULO</h3><table class="land-expense-table"><thead><tr><th>#</th><th>CONCEPTO</th><th>VALOR</th></tr></thead><tbody>${expenseRows||'<tr><td colspan="3" style="text-align:center;color:#777">SIN GASTOS RELACIONADOS REGISTRADOS</td></tr>'}<tr class="expense-total"><td colspan="2">TOTAL GASTOS RELACIONADOS</td><td>${priceMoney(d.expenseTotal)}</td></tr></tbody></table></div>
+      <div class="land-box land-summary"><h3>💰 RESUMEN FINANCIERO FINAL</h3>${row('PRECIO DE COMPRA',priceMoney(d.purchasePrice))}${row('GASTOS RELACIONADOS',priceMoney(d.expenseTotal))}${row('TOTAL INVERSIÓN',priceMoney(d.investment),'land-pay-total')}${row('VALOR DE VENTA',priceMoney(d.price))}<div class="land-result ${resultPositive?'positive':'negative'}"><small>${resultPositive?'GANANCIA OBTENIDA':'PÉRDIDA DE LA OPERACIÓN'}</small><b>${priceMoney(d.profit)}</b><em>RENTABILIDAD: ${Number(d.margin||0).toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2})}%</em></div></div>
+    </div>
+    <div class="land-footer">SOPORTE INTERNO (CONTROL) · MULTI INVERSIONES JCP · DOCUMENTO DE USO INTERNO</div>
+  </section></body></html>`;
+}
+
 function tradeSupportData(r){
  const s=r.snapshot||{};
  const perm=(data.permutas||[]).find(p=>String(p.id||'')===String(r.entityId||'')||String(p.receiptNumber||'').toUpperCase()===String(r.number||'').toUpperCase())||{};
@@ -11269,7 +11332,7 @@ if(!data.veh.length){
   const noPhoto='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
   vehList.innerHTML='<div class="inventory-cards">'+data.veh.map(x=>{
     const img=x.photo||noPhoto; const total=(+x.c||0)+(+x.g||0);
-    return `<div class="vehicle-card" onclick="selectInventoryVehicle('${jcpInlineJsArg(x.id)}')"><img src="${jcpSafeImageSrc(img)}" alt="Foto del vehículo"><div class="vc-body"><div class="label">${clientEsc(x.pl||'SIN PLACA')}</div><div><b>${clientEsc(x.marca||x.m||'')} ${clientEsc(x.ref||'')}</b></div><div class="label">${clientEsc(x.modelo||'')}</div><div class="label">Compra ${money(x.c||0)}</div><div class="label">Gastos ${money(x.g||0)}</div><div class="vc-price">Total ${money(total)}</div></div></div>`;
+    return `<div class="vehicle-card" onclick="selectInventoryVehicle('${jcpInlineJsArg(x.id)}')"><img src="${jcpSafeImageSrc(img)}" alt="Foto del vehículo"><div class="vc-body"><b>${clientEsc(x.marca||x.m||'')}</b><b>${clientEsc(x.ref||'SIN REFERENCIA')}</b><div class="vc-price">Total ${money(total)}</div></div></div>`;
   }).join('')+'</div>';
 }
 let sold=data.sold||[];
@@ -11333,7 +11396,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.17.9\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.17.10\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -14808,25 +14871,32 @@ function voidAccountingDocument(){
     const title=${JSON.stringify(String(shareTitle||safeFile))};
     const msg=document.getElementById('jcpSupportMsg');
     function setMsg(t){if(msg)msg.textContent=t||'';}
-    async function makeBlob(){
+    async function makeBlobs(){
       if(typeof html2canvas!=='function')throw new Error('No se pudo cargar el generador de imagen.');
       const tools=document.getElementById('jcpSupportTools'),old=tools.style.display;tools.style.display='none';
       try{
-        const canvas=await html2canvas(document.body,{scale:2,backgroundColor:'#050505',useCORS:true,logging:false,ignoreElements:el=>el.id==='jcpSupportTools'});
-        return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('No se pudo crear la imagen.')),'image/png',1));
+        const pages=Array.from(document.querySelectorAll('.sale-page,.tp'));
+        const targets=pages.length?pages:[document.body],blobs=[];
+        for(const target of targets){
+          const canvas=await html2canvas(target,{scale:2,backgroundColor:'#050505',useCORS:true,logging:false,ignoreElements:el=>el.id==='jcpSupportTools'});
+          const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('No se pudo crear la imagen.')),'image/png',1));
+          blobs.push(blob);
+        }
+        return blobs;
       }finally{tools.style.display=old;}
     }
     document.getElementById('jcpDownloadImage').onclick=async function(){
       try{
-        setMsg('GENERANDO IMAGEN...');const blob=await makeBlob(),url=URL.createObjectURL(blob),a=document.createElement('a');
-        a.href=url;a.download=fileName;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);setMsg('IMAGEN GENERADA.');
+        setMsg('GENERANDO IMAGEN...');const blobs=await makeBlobs();
+        blobs.forEach((blob,i)=>{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=blobs.length>1?fileName.replace(/\.png$/i,'_PAG_'+(i+1)+'.png'):fileName;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);});
+        setMsg(blobs.length>1?'PÁGINAS GENERADAS POR SEPARADO.':'IMAGEN GENERADA.');
       }catch(e){setMsg('');alert(e.message||'NO FUE POSIBLE GENERAR LA IMAGEN.');}
     };
     document.getElementById('jcpShareImage').onclick=async function(){
       try{
-        setMsg('PREPARANDO PARA COMPARTIR...');const blob=await makeBlob(),file=new File([blob],fileName,{type:'image/png'});
-        if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){await navigator.share({title,files:[file]});setMsg('');return;}
-        const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=fileName;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+        setMsg('PREPARANDO PARA COMPARTIR...');const blobs=await makeBlobs(),files=blobs.map((blob,i)=>new File([blob],blobs.length>1?fileName.replace(/\.png$/i,'_PAG_'+(i+1)+'.png'):fileName,{type:'image/png'}));
+        if(navigator.share&&(!navigator.canShare||navigator.canShare({files}))){await navigator.share({title,files});setMsg('');return;}
+        blobs.forEach((blob,i)=>{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=files[i].name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);});
         setMsg('EL NAVEGADOR NO PERMITE COMPARTIR ARCHIVOS DIRECTAMENTE. SE DESCARGÓ LA IMAGEN.');
       }catch(e){if(e&&e.name==='AbortError'){setMsg('');return;}setMsg('');alert(e.message||'NO FUE POSIBLE COMPARTIR EL SOPORTE.');}
     };
@@ -15128,7 +15198,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.17.9',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.17.10',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -15174,6 +15244,6 @@ window.openRecordCopy=function(number){
   document.addEventListener('DOMContentLoaded',()=>{install();const overlay=document.getElementById('jcpExcelOverlay');overlay.onclick=e=>{if(e.target===overlay)close();};document.getElementById('jcpExcelClose').onclick=close;document.getElementById('jcpExcelCancel').onclick=close;document.getElementById('jcpExcelGenerate').onclick=generate;document.getElementById('jcpExcelAll').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=true);document.getElementById('jcpExcelNone').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=false);document.querySelectorAll('[name="jcpExcelPeriod"]').forEach(x=>x.onchange=()=>document.getElementById('jcpExcelDates').hidden=x.value!=='range'||!x.checked);});
 })();
 </script>
-<script src="./app-update.js?v=2026.09.17.9"></script>
+<script src="./app-update.js?v=2026.09.17.10"></script>
 </body>
 </html>
