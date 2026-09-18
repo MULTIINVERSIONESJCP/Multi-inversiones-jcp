@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.17.10</title>
+<title>MULTI INVERSIONES JCP - V2026.09.18.1</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4371,9 +4371,6 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="sale-invoice-section">
 <div class="sale-section-title"><span>1</span> VEHÍCULO QUE SALE</div>
 <div class="sale-vehicle-preview" id="permutaVehiclePreview"></div>
-<div class="sale-field-grid" style="margin-top:10px">
-<label class="sale-field full"><b>Valor de venta acordado *</b><input data-money="1" id="permutaSalePrice" inputmode="numeric" placeholder="$ 0" type="text"/></label>
-</div>
 </div>
 <div class="sale-invoice-section">
 <div class="sale-section-title"><span>2</span> VEHÍCULO QUE INGRESA</div>
@@ -4382,7 +4379,6 @@ body.jcp-custom-theme .database-actions-list button{
 <label class="sale-field"><b>Referencia *</b><input id="permutaInRef" placeholder="REFERENCIA"/></label>
 <label class="sale-field"><b>Modelo *</b><input id="permutaInModelo" placeholder="MODELO"/></label>
 <label class="sale-field"><b>Placa</b><input id="permutaInPlaca" placeholder="PLACA"/></label>
-<label class="sale-field full"><b>Valor acordado del vehículo recibido *</b><input data-money="1" id="permutaInTotalCost" inputmode="numeric" placeholder="$ 0" type="text"/></label>
 <label class="sale-field full"><b>Fotos del vehículo (máximo 4)</b><input accept="image/*" class="permuta-photo-input" id="permutaInPhotos" multiple="" type="file"/></label>
 </div>
 <div class="permuta-photo-grid" id="permutaPhotoPreview"></div>
@@ -4401,6 +4397,10 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 <div class="sale-invoice-section">
 <div class="sale-section-title"><span>4</span> DIFERENCIA DE LA PERMUTA</div>
+<div class="sale-field-grid">
+<label class="sale-field"><b>Movimiento de dinero *</b><select id="permutaDifferenceDirection" onchange="updatePermutaCalculations()"><option value="even">SIN DINERO DE ENCIMA</option><option value="receive">RECIBIMOS DINERO</option><option value="pay">ENTREGAMOS DINERO</option></select></label>
+<label class="sale-field"><b>Valor real del dinero de encima *</b><input data-money="1" id="permutaDifferenceAmount" inputmode="numeric" oninput="formatPermutaMoney(this);updatePermutaCalculations()" placeholder="$ 0" type="text"/></label>
+</div>
 <div id="permutaSummary"></div>
 <div id="permutaPaymentBlock" style="display:none;margin-top:10px"><div class="paydist" id="permutaPayDist"><div class="paydist-title">DISTRIBUCIÓN DE LA DIFERENCIA</div><div class="paydist-grid">
 <label class="paydist-row"><span>EFECTIVO</span><input data-money="1" id="permutaPayCash" inputmode="numeric" oninput="payDistInput('permuta',this)" placeholder="$ 0" type="text"/></label>
@@ -6309,7 +6309,8 @@ function jcpAuditState(source){
   const loanReceivable=pres.reduce((a,x)=>a+Math.max(0,(jcpAuditNum(x?.c)||0)-(jcpAuditNum(x?.p)||0)),0);
   const saleReceivable=sold.filter(x=>x&&x.status!=='permuta'&&!x.permuta&&!x.sale?.voided&&x.status!=='venta_anulada').reduce((a,x)=>a+Math.max(0,jcpAuditNum(x?.sale?.pending)||0),0);
   const saleProfit=sold.filter(x=>x&&x.status!=='permuta'&&!x.permuta&&!x.sale?.voided&&x.status!=='venta_anulada').reduce((a,x)=>a+(jcpAuditNum(x?.sale?.price)||0)-((jcpAuditNum(x?.c)||0)+(jcpAuditNum(x?.g)||0)),0);
-  const permutaProfit=permutas.reduce((a,x)=>a+(jcpAuditNum(x?.profit)||0),0);
+  // Las permutas trasladan inversión; no realizan utilidad contable.
+  const permutaProfit=0;
   const operatingExpenses=mov.filter(x=>!x?.voided&&x?.t==='gasto'&&(x?.subtype==='gasto_operativo'||x?.subtype==='varios')).reduce((a,x)=>a+(jcpAuditNum(x?.v)||0),0);
   const withdrawals=mov.filter(x=>x?.t==='gasto'&&x?.subtype==='retiro_ganancias').reduce((a,x)=>a+(jcpAuditNum(x?.v)||0),0);
   const financing=mov.filter(x=>x?.t==='ingreso'&&(x?.subtype==='credito'||x?.subtype==='prestamo_recibido'||x?.subtype==='tarjeta_credito')).reduce((a,x)=>a+(jcpAuditNum(x?.v)||0),0);
@@ -8076,15 +8077,16 @@ function tradeSupportData(r){
  const ci=s.inVehicle&&typeof s.inVehicle==='object'?s.inVehicle:(perm.incomingVehicle&&typeof perm.incomingVehicle==='object'?{...snap(perm.incomingVehicle),...perm.incomingVehicle}:snap(vi));
  const client=String(first(s.buyer,s.client,perm.client,perm.buyer,r.party,'CLIENTE VARIOS')).toUpperCase(), doc=String(first(s.doc,s.clientDoc,perm.clientDoc,perm.doc,'')).toUpperCase();
  const cl=(data.clientes||[]).find(c=>(doc&&String(c.cedula||'').toUpperCase()===doc)||String(c.nombre||'').toUpperCase()===client)||{};
- const outValue=Number(first(s.outValue,s.deliveredValue,s.saleValue,s.price,perm.outgoingSalePrice,r.amount,0)||0), inValue=Number(first(s.inValue,s.receivedVehicleValue,s.tradeInValue,perm.incomingValue,0)||0);
- const difference=Number(first(s.difference,s.cashDifference,Math.abs(outValue-inValue),0)||0), differenceBy=String(first(s.differenceBy,s.paidBy,outValue>=inValue?'CLIENTE':'MULTI INVERSIONES JCP')).toUpperCase();
+ const outValue=Number(first(s.outValue,s.deliveredValue,s.saleValue,s.price,perm.outgoingSalePrice,0)||0), inValue=Number(first(s.inValue,s.receivedVehicleValue,s.tradeInValue,perm.incomingValue,0)||0);
+ const direction=String(first(s.differenceDirection,perm.differenceDirection,'even')).toLowerCase();
+ const difference=Number(first(s.difference,s.cashDifference,perm.difference,Math.abs(outValue-inValue),r.amount,0)||0), differenceBy=String(first(s.differenceBy,s.paidBy,direction==='receive'?'CLIENTE':(direction==='pay'?'MULTI INVERSIONES JCP':'SIN DINERO DE ENCIMA'))).toUpperCase();
  let expenses=Array.isArray(s.expenseRows)?s.expenseRows:[];
  if(!expenses.length&&vo.id&&typeof getVehicleExpenseMovements==='function')expenses=getVehicleExpenseMovements(vo.id,data).map(m=>({concept:String(m.c||m.concept||m.descripcion||'GASTO VEHÍCULO').toUpperCase(),value:Number(m.v||m.value||m.amount||0)})).filter(x=>x.value>0);
  const expenseTotal=Number(s.expenseTotal!==undefined?s.expenseTotal:expenses.reduce((a,x)=>a+Number(x.value||0),0)), purchasePrice=Number(first(s.purchasePrice,vo.c,0)||0), investment=Number(s.investment!==undefined?s.investment:purchasePrice+expenseTotal);
- const profit=Number(s.profit!==undefined?s.profit:outValue-investment), margin=Number(s.margin!==undefined?s.margin:(investment?profit/investment*100:0));
+ const inheritedInvestment=Number(first(s.incomingInventoryValue,perm.incomingInventoryCost,perm.inheritedInvestment,investment-(direction==='receive'?difference:(direction==='pay'?-difference:0)),0)||0);
  return {co,ci,client,doc,phone:String(first(s.phone,s.clientPhone,perm.clientPhone,perm.phone,cl.telefono,'')||''),address:String(first(s.address,s.clientAddress,perm.clientAddress,perm.address,cl.direccion,'')||'').toUpperCase(),outValue,inValue,difference,differenceBy,
-  received:Number(first(s.received,differenceBy==='CLIENTE'?difference:0,0)||0),pending:Number(first(s.pending,0)||0),dist:s.paymentDistribution||{},expenses,expenseTotal,purchasePrice,investment,profit,margin,
-  incomingExpenses:Number(first(s.incomingInitialExpenses,s.inExpenses,0)||0),incomingValue:Number(first(s.incomingInventoryValue,s.entryValue,inValue,0)||0),obs:String(first(s.obs,s.observations,'')||'').toUpperCase(),date:String(r.date||s.date||''),number:String(r.number||'')};
+  received:Number(first(s.received,differenceBy==='CLIENTE'?difference:0,0)||0),pending:Number(first(s.pending,0)||0),dist:s.paymentDistribution||{},expenses,expenseTotal,purchasePrice,investment,inheritedInvestment,direction,
+  incomingExpenses:Number(first(s.incomingInitialExpenses,s.inExpenses,0)||0),incomingValue:inheritedInvestment,obs:String(first(s.obs,s.observations,'')||'').toUpperCase(),date:String(r.date||s.date||''),number:String(r.number||'')};
 }
 function tradeStyles(){return `*{box-sizing:border-box}html,body{margin:0;background:#050505;color:#fff;font-family:Arial,sans-serif}body{min-width:1180px;padding:15px}.tp{width:1140px;min-height:1540px;margin:0 auto 18px;padding:18px;border:1px solid #a47b14;border-radius:14px;background:#050505;position:relative;break-after:page}.th{display:grid;grid-template-columns:390px 1fr;align-items:center;border-bottom:3px solid #d8aa32;padding-bottom:12px}.logo{width:330px;max-height:90px;object-fit:contain}.title{text-align:right}.title h1{font-size:38px;line-height:.95;margin:0}.title span,h3{color:#d8aa32}.num{display:inline-block;margin-top:9px;border:1px solid #9f7718;border-radius:8px;padding:7px 24px}.num small{display:block;color:#d8aa32;font-weight:900}.num b{font-size:22px}.date{margin:12px 0;border:1px solid #8b6918;border-radius:8px;padding:9px;color:#d8aa32;font-weight:900}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.box{border:1px solid #967116;border-radius:9px;padding:11px;background:#090909}.box h3{margin:0 0 8px;font-size:13px;border-bottom:1px solid #624b13;padding-bottom:7px}.photo{width:100%;height:300px;object-fit:cover;border-radius:6px;border:1px solid #765912}.empty{height:300px;display:flex;align-items:center;justify-content:center;color:#777}.row,.doc{display:grid;grid-template-columns:140px 1fr;gap:6px;padding:3px 0;font-size:12px}.row span{color:#ccc}.doc span{color:#76df31;font-weight:900}.line{display:flex;justify-content:space-between;gap:15px;padding:6px 0;border-bottom:1px solid #33290d;font-size:12px}.line b{text-align:right}.total{background:linear-gradient(90deg,#bd8b1c,#e0b643);color:#111;font-weight:1000;padding:8px}.green{color:#7bea2a!important}.table{width:100%;border-collapse:collapse;font-size:10px}.table th,.table td{border:1px solid #49370e;padding:7px}.table th{color:#d8aa32}.table td:last-child,.table th:last-child{text-align:right}.foot{position:absolute;bottom:12px;left:18px;right:18px;text-align:center;color:#888;font-size:9px;border-top:1px solid #44340f;padding-top:7px}@media print{body{padding:0}.tp{border:0;margin:0;width:100%;min-height:0}@page{size:A4 portrait;margin:7mm}}`;}
 function tradeVehicle(title,c){
@@ -8104,8 +8106,8 @@ function tradeInternalSupportHtml(r){
  const table=(rows,last)=>`<table class="table"><thead><tr><th>#</th><th>CONCEPTO</th><th>VALOR</th></tr></thead><tbody>${rows.length?rows.map(x=>`<tr><td>${++ix}</td><td>${priceEsc(x.concept)}</td><td>${priceMoney(x.value)}</td></tr>`).join(''):`<tr><td colspan="3">SIN GASTOS RELACIONADOS</td></tr>`}${last?`<tr class="total"><td colspan="2">TOTAL GASTOS</td><td>${priceMoney(d.expenseTotal)}</td></tr>`:''}</tbody></table>`;
  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1180"><style>${tradeStyles()}</style></head><body>${chunks.map((rows,i)=>i?`<section class="tp"><div class="th">${logo?`<img class="logo" src="${priceEsc(logo)}">`:''}<div class="title"><h1>PERMUTA<br><span>DE VEHÍCULOS</span></h1><div class="num"><small>N° DE PERMUTA</small><b>${priceEsc(d.number)}</b></div></div></div><div class="box" style="margin-top:15px"><h3>💲 DESGLOSE DE GASTOS · CONTINUACIÓN · PÁG. ${i+1} DE ${chunks.length}</h3>${table(rows,i===chunks.length-1)}</div><div class="foot">SOPORTE INTERNO · PÁG. ${i+1} DE ${chunks.length}</div></section>`:`<section class="tp"><div class="th">${logo?`<img class="logo" src="${priceEsc(logo)}">`:''}<div class="title"><h1>PERMUTA<br><span>DE VEHÍCULOS</span></h1><div class="num"><small>N° DE PERMUTA</small><b>${priceEsc(d.number)}</b></div></div></div><div class="date">📅 FECHA DE LA PERMUTA &nbsp; <b style="color:#fff">${priceEsc(d.date)}</b></div><div class="two">${tradeVehicle('🚘 VEHÍCULO QUE SALE DEL INVENTARIO',d.co)}${tradeVehicle('🚘 VEHÍCULO QUE ENTRA AL INVENTARIO',d.ci)}</div>
  <div class="box" style="margin-top:12px"><h3>👤 DATOS DEL CLIENTE</h3><div class="two"><div><div class="line"><span>NOMBRE</span><b>${priceEsc(d.client)}</b></div><div class="line"><span>TELÉFONO</span><b>${priceEsc(d.phone||'SIN REGISTRAR')}</b></div></div><div><div class="line"><span>IDENTIFICACIÓN</span><b>${priceEsc(d.doc||'SIN REGISTRAR')}</b></div><div class="line"><span>DIRECCIÓN</span><b>${priceEsc(d.address||'SIN REGISTRAR')}</b></div></div></div></div>
- <div class="two" style="margin-top:12px"><div class="box"><h3>📤 VEHÍCULO QUE SALE</h3><div class="line"><span>PRECIO DE COMPRA</span><b>${priceMoney(d.purchasePrice)}</b></div><div class="line"><span>GASTOS RELACIONADOS</span><b>${priceMoney(d.expenseTotal)}</b></div><div class="line"><span>INVERSIÓN TOTAL</span><b>${priceMoney(d.investment)}</b></div><div class="line total"><span>VALOR EN PERMUTA</span><b>${priceMoney(d.outValue)}</b></div></div><div class="box"><h3>📥 VEHÍCULO QUE ENTRA</h3><div class="line"><span>VALOR EN PERMUTA</span><b>${priceMoney(d.inValue)}</b></div><div class="line"><span>GASTOS INICIALES</span><b>${priceMoney(d.incomingExpenses)}</b></div><div class="line total"><span>VALOR DE ENTRADA</span><b>${priceMoney(d.incomingValue)}</b></div></div></div>
- <div class="box" style="margin-top:12px"><h3>📊 RESULTADO DE LA OPERACIÓN</h3><div class="line"><span>INVERSIÓN VEHÍCULO QUE SALE</span><b>${priceMoney(d.investment)}</b></div><div class="line"><span>VALOR RECONOCIDO POR EL QUE SALE</span><b>${priceMoney(d.outValue)}</b></div><div class="line"><span>VALOR VEHÍCULO QUE ENTRA</span><b>${priceMoney(d.inValue)}</b></div><div class="line"><span>DIFERENCIA DE DINERO</span><b>${priceMoney(d.difference)}</b></div><div class="line total"><span>UTILIDAD DE LA OPERACIÓN</span><b class="green">${priceMoney(d.profit)}</b></div><div class="line"><span>MARGEN DE UTILIDAD</span><b>${d.margin.toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2})}%</b></div></div>
+ <div class="two" style="margin-top:12px"><div class="box"><h3>📤 VEHÍCULO QUE SALE</h3><div class="line"><span>PRECIO DE COMPRA / SALDO HEREDADO</span><b>${priceMoney(d.purchasePrice)}</b></div><div class="line"><span>GASTOS RELACIONADOS</span><b>${priceMoney(d.expenseTotal)}</b></div><div class="line total"><span>INVERSIÓN REAL ACUMULADA</span><b>${priceMoney(d.investment)}</b></div></div><div class="box"><h3>📥 VEHÍCULO QUE ENTRA</h3><div class="line"><span>DINERO DE ENCIMA</span><b>${priceMoney(d.difference)}</b></div><div class="line"><span>MOVIMIENTO</span><b>${priceEsc(d.differenceBy)}</b></div><div class="line total"><span>SALDO DE INVERSIÓN HEREDADO</span><b>${priceMoney(d.inheritedInvestment)}</b></div></div></div>
+ <div class="box" style="margin-top:12px"><h3>📊 TRATAMIENTO FINANCIERO</h3><div class="line"><span>INVERSIÓN VEHÍCULO QUE SALE</span><b>${priceMoney(d.investment)}</b></div><div class="line"><span>DIFERENCIA FÍSICA DE DINERO</span><b>${priceMoney(d.difference)}</b></div><div class="line total"><span>SALDO TRASLADADO AL VEHÍCULO RECIBIDO</span><b>${priceMoney(d.inheritedInvestment)}</b></div><div class="line"><span>RECONOCIMIENTO DE UTILIDAD</span><b>APLAZADO HASTA LA VENTA FINAL POR DINERO</b></div></div>
  <div class="box" style="margin-top:12px"><h3>💲 DESGLOSE DE GASTOS RELACIONADOS</h3>${table(rows,chunks.length===1)}</div><div class="box" style="margin-top:12px"><h3>📝 OBSERVACIONES INTERNAS</h3><div style="min-height:65px;font-size:10px">${priceEsc(d.obs||'SIN OBSERVACIONES REGISTRADAS.')}</div></div><div class="foot">SOPORTE INTERNO (CONTROL) · PÁG. 1 DE ${chunks.length}</div></section>`).join('')}</body></html>`;
 }
 function standardSupportHtml(r){
@@ -10258,33 +10260,27 @@ function togglePermutaMixedPayment(){
 function updatePermutaCalculations(){
   const outgoing=data.veh.find(v=>String(v.id)===String(selectedPermutaVehicleId));
   const outgoingInvestment=outgoing?((+outgoing.c||0)+(+outgoing.g||0)):0;
-  const outgoingSalePrice=numericValue('permutaSalePrice');
-  const incomingValue=numericValue('permutaInTotalCost');
-  const signedDifference=outgoingSalePrice-incomingValue;
-  const difference=Math.abs(signedDifference);
-  const rawProfit=outgoingSalePrice-outgoingInvestment;
-  const status=signedDifference>0?'receive':(signedDifference<0?'pay':'even');
-  // Regla V71: si MULTI INVERSIONES JCP debe dar encima, no se reconoce
-  // utilidad en la salida. El resultado se reconocerá al vender el vehículo recibido.
-  const profit=status==='pay'?0:rawProfit;
+  const requestedStatus=document.getElementById('permutaDifferenceDirection')?.value||'even';
+  const enteredDifference=numericValue('permutaDifferenceAmount');
+  const status=requestedStatus==='receive'?'receive':(requestedStatus==='pay'?'pay':'even');
+  const difference=status==='even'?0:enteredDifference;
+  const signedDifference=status==='receive'?difference:(status==='pay'?-difference:0);
   const statusText=status==='receive'?'DIFERENCIA A RECIBIR':(status==='pay'?'DIFERENCIA A PAGAR':'PERMUTA MANO A MANO');
-  // V57: el costo contable del vehículo que entra parte de la inversión real del
-  // vehículo que sale. Si recibimos encima, se resta; si pagamos encima, se suma.
+  // El vehículo recibido hereda el costo real pendiente de la cadena. El dinero
+  // físico se descuenta o suma una sola vez; aquí no se reconoce utilidad.
   const incomingInventoryCost=outgoingInvestment-signedDifference;
   const summary=document.getElementById('permutaSummary');
   if(summary){
     summary.innerHTML=`
-      <div class="permuta-balance-card"><span>Valor venta vehículo que sale</span><b>${money(outgoingSalePrice)}</b></div>
-      <div class="permuta-balance-card"><span>Valor acordado vehículo que ingresa</span><b>${money(incomingValue)}</b></div>
+      <div class="permuta-balance-card"><span>Inversión real acumulada que sale</span><b>${money(outgoingInvestment)}</b></div>
       <div class="permuta-balance-card highlight"><span>${statusText}</span><b>${money(difference)}</b><div class="permuta-diff-status ${status}">${statusText}</div></div>
-      <div class="permuta-balance-card profit"><span>Utilidad del vehículo que sale</span><b>${money(profit)}</b>${status==='pay'?'<small style="display:block;margin-top:5px;color:#aaa">UTILIDAD DIFERIDA HASTA LA VENTA DEL VEHÍCULO RECIBIDO</small>':''}</div>
-      <div class="permuta-balance-card"><span>Inversión real vehículo que sale</span><b>${money(outgoingInvestment)}</b></div>
-      <div class="permuta-balance-card"><span>Costo de entrada ajustado (costo ± encima)</span><b>${money(incomingInventoryCost)}</b></div>`;
+      <div class="permuta-balance-card"><span>Saldo heredado del vehículo recibido</span><b style="color:${incomingInventoryCost<0?'#ff6868':'#d8aa32'}">${money(incomingInventoryCost)}</b></div>
+      <div class="permuta-balance-card profit"><span>Resultado de la permuta</span><b>UTILIDAD DIFERIDA</b><small style="display:block;margin-top:5px;color:#aaa">SE RECONOCERÁ ÚNICAMENTE EN LA VENTA FINAL POR DINERO</small></div>`;
   }
   const block=document.getElementById('permutaPaymentBlock');
   if(block){block.style.display=difference>0?'block':'none';block.dataset.total=String(difference);}
   if(difference<=0)clearPaymentDistribution('permuta');else updatePaymentDistribution('permuta');
-  return {outgoingInvestment,outgoingSalePrice,incomingValue,incomingInventoryCost,signedDifference,difference,profit,rawProfit,status,statusText};
+  return {outgoingInvestment,incomingInventoryCost,signedDifference,difference,status,statusText};
 }
 async function previewPermutaPhotos(){
   const input=document.getElementById('permutaInPhotos');
@@ -10312,7 +10308,8 @@ function clearPermutaForm(){
   ['permutaClientName','permutaClientDoc','permutaClientPhone','permutaClientAddress'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   const pcs=document.getElementById('permutaClientSuggestions');if(pcs){pcs.innerHTML='';pcs.style.display='none';}
 
-  ['permutaSalePrice','permutaInMarca','permutaInRef','permutaInModelo','permutaInPlaca','permutaInTotalCost','permutaCash','permutaTransfer','permutaObs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['permutaInMarca','permutaInRef','permutaInModelo','permutaInPlaca','permutaDifferenceAmount','permutaCash','permutaTransfer','permutaObs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const differenceDirection=document.getElementById('permutaDifferenceDirection');if(differenceDirection)differenceDirection.value='even';
   const method=document.getElementById('permutaPayMethod');if(method)method.value='efectivo';
   const photos=document.getElementById('permutaInPhotos');if(photos)photos.value='';
   const preview=document.getElementById('permutaPhotoPreview');if(preview)preview.innerHTML='';
@@ -10350,7 +10347,7 @@ function renderPermutaHistory(){
   const el=document.getElementById('permutaHistoryList');if(!el)return;
   const rows=(data.permutas||[]).map((x,i)=>({x,i})).sort((a,b)=>permutaTimestamp(b.x,b.i)-permutaTimestamp(a.x,a.i)).map(o=>o.x);
   if(!rows.length){el.innerHTML='<div class="empty">No hay permutas registradas.</div>';return;}
-  el.innerHTML=list(rows,['Fecha','Vehículo que salió','Vehículo que ingresó','Valor salida','Valor ingreso','Encima','Resultado','Costo entrada','Utilidad'],x=>{
+  el.innerHTML=list(rows,['Fecha','Vehículo que salió','Vehículo que ingresó','Encima','Movimiento','Saldo heredado','Reconocimiento'],x=>{
     const out=x.outgoingVehicle||{}, inc=x.incomingVehicle||{};
     const dir=x.differenceDirection||'even';
     const result=dir==='receive'?'A RECIBIR':(dir==='pay'?'A PAGAR':'MANO A MANO');
@@ -10358,8 +10355,7 @@ function renderPermutaHistory(){
     return [x.date||'SIN FECHA',
       (out.marca||'')+' '+(out.ref||'')+(out.pl?' — '+out.pl:''),
       (inc.marca||'')+' '+(inc.ref||'')+(inc.pl?' — '+inc.pl:''),
-      money(x.outgoingSalePrice||0),money(x.incomingValue||0),money(x.difference||0),
-      jcpSafeHtml('<span class="'+cls+'">'+clientEsc(result)+'</span>'),money(x.incomingInventoryCost||0),money(x.profit||0)];
+      money(x.difference||0),jcpSafeHtml('<span class="'+cls+'">'+clientEsc(result)+'</span>'),money(x.incomingInventoryCost||0),'DIFERIDO HASTA VENTA FINAL'];
   });
 }
 
@@ -10411,10 +10407,8 @@ async function savePermuta(){
     const clientAddress=(document.getElementById('permutaClientAddress')?.value||'').trim().toUpperCase();
     if(!client||!clientDoc){alert('COMPLETA NOMBRE Y DOCUMENTO DEL CLIENTE.');return false;}
 
-    if(calc.outgoingSalePrice<=0){alert('INGRESA EL VALOR DE VENTA ACORDADO DEL VEHÍCULO QUE SALE.');return false;}
     if(!inMarca||!inRef||!inModelo){alert('COMPLETA MARCA, REFERENCIA Y MODELO DEL VEHÍCULO QUE INGRESA.');return false;}
-    if(calc.incomingValue<=0){alert('INGRESA EL VALOR ACORDADO DEL VEHÍCULO QUE INGRESA.');return false;}
-    if(calc.incomingInventoryCost<0){alert('EL COSTO AJUSTADO DEL VEHÍCULO QUE INGRESA NO PUEDE SER NEGATIVO.');return false;}
+    if(calc.status!=='even'&&calc.difference<=0){alert('INGRESA EL VALOR REAL DEL DINERO DE ENCIMA.');return false;}
 
     if(calc.difference>0&&!validatePaymentDistribution('permuta',calc.difference))return false;
     const differenceDistribution=calc.difference>0?paymentDistribution('permuta'):{};
@@ -10438,17 +10432,18 @@ async function savePermuta(){
       photo:photos[0]||'',photos,
       purchaseDate:dateTime,createdAt:iso,
       origen:'permuta',status:'inventario',active:true,
-      permutaId,permutaAgreedValue:calc.incomingValue
+      permutaId,inheritedInvestment:calc.incomingInventoryCost,
+      tradeChainRootId:outgoing.tradeChainRootId||outgoing.permutaId||outgoing.id
     };
     const record={id:permutaId,date:dateTime,createdAt:iso,outgoingVehicleId:outgoing.id,
       outgoingVehicle:{marca:outgoing.marca||outgoing.m||'',ref:outgoing.ref||'',modelo:outgoing.modelo||'',pl:outgoing.pl||'',photo:outgoing.photo||'',photos:Array.isArray(outgoing.photos)?outgoing.photos:[]},
-      outgoingInvestment:calc.outgoingInvestment,outgoingSalePrice:calc.outgoingSalePrice,profit:calc.profit,rawProfit:calc.rawProfit,
+      outgoingInvestment:calc.outgoingInvestment,profit:0,profitRecognition:'deferred',
       incomingVehicleId:incoming.id,incomingVehicle:{
         id:incoming.id,marca:inMarca,m:inMarca,ref:inRef,modelo:inModelo,pl:inPlaca,
         c:calc.incomingInventoryCost,g:0,v:0,photo:incoming.photo,photos,
         purchaseDate:dateTime,createdAt:iso,origen:'permuta',status:'inventario',active:true,permutaId
       },
-      incomingValue:calc.incomingValue,incomingInventoryCost:calc.incomingInventoryCost,difference:calc.difference,differenceDirection:calc.status,
+      incomingInventoryCost:calc.incomingInventoryCost,inheritedInvestment:calc.incomingInventoryCost,difference:calc.difference,differenceDirection:calc.status,
       client,buyer:client,clientDoc,doc:clientDoc,clientPhone,phone:clientPhone,clientAddress,address:clientAddress,
       paymentDistribution:differenceDistribution,obs};
 
@@ -10465,13 +10460,13 @@ async function savePermuta(){
     }
 
     const nextData={...cloneAppData(data),veh:nextVeh,mov:nextMov,permutas:nextPerms};ensureTreasuryState(nextData);
-    const receipt=addInternalReceipt(nextData,'trade',{entityId:permutaId,vehicleId:incomingId,amount:calc.incomingValue,plate:inPlaca,title:'PERMUTA — '+((outgoing.marca||outgoing.m||'')+' '+(outgoing.ref||'')).trim()+' ↔ '+inMarca+' '+inRef,date:dateTime,createdAt:iso,snapshot:{
+    const receipt=addInternalReceipt(nextData,'trade',{entityId:permutaId,vehicleId:incomingId,amount:calc.difference,plate:inPlaca,title:'PERMUTA — '+((outgoing.marca||outgoing.m||'')+' '+(outgoing.ref||'')).trim()+' ↔ '+inMarca+' '+inRef,date:dateTime,createdAt:iso,snapshot:{
       outgoing:((outgoing.marca||outgoing.m||'')+' '+(outgoing.ref||'')+(outgoing.pl?' — '+outgoing.pl:'')).trim(),
       incoming:(inMarca+' '+inRef+(inPlaca?' — '+inPlaca:'')).trim(),
       outVehicleId:outgoing.id,inVehicleId:incoming.id,
       outVehicle:cloneAppData(typeof getVehicleCommercialSnapshot==='function'?getVehicleCommercialSnapshot(outgoing):outgoing),
       inVehicle:cloneAppData(typeof getVehicleCommercialSnapshot==='function'?getVehicleCommercialSnapshot(incoming):incoming),
-      outValue:calc.outgoingSalePrice,inValue:calc.incomingValue,incomingInventoryValue:calc.incomingInventoryCost,
+      outgoingInvestment:calc.outgoingInvestment,incomingInventoryValue:calc.incomingInventoryCost,
       difference:calc.difference,differenceDirection:calc.status,
       differenceBy:calc.status==='receive'?'CLIENTE':'MULTI INVERSIONES JCP',
       client,buyer:client,clientDoc,doc:clientDoc,clientPhone,phone:clientPhone,clientAddress,address:clientAddress,
@@ -11197,8 +11192,10 @@ function getFinancialSnapshotV75(){
   const saleProfit=data.sold
     .filter(x=>x.status!=='permuta'&&!x.permuta&&!x.sale?.voided&&x.status!=='venta_anulada')
     .reduce((a,x)=>a+((+x.sale?.price||0)-((+x.c||0)+(+x.g||0))),0);
-  const permutaProfit=data.permutas.reduce((a,x)=>a+(+x.profit||0),0);
-  const grossProfit=saleProfit+permutaProfit;
+  // Una permuta transfiere el saldo pendiente al vehículo recibido. No realiza
+  // utilidad; esta nace únicamente al vender el último vehículo por dinero.
+  const permutaProfit=0;
+  const grossProfit=saleProfit;
 
   const operatingExpenses=m
     .filter(x=>!x.voided&&x.t==='gasto'&&(x.subtype==='gasto_operativo'||x.subtype==='varios'))
@@ -11396,7 +11393,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.17.10\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.18.1\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -11951,7 +11948,7 @@ window.renderObligationHistory=function(){
     const sales=(data.sold||[]).filter(x=>inRange(x.sale||x));
     const sProfit=sales.reduce((a,x)=>a+((+x.sale?.price||0)-((+x.c||0)+(+x.g||0))),0);
     const perms=(data.permutas||[]).filter(inRange);
-    const pProfit=perms.reduce((a,x)=>a+(+x.profit||0),0);
+    const pProfit=0;
     const op=(data.mov||[]).filter(x=>inRange(x)&&x.t==='gasto'&&(x.subtype==='gasto_operativo'||x.subtype==='varios')).reduce((a,x)=>a+(+x.v||0),0);
     const withdrawals=(data.mov||[]).filter(x=>inRange(x)&&x.t==='gasto'&&x.subtype==='retiro_ganancias').reduce((a,x)=>a+(+x.v||0),0);
     const gross=sProfit+pProfit,net=gross-op;
@@ -14180,11 +14177,11 @@ function setAccountingTab(tab){
 function accountingCoverageNote(){
   const legacyLoans=(data.pres||[]).filter(x=>!x.createdAt&&!x.date).length;
   const legacyInv=(data.inv||[]).filter(x=>!x.createdAt&&!x.date).length;
-  const deferred=(data.permutas||[]).filter(x=>accNum(x.profit)>0).reduce((s,x)=>s+accNum(x.profit),0);
+  const deferred=(data.permutas||[]).reduce((s,x)=>s+Math.abs(accNum(x.incomingInventoryCost)),0);
   const bits=[];
   if(legacyLoans)bits.push(legacyLoans+' préstamo(s) histórico(s) sin fecha se presentan como APERTURA');
   if(legacyInv)bits.push(legacyInv+' inversión(es) histórica(s) sin fecha se presentan como APERTURA');
-  if(deferred>0)bits.push('utilidad administrativa de permutas diferida contablemente: '+accFmt(deferred));
+  if(deferred>0)bits.push('las permutas mantienen su saldo de inversión diferido hasta la venta final; no generan utilidad inmediata');
   return bits;
 }
 function accountingQualityHtml(report,label){
@@ -15198,7 +15195,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.17.10',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.18.1',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -15220,7 +15217,7 @@ window.openRecordCopy=function(number){
     {id:'obligations',label:'Obligaciones y financiaciones',sheet:'Obligaciones',build:()=>({headers:['Fecha','Tipo','Concepto / acreedor','Valor','Pagado','Saldo','Estado','Usuario'],rows:(data.capitalOps||[]).map(x=>[fmtDate(recordDate(x)),cleanLabel(val(x,'type','tipo')),val(x,'concept','concepto','creditor','acreedor'),num(x,'value','valor','capital'),num(x,'paid','pagado','abonos'),num(x,'balance','saldo')||Math.max(0,num(x,'value','valor','capital')-num(x,'paid','pagado','abonos')),val(x,'status','estado'),actor(x)])})},
     {id:'treasury',label:'Tesorería y cuentas',sheet:'Tesorería',build:()=>({headers:['Fecha','Cuenta','Tipo','Concepto','Entrada','Salida','Soporte','Usuario'],rows:(data.treasuryMovements||[]).map(x=>{const amount=num(x,'amount','valor','value'),incoming=String(val(x,'direction','tipo')).toLowerCase()==='in';return [fmtDate(recordDate(x)),val(x,'accountName','cuenta')||'Cuenta sin nombre',incoming?'ENTRADA':'SALIDA',val(x,'concept','concepto'),incoming?amount:0,incoming?0:amount,val(x,'receiptNumber','soporte'),actor(x)]})})},
     {id:'investments',label:'Inversiones',sheet:'Inversiones',build:()=>({headers:['Fecha','Nombre','Capital','Ganancia esperada','Valor proyectado','Estado','Usuario'],rows:(data.inv||[]).map(x=>{const c=num(x,'c','capital'),g=num(x,'g','gain','ganancia');return [fmtDate(recordDate(x)),val(x,'n','nombre','name'),c,g,c+g,val(x,'status','estado')||'ACTIVA',actor(x)]})})},
-    {id:'trades',label:'Permutas',sheet:'Permutas',build:()=>({headers:['Fecha','Vehículo entregado','Valor entregado','Vehículo recibido','Valor recibido','Diferencia','Resultado','Usuario'],rows:(data.permutas||[]).map(x=>[fmtDate(recordDate(x)),val(x,'outgoingVehicle','outgoingVehicleName','vehiculoSale'),num(x,'outValue','outgoingValue'),val(x,'incomingVehicle','incomingVehicleName','vehiculoEntra'),num(x,'inValue','incomingValue'),num(x,'difference','cashDifference'),num(x,'profit','utilidad'),actor(x)])})},
+    {id:'trades',label:'Permutas',sheet:'Permutas',build:()=>({headers:['Fecha','Vehículo entregado','Vehículo recibido','Dinero de encima','Dirección','Saldo heredado','Reconocimiento','Usuario'],rows:(data.permutas||[]).map(x=>[fmtDate(recordDate(x)),val(x,'outgoingVehicle','outgoingVehicleName','vehiculoSale'),val(x,'incomingVehicle','incomingVehicleName','vehiculoEntra'),num(x,'difference','cashDifference'),val(x,'differenceDirection')==='receive'?'RECIBIDO':(val(x,'differenceDirection')==='pay'?'ENTREGADO':'SIN DIFERENCIA'),num(x,'incomingInventoryCost','inheritedInvestment'),'DIFERIDO HASTA VENTA FINAL',actor(x)])})},
     {id:'movements',label:'Movimientos',sheet:'Movimientos',build:()=>({headers:['Fecha','Tipo','Departamento','Concepto','Entrada','Salida','Soporte','Usuario'],rows:(data.mov||[]).map(x=>{const amount=num(x,'v','value','valor','amount'),incoming=x.t==='ingreso';return [fmtDate(recordDate(x)),cleanLabel(val(x,'t','type','tipo')),cleanLabel(val(x,'subtype','department','departamento')),val(x,'c','concept','concepto'),incoming?amount:0,incoming?0:amount,val(x,'receiptNumber','soporte'),actor(x)]})})},
     {id:'supports',label:'Soportes y comprobantes',sheet:'Soportes',build:()=>({headers:['Número','Fecha','Tipo','Departamento','Concepto','Valor','Usuario'],rows:(data.receipts||[]).map(x=>[val(x,'number','receiptNumber'),fmtDate(recordDate(x)),cleanLabel(val(x,'type','tipo')),cleanLabel(val(x,'operationType','department','departamento')),val(x,'concept','title','concepto'),num(x,'amount','valor','value'),actor(x)])})},
     {id:'history',label:'Historial de usuarios',sheet:'Historial usuarios',build:()=>({headers:['Fecha y hora','Usuario','Correo','Acción','Detalle'],rows:(data.activityLog||[]).map(x=>[fmtDate(recordDate(x)),val(x,'actorName','usuario')||'Sin usuario registrado',val(x,'actorEmail','correo'),val(x,'action','accion'),val(x,'summary','detail','detalle')])})}
@@ -15244,6 +15241,6 @@ window.openRecordCopy=function(number){
   document.addEventListener('DOMContentLoaded',()=>{install();const overlay=document.getElementById('jcpExcelOverlay');overlay.onclick=e=>{if(e.target===overlay)close();};document.getElementById('jcpExcelClose').onclick=close;document.getElementById('jcpExcelCancel').onclick=close;document.getElementById('jcpExcelGenerate').onclick=generate;document.getElementById('jcpExcelAll').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=true);document.getElementById('jcpExcelNone').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=false);document.querySelectorAll('[name="jcpExcelPeriod"]').forEach(x=>x.onchange=()=>document.getElementById('jcpExcelDates').hidden=x.value!=='range'||!x.checked);});
 })();
 </script>
-<script src="./app-update.js?v=2026.09.17.10"></script>
+<script src="./app-update.js?v=2026.09.18.1"></script>
 </body>
 </html>
