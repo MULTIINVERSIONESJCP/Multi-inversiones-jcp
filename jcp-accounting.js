@@ -10,7 +10,7 @@
     '111015':{name:'DAVIPLATA',type:'asset',group:'ACTIVOS'},
     '111020':{name:'NEQUI',type:'asset',group:'ACTIVOS'},
     '119999':{name:'DISPONIBLE SIN CUENTA IDENTIFICADA',type:'asset',group:'ACTIVOS'},
-    '130505':{name:'CUENTAS POR COBRAR — VENTAS',type:'asset',group:'ACTIVOS'},
+    '130505':{name:'CUENTAS POR COBRAR — VENTAS Y PERMUTAS',type:'asset',group:'ACTIVOS'},
     '130510':{name:'PRÉSTAMOS POR COBRAR',type:'asset',group:'ACTIVOS'},
     '143505':{name:'INVENTARIO DE VEHÍCULOS',type:'asset',group:'ACTIVOS'},
     '149005':{name:'OTRAS INVERSIONES',type:'asset',group:'ACTIVOS'},
@@ -134,17 +134,36 @@
       const a=meta(s,'acc_sale_'+(s.id||v.id),'VENTA '+(v.pl||''),{source:'vehicle_sale'});
       const cash=moneyLines(a,received,'in',s,[v.id]);
       push(a,[...cash,line('130505',pending),line('413505',0,price)]);
-      push({...a,id:a.id+'_cost',concept:'COSTO '+a.concept},[line('613505',cost),line('143505',0,cost)]);
+      if(cost>=0){
+        push({...a,id:a.id+'_cost',concept:'COSTO '+a.concept},[line('613505',cost),line('143505',0,cost)]);
+      }else{
+        // Una cadena de permuta puede dejar un saldo de inversión negativo.
+        // Al vender el último vehículo se cancela ese saldo acreedor de inventario
+        // y se reconoce como resultado únicamente en ese momento.
+        push({...a,id:a.id+'_trade_result',concept:'RESULTADO DIFERIDO '+a.concept},[line('143505',Math.abs(cost)),line('421005',0,Math.abs(cost))]);
+      }
       if(s.voided){
         const r=meta({createdAt:s.voidedAt,date:s.voidedAt},a.id+'_void','REVERSIÓN '+a.concept,{isReversal:true});
         push(r,[line('413505',price),...moneyLines(r,received,'out',s,[v.id]),line('130505',0,pending)]);
-        push({...r,id:r.id+'_cost'},[line('143505',cost),line('613505',0,cost)]);
+        if(cost>=0)push({...r,id:r.id+'_cost'},[line('143505',cost),line('613505',0,cost)]);
+        else push({...r,id:r.id+'_trade_result'},[line('421005',Math.abs(cost)),line('143505',0,Math.abs(cost))]);
       }
     }
     for(const [i,p] of list(state.permutas).entries()){
       const a=meta(p,'acc_perm_'+(p.id||i),'PERMUTA '+(p.outgoingVehicle?.pl||'')+' → '+(p.incomingVehicle?.pl||''),{cashClass:'investing'});
-      const lines=[line('143505',p.incomingInventoryCost),line('143505',0,p.outgoingInvestment)];
-      if(num(p.difference)>0&&['receive','pay'].includes(p.differenceDirection))lines.push(...moneyLines(a,num(p.difference),p.differenceDirection==='receive'?'in':'out',p));
+      const incomingCost=num(p.incomingInventoryCost),outgoingCost=num(p.outgoingInvestment),difference=num(p.difference);
+      const pending=Math.max(0,num(p.pending));
+      const received=p.received===undefined?Math.max(0,difference-pending):Math.max(0,num(p.received));
+      const lines=[
+        incomingCost>=0?line('143505',incomingCost):line('143505',0,Math.abs(incomingCost)),
+        line('143505',0,outgoingCost)
+      ];
+      if(difference>0&&p.differenceDirection==='receive'){
+        if(received>0)lines.push(...moneyLines(a,received,'in',p));
+        if(pending>0)lines.push(line('130505',pending,0,'SALDO PENDIENTE DE PERMUTA'));
+      }else if(difference>0&&p.differenceDirection==='pay'){
+        lines.push(...moneyLines(a,difference,'out',p));
+      }
       push(a,lines);
     }
     for(const [i,p] of list(state.pres).entries()){
