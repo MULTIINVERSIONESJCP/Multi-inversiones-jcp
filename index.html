@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.19.4</title>
+<title>MULTI INVERSIONES JCP - V2026.09.19.5</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5356,8 +5356,8 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.19.4"></script>
-<script src="./jcp-sync.js?v=2026.09.19.4"></script>
+<script src="./jcp-accounting.js?v=2026.09.19.5"></script>
+<script src="./jcp-sync.js?v=2026.09.19.5"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -8171,7 +8171,15 @@ function standardSupportHtml(r){
   if(String(r?.type||'').toLowerCase()==='sale')return saleClientSupportHtml(r);
   if(['trade','permuta','swap'].includes(String(r?.type||'').toLowerCase()))return tradeClientSupportHtml(r);
   const logo=supportLogoSrc(),snap=r.snapshot||{},rows=Array.isArray(snap.rows)?snap.rows:[];
-  const detail=rows.length?`<div class="detail"><h3>DETALLE</h3>${rows.map(x=>`<div class="row"><span>${priceEsc(x.c||x.label||'DETALLE')}</span><b>${priceMoney(Number(x.v||x.value||0))}</b></div>`).join('')}</div>`:'';
+  const cap=s=>{s=String(s||'').trim();return s?s.charAt(0).toUpperCase()+s.slice(1).toLowerCase():s;};
+  const niceDate=v=>{const m=String(v||'').match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4}),?\s*(.*)$/);if(!m)return String(v||'');const y=m[3].length===2?'20'+m[3]:m[3];return m[1].padStart(2,'0')+'/'+m[2].padStart(2,'0')+'/'+y+(m[4]?' · '+m[4]:'');};
+  const plate=String(r.plate||'').trim();
+  let concept=String(r.title||r.concept||'').trim();
+  if(plate)concept=concept.replace(new RegExp('\\s*[—–-]\\s*'+plate.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\s*$','i'),'').trim();
+  if(String(r.type||'').toLowerCase()==='vehicle_expense')concept='GASTOS DE VEHÍCULO';
+  const vehTxt=[snap.marca,snap.ref].filter(Boolean).join(' ')+(snap.modelo?((snap.marca||snap.ref)?' · ':'')+snap.modelo:'');
+  const stRaw=String(r.status||'ACTIVE').toUpperCase(),stLabel=stRaw==='ACTIVE'?'VIGENTE':stRaw;
+  const detail=rows.length?`<div class="detail"><h3>DETALLE · ${rows.length} concepto${rows.length===1?'':'s'}</h3>${rows.map(x=>`<div class="row"><span>${priceEsc(cap(x.c||x.label||'Detalle'))}</span><b>${priceMoney(Number(x.v||x.value||0))}</b></div>`).join('')}</div>`:'';
   const extra=[];const put=(l,v)=>{if(v!==undefined&&v!==null&&String(v).trim()!=='')extra.push([l,String(v)]);};
   put('Tipo de operación',snap.operationType||snap.typeLabel||'');put('Vehículo que sale',snap.outgoing||'');put('Vehículo que ingresa',snap.incoming||'');
   if(snap.previousBalance!==undefined)put('Saldo anterior',priceMoney(Number(snap.previousBalance||0)));
@@ -8179,17 +8187,18 @@ function standardSupportHtml(r){
   if(snap.interest!==undefined)put('Interés',priceMoney(Number(snap.interest||0)));
   if(snap.gain!==undefined)put('Ganancia esperada',priceMoney(Number(snap.gain||0)));
   put('Período',snap.period||'');put('Observaciones',snap.obs||'');
-  return `<!doctype html><html><head><meta charset="utf-8"><title>${priceEsc(r.number||'SOPORTE')}</title><style>
-  *{box-sizing:border-box}body{margin:0;padding:26px;background:#f3f3f3;color:#111;font-family:Arial,sans-serif}.sheet{max-width:760px;margin:auto;background:#fff;border:1px solid #d6d6d6;padding:28px 32px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
-  .head{display:flex;align-items:center;gap:22px;border-bottom:3px solid #c49a21;padding-bottom:16px}.logo{width:240px;max-height:78px;object-fit:contain;object-position:left center}.brand-text{flex:1;text-align:right}.brand-text h1{font-size:22px;margin:0 0 5px;font-weight:900}.brand-text h2{font-size:14px;margin:0;color:#8a6a13;text-transform:uppercase}
-  .numline{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:20px 0 12px}.num{font-size:25px;font-weight:900}.status{padding:6px 11px;border:1px solid ${r.status==='ANULADO'?'#a33':'#28774b'};color:${r.status==='ANULADO'?'#a33':'#28774b'};font-size:11px;font-weight:900;border-radius:5px}
-  .row{display:flex;justify-content:space-between;gap:24px;border-bottom:1px solid #e4e4e4;padding:9px 0;font-size:12px}.row span{color:#555}.row b{text-align:right;overflow-wrap:anywhere}.detail{margin-top:18px}.detail h3{font-size:12px;color:#8a6a13;border-bottom:2px solid #c49a21;padding-bottom:6px;margin-bottom:4px}.total{margin-top:8px;font-size:18px;font-weight:900;border-top:2px solid #111;border-bottom:0}.void{margin-top:18px;padding:13px;border:2px solid #a33;color:#a33;font-weight:800}.footer{margin-top:24px;padding-top:12px;border-top:1px solid #ddd;font-size:9px;color:#777;text-align:center}.actions{max-width:760px;margin:12px auto 0;text-align:right}.actions button{padding:10px 15px;border:0;border-radius:7px;background:#111;color:#fff;font-weight:800}@media print{body{background:#fff;padding:0}.sheet{box-shadow:none;border:0}.actions{display:none}}</style></head><body><div class="sheet">
-  <div class="head">${logo?`<img class="logo" src="${priceEsc(logo)}">`:''}<div class="brand-text"><h1>MULTI INVERSIONES JCP</h1><h2>${priceEsc(receiptTypeLabel(r.type))}</h2></div></div>
-  <div class="numline"><div class="num">${priceEsc(r.number||'')}</div><span class="status">${priceEsc(r.status||'ACTIVE')}</span></div>
-  <div class="row"><span>Fecha</span><b>${priceEsc(r.date||'')}</b></div><div class="row"><span>Operación / concepto</span><b>${priceEsc(r.title||r.concept||'')}</b></div>
-  ${r.plate?`<div class="row"><span>Placa</span><b>${priceEsc(r.plate)}</b></div>`:''}${r.party?`<div class="row"><span>Cliente / tercero</span><b>${priceEsc(r.party)}</b></div>`:''}${r.method?`<div class="row"><span>Medio</span><b>${priceEsc(r.method)}</b></div>`:''}
+  return `<!doctype html><html><head><meta charset="utf-8"><title>Soporte ${priceEsc(r.number||'')}</title><style>
+  *{box-sizing:border-box}body{margin:0;padding:26px;background:#f3f3f3;color:#111;font-family:Arial,sans-serif}.sheet{max-width:760px;margin:auto;background:#fff;border:1px solid #d6d6d6;padding:24px 30px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+  .sh-head{display:flex;align-items:center;gap:16px;border-bottom:3px solid #c49a21;padding-bottom:14px}.sh-logo{width:120px;max-height:66px;object-fit:contain;object-position:left center;flex:none}.sh-text{min-width:0}.sh-text h1{font-size:19px;margin:0 0 5px;font-weight:900;line-height:1.15}.sh-text h2{font-size:12px;margin:0;color:#8a6a13;text-transform:uppercase;line-height:1.25}
+  .numline{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:18px 0 10px}.num{font-size:25px;font-weight:900}.status{padding:6px 11px;border:1px solid ${stRaw==='ANULADO'?'#a33':'#28774b'};color:${stRaw==='ANULADO'?'#a33':'#28774b'};font-size:11px;font-weight:900;border-radius:5px}
+  .row{display:flex;justify-content:space-between;gap:24px;border-bottom:1px solid #e4e4e4;padding:9px 0;font-size:12px}.row span{color:#555}.row b{text-align:right;overflow-wrap:anywhere}.detail{margin-top:18px}.detail h3{font-size:12px;color:#8a6a13;border-bottom:2px solid #c49a21;padding-bottom:6px;margin-bottom:4px}.total{margin-top:8px;font-size:22px;font-weight:900;border-top:3px solid #111;border-bottom:0;padding-top:14px}.total span{color:#111}.void{margin-top:18px;padding:13px;border:2px solid #a33;color:#a33;font-weight:800}.sign{margin-top:44px;width:46%;border-top:1px solid #777;padding-top:5px;text-align:center;font-size:11px;color:#666}.footer{margin-top:22px;padding-top:12px;border-top:1px solid #ddd;font-size:9px;color:#777;text-align:center}.actions{max-width:760px;margin:12px auto 0;text-align:right}.actions button{padding:10px 15px;border:0;border-radius:7px;background:#111;color:#fff;font-weight:800}@media print{body{background:#fff;padding:0}.sheet{box-shadow:none;border:0}.actions{display:none}}</style></head><body><div class="sheet">
+  <div class="sh-head">${logo?`<img class="sh-logo" src="${priceEsc(logo)}">`:''}<div class="sh-text"><h1>MULTI INVERSIONES JCP</h1><h2>${priceEsc(receiptTypeLabel(r.type))}</h2></div></div>
+  <div class="numline"><div class="num">${priceEsc(r.number||'')}</div><span class="status">${priceEsc(stLabel)}</span></div>
+  <div class="row"><span>Fecha</span><b>${priceEsc(niceDate(r.date))}</b></div><div class="row"><span>Concepto</span><b>${priceEsc(concept)}</b></div>
+  ${vehTxt?`<div class="row"><span>Vehículo</span><b>${priceEsc(vehTxt)}</b></div>`:''}${plate?`<div class="row"><span>Placa</span><b>${priceEsc(plate)}</b></div>`:''}${r.party?`<div class="row"><span>Cliente / tercero</span><b>${priceEsc(r.party)}</b></div>`:''}${r.method?`<div class="row"><span>Medio</span><b>${priceEsc(r.method)}</b></div>`:''}
   ${extra.map(([l,v])=>`<div class="row"><span>${priceEsc(l)}</span><b>${priceEsc(v)}</b></div>`).join('')}${detail}${supportDistributionRows(snap.paymentDistribution||r.paymentDistribution)}
-  <div class="row total"><span>VALOR TOTAL</span><b>${priceMoney(Number(r.amount||0))}</b></div>${r.status==='ANULADO'?`<div class="void">SOPORTE ANULADO<br><br>Motivo: ${priceEsc(r.voidReason||'')}<br>Fecha: ${priceEsc(r.voidDate||'')}</div>`:''}
+  <div class="row total"><span>VALOR TOTAL</span><b>${priceMoney(Number(r.amount||0))}</b></div>${stRaw==='ANULADO'?`<div class="void">SOPORTE ANULADO<br><br>Motivo: ${priceEsc(r.voidReason||'')}<br>Fecha: ${priceEsc(r.voidDate||'')}</div>`:''}
+  <div class="sign">Responsable</div>
   <div class="footer">Documento generado por MULTI INVERSIONES JCP · Soporte interno de la operación.</div></div><div class="actions"><button onclick="window.print()">IMPRIMIR / GUARDAR PDF</button></div></body></html>`;
 }
 function printInternalReceipt(number){
@@ -11557,7 +11566,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.19.4\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.19.5\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15362,7 +15371,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.19.4',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.19.5',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -15408,6 +15417,6 @@ window.openRecordCopy=function(number){
   document.addEventListener('DOMContentLoaded',()=>{install();const overlay=document.getElementById('jcpExcelOverlay');overlay.onclick=e=>{if(e.target===overlay)close();};document.getElementById('jcpExcelClose').onclick=close;document.getElementById('jcpExcelCancel').onclick=close;document.getElementById('jcpExcelGenerate').onclick=generate;document.getElementById('jcpExcelAll').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=true);document.getElementById('jcpExcelNone').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=false);document.querySelectorAll('[name="jcpExcelPeriod"]').forEach(x=>x.onchange=()=>document.getElementById('jcpExcelDates').hidden=x.value!=='range'||!x.checked);});
 })();
 </script>
-<script src="./app-update.js?v=2026.09.19.4"></script>
+<script src="./app-update.js?v=2026.09.19.5"></script>
 </body>
 </html>
