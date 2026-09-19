@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.18.10</title>
+<title>MULTI INVERSIONES JCP - V2026.09.19.1</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4164,6 +4164,7 @@ body.jcp-custom-theme .database-actions-list button{
 <label class="paydist-row"><span>DAVIPLATA</span><input data-money="1" id="purchasePayDaviplata" inputmode="numeric" oninput="payDistInput('purchase',this)" placeholder="$ 0" type="text"/></label>
 </div><div class="paydist-summary"><div><span>VALOR TOTAL</span><b id="purchasePayTotal">$0</b></div><div><span>DISTRIBUIDO</span><b id="purchasePayDistributed">$0</b></div><div class="bad" id="purchasePayPendingBox"><span>FALTA</span><b id="purchasePayPending">$0</b></div></div><div class="paydist-hint">La operación se habilita únicamente cuando la distribución coincide exactamente con el valor total.</div></div>
 <input id="vplaca" placeholder="Placa"/>
+<input id="vmatricula" placeholder="Matrícula de (ej. Bogotá)" type="text"/>
 <label class="full" style="color:#a8a8a8;font-size:13px">📷 Foto del vehículo
   <input accept="image/*" id="vfoto" style="margin-top:6px" type="file"/>
 </label>
@@ -4258,6 +4259,9 @@ body.jcp-custom-theme .database-actions-list button{
 </label>
 <label>CILINDRAJE
         <input autocomplete="off" id="completeCilindraje" placeholder="EJ. 1600 / 1.6" type="text"/>
+</label>
+<label>MATRÍCULA DE
+        <input autocomplete="off" id="completeMatricula" placeholder="EJ. BOGOTÁ" type="text"/>
 </label>
 <label>KILOMETRAJE
         <input autocomplete="off" id="completeKm" inputmode="numeric" placeholder="0" type="text"/>
@@ -4380,6 +4384,7 @@ body.jcp-custom-theme .database-actions-list button{
 <label class="sale-field"><b>Modelo *</b><input id="permutaInModelo" placeholder="MODELO"/></label>
 <label class="sale-field"><b>Cilindraje *</b><input id="permutaInCilindraje" inputmode="decimal" placeholder="EJ. 1600 / 1.6"/></label>
 <label class="sale-field"><b>Placa</b><input id="permutaInPlaca" placeholder="PLACA"/></label>
+<label class="sale-field"><b>Matrícula de</b><input id="permutaInMatricula" placeholder="EJ. BOGOTÁ"/></label>
 <label class="sale-field full"><b>Fotos del vehículo (máximo 4)</b><input accept="image/*" class="permuta-photo-input" id="permutaInPhotos" multiple="" type="file"/></label>
 </div>
 <div class="permuta-photo-grid" id="permutaPhotoPreview"></div>
@@ -5351,8 +5356,8 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.18.10"></script>
-<script src="./jcp-sync.js?v=2026.09.18.10"></script>
+<script src="./jcp-accounting.js?v=2026.09.19.1"></script>
+<script src="./jcp-sync.js?v=2026.09.19.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -7639,6 +7644,7 @@ function purchaseSupportHtml(r){
   const modelo=snap.modelo||commercial.modelo||veh.modelo||'';
   const cilindraje=snap.cilindraje||commercial.cilindraje||info.cilindraje||veh.cilindraje||'';
   const placa=snap.pl||r.plate||commercial.placa||veh.pl||'';
+  const matricula=snap.matricula||commercial.matricula||info.matricula||veh.matricula||'';
   const photo=snap.photo||commercial.photo||veh.photo||'';
 
   const kilometraje=Number(snap.kilometraje||commercial.kilometraje||info.kilometraje||veh.kilometraje||0);
@@ -7745,6 +7751,7 @@ body{margin:0;padding:18px;background:#050505;color:#fff;font-family:Arial,sans-
       <div class="line"><span>MODELO</span><b>${priceEsc(modelo)}</b></div>
       <div class="line"><span>CILINDRAJE</span><b>${priceEsc(cilindraje||'SIN REGISTRAR')}</b></div>
       <div class="line"><span>PLACA</span><b>${priceEsc(placa)}</b></div>
+      <div class="line"><span>MATRÍCULA DE</span><b>${priceEsc(matricula||'SIN REGISTRAR')}</b></div>
       ${kilometraje?`<div class="line"><span>KILOMETRAJE</span><b>${priceEsc(kilometraje.toLocaleString('es-CO'))} KM</b></div>`:''}
       <div class="line"><span>N° SOPORTE</span><b>${priceEsc(r.number||'')}</b></div>
     </div>
@@ -7934,6 +7941,7 @@ function saleClientSupportHtml(r){
           <div class="vehicle-row"><span>MODELO</span><b>${priceEsc(c.modelo||'SIN REGISTRAR')}</b></div>
           <div class="vehicle-row"><span>CILINDRAJE</span><b>${priceEsc(c.cilindraje||'SIN REGISTRAR')}</b></div>
           <div class="vehicle-row"><span>PLACA</span><b>${priceEsc(c.placa||r.plate||'SIN REGISTRAR')}</b></div>
+          <div class="vehicle-row"><span>MATRÍCULA DE</span><b>${priceEsc(c.matricula||'SIN REGISTRAR')}</b></div>
           <div class="vehicle-row"><span>KILOMETRAJE</span><b>${Number(c.kilometraje||0)>0?priceEsc(Number(c.kilometraje).toLocaleString('es-CO')+' KM'):'SIN REGISTRAR'}</b></div>
         </div>
       </div>
@@ -8007,6 +8015,7 @@ function saleInternalSupportHtml(r){
               <div class="vehicle-row"><span>MODELO</span><b>${priceEsc(c.modelo||'SIN REGISTRAR')}</b></div>
               <div class="vehicle-row"><span>CILINDRAJE</span><b>${priceEsc(c.cilindraje||'SIN REGISTRAR')}</b></div>
               <div class="vehicle-row"><span>PLACA</span><b>${priceEsc(c.placa||r.plate||'SIN REGISTRAR')}</b></div>
+              <div class="vehicle-row"><span>MATRÍCULA DE</span><b>${priceEsc(c.matricula||'SIN REGISTRAR')}</b></div>
               <div class="vehicle-row"><span>KILOMETRAJE</span><b>${Number(c.kilometraje||0)>0?priceEsc(Number(c.kilometraje).toLocaleString('es-CO')+' KM'):'SIN REGISTRAR'}</b></div>
             </div>
           </div>
@@ -8084,7 +8093,7 @@ function saleInternalSupportHtml(r){
     <div class="land-head">${logo?`<img class="land-logo" src="${priceEsc(logo)}">`:''}<div class="land-title"><h1>VENTA <span>DE VEHÍCULO</span></h1><b>SOPORTE INTERNO · ${priceEsc(d.number)}</b></div><div class="land-meta"><strong>${priceEsc(d.date)}</strong>PÁGINA 1 DE 2</div></div>
     <div class="land-main">
       <div class="land-left">
-        <div class="land-box"><h3>🚘 INFORMACIÓN DEL VEHÍCULO</h3><div class="land-vehicle"><div class="land-photo">${c.photo?`<img src="${priceEsc(c.photo)}" alt="Foto principal del vehículo">`:`<div class="empty-photo">SIN FOTO PRINCIPAL</div>`}</div><div>${row('MARCA',priceEsc(c.marca||'SIN REGISTRAR'))}${row('REFERENCIA',priceEsc(c.referencia||'SIN REGISTRAR'))}${row('MODELO',priceEsc(c.modelo||'SIN REGISTRAR'))}${row('CILINDRAJE',priceEsc(c.cilindraje||'SIN REGISTRAR'))}${row('PLACA',priceEsc(c.placa||r.plate||'SIN REGISTRAR'))}${row('KILOMETRAJE',Number(c.kilometraje||0)>0?priceEsc(Number(c.kilometraje).toLocaleString('es-CO')+' KM'):'SIN REGISTRAR')}</div></div></div>
+        <div class="land-box"><h3>🚘 INFORMACIÓN DEL VEHÍCULO</h3><div class="land-vehicle"><div class="land-photo">${c.photo?`<img src="${priceEsc(c.photo)}" alt="Foto principal del vehículo">`:`<div class="empty-photo">SIN FOTO PRINCIPAL</div>`}</div><div>${row('MARCA',priceEsc(c.marca||'SIN REGISTRAR'))}${row('REFERENCIA',priceEsc(c.referencia||'SIN REGISTRAR'))}${row('MODELO',priceEsc(c.modelo||'SIN REGISTRAR'))}${row('CILINDRAJE',priceEsc(c.cilindraje||'SIN REGISTRAR'))}${row('PLACA',priceEsc(c.placa||r.plate||'SIN REGISTRAR'))}${row('MATRÍCULA DE',priceEsc(c.matricula||'SIN REGISTRAR'))}${row('KILOMETRAJE',Number(c.kilometraje||0)>0?priceEsc(Number(c.kilometraje).toLocaleString('es-CO')+' KM'):'SIN REGISTRAR')}</div></div></div>
         <div class="land-box"><h3>📋 DOCUMENTACIÓN Y ESTADO</h3><div class="land-docs">${docs.map(([k,v])=>`<div class="land-doc"><span>✓ ${priceEsc(k)}</span><b>${priceEsc(v)}</b></div>`).join('')}</div></div>
       </div>
       <div class="land-right">
@@ -8137,7 +8146,7 @@ function tradeSupportData(r){
 }
 function tradeStyles(){return `*{box-sizing:border-box}html,body{margin:0;background:#050505;color:#fff;font-family:Arial,sans-serif}body{min-width:1180px;padding:15px}.tp{width:1140px;min-height:1540px;margin:0 auto 18px;padding:18px;border:1px solid #a47b14;border-radius:14px;background:#050505;position:relative;break-after:page}.th{display:grid;grid-template-columns:390px 1fr;align-items:center;border-bottom:3px solid #d8aa32;padding-bottom:12px}.logo{width:330px;max-height:90px;object-fit:contain}.title{text-align:right}.title h1{font-size:38px;line-height:.95;margin:0}.title span,h3{color:#d8aa32}.num{display:inline-block;margin-top:9px;border:1px solid #9f7718;border-radius:8px;padding:7px 24px}.num small{display:block;color:#d8aa32;font-weight:900}.num b{font-size:22px}.date{margin:12px 0;border:1px solid #8b6918;border-radius:8px;padding:9px;color:#d8aa32;font-weight:900}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.box{border:1px solid #967116;border-radius:9px;padding:11px;background:#090909}.box h3{margin:0 0 8px;font-size:13px;border-bottom:1px solid #624b13;padding-bottom:7px}.photo{width:100%;height:300px;object-fit:cover;border-radius:6px;border:1px solid #765912}.empty{height:300px;display:flex;align-items:center;justify-content:center;color:#777}.row,.doc{display:grid;grid-template-columns:140px 1fr;gap:6px;padding:3px 0;font-size:12px}.row span{color:#ccc}.doc span{color:#76df31;font-weight:900}.line{display:flex;justify-content:space-between;gap:15px;padding:6px 0;border-bottom:1px solid #33290d;font-size:12px}.line b{text-align:right}.total{background:linear-gradient(90deg,#bd8b1c,#e0b643);color:#111;font-weight:1000;padding:8px}.green{color:#7bea2a!important}.table{width:100%;border-collapse:collapse;font-size:10px}.table th,.table td{border:1px solid #49370e;padding:7px}.table th{color:#d8aa32}.table td:last-child,.table th:last-child{text-align:right}.foot{position:absolute;bottom:12px;left:18px;right:18px;text-align:center;color:#888;font-size:9px;border-top:1px solid #44340f;padding-top:7px}@media print{body{padding:0}.tp{border:0;margin:0;width:100%;min-height:0}@page{size:A4 portrait;margin:7mm}}`;}
 function tradeVehicle(title,c){
- const rows=[['MARCA',c.marca],['REFERENCIA',c.referencia],['MODELO',c.modelo],['CILINDRAJE',c.cilindraje],['PLACA',c.placa],['KILOMETRAJE',Number(c.kilometraje||0)>0?Number(c.kilometraje).toLocaleString('es-CO')+' KM':'SIN REGISTRAR'],['COLOR',c.color],['CARROCERÍA',c.carroceria],['COMBUSTIBLE',c.combustible],['CAJA',c.caja]];
+ const rows=[['MARCA',c.marca],['REFERENCIA',c.referencia],['MODELO',c.modelo],['CILINDRAJE',c.cilindraje],['PLACA',c.placa],['MATRÍCULA DE',c.matricula],['KILOMETRAJE',Number(c.kilometraje||0)>0?Number(c.kilometraje).toLocaleString('es-CO')+' KM':'SIN REGISTRAR'],['COLOR',c.color],['CARROCERÍA',c.carroceria],['COMBUSTIBLE',c.combustible],['CAJA',c.caja]];
  const docs=[['SOAT',c.soat],['TECNOMECÁNICA',c.tecnomecanica],['IMPUESTOS',c.impuestos],['COMPARENDOS',c.comparendos],['PRENDAS',c.prendas],['EMBARGOS',c.embargos]];
  return `<div class="box"><h3>${title}</h3>${c.photo?`<img class="photo" src="${priceEsc(c.photo)}">`:`<div class="empty">SIN FOTO PRINCIPAL</div>`}${rows.map(x=>`<div class="row"><span>${x[0]}</span><b>${priceEsc(x[1]||'SIN REGISTRAR')}</b></div>`).join('')}<h3 style="margin-top:8px">📋 DOCUMENTACIÓN Y ESTADO</h3>${docs.map(x=>`<div class="doc"><span>✓ ${x[0]}</span><b>${priceEsc(x[1]||'SIN REGISTRAR')}</b></div>`).join('')}</div>`;
 }
@@ -8289,13 +8298,37 @@ function voidOperatingExpenseReceipt(state,r,reason){
 
 
 async function addVeh(){
- if(!requireTreasuryReady())return;const marca=vmarca.value.trim().toUpperCase(),referencia=vref.value.trim().toUpperCase(),modelo=vmodelo.value.trim().toUpperCase(),cilindraje=(document.getElementById('vcilindraje')?.value||'').trim().toUpperCase(),placa=vplaca.value.trim().toUpperCase().replace(/\s+/g,''),compra=numericValue('vcompra');if(!marca||!referencia||!modelo||!placa||compra<=0){alert('COMPLETA LOS DATOS DE LA COMPRA.');return;}if(!validatePaymentDistribution('purchase',compra))return;if((data.veh||[]).some(v=>String(v.pl||'').trim().toUpperCase().replace(/\s+/g,'')===placa)){alert('YA EXISTE UN VEHÍCULO CON ESA PLACA.');return;}const file=vfoto.files[0];let photo='';try{if(file)photo=await readVehiclePhotoFile(file);}catch(e){alert('NO FUE POSIBLE PROCESAR LA FOTO.');return;}const before=cloneAppData(data),next=cloneAppData(data),now=new Date();try{const id='veh_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),receipt=addInternalReceipt(next,'purchase',{entityId:id,vehicleId:id,amount:compra,plate:placa,title:'COMPRA VEHÍCULO — '+marca+' '+referencia,date:now.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),createdAt:now.toISOString(),snapshot:{marca,ref:referencia,modelo,cilindraje,pl:placa,c:compra,photo:photo||'',paymentDistribution:paymentDistribution('purchase'),associatedExpenses:0,otherExpenses:0,obs:''}}),moveId='mov_compra_'+Date.now();const dist=applyPaymentDistribution(next,{prefix:'purchase',direction:'out',total:compra,operationType:'COMPRA VEHÍCULO',operationId:moveId,receiptNumber:receipt.number,concept:'COMPRA '+placa,date:receipt.date,createdAt:receipt.createdAt});receipt.snapshot.paymentDistribution=cloneAppData(dist);next.veh.push({id,marca,m:marca,ref:referencia,modelo,cilindraje,pl:placa,c:compra,g:0,v:0,photo,purchaseDate:now.toISOString().slice(0,10),purchaseReceiptNumber:receipt.number});next.mov.unshift({id:moveId,t:'gasto',subtype:'compra_vehiculo',c:'COMPRA VEHÍCULO — '+placa+' — '+marca+' '+referencia,v:compra,vehicleId:id,receiptNumber:receipt.number,paymentDistribution:dist,date:receipt.date,createdAt:receipt.createdAt,source:'vehicle_purchase',investmentMovement:true});data=next;save();clearVehicleForm();clearPaymentDistribution('purchase');populateVehicleSelect();document.getElementById('formVeh').style.display='none';openOperationsHub();alert('✅ '+receipt.number+' REGISTRADO.');}catch(e){data=before;alert('NO FUE POSIBLE REGISTRAR LA COMPRA.\\n\\n'+e.message);}
+ if(!requireTreasuryReady())return;
+ const marca=vmarca.value.trim().toUpperCase();
+ const referencia=vref.value.trim().toUpperCase();
+ const modelo=vmodelo.value.trim().toUpperCase();
+ const cilindraje=(document.getElementById('vcilindraje')?.value||'').trim().toUpperCase();
+ const placa=vplaca.value.trim().toUpperCase().replace(/\s+/g,'');
+ const matricula=(document.getElementById('vmatricula')?.value||'').trim().toUpperCase();
+ const compra=numericValue('vcompra');
+ if(!marca||!referencia||!modelo||!placa||compra<=0){alert('COMPLETA LOS DATOS DE LA COMPRA.');return;}
+ if(!validatePaymentDistribution('purchase',compra))return;
+ if((data.veh||[]).some(v=>String(v.pl||'').trim().toUpperCase().replace(/\s+/g,'')===placa)){alert('YA EXISTE UN VEHÍCULO CON ESA PLACA.');return;}
+ const file=vfoto.files[0];let photo='';
+ try{if(file)photo=await readVehiclePhotoFile(file);}catch(e){alert('NO FUE POSIBLE PROCESAR LA FOTO.');return;}
+ const before=cloneAppData(data),next=cloneAppData(data),now=new Date();
+ try{
+  const id='veh_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  const receipt=addInternalReceipt(next,'purchase',{entityId:id,vehicleId:id,amount:compra,plate:placa,title:'COMPRA VEHÍCULO — '+marca+' '+referencia,date:now.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),createdAt:now.toISOString(),snapshot:{marca,ref:referencia,modelo,cilindraje,pl:placa,matricula,c:compra,photo:photo||'',paymentDistribution:paymentDistribution('purchase'),associatedExpenses:0,otherExpenses:0,obs:''}});
+  const moveId='mov_compra_'+Date.now();
+  const dist=applyPaymentDistribution(next,{prefix:'purchase',direction:'out',total:compra,operationType:'COMPRA VEHÍCULO',operationId:moveId,receiptNumber:receipt.number,concept:'COMPRA '+placa,date:receipt.date,createdAt:receipt.createdAt});
+  receipt.snapshot.paymentDistribution=cloneAppData(dist);
+  next.veh.push({id,marca,m:marca,ref:referencia,modelo,cilindraje,pl:placa,matricula,c:compra,g:0,v:0,photo,purchaseDate:now.toISOString().slice(0,10),purchaseReceiptNumber:receipt.number});
+  next.mov.unshift({id:moveId,t:'gasto',subtype:'compra_vehiculo',c:'COMPRA VEHÍCULO — '+placa+' — '+marca+' '+referencia,v:compra,vehicleId:id,receiptNumber:receipt.number,paymentDistribution:dist,date:receipt.date,createdAt:receipt.createdAt,source:'vehicle_purchase',investmentMovement:true});
+  data=next;save();clearVehicleForm();clearPaymentDistribution('purchase');populateVehicleSelect();document.getElementById('formVeh').style.display='none';openOperationsHub();alert('✅ '+receipt.number+' REGISTRADO.');
+ }catch(e){data=before;alert('NO FUE POSIBLE REGISTRAR LA COMPRA.\n\n'+e.message);}
 }
 function clearVehicleForm(){
 document.getElementById('vmarca').value="";
 document.getElementById('vref').value="";
 document.getElementById('vmodelo').value="";
 document.getElementById('vcilindraje').value="";
+document.getElementById('vmatricula').value="";
 document.getElementById('vplaca').value="";
 document.getElementById('vcompra').value="";
 document.getElementById('vfoto').value="";
@@ -8919,6 +8952,11 @@ function getVehicleCommercialSnapshot(vehicle){
       v.pl,v.placa
     ),
 
+    matricula:textFrom(
+      ['matricula','matriculade','ciudadmatricula','origendeplaca','registrationcity'],
+      info.matricula,v.matricula,v.matriculaDe
+    ),
+
     soat:textFrom(
       ['soat','vigenciasoat','fechasoat','soatvence','vencimientosoat'],
       info.soat,v.soat
@@ -9013,7 +9051,7 @@ function openVehicleDetail(id){
     const x=commercial[key];
     return (x===undefined||x===null||String(x).trim()==='')?(alt??'SIN REGISTRAR'):x;
   };
-  const doc=(label,value,icon,extra='')=>`<div class="vd2-doc"><strong>${icon} ${label}</strong><b>${esc(value)}</b>${extra?`<small style="display:block;margin-top:6px;color:#e3b72c">${esc(extra)}</small>`:''}</div>`;
+  const doc=(label,value,icon,extra='')=>`<div class="vd2-doc"><span class="vd2-doc-icon">${icon}</span><strong>${label}</strong><b>${esc(value)}</b><small class="vd2-doc-extra">${extra?esc(extra):'&nbsp;'}</small></div>`;
   const taxPending=Number(commercial.valorPendienteImpuestos||0);
   const compPending=Number(commercial.valorPendienteComparendos||0);
   const reportValue=Number(commercial.valorReportes||0);
@@ -9043,14 +9081,14 @@ function openVehicleDetail(id){
     .vd2-head{font-size:17px;font-weight:900;margin:0 0 12px}.vd2-general{display:grid;grid-template-columns:1.35fr .65fr;gap:12px}
     .vd2-photo{width:100%;height:270px;object-fit:contain;background:#090909;border-radius:13px}.vd2-fields{display:grid;gap:8px}
     .vd2-field,.vd2-doc,.vd2-money{border:1px solid #584715;border-radius:12px;padding:10px}.vd2-field small,.vd2-money small{display:block;color:#999;margin-bottom:4px}
-    .vd2-purchase{color:#e3b72c;font-size:23px;font-weight:900}.vd2-docgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-    .vd2-doc{text-align:center;min-height:84px;display:flex;flex-direction:column;justify-content:center}.vd2-doc strong{margin-bottom:8px}.vd2-doc b{font-size:13px}
-    .vd2-mile{grid-column:1/-1;display:flex;flex-direction:row;justify-content:space-between;align-items:center;min-height:auto}
+    .vd2-purchase{color:#e3b72c;font-size:23px;font-weight:900}.vd2-docgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-items:stretch}
+    .vd2-doc{text-align:center;height:145px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}.vd2-doc-icon{display:block;font-size:24px;line-height:1;margin-bottom:7px}.vd2-doc strong{min-height:34px;display:flex;align-items:center;justify-content:center;margin-bottom:5px;line-height:1.12}.vd2-doc b{font-size:13px;line-height:1.2}.vd2-doc-extra{display:block;min-height:28px;margin-top:6px;color:#e3b72c;font-size:11px;line-height:1.2}
+    .vd2-registration{grid-column:1/-1;min-height:58px;border:1px solid #584715;border-radius:12px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px}.vd2-registration b{color:#fff;text-align:right}
     .vd2-fin{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.vd2-money b{font-size:17px}.vd2-total b{color:#e3b72c}
     .vd2-sub{font-weight:800;margin:16px 0 5px}.vd2-table{width:100%;border-collapse:collapse}.vd2-table th,.vd2-table td{padding:9px 5px;border-bottom:1px solid #3b321d;font-size:12px}
     .vd2-table th{color:#d9b334;text-align:left}.vd2-table th:last-child,.vd2-table td:last-child{text-align:right}.vd2-empty{text-align:center!important;color:#999;padding:20px!important}
     .vd2-foot td{font-weight:900;color:#e3b72c}
-    @media(max-width:650px){.vd2-general{grid-template-columns:1fr}.vd2-photo{height:225px}.vd2-fields{grid-template-columns:1fr 1fr}.vd2-buy{grid-column:1/-1}.vd2-docgrid{grid-template-columns:repeat(2,1fr)}.vd2-fin{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:650px){.vd2-general{grid-template-columns:1fr}.vd2-photo{height:225px}.vd2-fields{grid-template-columns:1fr 1fr}.vd2-buy{grid-column:1/-1}.vd2-docgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.vd2-doc{height:158px;padding:9px 5px}.vd2-doc strong{font-size:14px}.vd2-doc b{font-size:12px}.vd2-fin{grid-template-columns:repeat(2,1fr)}}
   </style>
   <div class="vd2-wrap">
     <div class="vd2-card">
@@ -9078,7 +9116,8 @@ function openVehicleDetail(id){
         ${doc('PRENDAS',read('prendas','SIN REGISTRAR'),'🔒')}
         ${doc('EMBARGOS',read('embargos','SIN REGISTRAR'),'⚖️')}
         ${doc('REPORTES',read('reportes','SIN REGISTRAR'),'📑',reportExtra)}
-        <div class="vd2-doc vd2-mile"><strong>⏱️ KILOMETRAJE</strong><b>${Number(read('kilometraje',0))?new Intl.NumberFormat('es-CO').format(Number(read('kilometraje',0)))+' KM':esc(read('kilometraje'))}</b></div>
+        ${doc('KILOMETRAJE',Number(read('kilometraje',0))?new Intl.NumberFormat('es-CO').format(Number(read('kilometraje',0)))+' KM':read('kilometraje'),'⏱️')}
+        <div class="vd2-registration"><strong>📍 MATRÍCULA DE</strong><b>${esc(read('matricula'))}</b></div>
       </div>
     </div>
 
@@ -9173,6 +9212,7 @@ function selectVehicleCompleteInfo(id){
   document.getElementById('completeEmbargos').value=normalizeYesNoDoc(info.embargos??v.embargos??'');
   document.getElementById('completeReports').value=normalizeYesNoDoc(info.reportes??v.reportes??'');
   document.getElementById('completeCilindraje').value=String(info.cilindraje??v.cilindraje??'');
+  document.getElementById('completeMatricula').value=String(info.matricula??v.matricula??v.matriculaDe??'');
   const km=Number(info.kilometraje??v.kilometraje??v.km??0);
   document.getElementById('completeKm').value=km?new Intl.NumberFormat('es-CO').format(km):'';
   const estimated=Number(info.precioEstimadoVenta??v.precioEstimadoVenta??0);
@@ -9187,7 +9227,7 @@ function selectVehicleCompleteInfo(id){
   return true;
 }
 function clearCompleteInfoForm(){
-  ['completeSoat','completeTecno','completeCilindraje','completeKm','completeEstimatedSalePrice','completeTaxesPendingValue','completeComparendosPendingValue','completeReportsValue'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  ['completeSoat','completeTecno','completeCilindraje','completeMatricula','completeKm','completeEstimatedSalePrice','completeTaxesPendingValue','completeComparendosPendingValue','completeReportsValue'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   ['completeTaxes','completeComparendos','completePrendas','completeEmbargos','completeReports'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   toggleDocumentPendingFields();
   const card=document.getElementById('completeInfoVehicleCard');if(card)card.innerHTML='';
@@ -9222,6 +9262,7 @@ function saveCompleteVehicleInfo(){
   const embargos=(document.getElementById('completeEmbargos')?.value||'').trim().toUpperCase();
   const reportes=(document.getElementById('completeReports')?.value||'').trim().toUpperCase();
   const cilindraje=(document.getElementById('completeCilindraje')?.value||'').trim().toUpperCase();
+  const matricula=(document.getElementById('completeMatricula')?.value||'').trim().toUpperCase();
   const kilometraje=Number(String(document.getElementById('completeKm')?.value||'').replace(/[^0-9]/g,''))||0;
   const precioEstimadoVenta=Number(String(document.getElementById('completeEstimatedSalePrice')?.value||'').replace(/[^0-9]/g,''))||0;
   const valorPendienteImpuestos=impuestos==='PENDIENTE'?documentPendingMoney('completeTaxesPendingValue'):0;
@@ -9231,12 +9272,12 @@ function saveCompleteVehicleInfo(){
   const nv=(next.veh||[]).find(x=>String(x.id)===String(completingVehicleId));
   if(!nv){alert('NO SE ENCONTRÓ EL VEHÍCULO.');return false;}
   try{
-    nv.additionalInfo={...(nv.additionalInfo||{}),soat,tecnomecanica,impuestos,valorPendienteImpuestos,comparendos,valorPendienteComparendos,prendas,embargos,reportes,valorReportes,cilindraje,kilometraje,precioEstimadoVenta,updatedAt:new Date().toISOString()};
+    nv.additionalInfo={...(nv.additionalInfo||{}),soat,tecnomecanica,impuestos,valorPendienteImpuestos,comparendos,valorPendienteComparendos,prendas,embargos,reportes,valorReportes,cilindraje,matricula,kilometraje,precioEstimadoVenta,updatedAt:new Date().toISOString()};
     nv.soat=soat;nv.tecnomecanica=tecnomecanica;nv.impuestos=impuestos;nv.valorPendienteImpuestos=valorPendienteImpuestos;
     nv.comparendos=comparendos;nv.valorPendienteComparendos=valorPendienteComparendos;nv.prendas=prendas;nv.embargos=embargos;
-    nv.reportes=reportes;nv.valorReportes=valorReportes;nv.cilindraje=cilindraje;nv.kilometraje=kilometraje;nv.precioEstimadoVenta=precioEstimadoVenta;
+    nv.reportes=reportes;nv.valorReportes=valorReportes;nv.cilindraje=cilindraje;nv.matricula=matricula;nv.kilometraje=kilometraje;nv.precioEstimadoVenta=precioEstimadoVenta;
     const pr=typeof findInternalReceipt==='function'?findInternalReceipt(nv.purchaseReceiptNumber,next):null;
-    if(pr&&pr.snapshot){pr.snapshot.cilindraje=cilindraje;pr.snapshot.soat=soat;pr.snapshot.tecnomecanica=tecnomecanica;pr.snapshot.impuestos=impuestos;pr.snapshot.comparendos=comparendos;pr.snapshot.prendas=prendas;pr.snapshot.embargos=embargos;pr.snapshot.reportes=reportes;pr.snapshot.kilometraje=kilometraje;}
+    if(pr&&pr.snapshot){pr.snapshot.cilindraje=cilindraje;pr.snapshot.matricula=matricula;pr.snapshot.soat=soat;pr.snapshot.tecnomecanica=tecnomecanica;pr.snapshot.impuestos=impuestos;pr.snapshot.comparendos=comparendos;pr.snapshot.prendas=prendas;pr.snapshot.embargos=embargos;pr.snapshot.reportes=reportes;pr.snapshot.kilometraje=kilometraje;}
     assertInventoryUnchanged(inventoryIdentity(before),next,'COMPLETAR INFORMACIÓN DEL VEHÍCULO');
     data=next;save();render();
     alert('✅ INFORMACIÓN Y DOCUMENTACIÓN DEL VEHÍCULO ACTUALIZADA.');
@@ -9503,6 +9544,12 @@ async function exportVehicleImage(type){
 
   drawLabelValue(
     ix,465,
+    'MATRÍCULA DE',
+    read('matricula')
+  );
+
+  drawLabelValue(
+    ix,525,
     'KILOMETRAJE',
     commercial.kilometraje>0
       ?Number(commercial.kilometraje).toLocaleString('es-CO')+' KM'
@@ -9510,7 +9557,7 @@ async function exportVehicleImage(type){
   );
 
   drawLabelValue(
-    ix,540,
+    ix,585,
     'PRECIO ESTIMADO DE VENTA',
     commercial.precioEstimadoVenta>0
       ?money(commercial.precioEstimadoVenta)
@@ -9959,7 +10006,7 @@ function supportVehicleExtraRows(x){
   const defs=[
     ['Kilometraje',x.km||x.kilometraje],['Motor',x.motor],['Combustible',x.combustible||x.alimentacion],
     ['Caja',x.caja],['Dirección',x.direccionVeh||x.tipoDireccion],['Color',x.color],['SOAT',x.soat],
-    ['Tecnomecánica',x.tecnomecanica||x.tecno],['Matrícula',x.matricula],['Propietarios',x.duenos||x.propietarios]
+    ['Tecnomecánica',x.tecnomecanica||x.tecno],['Matrícula de',x.matricula||x.matriculaDe],['Propietarios',x.duenos||x.propietarios]
   ];
   return defs.filter(([,v])=>v!==undefined&&v!==null&&String(v).trim()!=='');
 }
@@ -10068,7 +10115,7 @@ async function generateInternalSalePDF(id){
     // 1. Información vehículo + fotos
     let y=258;section(m,y,leftW,'1. INFORMACIÓN DEL VEHÍCULO');section(rightX,y,rightW,'FOTOS DEL VEHÍCULO');
     box(m,y,leftW,300);box(rightX,y,rightW,300);
-    const vehicleRows=[['MARCA',safe(x.marca||x.m)],['REFERENCIA',safe(x.ref)],['MODELO',safe(x.modelo)],['CILINDRAJE',safe(x.cilindraje||x.additionalInfo?.cilindraje||'SIN REGISTRAR')],['PLACA',safe(x.pl||'SIN PLACA')]];
+    const vehicleRows=[['MARCA',safe(x.marca||x.m)],['REFERENCIA',safe(x.ref)],['MODELO',safe(x.modelo)],['CILINDRAJE',safe(x.cilindraje||x.additionalInfo?.cilindraje||'SIN REGISTRAR')],['PLACA',safe(x.pl||'SIN PLACA')],['MATRÍCULA DE',safe(x.matricula||x.additionalInfo?.matricula||'SIN REGISTRAR')]];
     vehicleRows.forEach((r,i)=>row(m,y+36+i*36,leftW,r[0],r[1]));
     const photoSrcs=getVehiclePhotosForSupport(x).slice(0,4),photos=[];for(const src of photoSrcs)photos.push(await supportLoadImage(src));
     const py=y+45,pw=rightW-28,ph=238;
@@ -10138,7 +10185,7 @@ async function generateInventoryReportPDF(){
       for(let i=0;i<pageVehicles.length;i++){
         const v=pageVehicles[i],col=i%cols,row=Math.floor(i/cols),x=margin+col*(cardW+gap),y=gridTop+row*(cardH+gap),compra=Number(v.c)||0,gastos=(typeof getVehicleExpenseTotal==='function'?getVehicleExpenseTotal(v.id,data):Number(v.g)||0),total=compra+gastos;
         const foto=v.photo||v.foto||v.imagen||v.image||'',placa=v.pl||v.placa||'',ref=v.ref||v.referencia||'',marca=v.marca||v.m||'',modelo=v.modelo||'',info=v.additionalInfo||{};
-        const soat=docValue(v,'soat'),tecno=docValue(v,'tecnomecanica'),impuestos=docValue(v,'impuestos'),comparendos=docValue(v,'comparendos'),prendas=docValue(v,'prendas'),embargos=docValue(v,'embargos');
+        const soat=docValue(v,'soat'),tecno=docValue(v,'tecnomecanica'),impuestos=docValue(v,'impuestos'),comparendos=docValue(v,'comparendos'),prendas=docValue(v,'prendas'),embargos=docValue(v,'embargos'),matricula=docValue(v,'matricula');
         const km=Number(info.kilometraje??v.kilometraje??v.km??0),taxPending=Number(info.valorPendienteImpuestos??v.valorPendienteImpuestos??0),compPending=Number(info.valorPendienteComparendos??v.valorPendienteComparendos??0),im=await loadImage(foto);
         ctx.strokeStyle='#d4af37';ctx.lineWidth=1.5;ctx.strokeRect(x,y,cardW,cardH);
         const photoH=165;ctx.fillStyle='#151515';ctx.fillRect(x+1,y+1,cardW-2,photoH);
@@ -10147,7 +10194,7 @@ async function generateInventoryReportPDF(){
         ctx.textAlign='left';ctx.fillStyle='#fff';ctx.font='bold 14px Arial';ctx.fillText(clipText(ctx,[marca,ref].filter(Boolean).join(' ').toUpperCase()||'VEHÍCULO',cardW-16),x+8,y+photoH+19);
         ctx.fillStyle='#bbb';ctx.font='9px Arial';ctx.fillText(`PLACA: ${placa||'—'}   ·   MODELO: ${modelo||'—'}`,x+8,y+photoH+36);
         const docTop=y+photoH+52;ctx.fillStyle='#d4af37';ctx.font='bold 9px Arial';ctx.fillText('DOCUMENTACIÓN Y ESTADO',x+8,docTop);
-        const lines=[['SOAT',soat],['TECNOMECÁNICA',tecno],['IMPUESTOS',impuestos+(impuestos==='PENDIENTE'&&taxPending>0?' · '+money(taxPending):'')],['COMPARENDOS',comparendos+(comparendos==='TIENE'&&compPending>0?' · '+money(compPending):'')],['PRENDAS',prendas],['EMBARGOS',embargos],['KILOMETRAJE',km?km.toLocaleString('es-CO')+' KM':'SIN REGISTRAR']];
+        const lines=[['SOAT',soat],['TECNOMECÁNICA',tecno],['IMPUESTOS',impuestos+(impuestos==='PENDIENTE'&&taxPending>0?' · '+money(taxPending):'')],['COMPARENDOS',comparendos+(comparendos==='TIENE'&&compPending>0?' · '+money(compPending):'')],['PRENDAS',prendas],['EMBARGOS',embargos],['MATRÍCULA DE',matricula],['KILOMETRAJE',km?km.toLocaleString('es-CO')+' KM':'SIN REGISTRAR']];
         let ly=docTop+18;ctx.font='8.5px Arial';
         lines.forEach(([label,value])=>{ctx.fillStyle='#aaa';ctx.textAlign='left';ctx.fillText(label,x+8,ly);ctx.fillStyle='#fff';ctx.textAlign='right';ctx.fillText(clipText(ctx,value,cardW*.60),x+cardW-8,ly);ly+=16;});
         const finTop=ly+4;ctx.strokeStyle='#38301b';ctx.beginPath();ctx.moveTo(x+7,finTop-8);ctx.lineTo(x+cardW-7,finTop-8);ctx.stroke();ctx.fillStyle='#d4af37';ctx.font='bold 9px Arial';ctx.textAlign='left';ctx.fillText('ESTADO FINANCIERO',x+8,finTop);
@@ -10364,7 +10411,7 @@ function clearPermutaForm(){
   ['permutaClientName','permutaClientDoc','permutaClientPhone','permutaClientAddress'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   const pcs=document.getElementById('permutaClientSuggestions');if(pcs){pcs.innerHTML='';pcs.style.display='none';}
 
-  ['permutaInMarca','permutaInRef','permutaInModelo','permutaInCilindraje','permutaInPlaca','permutaDifferenceAmount','permutaReceivedNow','permutaPending','permutaCash','permutaTransfer','permutaObs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['permutaInMarca','permutaInRef','permutaInModelo','permutaInCilindraje','permutaInPlaca','permutaInMatricula','permutaDifferenceAmount','permutaReceivedNow','permutaPending','permutaCash','permutaTransfer','permutaObs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   const differenceDirection=document.getElementById('permutaDifferenceDirection');if(differenceDirection)differenceDirection.value='even';
   const paymentCondition=document.getElementById('permutaPaymentCondition');if(paymentCondition)paymentCondition.value='contado';
   const collectionFields=document.getElementById('permutaCollectionFields');if(collectionFields)collectionFields.style.display='none';
@@ -10464,6 +10511,7 @@ async function savePermuta(){
     const inModelo=(document.getElementById('permutaInModelo')?.value||'').trim().toUpperCase();
     const inCilindraje=(document.getElementById('permutaInCilindraje')?.value||'').trim().toUpperCase();
     const inPlaca=(document.getElementById('permutaInPlaca')?.value||'').trim().toUpperCase();
+    const inMatricula=(document.getElementById('permutaInMatricula')?.value||'').trim().toUpperCase();
     const obs=(document.getElementById('permutaObs')?.value||'').trim().toUpperCase();
     const client=(document.getElementById('permutaClientName')?.value||'').trim().toUpperCase();
     const clientDoc=(document.getElementById('permutaClientDoc')?.value||'').trim().toUpperCase();
@@ -10492,7 +10540,7 @@ async function savePermuta(){
     const incoming={
       id:incomingId,
       marca:inMarca,m:inMarca,
-      ref:inRef,modelo:inModelo,cilindraje:inCilindraje,pl:inPlaca,
+      ref:inRef,modelo:inModelo,cilindraje:inCilindraje,pl:inPlaca,matricula:inMatricula,
       c:calc.incomingInventoryCost,g:0,v:0,
       photo:photos[0]||'',photos,
       purchaseDate:dateTime,createdAt:iso,
@@ -10501,11 +10549,11 @@ async function savePermuta(){
       tradeChainRootId:outgoing.tradeChainRootId||outgoing.permutaId||outgoing.id
     };
     const record={id:permutaId,date:dateTime,createdAt:iso,outgoingVehicleId:outgoing.id,
-      outgoingVehicle:{marca:outgoing.marca||outgoing.m||'',ref:outgoing.ref||'',modelo:outgoing.modelo||'',cilindraje:outgoing.cilindraje||outgoing.additionalInfo?.cilindraje||'',pl:outgoing.pl||'',photo:outgoing.photo||'',photos:Array.isArray(outgoing.photos)?outgoing.photos:[],c:outgoingPurchasePrice,g:outgoingExpenseTotal},
+      outgoingVehicle:{marca:outgoing.marca||outgoing.m||'',ref:outgoing.ref||'',modelo:outgoing.modelo||'',cilindraje:outgoing.cilindraje||outgoing.additionalInfo?.cilindraje||'',pl:outgoing.pl||'',matricula:outgoing.matricula||outgoing.additionalInfo?.matricula||'',photo:outgoing.photo||'',photos:Array.isArray(outgoing.photos)?outgoing.photos:[],c:outgoingPurchasePrice,g:outgoingExpenseTotal},
       outgoingPurchasePrice,outgoingExpenseRows:cloneAppData(outgoingExpenseRows),outgoingExpenseTotal,
       outgoingInvestment:calc.outgoingInvestment,profit:0,profitRecognition:'deferred',
       incomingVehicleId:incoming.id,incomingVehicle:{
-        id:incoming.id,marca:inMarca,m:inMarca,ref:inRef,modelo:inModelo,cilindraje:inCilindraje,pl:inPlaca,
+        id:incoming.id,marca:inMarca,m:inMarca,ref:inRef,modelo:inModelo,cilindraje:inCilindraje,pl:inPlaca,matricula:inMatricula,
         c:calc.incomingInventoryCost,g:0,v:0,photo:incoming.photo,photos,
         purchaseDate:dateTime,createdAt:iso,origen:'permuta',status:'inventario',active:true,permutaId
       },
@@ -11470,7 +11518,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.18.10\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.19.1\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15275,7 +15323,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.18.10',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.19.1',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -15321,6 +15369,6 @@ window.openRecordCopy=function(number){
   document.addEventListener('DOMContentLoaded',()=>{install();const overlay=document.getElementById('jcpExcelOverlay');overlay.onclick=e=>{if(e.target===overlay)close();};document.getElementById('jcpExcelClose').onclick=close;document.getElementById('jcpExcelCancel').onclick=close;document.getElementById('jcpExcelGenerate').onclick=generate;document.getElementById('jcpExcelAll').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=true);document.getElementById('jcpExcelNone').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=false);document.querySelectorAll('[name="jcpExcelPeriod"]').forEach(x=>x.onchange=()=>document.getElementById('jcpExcelDates').hidden=x.value!=='range'||!x.checked);});
 })();
 </script>
-<script src="./app-update.js?v=2026.09.18.10"></script>
+<script src="./app-update.js?v=2026.09.19.1"></script>
 </body>
 </html>
