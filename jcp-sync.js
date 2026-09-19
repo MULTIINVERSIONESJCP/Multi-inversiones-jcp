@@ -2,6 +2,8 @@
 (function(root){
   'use strict';
   const PENDING_KEY='jcp_pending_write_v2';
+  const RPC_TIMEOUT_MS=12000;
+  const SESSION_TIMEOUT_MS=8000;
   const canonical=value=>JSON.stringify(sort(value));
   function sort(v){return Array.isArray(v)?v.map(sort):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,sort(v[k])])):v;}
   function create({client,storage,onStatus=()=>{},uuid=()=>{
@@ -11,13 +13,15 @@
     let userId=null,revision=null,busy=null,conflicted=false;
     const pending=()=>JSON.parse(storage.getItem(PENDING_KEY)||'null');
     const status=(state,message)=>onStatus({state,message,pending:!!pending(),revision});
-    async function rpc(name,args){
+    async function limited(promise,timeout,message){
       let timer;
-      try{
-        const result=await Promise.race([client.rpc(name,args),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Supabase no confirmó la respuesta. El cambio sigue pendiente.')),15000);})]);
-        if(result.error)throw result.error;
-        return result.data;
-      }finally{clearTimeout(timer);}
+      try{return await Promise.race([Promise.resolve(promise),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error(message)),timeout);})]);}
+      finally{clearTimeout(timer);}
+    }
+    async function rpc(name,args){
+      const result=await limited(client.rpc(name,args),RPC_TIMEOUT_MS,'Supabase tardó demasiado en responder. El cambio está protegido y se reintentará automáticamente.');
+      if(result.error)throw result.error;
+      return result.data;
     }
     async function read(){
       const row=await rpc('jcp_read_state');
@@ -37,7 +41,6 @@
         throw new Error('Espera a que el cambio pendiente quede confirmado en Supabase antes de registrar otro.');
       }
       const request={userId,expectedRevision:revision,requestId:uuid(),snapshot:JSON.parse(JSON.stringify(snapshot))};
-      // Si se agota el almacenamiento, fallar antes de iniciar la petición.
       storage.setItem(PENDING_KEY,JSON.stringify(request));
       storage.setItem('jcp_cloud_pending_v1','1');
       status('pending','Guardado en este dispositivo · pendiente de confirmación en Supabase');
@@ -51,13 +54,12 @@
       busy=(async()=>{
         try{
           status('saving','Guardando en Supabase…');
-          const {data:sessionData,error}=await client.auth.getSession();
+          const {data:sessionData,error}=await limited(client.auth.getSession(),SESSION_TIMEOUT_MS,'No se pudo validar la sesión a tiempo. El cambio se reintentará automáticamente.');
           if(error)throw error;
           if(sessionData?.session?.user?.id!==request.userId)throw new Error('La sesión cambió. El pendiente permanece protegido.');
           const result=await rpc('jcp_save_state',{p_expected_revision:request.expectedRevision,p_request_id:request.requestId,p_data:request.snapshot});
           if(result?.conflict){conflicted=true;status('conflict','Otro dispositivo guardó primero. Tu cambio está protegido y no sobrescribió la nube.');return result;}
           if(!result?.ok||!Number.isSafeInteger(result.revision))throw new Error('Respuesta de guardado inválida.');
-          // Persistir el acuse junto al pendiente ANTES de limpiarlo: recuperable tras un cierre.
           const acknowledged={...request,acknowledgedRevision:result.revision};
           storage.setItem(PENDING_KEY,JSON.stringify(acknowledged));
           revision=result.revision;
