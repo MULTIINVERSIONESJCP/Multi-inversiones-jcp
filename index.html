@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.19.3</title>
+<title>MULTI INVERSIONES JCP - V2026.09.19.4</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5356,8 +5356,8 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.19.3"></script>
-<script src="./jcp-sync.js?v=2026.09.19.3"></script>
+<script src="./jcp-accounting.js?v=2026.09.19.4"></script>
+<script src="./jcp-sync.js?v=2026.09.19.4"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -9051,90 +9051,129 @@ function openVehicleDetail(id){
     const x=commercial[key];
     return (x===undefined||x===null||String(x).trim()==='')?(alt??'SIN REGISTRAR'):x;
   };
-  const doc=(label,value,icon,extra='')=>`<div class="vd2-doc"><span class="vd2-doc-icon">${icon}</span><strong>${label}</strong><b>${esc(value)}</b><small class="vd2-doc-extra">${extra?esc(extra):'&nbsp;'}</small></div>`;
+  const up=v=>String(v??'').trim().toUpperCase();
+  const isEmpty=v=>up(v)===''||up(v)==='SIN REGISTRAR';
+  const doc=(label,value,tone,extra='')=>`<div class="vd2-doc vd2-${tone}"><strong>${label}</strong><b>${esc(value)}</b><small class="vd2-doc-extra">${extra?esc(extra):'&nbsp;'}</small></div>`;
+  const yesNoTone=v=>{const x=up(v);return x==='NO TIENE'?'ok':(x==='TIENE'?'bad':'neutral');};
+  const taxState=up(read('impuestos'));
+  const compState=up(read('comparendos','SIN REGISTRAR'));
+  const taxTone=taxState==='AL DIA'?'ok':(taxState==='PENDIENTE'?'warn':'neutral');
+  const docTone=v=>isEmpty(v)?'neutral':'ok';
   const taxPending=Number(commercial.valorPendienteImpuestos||0);
   const compPending=Number(commercial.valorPendienteComparendos||0);
   const reportValue=Number(commercial.valorReportes||0);
-  const taxExtra=(String(read('impuestos')).toUpperCase()==='PENDIENTE'&&taxPending>0)?'PENDIENTE: '+fmt(taxPending):'';
-  const compExtra=(String(read('comparendos')).toUpperCase()==='TIENE'&&compPending>0)?'PENDIENTE: '+fmt(compPending):'';
-  const reportExtra=(String(read('reportes')).toUpperCase()==='TIENE'&&reportValue>0)?'VALOR: '+fmt(reportValue):'';
+  const taxExtra=(taxState==='PENDIENTE'&&taxPending>0)?fmt(taxPending):'';
+  const compExtra=(compState==='TIENE'&&compPending>0)?fmt(compPending):'';
+  const reportExtra=(up(read('reportes'))==='TIENE'&&reportValue>0)?fmt(reportValue):'';
+  const kmRaw=Number(read('kilometraje',0));
+  const kmText=kmRaw?new Intl.NumberFormat('es-CO').format(kmRaw)+' KM':'SIN REGISTRAR';
 
   const expenses=getVehicleExpenseMovements(veh.id);
   const gastos=getVehicleExpenseTotal(veh.id);
   const compra=Number(veh.c||0), inversion=compra+gastos, venta=Number(veh.v||0);
+  const pendientes=(taxState==='PENDIENTE'?taxPending:0)+(compState==='TIENE'?compPending:0);
+  const proyectada=inversion+pendientes;
+  const precioBase=venta>0?venta:Number(commercial.precioEstimadoVenta||0);
+  const utilidad=precioBase>0?precioBase-proyectada:null;
+  const utilidadText=utilidad===null?'—':((utilidad<0?'-':'')+fmt(Math.abs(utilidad)));
+  const utilidadClass=utilidad===null?'':(utilidad<0?'vd2-neg':'vd2-pos');
+  const ventaText=venta>0?fmt(venta):(precioBase>0?fmt(precioBase)+' (estimado)':'Sin definir');
 
   const photo=commercial.photo||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(
     '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="40" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>'
   );
 
+  const cap=s=>s.charAt(0)+s.slice(1).toLowerCase();
   const rows=expenses.length?expenses.map(m=>{
-    const concepto=String(m.c||m.concepto||m.concept||m.descripcion||m.note||'GASTO VEHÍCULO').trim().toUpperCase();
+    const concepto=cap(String(m.c||m.concepto||m.concept||m.descripcion||m.note||'GASTO VEHÍCULO').trim().toUpperCase());
     return `<tr>
       <td>${esc(concepto)}</td>
       <td>${fmt(m.v||m.valor||m.amount||m.value||0)}</td>
     </tr>`;
-  }).join(''):`<tr><td colspan="2" class="vd2-empty">ESTE VEHÍCULO NO TIENE GASTOS ASOCIADOS.</td></tr>`;
+  }).join(''):`<tr><td colspan="2" class="vd2-empty">Este vehículo no tiene gastos asociados.</td></tr>`;
 
   out.innerHTML=`
   <style>
-    .vd2-wrap{display:grid;gap:12px}.vd2-card{background:#171717;border:1px solid #584715;border-radius:18px;padding:13px}
-    .vd2-head{font-size:17px;font-weight:900;margin:0 0 12px}.vd2-general{display:grid;grid-template-columns:1.35fr .65fr;gap:12px}
-    .vd2-photo{width:100%;height:270px;object-fit:contain;background:#090909;border-radius:13px}.vd2-fields{display:grid;gap:8px}
-    .vd2-field,.vd2-doc,.vd2-money{border:1px solid #584715;border-radius:12px;padding:10px}.vd2-field small,.vd2-money small{display:block;color:#999;margin-bottom:4px}
-    .vd2-purchase{color:#e3b72c;font-size:23px;font-weight:900}.vd2-docgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-items:stretch}
-    .vd2-doc{text-align:left;height:104px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;overflow:hidden;position:relative;padding:10px 13px}.vd2-doc-icon{display:none}.vd2-doc strong{display:block;color:#8e8e8e;font-size:12px;font-weight:500;line-height:1.1;margin:0 0 7px}.vd2-doc b{display:block;color:#fff;font-size:16px;line-height:1.14;font-weight:900;max-width:100%;overflow-wrap:anywhere}.vd2-doc-extra{display:block;min-height:12px;margin-top:4px;color:#e3b72c;font-size:10px;line-height:1.1}
-    .vd2-registration{grid-column:1/-1;min-height:58px;border:1px solid #584715;border-radius:12px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px}.vd2-registration b{color:#fff;text-align:right}
-    .vd2-fin{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.vd2-money b{font-size:17px}.vd2-total b{color:#e3b72c}
-    .vd2-sub{font-weight:800;margin:16px 0 5px}.vd2-table{width:100%;border-collapse:collapse}.vd2-table th,.vd2-table td{padding:9px 5px;border-bottom:1px solid #3b321d;font-size:12px}
-    .vd2-table th{color:#d9b334;text-align:left}.vd2-table th:last-child,.vd2-table td:last-child{text-align:right}.vd2-empty{text-align:center!important;color:#999;padding:20px!important}
-    .vd2-foot td{font-weight:900;color:#e3b72c}
-    @media(max-width:650px){.vd2-general{grid-template-columns:1fr}.vd2-photo{height:225px}.vd2-fields{grid-template-columns:1fr 1fr}.vd2-buy{grid-column:1/-1}.vd2-docgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.vd2-doc{height:108px;padding:10px}.vd2-doc strong{font-size:11px}.vd2-doc b{font-size:14px}.vd2-doc-extra{font-size:9px}.vd2-fin{grid-template-columns:repeat(2,1fr)}}
+    .vd2-wrap{display:grid;gap:14px}
+    .vd2-card{background:#171717;border:1px solid #584715;border-radius:18px;padding:13px}
+    .vd2-head{font-size:14px;font-weight:800;color:#d9b334;margin:0 0 10px}
+    .vd2-card.vd2-first{padding:0;overflow:hidden}
+    .vd2-photo{display:block;width:100%;height:240px;object-fit:cover;background:#090909}
+    .vd2-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:12px}
+    .vd2-field{background:#241f0c;border:1px solid #6b5a1c;border-radius:12px;padding:10px 12px;min-width:0}
+    .vd2-field small{display:block;color:#a8a396;font-size:12px;margin-bottom:4px}
+    .vd2-field b{display:block;color:#fff;font-size:clamp(15px,4.6vw,20px);font-weight:800;line-height:1.15;overflow-wrap:anywhere}
+    .vd2-docgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .vd2-doc{border:1px solid #3a3a3a;background:#1f1f1f;border-radius:12px;padding:10px 12px;min-width:0;display:flex;flex-direction:column;justify-content:flex-start;min-height:84px}
+    .vd2-doc strong{display:block;font-size:12px;font-weight:500;color:#a8a396;margin-bottom:3px}
+    .vd2-doc b{font-size:15px;font-weight:800;color:#fff;line-height:1.2;overflow-wrap:anywhere}
+    .vd2-doc small{font-size:13px;margin-top:3px}
+    .vd2-ok{background:#12281a;border-color:#2f6b45}.vd2-ok strong{color:#8fd4a8}
+    .vd2-warn{background:#33290d;border-color:#a87a12}.vd2-warn strong,.vd2-warn small{color:#f0c35a}
+    .vd2-bad{background:#341616;border-color:#a33a3a}.vd2-bad strong,.vd2-bad small{color:#f09595}
+    .vd2-list{display:grid}
+    .vd2-line{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;font-size:15px;border-top:1px solid #2e2e2e}
+    .vd2-line:first-child{border-top:0}
+    .vd2-line span{color:#a8a396}.vd2-line b{color:#fff;font-weight:600;text-align:right}
+    .vd2-line.vd2-gold b{color:#e3b72c;font-weight:800}
+    .vd2-line.vd2-pend span,.vd2-line.vd2-pend b{color:#f0c35a}
+    .vd2-line.vd2-big{font-size:17px}.vd2-line.vd2-big span{color:#fff;font-weight:700}
+    .vd2-line.vd2-dim b{color:#a8a396;font-weight:500}
+    .vd2-pos{color:#8fd4a8!important}.vd2-neg{color:#f09595!important}
+    .vd2-table{width:100%;border-collapse:collapse}
+    .vd2-table td{padding:10px 4px;border-top:1px solid #2e2e2e;font-size:15px}
+    .vd2-table tr:first-child td{border-top:0}
+    .vd2-table td:last-child{text-align:right}
+    .vd2-empty{text-align:center!important;color:#999;padding:20px!important}
+    .vd2-foot td{font-weight:800;color:#e3b72c;border-top:1px solid #584715!important}
+    @media(min-width:900px){.vd2-photo{height:320px}.vd2-docgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
   </style>
   <div class="vd2-wrap">
-    <div class="vd2-card">
-      <div class="vd2-head">🚘 INFORMACIÓN GENERAL DEL VEHÍCULO</div>
-      <div class="vd2-general">
-        <img class="vd2-photo" src="${jcpSafeImageSrc(photo)}" alt="Foto del vehículo">
-        <div class="vd2-fields">
-          <div class="vd2-field"><small>MARCA</small><b>${esc(commercial.marca||'SIN REGISTRAR')}</b></div>
-          <div class="vd2-field"><small>REFERENCIA</small><b>${esc(commercial.referencia||'SIN REGISTRAR')}</b></div>
-          <div class="vd2-field"><small>MODELO</small><b>${esc(commercial.modelo||'SIN REGISTRAR')}</b></div>
-          <div class="vd2-field"><small>CILINDRAJE</small><b>${esc(commercial.cilindraje||'SIN REGISTRAR')}</b></div>
-          <div class="vd2-field"><small>PLACA</small><b>${esc(commercial.placa||'SIN REGISTRAR')}</b></div>
-          <div class="vd2-field vd2-buy"><small>VALOR DE COMPRA</small><div class="vd2-purchase">${fmt(compra)}</div></div>
-        </div>
+    <div class="vd2-card vd2-first">
+      <img class="vd2-photo" src="${jcpSafeImageSrc(photo)}" alt="Foto del vehículo">
+      <div class="vd2-fields">
+        <div class="vd2-field"><small>Marca</small><b>${esc(commercial.marca||'SIN REGISTRAR')}</b></div>
+        <div class="vd2-field"><small>Referencia</small><b>${esc(commercial.referencia||'SIN REGISTRAR')}</b></div>
+        <div class="vd2-field"><small>Modelo</small><b>${esc(commercial.modelo||'SIN REGISTRAR')}</b></div>
+        <div class="vd2-field"><small>Cilindraje</small><b>${esc(commercial.cilindraje||'SIN REGISTRAR')}</b></div>
+        <div class="vd2-field"><small>Placa</small><b>${esc(commercial.placa||'SIN REGISTRAR')}</b></div>
+        <div class="vd2-field"><small>Matrícula de</small><b>${esc(read('matricula'))}</b></div>
       </div>
     </div>
 
     <div class="vd2-card">
-      <div class="vd2-head">📋 DOCUMENTACIÓN Y ESTADO</div>
+      <div class="vd2-head">Documentación y estado</div>
       <div class="vd2-docgrid">
-        ${doc('SOAT',read('soat'),'🛡️')}
-        ${doc('TECNOMECÁNICA',read('tecnomecanica'),'🔧')}
-        ${doc('IMPUESTOS',read('impuestos'),'📄',taxExtra)}
-        ${doc('COMPARENDOS',read('comparendos','SIN REGISTRAR'),'⚠️',compExtra)}
-        ${doc('PRENDAS',read('prendas','SIN REGISTRAR'),'🔒')}
-        ${doc('EMBARGOS',read('embargos','SIN REGISTRAR'),'⚖️')}
-        ${doc('REPORTES',read('reportes','SIN REGISTRAR'),'📑',reportExtra)}
-        ${doc('KILOMETRAJE',Number(read('kilometraje',0))?new Intl.NumberFormat('es-CO').format(Number(read('kilometraje',0)))+' KM':read('kilometraje'),'⏱️')}
-        <div class="vd2-registration"><strong>📍 MATRÍCULA DE</strong><b>${esc(read('matricula'))}</b></div>
+        ${doc('SOAT',read('soat'),docTone(read('soat')))}
+        ${doc('Tecnomecánica',read('tecnomecanica'),docTone(read('tecnomecanica')))}
+        ${doc('Impuestos',read('impuestos'),taxTone,taxExtra)}
+        ${doc('Comparendos',read('comparendos','SIN REGISTRAR'),yesNoTone(read('comparendos','SIN REGISTRAR')),compExtra)}
+        ${doc('Prendas',read('prendas','SIN REGISTRAR'),yesNoTone(read('prendas','SIN REGISTRAR')))}
+        ${doc('Embargos',read('embargos','SIN REGISTRAR'),yesNoTone(read('embargos','SIN REGISTRAR')))}
+        ${doc('Reportes',read('reportes','SIN REGISTRAR'),yesNoTone(read('reportes','SIN REGISTRAR')),reportExtra)}
+        ${doc('Kilometraje',kmText,'neutral')}
       </div>
     </div>
 
     <div class="vd2-card">
-      <div class="vd2-head">💰 ESTADO FINANCIERO</div>
-      <div class="vd2-fin">
-        <div class="vd2-money"><small>VALOR DE COMPRA</small><b>${fmt(compra)}</b></div>
-        <div class="vd2-money"><small>TOTAL GASTOS</small><b>${fmt(gastos)}</b></div>
-        <div class="vd2-money vd2-total"><small>INVERSIÓN TOTAL</small><b>${fmt(inversion)}</b></div>
-        <div class="vd2-money"><small>PRECIO DE VENTA</small><b>${fmt(venta)}</b></div>
+      <div class="vd2-head">Estado financiero</div>
+      <div class="vd2-list">
+        <div class="vd2-line"><span>Valor de compra</span><b>${fmt(compra)}</b></div>
+        <div class="vd2-line"><span>Total gastos</span><b>${fmt(gastos)}</b></div>
+        <div class="vd2-line vd2-gold"><span>Inversión actual</span><b>${fmt(inversion)}</b></div>
+        ${pendientes>0?`<div class="vd2-line vd2-pend"><span>Pendientes por pagar</span><b>${fmt(pendientes)}</b></div>
+        <div class="vd2-line vd2-gold vd2-big"><span>Inversión proyectada</span><b>${fmt(proyectada)}</b></div>`:''}
+        <div class="vd2-line vd2-dim"><span>Precio de venta</span><b>${esc(ventaText)}</b></div>
+        <div class="vd2-line vd2-dim"><span>Utilidad estimada</span><b class="${utilidadClass}">${utilidadText}</b></div>
       </div>
-      <div class="vd2-sub">🧾 RELACIÓN DE GASTOS</div>
+    </div>
+
+    <div class="vd2-card">
+      <div class="vd2-head">Relación de gastos</div>
       <div style="overflow:auto">
         <table class="vd2-table">
-          <thead><tr><th>CONCEPTO</th><th>VALOR</th></tr></thead>
           <tbody>${rows}</tbody>
-          <tfoot><tr class="vd2-foot"><td>TOTAL GASTOS</td><td>${fmt(gastos)}</td></tr></tfoot>
+          <tfoot><tr class="vd2-foot"><td>Total gastos</td><td>${fmt(gastos)}</td></tr></tfoot>
         </table>
       </div>
     </div>
@@ -11518,7 +11557,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.19.3\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.19.4\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15323,7 +15362,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.19.3',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.19.4',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -15369,6 +15408,6 @@ window.openRecordCopy=function(number){
   document.addEventListener('DOMContentLoaded',()=>{install();const overlay=document.getElementById('jcpExcelOverlay');overlay.onclick=e=>{if(e.target===overlay)close();};document.getElementById('jcpExcelClose').onclick=close;document.getElementById('jcpExcelCancel').onclick=close;document.getElementById('jcpExcelGenerate').onclick=generate;document.getElementById('jcpExcelAll').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=true);document.getElementById('jcpExcelNone').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=false);document.querySelectorAll('[name="jcpExcelPeriod"]').forEach(x=>x.onchange=()=>document.getElementById('jcpExcelDates').hidden=x.value!=='range'||!x.checked);});
 })();
 </script>
-<script src="./app-update.js?v=2026.09.19.3"></script>
+<script src="./app-update.js?v=2026.09.19.4"></script>
 </body>
 </html>
