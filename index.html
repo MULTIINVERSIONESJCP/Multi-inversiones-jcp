@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.21</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.22</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5353,9 +5353,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.21"></script>
-<script src="./jcp-sync.js?v=2026.09.20.21"></script>
-<script src="./jcp-images.js?v=2026.09.20.21"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.22"></script>
+<script src="./jcp-sync.js?v=2026.09.20.22"></script>
+<script src="./jcp-images.js?v=2026.09.20.22"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -11756,7 +11756,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.21\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.22\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15561,7 +15561,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.21',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.22',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -16306,13 +16306,22 @@ window.openRecordCopy=function(number){
 .jcp-pb-sheet{width:min(560px,100%);max-height:92vh;display:flex;flex-direction:column;gap:12px;padding:18px 18px calc(16px + env(safe-area-inset-bottom,0px));background:#101010;border:1px solid #4a3d17;border-bottom:0;border-radius:22px 22px 0 0}
 .jcp-pb-sheet textarea{width:100%;height:52vh;padding:14px;background:#0a0a0a;border:1px solid var(--pb-line);border-radius:14px;color:var(--pb-txt);font-size:14px;line-height:1.5;font-family:Arial,sans-serif;text-transform:none}
 .jcp-pb-sheet .jcp-pb-act{margin:0}
-.jcp-pb-edit{min-height:36px;padding:0 14px;border-radius:18px;background:none!important;border:1px dashed #6a5520!important;color:var(--pb-acc)!important;font-size:12px;font-weight:800}
-.jcp-pb-opt.del{border-color:#6b2f2a;color:#ff8a7d}
-.jcp-pb-addrow{display:flex;gap:8px;width:100%;margin-top:4px}
-.jcp-pb-addrow input{flex:1;width:auto;min-width:0;min-height:46px;padding:0 14px;background:#101010;border:1px solid var(--pb-line);border-radius:14px;color:var(--pb-txt);font-size:15px}
-.jcp-pb-addrow button{flex:none;min-height:46px;padding:0 16px;border-radius:14px;font-size:13px;font-weight:800}
-.jcp-pb-tools{display:flex;gap:8px;width:100%}
-.jcp-pb-tools button{flex:1;min-height:40px;border-radius:12px;font-size:12px;font-weight:800}
+.jcp-pb-menuwrap{position:relative;margin-left:auto;flex:none;margin-top:10px}
+.jcp-pb-dots{width:46px;height:46px;padding:0;border-radius:50%;background:var(--pb-card)!important;border:1px solid var(--pb-line)!important;color:var(--pb-txt)!important;font-size:22px;line-height:1}
+.jcp-pb-menu{display:none;position:absolute;right:0;top:54px;z-index:5;min-width:220px;padding:6px;background:#1a1812;border:1px solid #3a3320;border-radius:16px;box-shadow:0 14px 34px rgba(0,0,0,.65)}
+.jcp-pb-menu.open{display:block}
+.jcp-pb-menu button{display:flex;align-items:center;gap:10px;width:100%;min-height:46px;padding:0 14px;background:none!important;border:0!important;border-radius:10px;color:var(--pb-txt)!important;font-size:15px;font-weight:700;text-align:left}
+.jcp-pb-at{--pb-acc:var(--jcp-ui-accent,#d4af37);--pb-card:var(--jcp-ui-card,#141414);--pb-line:var(--jcp-ui-border,#2a2a2a);--pb-mut:var(--jcp-ui-muted,#a8a8a8);--pb-txt:var(--jcp-ui-text,#f5f5f5);--pb-serif:'Noto Serif','Source Serif 4',Georgia,'Times New Roman',serif;display:none;position:fixed;inset:0;z-index:1000005;overflow-y:auto;background:#0a0a0a;padding:22px 20px calc(120px + env(safe-area-inset-bottom,0px));font-family:Arial,sans-serif;color:var(--pb-txt)}
+.jcp-pb-at.open{display:block}
+.jcp-pb-at h2{margin:6px 0 0;font-family:var(--pb-serif);font-size:32px;line-height:1.06;font-weight:700;color:#f5f1e6;text-transform:none;letter-spacing:0}
+.jcp-pb-at p{margin:0 0 6px;font-size:14px;line-height:1.5;color:var(--pb-mut)}
+.jcp-pb-atrow{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:56px;margin-bottom:8px;padding:6px 8px 6px 16px;background:var(--pb-card)!important;border:1px solid var(--pb-line)!important;border-radius:14px;color:var(--pb-txt)!important;font-size:15px;font-weight:700;text-align:left}
+.jcp-pb-atrow small{font-size:12px;font-weight:400;color:var(--pb-mut)}
+.jcp-pb-atrow .jcp-pb-x{flex:none;width:44px;height:44px;padding:0;border-radius:12px;background:#1b1b1b!important;border:1px solid #333!important;color:var(--pb-mut)!important;font-size:16px}
+.jcp-pb-atrow .chev{font-size:20px;color:var(--pb-mut)}
+.jcp-pb-addrow{display:flex;gap:8px;width:100%;margin-top:12px}
+.jcp-pb-addrow input{flex:1;width:auto;min-width:0;min-height:50px;padding:0 14px;background:#101010;border:1px solid var(--pb-line);border-radius:14px;color:var(--pb-txt);font-size:16px}
+.jcp-pb-addrow button{flex:none;min-height:50px;padding:0 18px;border-radius:14px;font-size:14px;font-weight:800}
 #vehicleDetailView .unified-module-title{white-space:normal!important;font-size:19px!important;line-height:1.12!important;letter-spacing:0!important}
 #vehicleDetailView .unified-module-title-row{grid-template-columns:minmax(0,1fr) auto!important}
 </style>
@@ -16637,52 +16646,93 @@ window.openRecordCopy=function(number){
     o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-labelledby','jcpPbTitle');
     document.body.appendChild(o);return o;
   }
-  /* ---- Atajos (opciones) editables por casilla ---- */
+  /* ---- Atajos: se guardan una sola vez y valen para todos los carros ---- */
   var OKEY='jcp_pub_options_v1';
   function loadOpts(){try{return JSON.parse(localStorage.getItem(OKEY)||'{}')||{}}catch(e){return {}}}
   function getOpts(k){var s=loadOpts();if(Array.isArray(s[k]))return s[k].slice();return (FBY[k]&&FBY[k].o)?FBY[k].o.slice():[]}
   function setOpts(k,arr){var s=loadOpts();s[k]=arr;try{localStorage.setItem(OKEY,JSON.stringify(s))}catch(e){}}
   function resetOpts(k){var s=loadOpts();delete s[k];try{localStorage.setItem(OKEY,JSON.stringify(s))}catch(e){}}
-  function paintOpts(f,inp,box,editing){
+  function paintOpts(f,inp,box){
     box.innerHTML='';
-    var list=getOpts(f.k);
-    list.forEach(function(t,i){
-      var b=document.createElement('button');b.type='button';b.className='jcp-pb-opt'+(editing?' del':'');
-      b.textContent=editing?t+'  ✕':t;
-      b.setAttribute('aria-label',editing?'Quitar atajo '+t:t);
-      b.onclick=function(){
-        if(editing){var a=getOpts(f.k);a.splice(i,1);setOpts(f.k,a);paintOpts(f,inp,box,true)}
-        else{inp.value=t;cur.vals[f.k]=t;persist()}
-      };
+    getOpts(f.k).forEach(function(t){
+      var b=document.createElement('button');b.type='button';b.className='jcp-pb-opt';b.textContent=t;
+      b.onclick=function(){inp.value=t;cur.vals[f.k]=t;persist()};
       box.appendChild(b);
     });
-    if(!editing){
-      var e=document.createElement('button');e.type='button';e.className='jcp-pb-edit';
-      e.textContent=list.length?'✎ Editar atajos':'＋ Crear atajos';
-      e.setAttribute('aria-label','Editar atajos de '+f.l);
-      e.onclick=function(){paintOpts(f,inp,box,true)};
-      box.appendChild(e);
-      return;
-    }
-    var row=document.createElement('div');row.className='jcp-pb-addrow';
-    var ni=document.createElement('input');ni.type='text';ni.placeholder='Nuevo atajo';ni.setAttribute('aria-label','Nuevo atajo para '+f.l);ni.maxLength=40;ni.autocomplete='off';
+    box.style.display=box.children.length?'flex':'none';
+  }
+  var AT_SKIP={modelo:1,kilometraje:1,placas:1,precio:1};
+  function atNode(){
+    var o=el('jcpPbAt');if(o)return o;
+    o=document.createElement('div');o.id='jcpPbAt';o.className='jcp-pb-at';
+    o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-labelledby','jcpPbAtTitle');
+    document.body.appendChild(o);return o;
+  }
+  function openAtajos(){atNode().classList.add('open');atList()}
+  function closeAtajos(){
+    var o=el('jcpPbAt');if(o)o.classList.remove('open');
+    commitAll();renderForm();
+  }
+  function atTop(kick,title,onBack){
+    var top=document.createElement('div');top.className='jcp-pb-top';
+    top.innerHTML='<button type="button" class="jcp-pb-back" id="jcpPbAtBack" aria-label="Volver">'+backSvg()+'</button><div><div class="jcp-pb-kick"></div><h2 id="jcpPbAtTitle"></h2></div>';
+    top.querySelector('.jcp-pb-kick').textContent=kick;top.querySelector('h2').textContent=title;
+    top.querySelector('button').onclick=onBack;return top;
+  }
+  function atList(){
+    var o=atNode();o.innerHTML='';o.scrollTop=0;
+    o.appendChild(atTop('Información para redes','Editar atajos',closeAtajos));
+    var rule=document.createElement('div');rule.className='jcp-pb-rule';o.appendChild(rule);
+    var p=document.createElement('p');p.textContent='Elige la característica cuyos atajos quieres cambiar. Los cambios valen para todos los carros.';o.appendChild(p);
+    GROUPS.forEach(function(g){
+      var ks=g.ks.filter(function(k){return !AT_SKIP[k]});if(!ks.length)return;
+      o.appendChild(secNode(g.t));
+      ks.forEach(function(k){
+        var n=getOpts(k).length;
+        var b=document.createElement('button');b.type='button';b.className='jcp-pb-atrow';
+        b.innerHTML='<span></span><span class="chev">›</span>';
+        var sp=b.querySelector('span');sp.textContent=FBY[k].l+' ';
+        var sm=document.createElement('small');sm.textContent=n?('· '+n+(n===1?' atajo':' atajos')):'· sin atajos';sp.appendChild(sm);
+        b.onclick=function(){atField(k)};
+        o.appendChild(b);
+      });
+    });
+    var bar=document.createElement('div');bar.className='jcp-pb-bar';
+    bar.innerHTML='<button type="button" class="jcp-pb-pri" id="jcpPbAtDone">Listo</button>';
+    o.appendChild(bar);el('jcpPbAtDone').onclick=closeAtajos;
+  }
+  function atField(k){
+    var f=FBY[k],o=atNode();o.innerHTML='';o.scrollTop=0;
+    o.appendChild(atTop('Atajos de',f.l.charAt(0)+f.l.slice(1).toLowerCase(),atList));
+    var rule=document.createElement('div');rule.className='jcp-pb-rule';o.appendChild(rule);
+    var p=document.createElement('p');p.textContent='Estos atajos salen en todos los carros al llenar esta casilla.';o.appendChild(p);
+    o.appendChild(secNode('Atajos actuales'));
+    var list=getOpts(k);
+    if(!list.length){var e=document.createElement('p');e.textContent='Todavía no hay atajos para esta característica.';o.appendChild(e)}
+    list.forEach(function(t,i){
+      var r=document.createElement('div');r.className='jcp-pb-atrow';
+      var sp=document.createElement('span');sp.textContent=t;
+      var x=document.createElement('button');x.type='button';x.className='jcp-pb-x';x.textContent='✕';x.setAttribute('aria-label','Quitar atajo '+t);
+      x.onclick=function(){var a=getOpts(k);a.splice(i,1);setOpts(k,a);atField(k)};
+      r.appendChild(sp);r.appendChild(x);o.appendChild(r);
+    });
+    o.appendChild(secNode('Agregar un atajo'));
+    var row=document.createElement('div');row.className='jcp-pb-addrow';row.style.marginTop='0';
+    var ni=document.createElement('input');ni.type='text';ni.placeholder='Nuevo atajo';ni.maxLength=40;ni.autocomplete='off';ni.setAttribute('aria-label','Nuevo atajo para '+f.l);
     var ab=document.createElement('button');ab.type='button';ab.className='jcp-pb-pri';ab.textContent='＋ Agregar';
     function add(){
       var t=up(ni.value);if(!t)return;
-      var a=getOpts(f.k);
-      if(a.indexOf(t)<0&&a.length<14){a.push(t);setOpts(f.k,a)}
-      paintOpts(f,inp,box,true);
-      var again=box.querySelector('.jcp-pb-addrow input');if(again)again.focus();
+      var a=getOpts(k);
+      if(a.indexOf(t)<0&&a.length<14){a.push(t);setOpts(k,a)}
+      atField(k);var again=el('jcpPbAt').querySelector('.jcp-pb-addrow input');if(again)again.focus();
     }
-    ab.onclick=add;
-    ni.addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();add()}});
-    row.appendChild(ni);row.appendChild(ab);box.appendChild(row);
-    var tools=document.createElement('div');tools.className='jcp-pb-tools';
-    var rs=document.createElement('button');rs.type='button';rs.className='jcp-pb-sec2';rs.textContent='Restablecer originales';
-    rs.onclick=function(){resetOpts(f.k);paintOpts(f,inp,box,true)};
-    var dn=document.createElement('button');dn.type='button';dn.className='jcp-pb-pri';dn.textContent='Listo';
-    dn.onclick=function(){paintOpts(f,inp,box,false)};
-    tools.appendChild(rs);tools.appendChild(dn);box.appendChild(tools);
+    ab.onclick=add;ni.addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();add()}});
+    row.appendChild(ni);row.appendChild(ab);o.appendChild(row);
+    var bar=document.createElement('div');bar.className='jcp-pb-bar';
+    bar.innerHTML='<button type="button" class="jcp-pb-sec2" id="jcpPbAtReset">Restablecer originales</button><button type="button" class="jcp-pb-pri" id="jcpPbAtOk">Listo</button>';
+    o.appendChild(bar);
+    el('jcpPbAtReset').onclick=function(){resetOpts(k);atField(k)};
+    el('jcpPbAtOk').onclick=atList;
   }
   function fieldNode(f){
     var w=document.createElement('div');w.className='jcp-pb-f';
@@ -16697,7 +16747,7 @@ window.openRecordCopy=function(number){
     w.appendChild(inp);
     var box=document.createElement('div');box.className='jcp-pb-opts';
     w.appendChild(box);
-    paintOpts(f,inp,box,false);
+    paintOpts(f,inp,box);
     return w;
   }
   function secNode(t){var s=document.createElement('div');s.className='jcp-pb-sec';s.textContent=t;return s}
@@ -16705,7 +16755,8 @@ window.openRecordCopy=function(number){
     var o=ensureEditor(),st=o.scrollTop;o.innerHTML='';
     var v=vehById(cur.id)||{};
     var top=document.createElement('div');top.className='jcp-pb-top';
-    top.innerHTML='<button type="button" class="jcp-pb-back" id="jcpPbBack" aria-label="Volver">'+backSvg()+'</button><div><div class="jcp-pb-kick">Inventario</div><h2 id="jcpPbTitle">Información para redes</h2></div>';
+    top.innerHTML='<button type="button" class="jcp-pb-back" id="jcpPbBack" aria-label="Volver">'+backSvg()+'</button><div><div class="jcp-pb-kick">Inventario</div><h2 id="jcpPbTitle">Información para redes</h2></div>'
+      +'<div class="jcp-pb-menuwrap"><button type="button" class="jcp-pb-dots" id="jcpPbDots" aria-label="Más opciones" aria-expanded="false">⋮</button><div class="jcp-pb-menu" id="jcpPbMenu"><button type="button" id="jcpPbMenuAt">✎ Editar atajos</button></div></div>';
     o.appendChild(top);
     var rule=document.createElement('div');rule.className='jcp-pb-rule';o.appendChild(rule);
     var card=document.createElement('div');card.className='jcp-pb-veh';
@@ -16786,6 +16837,15 @@ window.openRecordCopy=function(number){
     bar.innerHTML='<button type="button" class="jcp-pb-sec2" id="jcpPbBtnTxt">📝 Ver texto</button><button type="button" class="jcp-pb-pri" id="jcpPbBtnImg">🖼️ Crear imagen</button>';
     o.appendChild(bar);
     el('jcpPbBack').onclick=closeEditor;
+    (function(){
+      var dots=el('jcpPbDots'),menu=el('jcpPbMenu');
+      dots.onclick=function(e){e.stopPropagation();var on=menu.classList.toggle('open');dots.setAttribute('aria-expanded',on?'true':'false')};
+      if(!o.__menuBound){o.__menuBound=true;o.addEventListener('click',function(e){
+        if(e.target.closest&&e.target.closest('.jcp-pb-menuwrap'))return;
+        var m2=el('jcpPbMenu'),d2=el('jcpPbDots');if(m2)m2.classList.remove('open');if(d2)d2.setAttribute('aria-expanded','false');
+      })}
+      el('jcpPbMenuAt').onclick=function(){menu.classList.remove('open');commitAll();openAtajos()};
+    })();
     el('jcpPbBtnTxt').onclick=function(){commitAll();openText()};
     el('jcpPbBtnImg').onclick=function(){commitAll();generate()};
     o.classList.add('open');o.scrollTop=st;
@@ -16896,6 +16956,6 @@ window.openRecordCopy=function(number){
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install);else install();
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.21"></script>
+<script src="./app-update.js?v=2026.09.20.22"></script>
 </body>
 </html>
