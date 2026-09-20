@@ -2,8 +2,9 @@
 (function(root){
   'use strict';
   const PENDING_KEY='jcp_pending_write_v2';
-  const RPC_TIMEOUT_MS=12000;
-  const SESSION_TIMEOUT_MS=8000;
+  const RPC_TIMEOUT_MS=60000;   // lecturas (los datos pesan varios MB)
+  const SAVE_TIMEOUT_MS=150000; // guardados: se sube todo el bloque de datos
+  const SESSION_TIMEOUT_MS=15000;
   const canonical=value=>JSON.stringify(sort(value));
   function sort(v){return Array.isArray(v)?v.map(sort):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,sort(v[k])])):v;}
   function create({client,storage,onStatus=()=>{},resolveConflict=null,uuid=()=>{
@@ -18,8 +19,8 @@
       try{return await Promise.race([Promise.resolve(promise),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error(message)),timeout);})]);}
       finally{clearTimeout(timer);}
     }
-    async function rpc(name,args){
-      const result=await limited(client.rpc(name,args),RPC_TIMEOUT_MS,'Supabase tardó demasiado en responder. El cambio está protegido y se reintentará automáticamente.');
+    async function rpc(name,args,timeout=RPC_TIMEOUT_MS){
+      const result=await limited(client.rpc(name,args),timeout,'Supabase tardó demasiado en responder. El cambio está protegido y se reintentará automáticamente.');
       if(result.error)throw result.error;
       return result.data;
     }
@@ -59,7 +60,7 @@
           if(sessionData?.session?.user?.id!==request.userId)throw new Error('La sesión cambió. El pendiente permanece protegido.');
           let current=request,merged=false,result;
           for(let attempt=0;;attempt++){
-            result=await rpc('jcp_save_state',{p_expected_revision:current.expectedRevision,p_request_id:current.requestId,p_data:current.snapshot});
+            result=await rpc('jcp_save_state',{p_expected_revision:current.expectedRevision,p_request_id:current.requestId,p_data:current.snapshot},SAVE_TIMEOUT_MS);
             if(!result?.conflict)break;
             // Otro dispositivo guardó primero: intentar combinar ambos cambios sin perder nada.
             let next=null,central=null;
