@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.18</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.21</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5353,9 +5353,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.18"></script>
-<script src="./jcp-sync.js?v=2026.09.20.18"></script>
-<script src="./jcp-images.js?v=2026.09.20.18"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.21"></script>
+<script src="./jcp-sync.js?v=2026.09.20.21"></script>
+<script src="./jcp-images.js?v=2026.09.20.21"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -11756,7 +11756,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.18\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.21\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15561,7 +15561,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.18',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.21',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -16306,6 +16306,13 @@ window.openRecordCopy=function(number){
 .jcp-pb-sheet{width:min(560px,100%);max-height:92vh;display:flex;flex-direction:column;gap:12px;padding:18px 18px calc(16px + env(safe-area-inset-bottom,0px));background:#101010;border:1px solid #4a3d17;border-bottom:0;border-radius:22px 22px 0 0}
 .jcp-pb-sheet textarea{width:100%;height:52vh;padding:14px;background:#0a0a0a;border:1px solid var(--pb-line);border-radius:14px;color:var(--pb-txt);font-size:14px;line-height:1.5;font-family:Arial,sans-serif;text-transform:none}
 .jcp-pb-sheet .jcp-pb-act{margin:0}
+.jcp-pb-edit{min-height:36px;padding:0 14px;border-radius:18px;background:none!important;border:1px dashed #6a5520!important;color:var(--pb-acc)!important;font-size:12px;font-weight:800}
+.jcp-pb-opt.del{border-color:#6b2f2a;color:#ff8a7d}
+.jcp-pb-addrow{display:flex;gap:8px;width:100%;margin-top:4px}
+.jcp-pb-addrow input{flex:1;width:auto;min-width:0;min-height:46px;padding:0 14px;background:#101010;border:1px solid var(--pb-line);border-radius:14px;color:var(--pb-txt);font-size:15px}
+.jcp-pb-addrow button{flex:none;min-height:46px;padding:0 16px;border-radius:14px;font-size:13px;font-weight:800}
+.jcp-pb-tools{display:flex;gap:8px;width:100%}
+.jcp-pb-tools button{flex:1;min-height:40px;border-radius:12px;font-size:12px;font-weight:800}
 #vehicleDetailView .unified-module-title{white-space:normal!important;font-size:19px!important;line-height:1.12!important;letter-spacing:0!important}
 #vehicleDetailView .unified-module-title-row{grid-template-columns:minmax(0,1fr) auto!important}
 </style>
@@ -16358,8 +16365,8 @@ window.openRecordCopy=function(number){
     {t:'Precio',ks:['precio']}
   ];
   var TEXT_ORDER=['modelo','motor','alimentacion','caja','direccion','kilometraje','soat','tecnomecanica','comparendos','prendas','embargos','impuestos','matricula','placas','duenos','traspaso','tapiceria','cojineria','climatizacion','radio','elevavidrios','retrovisores','polarizados','alarma','llantas','rines','pintura','estructura','linea','extras','precio'];
-  var SPEC=['motor','alimentacion','caja','direccion','kilometraje','matricula','placas','duenos','traspaso','tapiceria','cojineria','climatizacion','radio','elevavidrios','retrovisores','polarizados','alarma','llantas','rines','pintura','estructura','linea','extras'];
-  var DOCS=['soat','tecnomecanica','comparendos','prendas','embargos','impuestos'];
+  var SPEC=['motor','alimentacion','caja','direccion','kilometraje','matricula','placas','tapiceria','cojineria','climatizacion','radio','elevavidrios','retrovisores','polarizados','alarma','llantas','rines','pintura','estructura','linea','extras'];
+  var DOCS=['soat','tecnomecanica','comparendos','prendas','embargos','impuestos','duenos','traspaso'];
   var FBY={};F.forEach(function(f){FBY[f.k]=f});
   var cur={id:null,vals:{},defs:{},omit:{},title:TITLES[0],name:'',defName:'',obs:'',noT:false,motivo:''};
 
@@ -16528,14 +16535,10 @@ window.openRecordCopy=function(number){
     x.fillStyle='rgba(212,175,55,.14)';x.beginPath();x.moveTo(720,0);x.lineTo(W,0);x.lineTo(W,HEAD);x.lineTo(650,HEAD);x.closePath();x.fill();
     x.textAlign='left';x.fillStyle='#ffffff';x.font='italic bold 34px '+SANS;x.fillText(o.title,P+8,58);
     var nm=o.name||'VEHÍCULO';
-    x.fillStyle=goldGrad(x,P,700);fit(x,nm,640,112,56,'italic bold',SANS);x.fillText(nm,P+6,158);
+    x.fillStyle=goldGrad(x,P,W-P);fit(x,nm,W-2*P-16,112,50,'italic bold',SANS);x.fillText(nm,P+6,158);
     if(v.modelo){
-      x.fillStyle='#ffffff';x.font='italic bold 38px '+SANS;x.textAlign='center';var mt='MODELO '+v.modelo;x.fillText(mt,350,206);
-      var hw=x.measureText(mt).width/2;x.strokeStyle=goldGrad(x,P,700);x.lineWidth=3;x.beginPath();x.moveTo(P+8,196);x.lineTo(350-hw-18,196);x.moveTo(350+hw+18,196);x.lineTo(690,196);x.stroke();
-    }
-    if(o.brand){
-      x.save();x.translate(895,112);x.beginPath();x.ellipse(0,0,150,66,0,0,7);x.fillStyle='#111';x.fill();x.lineWidth=7;x.strokeStyle='#c9c9c9';x.stroke();x.lineWidth=2;x.strokeStyle=GOLD;x.beginPath();x.ellipse(0,0,138,55,0,0,7);x.stroke();
-      x.fillStyle='#ffffff';x.textAlign='center';fit(x,o.brand,236,66,26,'bold',SANS);x.fillText(o.brand,0,22);x.restore();
+      x.fillStyle='#ffffff';x.font='italic bold 38px '+SANS;x.textAlign='center';var mt='MODELO '+v.modelo;x.fillText(mt,W/2,206);
+      var hw=x.measureText(mt).width/2;x.strokeStyle=goldGrad(x,P,W-P);x.lineWidth=3;x.beginPath();x.moveTo(P+8,196);x.lineTo(W/2-hw-18,196);x.moveTo(W/2+hw+18,196);x.lineTo(W-P-8,196);x.stroke();
     }
     x.strokeStyle=GOLD;x.lineWidth=3;x.beginPath();x.moveTo(P,HEAD-2);x.lineTo(W-P,HEAD-2);x.stroke();
     /* letrero NO TRASPASO */
@@ -16634,6 +16637,53 @@ window.openRecordCopy=function(number){
     o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-labelledby','jcpPbTitle');
     document.body.appendChild(o);return o;
   }
+  /* ---- Atajos (opciones) editables por casilla ---- */
+  var OKEY='jcp_pub_options_v1';
+  function loadOpts(){try{return JSON.parse(localStorage.getItem(OKEY)||'{}')||{}}catch(e){return {}}}
+  function getOpts(k){var s=loadOpts();if(Array.isArray(s[k]))return s[k].slice();return (FBY[k]&&FBY[k].o)?FBY[k].o.slice():[]}
+  function setOpts(k,arr){var s=loadOpts();s[k]=arr;try{localStorage.setItem(OKEY,JSON.stringify(s))}catch(e){}}
+  function resetOpts(k){var s=loadOpts();delete s[k];try{localStorage.setItem(OKEY,JSON.stringify(s))}catch(e){}}
+  function paintOpts(f,inp,box,editing){
+    box.innerHTML='';
+    var list=getOpts(f.k);
+    list.forEach(function(t,i){
+      var b=document.createElement('button');b.type='button';b.className='jcp-pb-opt'+(editing?' del':'');
+      b.textContent=editing?t+'  ✕':t;
+      b.setAttribute('aria-label',editing?'Quitar atajo '+t:t);
+      b.onclick=function(){
+        if(editing){var a=getOpts(f.k);a.splice(i,1);setOpts(f.k,a);paintOpts(f,inp,box,true)}
+        else{inp.value=t;cur.vals[f.k]=t;persist()}
+      };
+      box.appendChild(b);
+    });
+    if(!editing){
+      var e=document.createElement('button');e.type='button';e.className='jcp-pb-edit';
+      e.textContent=list.length?'✎ Editar atajos':'＋ Crear atajos';
+      e.setAttribute('aria-label','Editar atajos de '+f.l);
+      e.onclick=function(){paintOpts(f,inp,box,true)};
+      box.appendChild(e);
+      return;
+    }
+    var row=document.createElement('div');row.className='jcp-pb-addrow';
+    var ni=document.createElement('input');ni.type='text';ni.placeholder='Nuevo atajo';ni.setAttribute('aria-label','Nuevo atajo para '+f.l);ni.maxLength=40;ni.autocomplete='off';
+    var ab=document.createElement('button');ab.type='button';ab.className='jcp-pb-pri';ab.textContent='＋ Agregar';
+    function add(){
+      var t=up(ni.value);if(!t)return;
+      var a=getOpts(f.k);
+      if(a.indexOf(t)<0&&a.length<14){a.push(t);setOpts(f.k,a)}
+      paintOpts(f,inp,box,true);
+      var again=box.querySelector('.jcp-pb-addrow input');if(again)again.focus();
+    }
+    ab.onclick=add;
+    ni.addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();add()}});
+    row.appendChild(ni);row.appendChild(ab);box.appendChild(row);
+    var tools=document.createElement('div');tools.className='jcp-pb-tools';
+    var rs=document.createElement('button');rs.type='button';rs.className='jcp-pb-sec2';rs.textContent='Restablecer originales';
+    rs.onclick=function(){resetOpts(f.k);paintOpts(f,inp,box,true)};
+    var dn=document.createElement('button');dn.type='button';dn.className='jcp-pb-pri';dn.textContent='Listo';
+    dn.onclick=function(){paintOpts(f,inp,box,false)};
+    tools.appendChild(rs);tools.appendChild(dn);box.appendChild(tools);
+  }
   function fieldNode(f){
     var w=document.createElement('div');w.className='jcp-pb-f';
     var h=document.createElement('div');h.className='jcp-pb-fh';
@@ -16645,15 +16695,9 @@ window.openRecordCopy=function(number){
     inp.addEventListener('input',function(){cur.vals[f.k]=inp.value});
     inp.addEventListener('change',function(){cur.vals[f.k]=inp.value;persist()});
     w.appendChild(inp);
-    if(f.o){
-      var box=document.createElement('div');box.className='jcp-pb-opts';
-      f.o.forEach(function(t){
-        var b=document.createElement('button');b.type='button';b.className='jcp-pb-opt';b.textContent=t;
-        b.onclick=function(){inp.value=t;cur.vals[f.k]=t;persist()};
-        box.appendChild(b);
-      });
-      w.appendChild(box);
-    }
+    var box=document.createElement('div');box.className='jcp-pb-opts';
+    w.appendChild(box);
+    paintOpts(f,inp,box,false);
     return w;
   }
   function secNode(t){var s=document.createElement('div');s.className='jcp-pb-sec';s.textContent=t;return s}
@@ -16852,6 +16896,6 @@ window.openRecordCopy=function(number){
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install);else install();
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.18"></script>
+<script src="./app-update.js?v=2026.09.20.21"></script>
 </body>
 </html>
