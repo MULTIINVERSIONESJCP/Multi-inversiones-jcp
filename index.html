@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.19.9</title>
+<title>MULTI INVERSIONES JCP - V2026.09.19.10</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5356,8 +5356,8 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.19.9"></script>
-<script src="./jcp-sync.js?v=2026.09.19.9"></script>
+<script src="./jcp-accounting.js?v=2026.09.19.10"></script>
+<script src="./jcp-sync.js?v=2026.09.19.10"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -5833,6 +5833,73 @@ async function jcpMergeOnConflict({request,central}){
     if(!guard.ok){console.warn('Fusión rechazada por el motor de integridad:',guard.introduced[0]?.title);return null;}
     return buildPersistedSnapshot(res.merged);
   }catch(e){console.warn('Fusión automática falló:',e);return null;}
+}
+
+// OPTIMIZAR FOTOS 2026-09-19 · reduce el peso de las fotos ya guardadas (no borra ninguna).
+const JCP_PHOTO_MIN_CHARS=40000;
+const jcpIsBigImage=v=>typeof v==='string'&&v.length>=JCP_PHOTO_MIN_CHARS&&/^data:image\//i.test(v);
+const jcpIsAnyImage=v=>typeof v==='string'&&/^data:image\//i.test(v);
+function jcpWalkImages(node,visit){
+  if(!node||typeof node!=='object')return;
+  for(const k of Object.keys(node)){
+    const v=node[k];
+    if(jcpIsBigImage(v)){const r=visit(v);if(r!==undefined)node[k]=r;}
+    else if(v&&typeof v==='object')jcpWalkImages(v,visit);
+  }
+}
+function jcpStripImagesJson(state){return JSON.stringify(state,(k,v)=>jcpIsAnyImage(v)?'IMG':v);}
+let jcpOptimizing=false;
+async function jcpOptimizePhotos(){
+  if(jcpOptimizing)return;
+  if(!cloudReady||window.jcpCloudBootstrapReady!==true){alert('Espera a que la aplicación termine de conectarse con Supabase.');return;}
+  if(cloudStore.pending()||cloudStore.conflicted||cloudConflictDetected||window.jcpCloudConflictDetected===true){alert('Hay un cambio pendiente o un conflicto sin resolver. Resuélvelo primero y vuelve a intentar.');return;}
+  if(!confirm('OPTIMIZAR FOTOS\n\nSe reducirá el tamaño de las fotos guardadas. No se borra ninguna foto ni ningún dato.\n\nAntes de continuar:\n1) Ten un respaldo de los datos.\n2) Cierra la aplicación en los demás dispositivos.\n3) Usa buena conexión y no cierres esta pantalla.\n\nPuede tardar 1 o 2 minutos. ¿Continuar?'))return;
+  jcpOptimizing=true;
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;z-index:2147483600;background:#070707f2;color:#fff;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-weight:800;font-size:18px;white-space:pre-line';
+  const msg=document.createElement('div');msg.textContent='Preparando…';overlay.appendChild(msg);document.body.appendChild(overlay);
+  const original=data;
+  try{
+    const work=cloneAppData(original);
+    const unique=new Map();
+    jcpWalkImages(work,v=>{if(!unique.has(v))unique.set(v,v);});
+    const total=unique.size;
+    if(!total){alert('No hay fotos pesadas que optimizar.');return;}
+    let n=0;
+    for(const src of [...unique.keys()]){
+      n++;msg.textContent='Optimizando fotos '+n+' de '+total+'…\nNo cierres esta pantalla.';
+      let out=src;
+      try{
+        const c=await recompressVehicleDataUrl(src,800,600,0.62);
+        if(/^data:image\/jpeg;base64,/i.test(c)&&c.length<src.length*0.9)out=c;
+      }catch(e){console.warn('Foto conservada sin cambios:',e);}
+      unique.set(src,out);
+      await new Promise(r=>setTimeout(r,0));
+    }
+    let copies=0,before=0,after=0;
+    jcpWalkImages(work,v=>{copies++;before+=v.length;const o=unique.get(v)||v;after+=o.length;return o;});
+    // Seguridad: lo único que puede haber cambiado son las fotos.
+    if(jcpStripImagesJson(work)!==jcpStripImagesJson(original))throw new Error('La verificación de seguridad detectó diferencias distintas a las fotos. No se guardó nada.');
+    const mb=x=>(x/1048576).toFixed(1)+' MB';
+    if(after>=before*0.95){alert('Las fotos ya están optimizadas. No hay cambios que guardar.');return;}
+    if(!confirm('Las fotos pasarán de '+mb(before)+' a '+mb(after)+' ('+copies+' imágenes).\n\n¿Guardar los cambios en Supabase?'))return;
+    msg.textContent='Guardando…';
+    data=work;
+    try{save();}
+    catch(e){data=original;throw e;}
+    alert('Listo. Las fotos se están guardando en Supabase.\n\nEspera a que desaparezca el mensaje "Guardando en Supabase…" antes de cerrar la aplicación.');
+  }catch(e){
+    console.error(e);
+    alert('No se pudo optimizar las fotos. Tus datos no fueron modificados.\n\nDetalle: '+String(e?.message||e));
+  }finally{overlay.remove();jcpOptimizing=false;}
+}
+function jcpInstallPhotoOptimizerUi(){
+  const menu=document.getElementById('topMenu');
+  if(!menu||document.getElementById('jcpOptPhotosItem'))return;
+  const b=document.createElement('button');
+  b.id='jcpOptPhotosItem';b.type='button';b.textContent='🗜️ Optimizar fotos';
+  b.onclick=()=>{closeTopMenu();jcpOptimizePhotos();};
+  menu.appendChild(b);
 }
 const cloudStore=JcpSync.create({client:supabaseClient,storage:jcpResilientStorage,resolveConflict:jcpMergeOnConflict,onStatus:({state,message,revision})=>{
   window.jcpSyncState=state;window.jcpServerRevision=revision;
@@ -7278,11 +7345,10 @@ async function readVehiclePhotoFile(file){
   // No guardar nunca la foto original de cámara en localStorage.
   // En tablets/celulares puede pesar varios MB y bloquear el registro completo.
   const attempts=[
-    [1280,960,.70],
-    [1080,810,.62],
-    [900,675,.55],
-    [720,540,.48],
-    [640,480,.42]
+    [800,600,.62],
+    [720,540,.55],
+    [640,480,.50],
+    [560,420,.45]
   ];
 
   let lastError=null;
@@ -7290,8 +7356,8 @@ async function readVehiclePhotoFile(file){
     try{
       const result=await compressVehicleImage(file,w,h,q);
       if(!result)continue;
-      // Meta aproximada: <= 300 KB por fotografía almacenada.
-      if(estimateDataUrlBytes(result)<=300*1024 || w===640)return result;
+      // Meta aproximada: <= 120 KB por fotografía almacenada (antes 300 KB).
+      if(estimateDataUrlBytes(result)<=120*1024 || w===560)return result;
     }catch(err){
       lastError=err;
       console.warn('Intento de compresión de foto falló:',err);
@@ -11605,7 +11671,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.19.9\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.19.10\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -11634,6 +11700,7 @@ window.addEventListener('jcp-cloud-bootstrap-ready',()=>{
   try{if(typeof populatePermutaVehicles==='function') populatePermutaVehicles();}catch(e){}
 },{once:true});
 jcpInstallActivityHistoryUi();
+jcpInstallPhotoOptimizerUi();
 initSupabase();
 window.addEventListener('error',function(e){console.error(e.error||e.message);});
 
@@ -15410,7 +15477,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.19.9',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.19.10',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -15456,6 +15523,6 @@ window.openRecordCopy=function(number){
   document.addEventListener('DOMContentLoaded',()=>{install();const overlay=document.getElementById('jcpExcelOverlay');overlay.onclick=e=>{if(e.target===overlay)close();};document.getElementById('jcpExcelClose').onclick=close;document.getElementById('jcpExcelCancel').onclick=close;document.getElementById('jcpExcelGenerate').onclick=generate;document.getElementById('jcpExcelAll').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=true);document.getElementById('jcpExcelNone').onclick=()=>document.querySelectorAll('[data-module]').forEach(x=>x.checked=false);document.querySelectorAll('[name="jcpExcelPeriod"]').forEach(x=>x.onchange=()=>document.getElementById('jcpExcelDates').hidden=x.value!=='range'||!x.checked);});
 })();
 </script>
-<script src="./app-update.js?v=2026.09.19.9"></script>
+<script src="./app-update.js?v=2026.09.19.10"></script>
 </body>
 </html>
