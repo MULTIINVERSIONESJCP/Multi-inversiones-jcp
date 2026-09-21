@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.25</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.26</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4308,6 +4308,7 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="sales-menu-card jcp-icon-card" onclick="openOperationsPurchase()"><span class="jcp-app-icon sales-menu-icon" data-jcp-icon="purchase"></span><b>Comprar vehículo</b></div>
 <div class="sales-menu-card jcp-icon-card" onclick="openOperationsSales()"><span class="jcp-app-icon sales-menu-icon" data-jcp-icon="sale"></span><b>Facturar</b></div>
 <div class="sales-menu-card jcp-icon-card" onclick="openOperationsExpenses()"><span class="jcp-app-icon sales-menu-icon" data-jcp-icon="receipt"></span><b>Gastos</b></div>
+<div class="sales-menu-card jcp-icon-card" onclick="openLoanModule()"><span class="jcp-app-icon sales-menu-icon" data-jcp-icon="loans"></span><b>Préstamos</b></div>
 <div class="sales-menu-card jcp-icon-card operations-wide-card" onclick="openOperationsDocuments()"><span class="jcp-app-icon sales-menu-icon" data-jcp-icon="edit"></span><b>Modificar documentos</b></div>
 </div>
 <div class="sale-invoice-shell" id="operationsPurchaseHost" style="display:none;margin:16px 0">
@@ -5165,9 +5166,126 @@ body.jcp-custom-theme .database-actions-list button{
 <h2 class="unified-module-title"><span class="unified-module-icon">💰</span> RECAUDO</h2>
 </div></div>
 <div class="unified-module-gold-line"></div>
-<div class="unified-module-note">💡 Registra los abonos y pagos de tus cuentas por cobrar: ventas a crédito, permutas y préstamos.</div>
+<div class="unified-module-note">💡 Selecciona una cuenta por cobrar, elige abono o pago total y revisa el saldo resultante antes de registrar.</div>
 </div>
-<div id="rcBody"></div>
+<div class="debt-pay-shell">
+<div class="debt-pay-form">
+<label class="debt-pay-label" for="rcSelect">CUENTA POR COBRAR</label>
+<select id="rcSelect"></select>
+<div id="rcHint" class="jcp-rc-hint" style="display:none"></div>
+<div id="rcCompBox" style="display:none">
+<label class="debt-pay-label">QUÉ ESTÁS COBRANDO</label>
+<div class="debt-pay-type-grid">
+<button class="debt-pay-type active" id="rcCompC" type="button">CAPITAL</button>
+<button class="debt-pay-type" id="rcCompI" type="button">INTERESES</button>
+</div>
+</div>
+<label class="debt-pay-label">TIPO DE COBRO</label>
+<div class="debt-pay-type-grid">
+<button class="debt-pay-type active" id="rcModeP" type="button">ABONO</button>
+<button class="debt-pay-type" id="rcModeT" type="button">PAGO TOTAL</button>
+</div>
+<label class="debt-pay-label" for="rcValue">VALOR A COBRAR</label>
+<input data-money="1" id="rcValue" inputmode="numeric" placeholder="$ 0" type="text" autocomplete="off"/>
+<div class="debt-pay-secondary">
+<div>
+<div class="paydist" id="cobroPayDist"><div class="paydist-title">FORMA DE COBRO</div><div class="paydist-grid">
+<label class="paydist-row"><span>EFECTIVO</span><input data-money="1" id="cobroPayCash" inputmode="numeric" oninput="payDistInput('cobro',this)" placeholder="$ 0" type="text"/></label>
+<label class="paydist-row"><span>BANCOLOMBIA</span><input data-money="1" id="cobroPayBancolombia" inputmode="numeric" oninput="payDistInput('cobro',this)" placeholder="$ 0" type="text"/></label>
+<label class="paydist-row"><span>DAVIVIENDA</span><input data-money="1" id="cobroPayDavivienda" inputmode="numeric" oninput="payDistInput('cobro',this)" placeholder="$ 0" type="text"/></label>
+<label class="paydist-row"><span>NEQUI</span><input data-money="1" id="cobroPayNequi" inputmode="numeric" oninput="payDistInput('cobro',this)" placeholder="$ 0" type="text"/></label>
+<label class="paydist-row"><span>DAVIPLATA</span><input data-money="1" id="cobroPayDaviplata" inputmode="numeric" oninput="payDistInput('cobro',this)" placeholder="$ 0" type="text"/></label>
+</div><div class="paydist-summary"><div><span>VALOR TOTAL</span><b id="cobroPayTotal">$0</b></div><div><span>DISTRIBUIDO</span><b id="cobroPayDistributed">$0</b></div><div class="bad" id="cobroPayPendingBox"><span>FALTA</span><b id="cobroPayPending">$0</b></div></div><div class="paydist-hint">La operación se habilita únicamente cuando la distribución coincide exactamente con el valor total.</div></div>
+</div>
+<div>
+<label class="debt-pay-label" for="rcObs">OBSERVACIÓN</label>
+<textarea id="rcObs" placeholder="OBSERVACIÓN"></textarea>
+</div>
+</div>
+</div>
+<div class="debt-pay-summary">
+<div class="debt-pay-summary-title">RESUMEN DEL COBRO</div>
+<div class="debt-pay-summary-grid">
+<div><span>CUENTA</span><b id="rcSumAccount">—</b></div>
+<div><span>TIPO</span><b id="rcSumType">—</b></div>
+<div><span id="rcLblInitial">VALOR INICIAL</span><b id="rcSumInitial">$0</b></div>
+<div><span id="rcLblPaid">TOTAL COBRADO</span><b id="rcSumPaid">$0</b></div>
+<div><span id="rcLblPending">SALDO PENDIENTE</span><b id="rcSumPending">$0</b></div>
+<div><span>VALOR DEL COBRO</span><b id="rcSumPayment">$0</b></div>
+</div>
+<div class="debt-pay-result">
+<span>SALDO DESPUÉS DEL COBRO</span>
+<strong id="rcResult">$0</strong>
+<small id="rcResultNote">SELECCIONA UNA CUENTA</small>
+</div>
+<button class="debt-pay-submit paydist-locked" disabled="" id="cobroSubmit" type="button">REGISTRAR COBRO</button>
+</div>
+</div>
+<div id="rcHist"></div>
+</section>
+<section class="view" id="prestamoNuevo">
+<div class="unified-module-header">
+<div class="unified-module-title-row"><div class="unified-module-brand">
+<img alt="MULTI INVERSIONES JCP" class="unified-module-logo" id="prestamoLogo" src="logo-3.jpg"/>
+<h2 class="unified-module-title"><span class="unified-module-icon">🤝</span> PRÉSTAMOS</h2>
+</div></div>
+<div class="unified-module-gold-line"></div>
+<div class="unified-module-note">💡 Registra un préstamo a una persona: define el interés mensual y de dónde sale el dinero.</div>
+</div>
+<div class="debt-pay-shell">
+<div class="debt-pay-form">
+<label class="debt-pay-label" for="lnClient">CLIENTE</label>
+<input id="lnClient" list="lnClientList" placeholder="NOMBRE DEL CLIENTE" autocomplete="off" type="text"/>
+<datalist id="lnClientList"></datalist>
+<div class="jcp-ln-two">
+<div><label class="debt-pay-label" for="lnDoc">CÉDULA (OPCIONAL)</label><input id="lnDoc" inputmode="numeric" placeholder="CÉDULA" autocomplete="off" type="text"/></div>
+<div><label class="debt-pay-label" for="lnPhone">TELÉFONO (OPCIONAL)</label><input id="lnPhone" inputmode="tel" placeholder="TELÉFONO" autocomplete="off" type="text"/></div>
+</div>
+<label class="debt-pay-label" for="lnCapital">CAPITAL PRESTADO</label>
+<input data-money="1" id="lnCapital" inputmode="numeric" placeholder="$ 0" autocomplete="off" type="text"/>
+<div class="jcp-ln-two">
+<div><label class="debt-pay-label" for="lnRate">INTERÉS MENSUAL (%)</label><input id="lnRate" inputmode="decimal" placeholder="0" autocomplete="off" type="text"/></div>
+<div><label class="debt-pay-label" for="lnDue">VENCIMIENTO (OPCIONAL)</label><input id="lnDue" type="date"/></div>
+</div>
+<label class="debt-pay-label">PAGO DE INTERESES</label>
+<div class="debt-pay-type-grid">
+<button class="debt-pay-type active" id="lnModeM" type="button">MENSUAL</button>
+<button class="debt-pay-type" id="lnModeF" type="button">AL FINAL</button>
+</div>
+<div class="debt-pay-secondary">
+<div>
+<div class="paydist" id="lnPayDist"><div class="paydist-title">FORMA DE DESEMBOLSO</div><div class="paydist-grid">
+<label class="paydist-row"><span>EFECTIVO</span><input data-money="1" id="lnPayCash" inputmode="numeric" oninput="payDistInput('ln',this)" placeholder="$ 0" type="text"/></label>
+<label class="paydist-row"><span>BANCOLOMBIA</span><input data-money="1" id="lnPayBancolombia" inputmode="numeric" oninput="payDistInput('ln',this)" placeholder="$ 0" type="text"/></label>
+<label class="paydist-row"><span>DAVIVIENDA</span><input data-money="1" id="lnPayDavivienda" inputmode="numeric" oninput="payDistInput('ln',this)" placeholder="$ 0" type="text"/></label>
+<label class="paydist-row"><span>NEQUI</span><input data-money="1" id="lnPayNequi" inputmode="numeric" oninput="payDistInput('ln',this)" placeholder="$ 0" type="text"/></label>
+<label class="paydist-row"><span>DAVIPLATA</span><input data-money="1" id="lnPayDaviplata" inputmode="numeric" oninput="payDistInput('ln',this)" placeholder="$ 0" type="text"/></label>
+</div><div class="paydist-summary"><div><span>VALOR TOTAL</span><b id="lnPayTotal">$0</b></div><div><span>DISTRIBUIDO</span><b id="lnPayDistributed">$0</b></div><div class="bad" id="lnPayPendingBox"><span>FALTA</span><b id="lnPayPending">$0</b></div></div><div class="paydist-hint">La operación se habilita únicamente cuando la distribución coincide exactamente con el valor total.</div></div>
+</div>
+<div>
+<label class="debt-pay-label" for="lnObs">OBSERVACIÓN</label>
+<textarea id="lnObs" placeholder="OBSERVACIÓN (GARANTÍA, PAGARÉ…)"></textarea>
+</div>
+</div>
+</div>
+<div class="debt-pay-summary">
+<div class="debt-pay-summary-title">RESUMEN DEL PRÉSTAMO</div>
+<div class="debt-pay-summary-grid">
+<div><span>CLIENTE</span><b id="lnSumClient">—</b></div>
+<div><span>CAPITAL</span><b id="lnSumCapital">$0</b></div>
+<div><span>TASA MENSUAL</span><b id="lnSumRate">0%</b></div>
+<div><span>INTERÉS POR MES</span><b id="lnSumMonthly">$0</b></div>
+<div><span>PAGO DE INTERESES</span><b id="lnSumMode">MENSUAL</b></div>
+<div><span>VENCIMIENTO</span><b id="lnSumDue">SIN FECHA</b></div>
+</div>
+<div class="debt-pay-result">
+<span id="lnResultLabel">TOTAL A RECIBIR</span>
+<strong id="lnResult">$0</strong>
+<small id="lnResultNote">INGRESA EL CAPITAL DEL PRÉSTAMO</small>
+</div>
+<button class="debt-pay-submit paydist-locked" disabled="" id="lnSubmit" type="button">REGISTRAR PRÉSTAMO</button>
+</div>
+</div>
 </section>
 <section class="view" id="registros">
 <div class="unified-module-header">
@@ -5367,9 +5485,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.25"></script>
-<script src="./jcp-sync.js?v=2026.09.20.25"></script>
-<script src="./jcp-images.js?v=2026.09.20.25"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.26"></script>
+<script src="./jcp-sync.js?v=2026.09.20.26"></script>
+<script src="./jcp-images.js?v=2026.09.20.26"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -11709,7 +11827,7 @@ if(!data.veh.length){
   const noPhoto='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
   vehList.innerHTML='<div class="inventory-cards">'+data.veh.map(x=>{
     const img=x.photo||noPhoto; const total=(+x.c||0)+(+x.g||0);
-    return `<div class="vehicle-card" onclick="selectInventoryVehicle('${jcpInlineJsArg(x.id)}')"><img src="${jcpSafeImageSrc(img)}" alt="Foto del vehículo"><div class="vc-body"><b>${clientEsc(x.marca||x.m||'')}</b><b>${clientEsc(x.ref||'SIN REFERENCIA')}</b><div class="vc-price">Total ${money(total)}</div></div></div>`;
+    return `<div class="vehicle-card" onclick="selectInventoryVehicle('${jcpInlineJsArg(x.id)}')"><img src="${jcpSafeImageSrc(img)}" alt="Foto del vehículo"><div class="vc-body"><b>${clientEsc(x.marca||x.m||'')}</b> <b>${clientEsc(x.ref||'SIN REFERENCIA')}</b><div class="vc-price">Total ${money(total)}</div></div></div>`;
   }).join('')+'</div>';
 }
 let sold=data.sold||[];
@@ -11773,7 +11891,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.25\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.26\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -12652,6 +12770,7 @@ h1{font-size:22px;margin:0}h2{font-size:14px;color:#555;margin:5px 0 18px}
     const net=totalIn-totalOut;
 
     const category=x=>{
+      if(x.interestOf)return 'INTERESES COBRADOS';
       if(x.subtype==='cobro_cuenta_por_cobrar')return 'COBRO DE CARTERA';
       if(x.subtype==='venta'||(x.t==='ingreso'&&x.saleVehicleId))return 'VENTA';
       if(x.subtype==='compra_vehiculo')return 'COMPRA VEHÍCULO';
@@ -13059,6 +13178,7 @@ window.renderExtractos=function(){
     const accountFilter=document.getElementById('extAccountFilter')?.value||'all';
     const range=extractPeriodRange(),inRange=x=>{const t=ts(x);return t>=range.start&&t<=range.end;};
     const movementCategory=x=>{
+      if(x.interestOf)return 'INTERESES COBRADOS';
       if(x.subtype==='cobro_cuenta_por_cobrar')return 'COBRO DE CARTERA';
       if(x.subtype==='venta'||(x.t==='ingreso'&&x.saleVehicleId))return 'VENTA';
       if(x.subtype==='compra_vehiculo')return 'COMPRA VEHÍCULO';
@@ -13222,8 +13342,8 @@ function renderLoanReceivablesV78(){
     return;
   }
   el.innerHTML='<div class="section" style="margin-top:0">🤝 Préstamos por cobrar</div>'+
-    '<table><thead><tr><th>CLIENTE / CONCEPTO</th><th>PRESTADO</th><th>ABONADO</th><th>PENDIENTE</th></tr></thead><tbody>'+
-    loans.map(x=>`<tr><td>${clientEsc(x.n||x.nombre||x.cliente||x.c||'PRÉSTAMO')}</td><td>${money(+x.c||0)}</td><td>${money(+x.p||0)}</td><td>${money(x.__pending)}</td></tr>`).join('')+
+    '<table><thead><tr><th>CLIENTE / CONCEPTO</th><th>PRESTADO</th><th>ABONADO</th><th>PENDIENTE</th><th>INTERESES</th></tr></thead><tbody>'+
+    loans.map(x=>{const lc=(typeof window.jcpLoanCalc==='function')?window.jcpLoanCalc(x):null;return `<tr><td>${clientEsc(x.n||x.nombre||x.cliente||x.c||'PRÉSTAMO')}${x.rate?`<br><small>${clientEsc(String(x.rate).replace('.',','))}% mensual</small>`:''}</td><td>${money(+x.c||0)}</td><td>${money(+x.p||0)}</td><td>${money(x.__pending)}</td><td>${lc&&x.rate?money(lc.intPending):'—'}</td></tr>`}).join('')+
     '</tbody></table>';
 }
 
@@ -13804,7 +13924,7 @@ function globalSearchModules(){
     {type:'MÓDULO',title:'Retiro de ganancia',meta:'Historial de retiros de utilidad',action:"show('historialRetiroGanancia')"},
     {type:'MÓDULO',title:'Extractos',meta:'Movimientos financieros',action:"show('extractos')"},
     {type:'MÓDULO',title:'Base de datos',meta:'Clientes registrados',action:"show('clientes')"},
-    {type:'MÓDULO',title:'Préstamos',meta:'Préstamos y pagos',action:"show('prestamos')"}
+    {type:'MÓDULO',title:'Préstamos',meta:'Préstamos y pagos',action:"openLoanModule()"}
   ];
 }
 
@@ -15584,7 +15704,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.25',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.26',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -15758,7 +15878,7 @@ window.openRecordCopy=function(number){
     utilidades:  {label:'Utilidades',     icon:'trend',   go:function(){openUtilitiesModule()}},
     cierre:      {label:'Cierre de caja', icon:'lock',    go:function(){show('cierreCaja')}},
     extractos:   {label:'Extractos',      icon:'list',    go:function(){show('extractos')}},
-    prestamos:   {label:'Préstamos',      icon:'coin',    go:function(){show('prestamos')}},
+    prestamos:   {label:'Préstamos',      icon:'coin',    go:function(){openLoanModule()}},
     cartera:     {label:'Por cobrar',     icon:'download',go:function(){openSalesReceivables()}},
     contabilidad:{label:'Contabilidad',   icon:'calc',    go:function(){openAccountingModule()}},
     documentos:  {label:'Documentos',     icon:'edit',    go:function(){openOperationsDocuments()}},
@@ -17012,84 +17132,68 @@ window.openRecordCopy=function(number){
 })();
 </script>
 <style id="jcp-recaudo-style">
-/* ===== Recaudo (cobro de cuentas por cobrar) ===== */
-#recaudo,.jcp-rc-sheet{--rc-acc:var(--jcp-ui-accent,#d4af37);--rc-card:var(--jcp-ui-card,#141414);--rc-line:var(--jcp-ui-border,#2a2a2a);--rc-mut:var(--jcp-ui-muted,#a8a8a8);--rc-txt:var(--jcp-ui-text,#f5f5f5);--rc-ok:#39d98a}
-#recaudo .jcp-rc-wrap{padding:0 2px 24px}
-.jcp-rc-sum{margin:0 0 12px;padding:16px;background:linear-gradient(180deg,#1a1710,#121212);border:1px solid #4a3c14;border-radius:18px}
-.jcp-rc-sum span{display:block;font-size:11px;font-weight:900;letter-spacing:.09em;color:var(--rc-mut)}
-.jcp-rc-sum b{display:block;margin-top:4px;font-size:30px;line-height:1.1;color:var(--rc-acc);font-family:Arial,sans-serif}
-.jcp-rc-sum small{display:block;margin-top:6px;font-size:12px;color:var(--rc-mut)}
-.jcp-rc-search{width:100%;min-height:48px;margin:0 0 10px;padding:0 14px;background:#101010;border:1px solid var(--rc-line);border-radius:14px;color:var(--rc-txt);font-size:16px;box-sizing:border-box}
-.jcp-rc-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0 0 12px}
-.jcp-rc-tabs button{min-height:42px;padding:0 2px;border-radius:999px;background:var(--rc-card)!important;border:1px solid var(--rc-line)!important;color:var(--rc-txt)!important;font-size:11px;font-weight:800;letter-spacing:0}
-.jcp-rc-tabs button.on{background:var(--rc-acc)!important;border-color:var(--rc-acc)!important;color:#111!important}
-.jcp-rc-card{margin:0 0 10px;padding:14px;background:var(--rc-card);border:1px solid var(--rc-line);border-radius:16px}
-.jcp-rc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.jcp-rc-chip{display:inline-block;padding:3px 9px;border-radius:999px;border:1px solid #4a3c14;color:var(--rc-acc);font-size:10px;font-weight:900;letter-spacing:.06em}
-.jcp-rc-client{margin:6px 0 0;font-size:17px;font-weight:800;color:var(--rc-txt);line-height:1.2;overflow-wrap:anywhere}
-.jcp-rc-veh{margin:2px 0 0;font-size:13px;color:var(--rc-mut);overflow-wrap:anywhere}
-.jcp-rc-pend{text-align:right;flex:none}
-.jcp-rc-pend span{display:block;font-size:10px;font-weight:900;letter-spacing:.08em;color:var(--rc-mut)}
-.jcp-rc-pend b{display:block;font-size:20px;color:var(--rc-acc)}
-.jcp-rc-bar{height:7px;margin:12px 0 6px;border-radius:99px;background:#232323;overflow:hidden}
-.jcp-rc-bar i{display:block;height:100%;background:var(--rc-ok);border-radius:99px}
-.jcp-rc-nums{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--rc-mut)}
-.jcp-rc-go,.jcp-rc-do{display:block;width:100%;min-height:48px;margin-top:12px;border-radius:14px;font-size:14px;font-weight:900;letter-spacing:.03em}
-.jcp-rc-do{background:var(--rc-acc)!important;border:0!important;color:#111!important}
-.jcp-rc-go{margin:0 0 12px;background:#1b1b1b!important;border:1px solid #4a3c14!important;color:var(--rc-acc)!important}
-.jcp-rc-empty{padding:26px 14px;text-align:center;color:var(--rc-mut);border:1px dashed var(--rc-line);border-radius:16px}
-.jcp-rc-h3{margin:18px 0 8px;font-size:11px;font-weight:900;letter-spacing:.1em;color:var(--rc-acc)}
-.jcp-rc-hist{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px;padding:12px 14px;background:var(--rc-card);border:1px solid var(--rc-line);border-radius:14px}
-.jcp-rc-hist b{display:block;font-size:14px;color:var(--rc-txt)}
-.jcp-rc-hist small{display:block;font-size:12px;color:var(--rc-mut);overflow-wrap:anywhere}
-.jcp-rc-hist .amt{font-weight:800;color:var(--rc-ok);white-space:nowrap}
-.jcp-rc-hist.void .amt{color:#ff6868;text-decoration:line-through}
-.jcp-rc-hact{display:flex;gap:6px;margin-top:6px}
-.jcp-rc-hact button{min-height:34px;padding:0 10px;border-radius:10px;background:#1b1b1b!important;border:1px solid #333!important;color:var(--rc-mut)!important;font-size:11px;font-weight:800}
-.jcp-rc-sheet{display:none;position:fixed;inset:0;z-index:1000006;overflow-y:auto;background:#0a0a0a;padding:22px 20px calc(130px + env(safe-area-inset-bottom,0px));font-family:Arial,sans-serif;color:var(--rc-txt)}
-.jcp-rc-sheet.open{display:block}
-.jcp-rc-top{display:flex;align-items:center;gap:14px}
-.jcp-rc-back{flex:none;width:46px;height:46px;padding:0;border-radius:50%;background:var(--rc-card)!important;border:1px solid var(--rc-line)!important;color:var(--rc-txt)!important;font-size:22px}
-.jcp-rc-kick{font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--rc-acc)}
-.jcp-rc-sheet h2{margin:4px 0 0;font-family:'Noto Serif','Source Serif 4',Georgia,serif;font-size:26px;line-height:1.1;color:#f5f1e6;text-transform:none;letter-spacing:0;overflow-wrap:anywhere}
-.jcp-rc-rule{height:1px;margin:14px 0;background:#4a3c14}
-.jcp-rc-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:14px;color:var(--rc-mut)}
-.jcp-rc-row b{color:var(--rc-txt);text-align:right}
-.jcp-rc-row.gold b{color:var(--rc-acc);font-size:18px}
-.jcp-rc-seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 12px}
-.jcp-rc-seg button{min-height:48px;border-radius:14px;background:var(--rc-card)!important;border:1px solid var(--rc-line)!important;color:var(--rc-txt)!important;font-size:13px;font-weight:900}
-.jcp-rc-seg button.on{background:var(--rc-acc)!important;border-color:var(--rc-acc)!important;color:#111!important}
-.jcp-rc-lab{display:block;margin:12px 0 0;font-size:11px;font-weight:900;letter-spacing:.08em;color:var(--rc-mut)}
-.jcp-rc-lab input{display:block;width:100%;min-height:52px;margin-top:6px;padding:0 14px;background:#101010;border:1px solid var(--rc-line);border-radius:14px;color:var(--rc-txt);font-size:18px;font-weight:700;box-sizing:border-box}
-.jcp-rc-lab input[readonly]{color:var(--rc-acc)}
-.jcp-rc-after{margin:8px 2px 0;font-size:13px;color:var(--rc-mut)}
-.jcp-rc-after b{color:var(--rc-txt)}
-.jcp-rc-quick{margin:14px 0 0}
-.jcp-rc-quick p{margin:0 0 6px;font-size:11px;font-weight:900;letter-spacing:.08em;color:var(--rc-mut)}
-.jcp-rc-quick div{display:flex;flex-wrap:wrap;gap:8px}
-.jcp-rc-quick button{min-height:40px;padding:0 13px;border-radius:999px;background:var(--rc-card)!important;border:1px solid var(--rc-line)!important;color:var(--rc-txt)!important;font-size:12px;font-weight:800}
-.jcp-rc-foot{position:fixed;left:0;right:0;bottom:0;display:flex;gap:10px;padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(10,10,10,0),#0a0a0a 30%)}
-.jcp-rc-foot button{flex:1;min-height:52px;border-radius:14px;font-size:15px;font-weight:900}
-.jcp-rc-foot .sec{background:var(--rc-card)!important;border:1px solid var(--rc-line)!important;color:var(--rc-txt)!important}
-.jcp-rc-foot .pri{background:var(--rc-acc)!important;border:0!important;color:#111!important}
-.jcp-rc-foot .pri:disabled{background:#1c1c1c!important;color:#6d6d6d!important;border:1px solid var(--rc-line)!important}
+/* ===== Recaudo y Préstamos (mismo formato que Pago de obligaciones) ===== */
+#recaudo .unified-module-title,#prestamoNuevo .unified-module-title{font-size:15px!important;white-space:normal!important;line-height:1.08!important}
+@media(max-width:480px){#recaudo .unified-module-title,#prestamoNuevo .unified-module-title{font-size:12px!important}}
+#recaudo .debt-pay-secondary,#prestamoNuevo .debt-pay-secondary{grid-template-columns:1fr!important}
+#recaudo #cobroPayDist.open,#prestamoNuevo #lnPayDist.open{display:block!important;margin-top:10px!important}
+#recaudo #rcValue[readonly]{border-color:#7b6420!important;color:var(--gold)!important;font-weight:900!important;background:#17140c!important}
+#recaudo .paydist-title,#prestamoNuevo .paydist-title{font-size:11px!important;letter-spacing:.4px!important}
+.jcp-ln-two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.jcp-ln-two input{min-width:0}
+.jcp-rc-hint{margin:8px 2px 0;font-size:11px;line-height:1.4;color:#b9b9b9}
+.jcp-rc-hint b{color:var(--gold)}
+.jcp-rc-go{display:block;width:100%;min-height:46px;margin:0 0 12px;border-radius:12px;background:#17130a!important;border:1px solid #b89227!important;color:var(--gold)!important;font-size:12px;font-weight:900;letter-spacing:.03em}
+.jcp-rc-hh{margin:20px 2px 6px;font-size:10px;font-weight:900;letter-spacing:.7px;color:#929292}
+.jcp-rc-hr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px solid #222;font-size:12px;color:#ddd}
+.jcp-rc-hr b{display:block;color:#fff;font-size:12px}
+.jcp-rc-hr small{display:block;color:#8f8f8f;font-size:10px;overflow-wrap:anywhere}
+.jcp-rc-hr .amt{font-weight:800;color:#4ee17b;white-space:nowrap;font-size:12px}
+.jcp-rc-hr.void .amt{color:#ff7777;text-decoration:line-through}
+.jcp-rc-hact{display:flex;gap:6px;margin-top:5px}
+.jcp-rc-hact button{min-height:30px;padding:0 10px;border-radius:8px;background:#141414!important;border:1px solid #333!important;color:#a8a8a8!important;font-size:10px;font-weight:800}
 </style>
 <script id="jcp-recaudo-script">
 (function(){
 'use strict';
-if(window.__jcpRecaudo)return;window.__jcpRecaudo=true;
+if(window.__jcpRecaudo2)return;window.__jcpRecaudo2=true;
 
-var cur=null,mode='partial',filter='all',query='';
-var KIND_LABEL={sale:'VENTA A CRÉDITO',trade:'PERMUTA',loan:'PRÉSTAMO'};
-var KIND_SHORT={sale:'VENTA',trade:'PERMUTA',loan:'PRÉSTAMO'};
+var accs=[],cur=null,mode='partial',comp='capital',bound=false;
+var KIND={sale:'VENTA A CRÉDITO',trade:'PERMUTA',loan:'PRÉSTAMO'};
+var KSHORT={sale:'VENTA',trade:'PERMUTA',loan:'PRÉSTAMO'};
 function el(id){return document.getElementById(id)}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function fm(v){return typeof money==='function'?money(v):'$ '+new Intl.NumberFormat('es-CO').format(Math.round(v||0))}
 function vehTxt(x){x=x||{};var t=[(x.marca||x.m||''),(x.ref||'')].join(' ').trim();return t+(x.pl?(t?' — ':'')+x.pl:'')}
 function ts(s){var t=Date.parse(s||'');return isNaN(t)?0:t}
 function nowParts(){var n=new Date();return{date:n.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),iso:n.toISOString()}}
+function txt(id,v){var e=el(id);if(e)e.textContent=v}
 
-/* ---------- Lectura de cuentas pendientes ---------- */
+/* ---------- Intereses de un préstamo ---------- */
+function monthsBetween(a,b){var m=(b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth());if(b.getDate()<a.getDate())m--;return Math.max(0,m)}
+function addMonths(d,n){var r=new Date(d.getTime());r.setMonth(r.getMonth()+n);return r}
+function loanCalc(x){
+  var c=+x.c||0,p=+x.p||0,rate=parseFloat(x.rate)||0;
+  var cols=Array.isArray(x.collections)?x.collections.filter(function(k){return k&&!k.voided}):[];
+  var capCols=cols.filter(function(k){return k.component!=='interest'});
+  var intPaid=cols.filter(function(k){return k.component==='interest'}).reduce(function(s,k){return s+(+k.amount||0)},0);
+  var sumCap=capCols.reduce(function(s,k){return s+(+k.amount||0)},0);
+  var p0=Math.max(0,p-sumCap);
+  var start=new Date(x.createdAt||Date.now());if(isNaN(start.getTime()))start=new Date();
+  var M=monthsBetween(start,new Date()),acc=0;
+  if(rate>0){
+    for(var m=0;m<M;m++){
+      var ms=addMonths(start,m).getTime(),paidCap=p0;
+      capCols.forEach(function(k){if((Date.parse(k.createdAt)||0)<ms)paidCap+=(+k.amount||0)});
+      acc+=Math.max(0,c-paidCap)*rate/100;
+    }
+  }
+  acc=Math.round(acc);
+  return{c:c,p:p,capPending:Math.max(0,c-p),rate:rate,monthly:Math.round(c*rate/100),months:M,accrued:acc,intPaid:intPaid,intPending:Math.max(0,acc-intPaid)};
+}
+window.jcpLoanCalc=loanCalc;
+
+/* ---------- Cuentas pendientes ---------- */
 function accounts(){
   var out=[];
   (data.sold||[]).forEach(function(x,i){
@@ -17105,8 +17209,9 @@ function accounts(){
     out.push({kind:'trade',key:String(x.id),title:vehTxt(inc),plate:inc.pl||'',client:x.client||x.buyer||'SIN REGISTRAR',total:+x.difference||0,received:+x.received||0,pending:p,time:t});
   });
   (data.pres||[]).forEach(function(x,i){
-    if(!x)return;var p=Math.max(0,(+x.c||0)-(+x.p||0));if(p<=0)return;
-    out.push({kind:'loan',key:String(x.id||('idx'+i)),idx:i,title:'PRÉSTAMO'+(x.date?' · '+x.date:''),plate:'',client:x.n||x.nombre||x.cliente||'SIN REGISTRAR',total:+x.c||0,received:+x.p||0,pending:p,time:ts(x.createdAt)});
+    if(!x)return;var c=loanCalc(x);
+    if(c.capPending<=0&&c.intPending<=0)return;
+    out.push({kind:'loan',key:String(x.id||('idx'+i)),idx:i,title:'PRÉSTAMO'+(x.date?' · '+x.date:''),plate:'',client:x.n||x.nombre||x.cliente||'SIN REGISTRAR',total:c.c,received:c.p,pending:c.capPending,calc:c,payMode:x.payMode||'',time:ts(x.createdAt)});
   });
   out.sort(function(a,b){return b.time-a.time});
   return out;
@@ -17115,7 +17220,7 @@ function accounts(){
 /* ---------- Localizar y modificar la cuenta dentro de un estado ---------- */
 function tradeCxc(state,id){return (state.mov||[]).findIndex(function(m){return m&&m.t==='cuenta_por_cobrar'&&String(m.permutaId||'')===String(id)})}
 function locate(state,a){
-  var x,i;
+  var x;
   if(a.kind==='sale'){
     x=(state.sold||[]).find(function(v){return v&&v.sale&&!v.sale.voided&&String(v.sale.id||v.id)===String(a.key)});
     if(!x)return null;
@@ -17165,173 +17270,160 @@ function locate(state,a){
     return{
       pending:function(){return Math.max(0,(+x.c||0)-(+x.p||0))},
       apply:function(amount,entry){
-        x.p=(+x.p||0)+amount;x.collections=Array.isArray(x.collections)?x.collections:[];x.collections.unshift(entry);
+        if(entry.component!=='interest')x.p=(+x.p||0)+amount;
+        x.collections=Array.isArray(x.collections)?x.collections:[];x.collections.unshift(entry);
       },
       revert:function(amount,number){
-        x.p=Math.max(0,(+x.p||0)-amount);
-        (x.collections||[]).forEach(function(c){if(c.receiptNumber===number)c.voided=true});
+        var e=(x.collections||[]).find(function(k){return k.receiptNumber===number});
+        if(!e||e.component!=='interest')x.p=Math.max(0,(+x.p||0)-amount);
+        (x.collections||[]).forEach(function(k){if(k.receiptNumber===number)k.voided=true});
       }
     };
   }
   return null;
 }
 
-/* ---------- Pantalla principal ---------- */
-function ensureView(){return el('recaudo')}
-function draw(){
-  var root=el('rcBody');if(!root)return;
-  var all=accounts(),tot=all.reduce(function(s,a){return s+a.pending},0);
-  var cnt={sale:0,trade:0,loan:0};all.forEach(function(a){cnt[a.kind]++});
-  var q=query.trim().toUpperCase();
-  var list=all.filter(function(a){
-    if(filter!=='all'&&a.kind!==filter)return false;
-    if(!q)return true;
-    return (a.client+' '+a.title+' '+a.plate).toUpperCase().indexOf(q)>=0;
-  });
-  var h='<div class="jcp-rc-wrap">'
-    +'<div class="jcp-rc-sum"><span>TOTAL POR COBRAR</span><b>'+fm(tot)+'</b><small>'+all.length+(all.length===1?' cuenta':' cuentas')+' · '+cnt.sale+(cnt.sale===1?' venta':' ventas')+' · '+cnt.trade+(cnt.trade===1?' permuta':' permutas')+' · '+cnt.loan+(cnt.loan===1?' préstamo':' préstamos')+'</small></div>'
-    +'<input class="jcp-rc-search" id="rcSearch" type="search" placeholder="Buscar cliente o placa" value="'+esc(query)+'" autocomplete="off" aria-label="Buscar cuenta por cobrar">'
-    +'<div class="jcp-rc-tabs" role="tablist">'
-    +[['all','TODAS'],['sale','VENTAS'],['trade','PERMUTAS'],['loan','PRÉSTAMOS']].map(function(t){return '<button type="button" role="tab" data-f="'+t[0]+'" class="'+(filter===t[0]?'on':'')+'">'+t[1]+'</button>'}).join('')
-    +'</div>';
-  if(!list.length){
-    h+='<div class="jcp-rc-empty">'+(all.length?'No hay cuentas que coincidan con la búsqueda.':'No tienes cuentas por cobrar pendientes.')+'</div>';
-  }
-  list.forEach(function(a,n){
-    var pct=a.total>0?Math.max(0,Math.min(100,Math.round(a.received/a.total*100))):0;
-    h+='<div class="jcp-rc-card"><div class="jcp-rc-head"><div style="min-width:0"><span class="jcp-rc-chip">'+KIND_LABEL[a.kind]+'</span>'
-      +'<p class="jcp-rc-client">'+esc(a.client)+'</p>'+(a.title?'<p class="jcp-rc-veh">'+esc(a.title)+'</p>':'')+'</div>'
-      +'<div class="jcp-rc-pend"><span>PENDIENTE</span><b>'+fm(a.pending)+'</b></div></div>'
-      +'<div class="jcp-rc-bar" aria-hidden="true"><i style="width:'+pct+'%"></i></div>'
-      +'<div class="jcp-rc-nums"><span>Recibido '+fm(a.received)+'</span><span>Acordado '+fm(a.total)+'</span></div>'
-      +'<button type="button" class="jcp-rc-do" data-i="'+n+'">💰 COBRAR</button></div>';
-  });
-  var recs=(typeof receiptList==='function'?receiptList(data):[]).filter(function(r){return r.type==='collection'}).slice(0,6);
-  if(recs.length){
-    h+='<div class="jcp-rc-h3">ÚLTIMOS COBROS</div>';
-    recs.forEach(function(r){
-      var v=r.status==='ANULADO';
-      h+='<div class="jcp-rc-hist'+(v?' void':'')+'"><div style="min-width:0"><b>'+esc(r.number)+(v?' · ANULADO':'')+'</b><small>'+esc(r.party||'')+' · '+esc(r.date||'')+'</small>'
-        +'<div class="jcp-rc-hact"><button type="button" data-sup="'+esc(r.number)+'">Ver soporte</button>'+(v?'':'<button type="button" data-void="'+esc(r.number)+'">Anular</button>')+'</div></div>'
-        +'<span class="amt">'+fm(r.amount)+'</span></div>';
-    });
-  }
-  h+='</div>';
-  var keep=el('rcSearch')&&document.activeElement===el('rcSearch');
-  root.innerHTML=h;
-  root._list=list;
-  if(keep){var s=el('rcSearch');s.focus();try{s.setSelectionRange(s.value.length,s.value.length)}catch(e){}}
+/* ---------- Formulario ---------- */
+function isInt(){return !!cur&&cur.kind==='loan'&&comp==='interest'}
+function slice(){
+  if(!cur)return{total:0,done:0,pending:0};
+  if(isInt())return{total:cur.calc.accrued,done:cur.calc.intPaid,pending:cur.calc.intPending};
+  return{total:cur.total,done:cur.received,pending:cur.pending};
 }
-function bindRoot(){
-  var root=el('rcBody');if(!root||root._bound)return;root._bound=true;
-  root.addEventListener('input',function(e){if(e.target&&e.target.id==='rcSearch'){query=e.target.value||'';draw()}});
-  root.addEventListener('click',function(e){
-    var t=e.target.closest?e.target.closest('button'):null;if(!t)return;
-    if(t.dataset.f){filter=t.dataset.f;draw();return}
-    if(t.dataset.i!==undefined){var a=(root._list||[])[+t.dataset.i];if(a)openSheet(a);return}
-    if(t.dataset.sup){if(typeof printInternalReceipt==='function')printInternalReceipt(t.dataset.sup);return}
-    if(t.dataset.void){if(typeof voidInternalReceipt==='function'){voidInternalReceipt(t.dataset.void);draw()}return}
-  });
-}
-window.openRecaudo=function(){
-  show('recaudo');bindRoot();
-  var src=document.querySelector('#vehiculos .inventory-inline-logo')||document.querySelector('.brand-logo'),dst=el('recaudoLogo');
-  if(src&&dst&&src.src)dst.src=src.src;
-  filter='all';query='';draw();
-  try{window.scrollTo({top:0,behavior:'auto'})}catch(e){window.scrollTo(0,0)}
-};
-
-/* ---------- Formulario de cobro ---------- */
-var FIELDS=[['cash','Cash','EFECTIVO'],['bancolombia','Bancolombia','BANCOLOMBIA'],['davivienda','Davivienda','DAVIVIENDA'],['nequi','Nequi','NEQUI'],['daviplata','Daviplata','DAVIPLATA']];
 function total(){
   if(!cur)return 0;
-  if(mode==='total')return cur.pending;
+  if(mode==='total')return slice().pending;
   var v=el('rcValue');return v?parseFormattedMoney(v.value||''):0;
 }
+function limit(){return (cur&&!isInt())?slice().pending:Infinity}
 PAYMENT_CONFIG.cobro={total:total,submit:'cobroSubmit'};
-function sheetEl(){
-  var o=el('jcpRcSheet');
-  if(!o){o=document.createElement('div');o.id='jcpRcSheet';o.className='jcp-rc-sheet';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-labelledby','jcpRcTitle');document.body.appendChild(o)}
-  return o;
+
+function optLabel(a){
+  var t=KSHORT[a.kind]+' · '+a.client+(a.title&&a.kind!=='loan'?' — '+a.title:'')+' · '+fm(a.pending);
+  if(a.kind==='loan'&&a.calc.intPending>0)t+=' (+ int. '+fm(a.calc.intPending)+')';
+  return t;
 }
-function openSheet(a){
-  cur=a;mode='partial';
-  var o=sheetEl();
-  var dist='<div class="paydist" id="cobroPayDist"><div class="paydist-title">FORMA DE COBRO — ¿POR DÓNDE LLEGÓ EL DINERO?</div><div class="paydist-grid">'
-    +FIELDS.map(function(f){return '<label class="paydist-row"><span>'+f[2]+'</span><input data-money="1" id="cobroPay'+f[1]+'" inputmode="numeric" oninput="payDistInput(\'cobro\',this)" placeholder="$ 0" type="text"></label>'}).join('')
-    +'</div><div class="paydist-summary"><div><span>VALOR TOTAL</span><b id="cobroPayTotal">$0</b></div><div><span>DISTRIBUIDO</span><b id="cobroPayDistributed">$0</b></div><div class="bad" id="cobroPayPendingBox"><span>FALTA</span><b id="cobroPayPending">$0</b></div></div><div class="paydist-hint">El cobro se habilita cuando la distribución coincide exactamente con el valor cobrado.</div></div>';
-  o.innerHTML='<div class="jcp-rc-top"><button type="button" class="jcp-rc-back" id="rcBack" aria-label="Volver">‹</button><div style="min-width:0"><div class="jcp-rc-kick">REGISTRAR COBRO</div><h2 id="jcpRcTitle">'+esc(a.client)+'</h2></div></div>'
-    +'<div class="jcp-rc-rule"></div>'
-    +'<div><span class="jcp-rc-chip">'+KIND_LABEL[a.kind]+'</span></div>'
-    +(a.title?'<div class="jcp-rc-row"><span>Detalle</span><b>'+esc(a.title)+'</b></div>':'')
-    +'<div class="jcp-rc-row"><span>Valor acordado</span><b>'+fm(a.total)+'</b></div>'
-    +'<div class="jcp-rc-row"><span>Recibido</span><b>'+fm(a.received)+'</b></div>'
-    +'<div class="jcp-rc-row gold"><span>Pendiente</span><b>'+fm(a.pending)+'</b></div>'
-    +'<div class="jcp-rc-seg"><button type="button" id="rcModeP" class="on">ABONO</button><button type="button" id="rcModeT">PAGO TOTAL</button></div>'
-    +'<label class="jcp-rc-lab">VALOR A COBRAR<input id="rcValue" data-money="1" inputmode="numeric" placeholder="$ 0" autocomplete="off" type="text"></label>'
-    +'<div class="jcp-rc-after">Saldo después del cobro: <b id="rcAfter">'+fm(a.pending)+'</b></div>'
-    +'<div class="jcp-rc-quick"><p>MARCAR QUE PAGÓ TODO POR</p><div>'+FIELDS.map(function(f){return '<button type="button" data-q="'+f[1]+'">'+f[2]+'</button>'}).join('')+'</div></div>'
-    +dist
-    +'<label class="jcp-rc-lab">OBSERVACIÓN (OPCIONAL)<input id="rcObs" maxlength="90" autocomplete="off" type="text"></label>'
-    +'<div class="jcp-rc-foot"><button type="button" class="sec" id="rcCancel">Cancelar</button><button type="button" class="pri" id="cobroSubmit" disabled>Registrar cobro</button></div>';
-  o.classList.add('open');o.scrollTop=0;
-  el('rcBack').onclick=el('rcCancel').onclick=closeSheet;
-  el('rcModeP').onclick=function(){setMode('partial')};
-  el('rcModeT').onclick=function(){setMode('total')};
-  el('rcValue').addEventListener('input',function(){formatMoneyInput(this);refresh()});
-  o.querySelectorAll('[data-q]').forEach(function(b){b.onclick=function(){quick(b.dataset.q)}});
-  el('cobroSubmit').onclick=doSave;
-  refresh();
+function fillSelect(){
+  var sel=el('rcSelect');if(!sel)return;
+  accs=accounts();
+  sel.innerHTML='<option value="">'+(accs.length?'SELECCIONA UNA CUENTA POR COBRAR':'NO HAY CUENTAS POR COBRAR')+'</option>'+accs.map(function(a,i){return '<option value="'+i+'">'+esc(optLabel(a))+'</option>'}).join('');
 }
-function closeSheet(){var o=el('jcpRcSheet');if(o)o.classList.remove('open');cur=null;try{clearPaymentDistribution('cobro')}catch(e){}}
-function setMode(m){
-  mode=m;el('rcModeP').classList.toggle('on',m==='partial');el('rcModeT').classList.toggle('on',m==='total');
-  var v=el('rcValue');
-  if(m==='total'){v.value=new Intl.NumberFormat('es-CO').format(cur.pending);v.readOnly=true}
-  else{v.readOnly=false;v.value=''}
-  clearPaymentDistribution('cobro');refresh();
+function resetForm(){
+  cur=null;mode='partial';comp='capital';
+  var v=el('rcValue');if(v){v.value='';v.readOnly=false}
+  var o=el('rcObs');if(o)o.value='';
+  var sel=el('rcSelect');if(sel)sel.value='';
+  try{clearPaymentDistribution('cobro')}catch(e){}
+  syncButtons();refresh();
+}
+function syncButtons(){
+  el('rcModeP').classList.toggle('active',mode==='partial');el('rcModeT').classList.toggle('active',mode==='total');
+  el('rcCompC').classList.toggle('active',comp==='capital');el('rcCompI').classList.toggle('active',comp==='interest');
+  var box=el('rcCompBox'),h=el('rcHint'),loan=!!cur&&cur.kind==='loan';
+  if(box)box.style.display=loan?'block':'none';
+  if(h){
+    if(loan){
+      var c=cur.calc;
+      h.innerHTML='Tasa <b>'+c.rate+'% mensual</b> · Interés por mes <b>'+fm(c.monthly)+'</b> · Intereses: <b>'+(cur.payMode==='F'?'AL FINAL':(cur.payMode==='M'?'MENSUAL':'SIN DEFINIR'))+'</b><br>Capital pendiente <b>'+fm(c.capPending)+'</b> · Intereses pendientes <b>'+fm(c.intPending)+'</b>';
+      h.style.display='block';
+    }else h.style.display='none';
+  }
 }
 function refresh(){
-  var t=total(),after=el('rcAfter');
-  if(after){
-    if(t>cur.pending+0.5){after.textContent='EL COBRO SUPERA EL SALDO';after.style.color='#ff6868'}
-    else{after.textContent=fm(Math.max(0,cur.pending-t));after.style.color=''}
+  var s=slice(),t=total(),lim=limit();
+  txt('rcLblInitial',isInt()?'INTERESES CAUSADOS':'VALOR INICIAL');
+  txt('rcLblPaid',isInt()?'INTERESES COBRADOS':'TOTAL COBRADO');
+  txt('rcLblPending',isInt()?'INTERESES PENDIENTES':'SALDO PENDIENTE');
+  txt('rcSumAccount',cur?(cur.client+(cur.title&&cur.kind!=='loan'?' — '+cur.title:'')):'—');
+  txt('rcSumType',cur?((mode==='total'?'PAGO TOTAL':'ABONO')+(cur.kind==='loan'?' · '+(comp==='interest'?'INTERESES':'CAPITAL'):'')):'—');
+  txt('rcSumInitial',fm(s.total));txt('rcSumPaid',fm(s.done));txt('rcSumPending',fm(s.pending));txt('rcSumPayment',fm(t));
+  var after=Math.max(0,s.pending-t),note='SELECCIONA UNA CUENTA';
+  if(cur){
+    if(t>lim+0.5)note='EL COBRO SUPERA EL SALDO';
+    else if(mode==='total'&&s.pending<=0)note='NO HAY INTERESES PENDIENTES. USA ABONO SI RECIBISTE INTERESES ADELANTADOS';
+    else if(t>0&&after===0)note='CUENTA SALDADA CON ESTE COBRO';
+    else note='SALDO PENDIENTE DESPUÉS DEL COBRO';
+  }
+  txt('rcResult',fm(after));txt('rcResultNote',note);
+  var v=el('rcValue');
+  if(v){
+    if(mode==='total'&&cur){v.value=new Intl.NumberFormat('es-CO').format(s.pending);v.readOnly=true}
+    else if(v.readOnly){v.readOnly=false;v.value=''}
   }
   updatePaymentDistribution('cobro');
-  var b=el('cobroSubmit');if(b&&t>cur.pending+0.5)b.disabled=true;
+  var b=el('cobroSubmit');if(b&&(!cur||t>lim+0.5))b.disabled=true;
 }
-function quick(suffix){
-  var t=total();if(!(t>0)||t>cur.pending+0.5){alert('PRIMERO INGRESA EL VALOR A COBRAR.');return}
-  clearPaymentDistribution('cobro');
-  var inp=el('cobroPay'+suffix);if(inp)inp.value=new Intl.NumberFormat('es-CO').format(t);
-  updatePaymentDistribution('cobro');refresh();
+function onSelect(){
+  var i=el('rcSelect').value;
+  cur=(i===''?null:accs[+i]||null);mode='partial';comp='capital';
+  var v=el('rcValue');if(v){v.value='';v.readOnly=false}
+  try{clearPaymentDistribution('cobro')}catch(e){}
+  syncButtons();refresh();
 }
+function bind(){
+  if(bound)return;bound=true;
+  el('rcSelect').addEventListener('change',onSelect);
+  el('rcModeP').onclick=function(){if(!cur)return;mode='partial';var v=el('rcValue');v.readOnly=false;v.value='';try{clearPaymentDistribution('cobro')}catch(e){}syncButtons();refresh()};
+  el('rcModeT').onclick=function(){if(!cur)return;mode='total';try{clearPaymentDistribution('cobro')}catch(e){}syncButtons();refresh()};
+  el('rcCompC').onclick=function(){comp='capital';mode='partial';var v=el('rcValue');v.readOnly=false;v.value='';try{clearPaymentDistribution('cobro')}catch(e){}syncButtons();refresh()};
+  el('rcCompI').onclick=function(){comp='interest';mode='partial';var v=el('rcValue');v.readOnly=false;v.value='';try{clearPaymentDistribution('cobro')}catch(e){}syncButtons();refresh()};
+  el('rcValue').addEventListener('input',function(){formatMoneyInput(this);refresh()});
+  el('cobroSubmit').onclick=doSave;
+  el('rcHist').addEventListener('click',function(e){
+    var t=e.target.closest?e.target.closest('button'):null;if(!t)return;
+    if(t.dataset.sup&&typeof printInternalReceipt==='function'){printInternalReceipt(t.dataset.sup);return}
+    if(t.dataset.void&&typeof voidInternalReceipt==='function'){voidInternalReceipt(t.dataset.void);draw()}
+  });
+}
+function drawHist(){
+  var box=el('rcHist');if(!box)return;
+  var recs=(typeof receiptList==='function'?receiptList(data):[]).filter(function(r){return r.type==='collection'}).slice(0,6);
+  if(!recs.length){box.innerHTML='';return}
+  box.innerHTML='<div class="jcp-rc-hh">ÚLTIMOS COBROS</div>'+recs.map(function(r){
+    var v=r.status==='ANULADO';
+    return '<div class="jcp-rc-hr'+(v?' void':'')+'"><div style="min-width:0"><b>'+esc(r.number)+(v?' · ANULADO':'')+'</b><small>'+esc(r.party||'')+' · '+esc(r.date||'')+'</small>'
+      +'<div class="jcp-rc-hact"><button type="button" data-sup="'+esc(r.number)+'">Ver soporte</button>'+(v?'':'<button type="button" data-void="'+esc(r.number)+'">Anular</button>')+'</div></div>'
+      +'<span class="amt">'+fm(r.amount)+'</span></div>';
+  }).join('');
+}
+function draw(){fillSelect();resetForm();drawHist()}
+window.openRecaudo=function(){
+  show('recaudo');bind();
+  var src=document.querySelector('#vehiculos .inventory-inline-logo')||document.querySelector('.brand-logo'),dst=el('recaudoLogo');
+  if(src&&dst&&src.src)dst.src=src.src;
+  draw();
+  try{window.scrollTo({top:0,behavior:'auto'})}catch(e){window.scrollTo(0,0)}
+};
 
 /* ---------- Guardar ---------- */
 function doSave(){
   if(!cur)return;
-  var amount=total(),acc=cur;
+  var acc=cur,interest=isInt(),amount=total();
   if(!(amount>0)){alert('INGRESA EL VALOR DEL COBRO.');return}
-  if(amount>acc.pending+0.5){alert('EL COBRO SUPERA EL SALDO PENDIENTE.');return}
+  if(amount>limit()+0.5){alert('EL COBRO SUPERA EL SALDO PENDIENTE.');return}
   if(!validatePaymentDistribution('cobro',amount))return;
   var obs=String((el('rcObs')||{}).value||'').trim().toUpperCase();
   var before=cloneAppData(data),next=cloneAppData(data),p=nowParts(),id='cobro_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
   var invBefore=(typeof inventoryIdentity==='function')?inventoryIdentity(data):null;
   try{
     var target=locate(next,acc);if(!target)throw new Error('NO SE ENCONTRÓ LA CUENTA POR COBRAR.');
-    var prev=target.pending();if(amount>prev+0.5)throw new Error('EL COBRO SUPERA EL SALDO PENDIENTE ACTUAL.');
+    var prev=interest?acc.calc.intPending:target.pending();
+    if(!interest&&amount>prev+0.5)throw new Error('EL COBRO SUPERA EL SALDO PENDIENTE ACTUAL.');
     var np=Math.max(0,prev-amount),isTotal=np<1;
-    var word=acc.kind==='loan'?'PRÉSTAMO':(acc.kind==='trade'?'DIFERENCIA DE PERMUTA':'VENTA');
-    var title='COBRO DE '+word+(acc.title?' — '+acc.title:'')+' — '+acc.client;
+    var word=acc.kind==='loan'?(interest?'INTERESES DE PRÉSTAMO':'PRÉSTAMO'):(acc.kind==='trade'?'DIFERENCIA DE PERMUTA':'VENTA');
+    var title='COBRO DE '+word+(acc.title&&acc.kind!=='loan'?' — '+acc.title:'')+' — '+acc.client;
+    var component=interest?'interest':'capital';
     var receipt=addInternalReceipt(next,'collection',{entityId:id,vehicleId:'',amount:amount,plate:acc.plate||'',party:acc.client,title:title,concept:title,date:p.date,createdAt:p.iso,
-      snapshot:{operationType:isTotal?'PAGO TOTAL':'ABONO',previousBalance:prev,newBalance:np,kind:acc.kind,targetKey:acc.key,targetIdx:acc.idx===undefined?null:acc.idx,obs:obs,paymentDistribution:paymentDistribution('cobro')}});
-    var dist=applyPaymentDistribution(next,{prefix:'cobro',direction:'in',total:amount,operationType:'COBRO DE CARTERA',operationId:id,receiptNumber:receipt.number,concept:title,date:p.date,createdAt:p.iso});
+      snapshot:{operationType:(isTotal?'PAGO TOTAL':'ABONO')+(acc.kind==='loan'?' · '+(interest?'INTERESES':'CAPITAL'):''),previousBalance:prev,newBalance:np,kind:acc.kind,component:component,targetKey:acc.key,targetIdx:acc.idx===undefined?null:acc.idx,obs:obs,paymentDistribution:paymentDistribution('cobro')}});
+    var dist=applyPaymentDistribution(next,{prefix:'cobro',direction:'in',total:amount,operationType:interest?'COBRO DE INTERESES':'COBRO DE CARTERA',operationId:id,receiptNumber:receipt.number,concept:title,date:p.date,createdAt:p.iso});
     receipt.snapshot.paymentDistribution=cloneAppData(dist);
-    target.apply(amount,{id:id,receiptNumber:receipt.number,amount:amount,date:p.date,createdAt:p.iso,obs:obs,paymentDistribution:cloneAppData(dist)});
-    next.mov.unshift({id:'mov_'+id,t:'ingreso',subtype:'cobro_cuenta_por_cobrar',c:title,v:amount,receiptNumber:receipt.number,paymentDistribution:dist,collectionOf:{kind:acc.kind,key:acc.key},date:p.date,createdAt:p.iso,source:'recaudo'});
+    target.apply(amount,{id:id,receiptNumber:receipt.number,amount:amount,component:component,date:p.date,createdAt:p.iso,obs:obs,paymentDistribution:cloneAppData(dist)});
+    var mv={id:'mov_'+id,t:'ingreso',subtype:interest?'ingreso_vario':'cobro_cuenta_por_cobrar',c:title,v:amount,receiptNumber:receipt.number,paymentDistribution:dist,collectionOf:{kind:acc.kind,key:acc.key,component:component},date:p.date,createdAt:p.iso,source:'recaudo'};
+    if(interest)mv.interestOf=acc.key;
+    next.mov.unshift(mv);
     if(invBefore&&typeof assertInventoryUnchanged==='function')assertInventoryUnchanged(invBefore,next,'COBRO DE CARTERA');
     data=next;save();
-    closeSheet();draw();
+    draw();
     alert('✅ '+receipt.number+' REGISTRADO. '+(isTotal?'CUENTA SALDADA.':'SALDO PENDIENTE: '+fm(np)+'.'));
   }catch(e){
     data=before;try{window.render()}catch(_e){}
@@ -17340,18 +17432,110 @@ function doSave(){
   }
 }
 
-/* ---------- Anulación de un recibo de cobro (lo llama voidInternalReceipt) ---------- */
+/* ---------- Anulación (la llama voidInternalReceipt) ---------- */
 window.voidCollectionReceipt=function(state,r,reason){
   var snap=r.snapshot||{};
   var target=locate(state,{kind:snap.kind,key:snap.targetKey,idx:snap.targetIdx===null?undefined:snap.targetIdx});
   if(!target)throw new Error('NO SE ENCONTRÓ LA CUENTA POR COBRAR DE ESTE COBRO. ES POSIBLE QUE LA VENTA YA HAYA SIDO ANULADA.');
-  var amount=Number(r.amount||0);
-  target.revert(amount,r.number);
-  (state.mov||[]).forEach(function(m){if(m&&!m.voided&&m.subtype==='cobro_cuenta_por_cobrar'&&String(m.receiptNumber||'')===String(r.number))markMovementVoided(m,r.number,reason)});
+  target.revert(Number(r.amount||0),r.number);
+  (state.mov||[]).forEach(function(m){if(m&&!m.voided&&m.source==='recaudo'&&String(m.receiptNumber||'')===String(r.number))markMovementVoided(m,r.number,reason)});
 };
 window.jcpRecaudoRefresh=function(){try{if(el('recaudo')&&el('recaudo').classList.contains('active'))draw()}catch(e){}};
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.25"></script>
+<script id="jcp-loans-script">
+(function(){
+'use strict';
+if(window.__jcpLoans)return;window.__jcpLoans=true;
+var mode='M',bound=false;
+function el(id){return document.getElementById(id)}
+function fm(v){return typeof money==='function'?money(v):'$ '+new Intl.NumberFormat('es-CO').format(Math.round(v||0))}
+function txt(id,v){var e=el(id);if(e)e.textContent=v}
+function up(v){return String(v==null?'':v).trim().toUpperCase()}
+function capital(){var e=el('lnCapital');return e?parseFormattedMoney(e.value||''):0}
+function rate(){var e=el('lnRate');var v=parseFloat(String(e?e.value:'').replace(',','.'));return isFinite(v)&&v>0?v:0}
+function dueDate(){var e=el('lnDue');if(!e||!e.value)return null;var d=new Date(e.value+'T23:59:59');return isNaN(d.getTime())?null:d}
+function monthsToDue(){var d=dueDate();if(!d)return 0;var n=new Date();if(d.getTime()<=n.getTime())return 0;var m=(d.getFullYear()-n.getFullYear())*12+(d.getMonth()-n.getMonth());if(d.getDate()>n.getDate())m++;return Math.max(1,m)}
+function dueLabel(d){return d?d.toLocaleDateString('es-CO'):'SIN FECHA'}
+PAYMENT_CONFIG.ln={total:capital,submit:'lnSubmit'};
+
+function refresh(){
+  var c=capital(),r=rate(),monthly=Math.round(c*r/100),m=monthsToDue(),est=monthly*m,d=dueDate();
+  txt('lnSumClient',up((el('lnClient')||{}).value)||'—');
+  txt('lnSumCapital',fm(c));txt('lnSumRate',(r?String(r).replace('.',','):'0')+'%');txt('lnSumMonthly',fm(monthly));
+  txt('lnSumMode',mode==='M'?'MENSUAL':'AL FINAL');txt('lnSumDue',dueLabel(d));
+  if(c<=0){txt('lnResult',fm(0));txt('lnResultNote','INGRESA EL CAPITAL DEL PRÉSTAMO')}
+  else if(m>0){txt('lnResult',fm(c+est));txt('lnResultNote','CAPITAL + INTERESES ESTIMADOS ('+m+(m===1?' MES':' MESES')+' × '+fm(monthly)+')')}
+  else{txt('lnResult',fm(c));txt('lnResultNote',r?'CAPITAL · LOS INTERESES CORREN A '+fm(monthly)+' POR MES':'CAPITAL · SIN INTERESES')}
+  updatePaymentDistribution('ln');
+  var b=el('lnSubmit');if(b&&!up((el('lnClient')||{}).value))b.disabled=true;
+}
+function setMode(m){mode=m;el('lnModeM').classList.toggle('active',m==='M');el('lnModeF').classList.toggle('active',m==='F');refresh()}
+function fillClients(){
+  var dl=el('lnClientList');if(!dl)return;
+  var seen={},h='';
+  (data.clientes||[]).forEach(function(c){var n=up(c&&c.nombre);if(n&&!seen[n]){seen[n]=1;h+='<option value="'+n.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'"></option>'}});
+  dl.innerHTML=h;
+}
+function onClientChange(){
+  var n=up(el('lnClient').value),c=(data.clientes||[]).find(function(x){return up(x&&x.nombre)===n});
+  if(c){
+    if(!el('lnDoc').value)el('lnDoc').value=String(c.cedula||'');
+    if(!el('lnPhone').value)el('lnPhone').value=String(c.telefono||'');
+  }
+  refresh();
+}
+function bind(){
+  if(bound)return;bound=true;
+  el('lnClient').addEventListener('input',refresh);
+  el('lnClient').addEventListener('change',onClientChange);
+  el('lnCapital').addEventListener('input',function(){formatMoneyInput(this);refresh()});
+  el('lnRate').addEventListener('input',refresh);
+  el('lnDue').addEventListener('change',refresh);
+  el('lnModeM').onclick=function(){setMode('M')};
+  el('lnModeF').onclick=function(){setMode('F')};
+  el('lnSubmit').onclick=save2;
+}
+function reset(){
+  ['lnClient','lnDoc','lnPhone','lnCapital','lnRate','lnDue','lnObs'].forEach(function(i){var e=el(i);if(e)e.value=''});
+  try{clearPaymentDistribution('ln')}catch(e){}
+  mode='M';el('lnModeM').classList.add('active');el('lnModeF').classList.remove('active');refresh();
+}
+window.openLoanModule=function(){
+  show('prestamoNuevo');bind();fillClients();
+  var src=document.querySelector('#vehiculos .inventory-inline-logo')||document.querySelector('.brand-logo'),dst=el('prestamoLogo');
+  if(src&&dst&&src.src)dst.src=src.src;
+  reset();
+  try{window.scrollTo({top:0,behavior:'auto'})}catch(e){window.scrollTo(0,0)}
+};
+function save2(){
+  var name=up(el('lnClient').value),c=capital(),r=rate(),d=dueDate();
+  if(!name){alert('INGRESA EL NOMBRE DEL CLIENTE.');return}
+  if(!(c>0)){alert('INGRESA EL CAPITAL PRESTADO.');return}
+  if(r>100){alert('REVISA EL INTERÉS: EL PORCENTAJE MENSUAL NO PUEDE SUPERAR 100%.');return}
+  if(d&&d.getTime()<Date.now()-86400000){alert('LA FECHA DE VENCIMIENTO YA PASÓ. REVÍSALA.');return}
+  if(!validatePaymentDistribution('ln',c))return;
+  var doc=String(el('lnDoc').value||'').trim(),phone=String(el('lnPhone').value||'').trim(),obs=up(el('lnObs').value);
+  var monthly=Math.round(c*r/100),m=monthsToDue(),est=monthly*m;
+  var before=cloneAppData(data),next=cloneAppData(data),now=new Date(),id='loan_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
+  var date=now.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),createdAt=now.toISOString();
+  try{
+    var detail='TASA '+(r?String(r).replace('.',','):'0')+'% MENSUAL · INTERÉS POR MES '+fm(monthly)+' · PAGO DE INTERESES: '+(mode==='M'?'MENSUAL':'AL FINAL')+(d?' · VENCE: '+dueLabel(d):'')+(obs?' · '+obs:'');
+    var receipt=addInternalReceipt(next,'loan',{entityId:id,amount:c,title:'PRÉSTAMO OTORGADO — '+name,party:name,date:date,createdAt:createdAt,snapshot:{interest:monthly,paid:0,rate:r,payMode:mode,due:d?d.toISOString():'',obs:detail,paymentDistribution:paymentDistribution('ln')}});
+    var dist=applyPaymentDistribution(next,{prefix:'ln',direction:'out',total:c,operationType:'PRÉSTAMO OTORGADO',operationId:id,receiptNumber:receipt.number,concept:'PRÉSTAMO — '+name,date:date,createdAt:createdAt});
+    receipt.snapshot.paymentDistribution=cloneAppData(dist);
+    next.pres.push({id:id,n:name,doc:doc,phone:phone,c:c,i:est,p:0,rate:r,monthlyInterest:monthly,payMode:mode,due:d?d.toISOString():'',obs:obs,receiptNumber:receipt.number,paymentDistribution:dist,date:date,createdAt:createdAt});
+    data=next;save();
+    reset();fillClients();
+    alert('✅ '+receipt.number+' REGISTRADO. PRÉSTAMO GUARDADO. YA ESTÁ EN CUENTAS POR COBRAR Y EN RECAUDO.');
+  }catch(e){
+    data=before;try{window.render()}catch(_e){}
+    console.error(e);
+    if(!(e&&e.jcpIntegrityIssues))alert('NO FUE POSIBLE REGISTRAR EL PRÉSTAMO. NO SE MODIFICÓ LA INFORMACIÓN.\n\n'+(e&&e.message||e));
+  }
+}
+})();
+</script>
+<script src="./app-update.js?v=2026.09.20.26"></script>
 </body>
 </html>
