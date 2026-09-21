@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.28</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.30</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5512,9 +5512,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.28"></script>
-<script src="./jcp-sync.js?v=2026.09.20.28"></script>
-<script src="./jcp-images.js?v=2026.09.20.28"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.30"></script>
+<script src="./jcp-sync.js?v=2026.09.20.30"></script>
+<script src="./jcp-images.js?v=2026.09.20.30"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -6699,12 +6699,12 @@ function jcpAuditState(source){
   // Métricas independientes para la pantalla de auditoría.
   const vehicleInvestment=veh.reduce((a,x)=>a+(jcpAuditNum(x?.c)||0)+(jcpAuditNum(x?.g)||0),0);
   const otherInvestment=inv.reduce((a,x)=>a+(jcpAuditNum(x?.c)||0),0);
-  const loanReceivable=pres.reduce((a,x)=>a+Math.max(0,(jcpAuditNum(x?.c)||0)-(jcpAuditNum(x?.p)||0)),0);
-  const saleReceivable=sold.filter(x=>x&&x.status!=='permuta'&&!x.permuta&&!x.sale?.voided&&x.status!=='venta_anulada').reduce((a,x)=>a+Math.max(0,jcpAuditNum(x?.sale?.pending)||0),0);
+  const loanReceivable=pres.reduce((a,x)=>a+Math.max(0,(jcpAuditNum(x?.c)||0)-(jcpAuditNum(x?.p)||0)-(typeof jcpLoanCapCollected==='function'?jcpLoanCapCollected(x):0)),0);
+  const saleReceivable=sold.filter(x=>x&&x.status!=='permuta'&&!x.permuta&&!x.sale?.voided&&x.status!=='venta_anulada').reduce((a,x)=>a+Math.max(0,(jcpAuditNum(x?.sale?.pending)||0)-(typeof jcpColCap==='function'?jcpColCap(x?.sale?.collections):0)),0);
   // Las permutas mixtas pueden dejar una cuenta por cobrar independiente.
   // Se toma el saldo vigente de la operación, no el movimiento auxiliar, para
   // evitar duplicarlo y para que los abonos reduzcan el indicador correcto.
-  const tradeReceivable=permutas.filter(x=>x&&!x.voided&&x.status!=='anulada').reduce((a,x)=>a+Math.max(0,jcpAuditNum(x?.pending)||0),0);
+  const tradeReceivable=permutas.filter(x=>x&&!x.voided&&x.status!=='anulada').reduce((a,x)=>a+Math.max(0,(jcpAuditNum(x?.pending)||0)-(typeof jcpColCap==='function'?jcpColCap(x?.collections):0)),0);
   const saleProfit=sold.filter(x=>x&&x.status!=='permuta'&&!x.permuta&&!x.sale?.voided&&x.status!=='venta_anulada').reduce((a,x)=>a+(jcpAuditNum(x?.sale?.price)||0)-((jcpAuditNum(x?.c)||0)+(jcpAuditNum(x?.g)||0)),0);
   // Las permutas trasladan inversión; no realizan utilidad contable.
   const permutaProfit=0;
@@ -10564,10 +10564,18 @@ async function generateInventoryReportPDF(){
     return v && !v.deleted && !v.sale && !['VENDIDO','ELIMINADO','INACTIVO'].includes(status);
   });
   if(!vehicles.length){alert('NO HAY VEHÍCULOS EN EL INVENTARIO PARA GENERAR EL INFORME.');return;}
+  const oldOv=document.getElementById('jcpInfOverlay');if(oldOv)oldOv.remove();
+  const infOv=document.createElement('div');infOv.id='jcpInfOverlay';infOv.setAttribute('role','dialog');infOv.setAttribute('aria-modal','true');
+  infOv.style.cssText='position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:24px;font-family:Arial,sans-serif;color:#fff;text-align:center';
+  infOv.innerHTML='<div style="max-width:360px;width:100%;background:#141414;border:1px solid #4a3c14;border-radius:18px;padding:22px"><div id="jcpInfTitle" style="font-size:16px;font-weight:800;color:#d4af37;margin-bottom:10px">GENERANDO INFORME</div><div id="jcpInfMsg" style="font-size:14px;color:#ddd;line-height:1.4">Preparando…</div><div id="jcpInfBtns" style="margin-top:16px;display:none;flex-direction:column;gap:10px"></div></div>';
+  document.body.appendChild(infOv);
+  const infMsg=t=>{const e=document.getElementById('jcpInfMsg');if(e)e.textContent=t;};
+  await new Promise(r=>setTimeout(r,30));
   try{
     const money=n=>'$ '+(Number(n)||0).toLocaleString('es-CO');
     const logoSrc=document.querySelector('img.brand-logo')?.src||'';
-    const loadImage=src=>jcpResolvePhotoSrc(src).then(src=>new Promise(resolve=>{if(!src){resolve(null);return;}const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>resolve(null);im.src=src;}));
+    const toDataUrl=async u=>{if(!u)return '';if(/^data:/i.test(u))return u;try{const r=await fetch(u);if(!r.ok)return '';const bl=await r.blob();return await new Promise(res=>{const fr=new FileReader();fr.onload=()=>res(String(fr.result||''));fr.onerror=()=>res('');fr.readAsDataURL(bl);});}catch(e){return '';}};
+    const loadImage=src=>Promise.race([Promise.resolve(jcpResolvePhotoSrc(src)).then(toDataUrl).then(u=>new Promise(resolve=>{if(!u){resolve(null);return;}const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>resolve(null);im.src=u;})).catch(()=>null),new Promise(r=>setTimeout(()=>r(null),12000))]);
     const W=1240,H=1754,margin=28,headerH=135,summaryH=180,gap=10,cols=3,rows=3;
     const gridTop=headerH,gridBottom=H-margin-summaryH,gridH=gridBottom-gridTop;
     const cardW=(W-2*margin-gap*(cols-1))/cols,cardH=(gridH-gap*(rows-1))/rows;
@@ -10583,6 +10591,7 @@ async function generateInventoryReportPDF(){
       if(logoSrc){const logo=await loadImage(logoSrc);if(logo){const maxW=175,maxH=62,scale=Math.min(maxW/logo.width,maxH/logo.height);ctx.drawImage(logo,margin,18,logo.width*scale,logo.height*scale);}}
       ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='bold 32px Arial';ctx.fillText('INFORME GENERAL DE INVENTARIO',W/2,45);ctx.fillStyle='#aaa';ctx.font='15px Arial';ctx.fillText(`Fecha del informe: ${fecha}  ·  ${hora}`,W/2,73);
       for(let i=0;i<pageVehicles.length;i++){
+        infMsg('Procesando vehículo '+(pageStart+i+1)+' de '+vehicles.length+'…');await new Promise(r=>setTimeout(r,0));
         const v=pageVehicles[i],col=i%cols,row=Math.floor(i/cols),x=margin+col*(cardW+gap),y=gridTop+row*(cardH+gap),compra=Number(v.c)||0,gastos=(typeof getVehicleExpenseTotal==='function'?getVehicleExpenseTotal(v.id,data):Number(v.g)||0),total=compra+gastos;
         const foto=v.photo||v.foto||v.imagen||v.image||'',placa=v.pl||v.placa||'',ref=v.ref||v.referencia||'',marca=v.marca||v.m||'',modelo=v.modelo||'',info=v.additionalInfo||{};
         const soat=docValue(v,'soat'),tecno=docValue(v,'tecnomecanica'),impuestos=docValue(v,'impuestos'),comparendos=docValue(v,'comparendos'),prendas=docValue(v,'prendas'),embargos=docValue(v,'embargos'),matricula=docValue(v,'matricula');
@@ -10653,19 +10662,32 @@ async function generateInventoryReportPDF(){
     push(ascii(`trailer\n<< /Size ${next} /Root 1 0 R /Info ${infoObj} 0 R >>\nstartxref\n${xref}\n%%EOF`));
 
     const blob=new Blob(chunks,{type:'application/pdf'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;
-    a.download='informe_general_inventario_multi_inversiones_jcp.pdf';
-    a.style.display='none';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(()=>{a.remove();URL.revokeObjectURL(url);},120000);
-
-    alert('INFORME PDF GENERADO CORRECTAMENTE. Revisa la carpeta Descargas.');
+    const url=URL.createObjectURL(blob),fname='informe_general_inventario_multi_inversiones_jcp.pdf';
+    const tt=document.getElementById('jcpInfTitle');if(tt)tt.textContent='✅ INFORME LISTO';
+    infMsg(vehicles.length+(vehicles.length===1?' vehículo':' vehículos')+' · '+(blob.size/1048576).toFixed(1)+' MB');
+    const box=document.getElementById('jcpInfBtns');
+    if(box){
+      box.style.display='flex';box.innerHTML='';
+      const css='display:block;box-sizing:border-box;width:100%;min-height:48px;line-height:48px;border-radius:12px;font-size:14px;font-weight:800;text-decoration:none;text-align:center;cursor:pointer;border:1px solid #b99527;font-family:Arial,sans-serif;';
+      const dl=document.createElement('a');dl.href=url;dl.download=fname;dl.textContent='⬇ DESCARGAR PDF';dl.style.cssText=css+'background:#d4af37;color:#111;';
+      const op=document.createElement('a');op.href=url;op.target='_blank';op.rel='noopener';op.textContent='ABRIR EL INFORME';op.style.cssText=css+'background:#17130a;color:#d4af37;';
+      box.appendChild(dl);box.appendChild(op);
+      try{
+        const file=new File([blob],fname,{type:'application/pdf'});
+        if(navigator.canShare&&navigator.canShare({files:[file]})){
+          const sh=document.createElement('button');sh.type='button';sh.textContent='COMPARTIR';sh.style.cssText=css+'background:#17130a;color:#d4af37;';
+          sh.onclick=()=>{navigator.share({files:[file],title:'Informe general de inventario'}).catch(()=>{});};
+          box.appendChild(sh);
+        }
+      }catch(e){}
+      const cl=document.createElement('button');cl.type='button';cl.textContent='CERRAR';cl.style.cssText=css+'background:#141414;color:#ddd;border-color:#333;';
+      cl.onclick=()=>{infOv.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);};
+      box.appendChild(cl);
+    }
   }catch(error){
     console.error('Error generando informe PDF:',error);
-    alert('NO FUE POSIBLE GENERAR EL INFORME PDF. Revisa la consola para más detalles.');
+    try{infOv.remove();}catch(e){}
+    alert('NO FUE POSIBLE GENERAR EL INFORME PDF.\n\n'+(error&&error.message?error.message:String(error)));
   }
 }
 
@@ -11710,7 +11732,7 @@ function getFinancialSnapshotV75(){
   const otherInvestment=data.inv.reduce((a,x)=>a+(+x.c||0),0);
   const invested=vehicleInvestment+otherInvestment;
 
-  const loanReceivable=data.pres.reduce((a,x)=>a+Math.max(0,(+x.c||0)-(+x.p||0)),0);
+  const loanReceivable=data.pres.reduce((a,x)=>a+Math.max(0,(+x.c||0)-(+x.p||0)-(typeof jcpLoanCapCollected==='function'?jcpLoanCapCollected(x):0)),0);
   const saleReceivable=m.filter(x=>!x.voided&&x.t==='cuenta_por_cobrar').reduce((a,x)=>a+(+x.v||0),0);
   const receivable=loanReceivable+saleReceivable;
 
@@ -11918,7 +11940,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.28\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.30\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15733,7 +15755,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.28',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.30',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -17198,16 +17220,22 @@ function ts(s){var t=Date.parse(s||'');return isNaN(t)?0:t}
 function nowParts(){var n=new Date();return{date:n.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),iso:n.toISOString()}}
 function txt(id,v){var e=el(id);if(e)e.textContent=v}
 
+/* ---------- Cobros vigentes de una cuenta (nunca se modifica el registro original) ---------- */
+function colSum(list,comp){
+  return (Array.isArray(list)?list:[]).filter(function(k){return k&&!k.voided&&(k.component||'capital')===comp}).reduce(function(s,k){return s+(+k.amount||0)},0);
+}
+window.jcpLoanCapCollected=function(x){return x?colSum(x.collections,'capital'):0};
+
 /* ---------- Intereses de un préstamo ---------- */
 function monthsBetween(a,b){var m=(b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth());if(b.getDate()<a.getDate())m--;return Math.max(0,m)}
 function addMonths(d,n){var r=new Date(d.getTime());r.setMonth(r.getMonth()+n);return r}
 function loanCalc(x){
-  var c=+x.c||0,p=+x.p||0,rate=parseFloat(x.rate)||0;
+  var c=+x.c||0,p0=+x.p||0,rate=parseFloat(x.rate)||0;
   var cols=Array.isArray(x.collections)?x.collections.filter(function(k){return k&&!k.voided}):[];
-  var capCols=cols.filter(function(k){return k.component!=='interest'});
+  var capCols=cols.filter(function(k){return (k.component||'capital')!=='interest'});
   var intPaid=cols.filter(function(k){return k.component==='interest'}).reduce(function(s,k){return s+(+k.amount||0)},0);
   var sumCap=capCols.reduce(function(s,k){return s+(+k.amount||0)},0);
-  var p0=Math.max(0,p-sumCap);
+  var p=p0+sumCap;
   var start=new Date(x.createdAt||Date.now());if(isNaN(start.getTime()))start=new Date();
   var M=monthsBetween(start,new Date()),acc=0;
   if(rate>0){
@@ -17223,19 +17251,22 @@ function loanCalc(x){
 window.jcpLoanCalc=loanCalc;
 
 /* ---------- Cuentas pendientes ---------- */
+/* Regla: la venta / permuta / préstamo original NO se modifica al cobrar.
+   Los cobros viven en x.collections y los saldos vigentes se calculan a partir de ellos.
+   Así el libro contable sigue leyendo el mismo "recibido" y la misma forma de pago del origen. */
 function accounts(){
   var out=[];
   (data.sold||[]).forEach(function(x,i){
     var s=x&&x.sale;if(!s||s.voided||x.status==='venta_anulada'||x.status==='permuta'||x.permuta)return;
-    var p=+s.pending||0;if(p<=0)return;
+    var got=colSum(s.collections,'capital'),p=Math.max(0,(+s.pending||0)-got);if(p<=0)return;
     var t=0;try{t=saleTimestamp(x,i)}catch(e){t=ts(s.createdAt||x.soldAt)}
-    out.push({kind:'sale',key:String(s.id||x.id),title:vehTxt(x),plate:x.pl||'',client:s.buyer||'SIN REGISTRAR',total:+s.price||0,received:+s.received||0,pending:p,time:t});
+    out.push({kind:'sale',key:String(s.id||x.id),title:vehTxt(x),plate:x.pl||'',client:s.buyer||'SIN REGISTRAR',total:+s.price||0,received:(+s.received||0)+got,pending:p,time:t});
   });
   (data.permutas||[]).forEach(function(x,i){
     if(!x||x.voided||x.status==='anulada')return;
-    var p=+x.pending||0;if(p<=0)return;
+    var got=colSum(x.collections,'capital'),p=Math.max(0,(+x.pending||0)-got);if(p<=0)return;
     var inc=x.incomingVehicle||{},t=0;try{t=permutaTimestamp(x,i)}catch(e){t=ts(x.createdAt)}
-    out.push({kind:'trade',key:String(x.id),title:vehTxt(inc),plate:inc.pl||'',client:x.client||x.buyer||'SIN REGISTRAR',total:+x.difference||0,received:+x.received||0,pending:p,time:t});
+    out.push({kind:'trade',key:String(x.id),title:vehTxt(inc),plate:inc.pl||'',client:x.client||x.buyer||'SIN REGISTRAR',total:+x.difference||0,received:(+x.received||0)+got,pending:p,time:t});
   });
   (data.pres||[]).forEach(function(x,i){
     if(!x)return;var c=loanCalc(x);
@@ -17253,24 +17284,25 @@ function locate(state,a){
   if(a.kind==='sale'){
     x=(state.sold||[]).find(function(v){return v&&v.sale&&!v.sale.voided&&String(v.sale.id||v.id)===String(a.key)});
     if(!x)return null;
+    var sPend=function(){return Math.max(0,(+x.sale.pending||0)-colSum(x.sale.collections,'capital'))};
     return{
-      pending:function(){return +x.sale.pending||0},
+      pending:sPend,
       apply:function(amount,entry){
-        var s=x.sale;s.received=(+s.received||0)+amount;s.pending=Math.max(0,(+s.pending||0)-amount);if(s.pending<1)s.pending=0;
-        s.collections=Array.isArray(s.collections)?s.collections:[];s.collections.unshift(entry);
-        if(s.pending===0)s.paidAt=entry.createdAt;
-        syncSaleReceivable(state,x,s.pending,'COBRO '+entry.receiptNumber,'recaudo');
+        var s=x.sale,before=sPend();
+        s.collections=Array.isArray(s.collections)?s.collections:[];s.collections.unshift(entry);s.collV2=true;
+        syncSaleReceivable(state,x,Math.max(0,before-amount),'COBRO '+entry.receiptNumber,'recaudo');
       },
       revert:function(amount,number){
-        var s=x.sale;s.received=Math.max(0,(+s.received||0)-amount);s.pending=(+s.pending||0)+amount;delete s.paidAt;
+        var s=x.sale;
         (s.collections||[]).forEach(function(c){if(c.receiptNumber===number)c.voided=true});
-        syncSaleReceivable(state,x,s.pending,'ANULACIÓN COBRO '+number,'recaudo');
+        syncSaleReceivable(state,x,sPend(),'ANULACIÓN COBRO '+number,'recaudo');
       }
     };
   }
   if(a.kind==='trade'){
     x=(state.permutas||[]).find(function(v){return v&&String(v.id)===String(a.key)&&!v.voided});
     if(!x)return null;
+    var tPend=function(){return Math.max(0,(+x.pending||0)-colSum(x.collections,'capital'))};
     var setCxc=function(pending,reason){
       var k=tradeCxc(state,x.id);
       if(pending>0){
@@ -17279,16 +17311,15 @@ function locate(state,a){
       }else if(k>=0)state.mov.splice(k,1);
     };
     return{
-      pending:function(){return +x.pending||0},
+      pending:tPend,
       apply:function(amount,entry){
-        x.received=(+x.received||0)+amount;x.pending=Math.max(0,(+x.pending||0)-amount);if(x.pending<1)x.pending=0;
-        x.collections=Array.isArray(x.collections)?x.collections:[];x.collections.unshift(entry);
-        setCxc(x.pending,'COBRO '+entry.receiptNumber);
+        var before=tPend();
+        x.collections=Array.isArray(x.collections)?x.collections:[];x.collections.unshift(entry);x.collV2=true;
+        setCxc(Math.max(0,before-amount),'COBRO '+entry.receiptNumber);
       },
       revert:function(amount,number){
-        x.received=Math.max(0,(+x.received||0)-amount);x.pending=(+x.pending||0)+amount;
         (x.collections||[]).forEach(function(c){if(c.receiptNumber===number)c.voided=true});
-        setCxc(x.pending,'ANULACIÓN COBRO '+number);
+        setCxc(tPend(),'ANULACIÓN COBRO '+number);
       }
     };
   }
@@ -17297,20 +17328,56 @@ function locate(state,a){
     if(!x&&typeof a.idx==='number'&&state.pres[a.idx]&&('idx'+a.idx)===String(a.key))x=state.pres[a.idx];
     if(!x)return null;
     return{
-      pending:function(){return Math.max(0,(+x.c||0)-(+x.p||0))},
+      pending:function(){return Math.max(0,(+x.c||0)-(+x.p||0)-colSum(x.collections,'capital'))},
       apply:function(amount,entry){
-        if(entry.component!=='interest')x.p=(+x.p||0)+amount;
-        x.collections=Array.isArray(x.collections)?x.collections:[];x.collections.unshift(entry);
+        x.collections=Array.isArray(x.collections)?x.collections:[];x.collections.unshift(entry);x.collV2=true;
       },
       revert:function(amount,number){
-        var e=(x.collections||[]).find(function(k){return k.receiptNumber===number});
-        if(!e||e.component!=='interest')x.p=Math.max(0,(+x.p||0)-amount);
         (x.collections||[]).forEach(function(k){if(k.receiptNumber===number)k.voided=true});
       }
     };
   }
   return null;
 }
+
+/* ---------- Reparación de cobros hechos con la regla anterior ----------
+   Antes, cobrar sumaba el cobro a "recibido" y a "abonado" del registro original,
+   y eso hacía que el libro contable no reconociera la venta / permuta / préstamo.
+   Aquí se devuelve el registro original a sus valores de origen (una sola vez). */
+function repairState(state){
+  var changed=false;
+  (state.sold||[]).forEach(function(x){
+    var s=x&&x.sale;if(!s||s.collV2||!Array.isArray(s.collections))return;
+    var got=colSum(s.collections,'capital');
+    if(got>0){s.received=Math.max(0,(+s.received||0)-got);s.pending=(+s.pending||0)+got;delete s.paidAt;changed=true}
+    s.collV2=true;
+  });
+  (state.permutas||[]).forEach(function(x){
+    if(!x||x.collV2||!Array.isArray(x.collections))return;
+    var got=colSum(x.collections,'capital');
+    if(got>0){x.received=Math.max(0,(+x.received||0)-got);x.pending=(+x.pending||0)+got;changed=true}
+    x.collV2=true;
+  });
+  (state.pres||[]).forEach(function(x){
+    if(!x||x.collV2||!Array.isArray(x.collections))return;
+    var got=colSum(x.collections,'capital');
+    if(got>0){x.p=Math.max(0,(+x.p||0)-got);changed=true}
+    x.collV2=true;
+  });
+  return changed;
+}
+window.jcpRepairCollections=function(){
+  try{
+    var need=(data.sold||[]).some(function(x){return x&&x.sale&&Array.isArray(x.sale.collections)&&!x.sale.collV2})
+      ||(data.permutas||[]).some(function(x){return x&&Array.isArray(x.collections)&&!x.collV2})
+      ||(data.pres||[]).some(function(x){return x&&Array.isArray(x.collections)&&!x.collV2});
+    if(!need)return false;
+    var before=cloneAppData(data),next=cloneAppData(data);
+    repairState(next);
+    try{data=next;save();return true}catch(e){data=before;console.warn('JCP reparación de cobros:',e);return false}
+  }catch(e){console.warn('JCP reparación de cobros:',e);return false}
+};
+window.addEventListener('jcp-cloud-bootstrap-ready',function(){setTimeout(function(){try{window.jcpRepairCollections()}catch(e){}},1200)});
 
 /* ---------- Formulario ---------- */
 function isInt(){return !!cur&&cur.kind==='loan'&&comp==='interest'}
@@ -17417,6 +17484,7 @@ function drawHist(){
 }
 function draw(){fillSelect();resetForm();drawHist()}
 window.openRecaudo=function(){
+  try{window.jcpRepairCollections()}catch(e){}
   show('recaudo');bind();
   var src=document.querySelector('#vehiculos .inventory-inline-logo')||document.querySelector('.brand-logo'),dst=el('recaudoLogo');
   if(src&&dst&&src.src)dst.src=src.src;
@@ -17435,6 +17503,7 @@ function doSave(){
   var before=cloneAppData(data),next=cloneAppData(data),p=nowParts(),id='cobro_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
   var invBefore=(typeof inventoryIdentity==='function')?inventoryIdentity(data):null;
   try{
+    repairState(next);
     var target=locate(next,acc);if(!target)throw new Error('NO SE ENCONTRÓ LA CUENTA POR COBRAR.');
     var prev=interest?acc.calc.intPending:target.pending();
     if(!interest&&amount>prev+0.5)throw new Error('EL COBRO SUPERA EL SALDO PENDIENTE ACTUAL.');
@@ -17597,6 +17666,8 @@ if(window.__jcpReceivables)return;window.__jcpReceivables=true;
 function esc(v){return typeof clientEsc==='function'?clientEsc(v):String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function fm(v){return typeof money==='function'?money(v):'$ '+new Intl.NumberFormat('es-CO').format(Math.round(v||0))}
 function veh(x){x=x||{};var t=[(x.marca||x.m||''),(x.ref||'')].join(' ').trim();return t+(x.pl?(t?' — ':'')+x.pl:'')}
+function colcap(list){return (Array.isArray(list)?list:[]).filter(function(k){return k&&!k.voided&&(k.component||'capital')==='capital'}).reduce(function(s,k){return s+(+k.amount||0)},0)}
+window.jcpColCap=colcap;
 function totals(items){return '<div class="jcp-cx-totals">'+items.map(function(i){return '<div><span>'+i[0]+'</span><b>'+i[1]+'</b></div>'}).join('')+'</div>'}
 function row(client,pend,line,detail){
   return '<div class="jcp-cx-row"><div class="jcp-cx-l1"><b>'+esc(client)+'</b><strong>'+fm(pend)+'</strong></div>'
@@ -17609,15 +17680,15 @@ window.renderSalesReceivables=function(){
   var items=[];
   (data.sold||[]).forEach(function(x,i){
     var s=x&&x.sale;if(!s||s.voided||x.status==='venta_anulada'||x.status==='permuta'||x.permuta)return;
-    var p=+s.pending||0;if(p<=0)return;
+    var cc=colcap(s.collections),p=Math.max(0,(+s.pending||0)-cc);if(p<=0)return;
     var t=0;try{t=saleTimestamp(x,i)}catch(e){}
-    items.push({t:t,client:s.buyer||'SIN REGISTRAR',pend:p,line:veh(x),kind:'Venta a crédito',total:+s.price||0,got:+s.received||0});
+    items.push({t:t,client:s.buyer||'SIN REGISTRAR',pend:p,line:veh(x),kind:'Venta a crédito',total:+s.price||0,got:(+s.received||0)+cc});
   });
   (data.permutas||[]).forEach(function(x,i){
     if(!x||x.voided||x.status==='anulada')return;
-    var p=+x.pending||0;if(p<=0)return;
+    var cc=colcap(x.collections),p=Math.max(0,(+x.pending||0)-cc);if(p<=0)return;
     var t=0;try{t=permutaTimestamp(x,i)}catch(e){}
-    items.push({t:t,client:x.client||x.buyer||'SIN REGISTRAR',pend:p,line:veh(x.incomingVehicle),kind:'Permuta',total:+x.difference||0,got:+x.received||0});
+    items.push({t:t,client:x.client||x.buyer||'SIN REGISTRAR',pend:p,line:veh(x.incomingVehicle),kind:'Permuta',total:+x.difference||0,got:(+x.received||0)+cc});
   });
   items.sort(function(a,b){return b.t-a.t});
   var tot=items.reduce(function(s,i){return s+i.pend},0);
@@ -17668,6 +17739,6 @@ window.jcpExtractMov=function(){
 };
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.28"></script>
+<script src="./app-update.js?v=2026.09.20.30"></script>
 </body>
 </html>
