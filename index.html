@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.26</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.27</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5148,15 +5148,44 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="unified-module-header">
 <div class="unified-module-title-row"><div class="unified-module-brand">
 <img alt="MULTI INVERSIONES JCP" class="unified-module-logo" id="carteraCajaLogo" src="logo-3.jpg"/>
-<h2 class="unified-module-title"><span class="unified-module-icon">💳</span> CARTERA POR COBRAR</h2>
+<h2 class="unified-module-title"><span class="unified-module-icon">💳</span> CUENTAS POR COBRAR</h2>
 </div></div>
 <div class="unified-module-gold-line"></div>
-<div class="unified-module-note">💡 Aquí se muestran las ventas con saldo pendiente y los préstamos por cobrar.</div>
+<div class="unified-module-note">💡 Elige qué cuentas por cobrar quieres consultar.</div>
 </div>
-<div class="cf-detail-panel cf-standalone-v78">
-<button class="jcp-rc-go" onclick="openRecaudo()" type="button">💰 REGISTRAR COBROS EN RECAUDO</button>
+<div class="cf-actions">
+<div class="cf-action-grid">
+<button class="cf-action" onclick="show('carteraVehiculos')" type="button"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="vehicle"></span><div><b>Vehículos</b></div></button>
+<button class="cf-action" onclick="show('carteraPrestamos')" type="button"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="loans"></span><div><b>Préstamos</b></div></button>
+</div>
+</div>
+</section>
+<section class="view" id="carteraVehiculos">
+<div class="unified-module-header">
+<div class="unified-module-title-row"><div class="unified-module-brand">
+<img alt="MULTI INVERSIONES JCP" class="unified-module-logo" id="carteraVehLogo" src="logo-3.jpg"/>
+<h2 class="unified-module-title"><span class="unified-module-icon">🚗</span> POR COBRAR · VEHÍCULOS</h2>
+</div></div>
+<div class="unified-module-gold-line"></div>
+<div class="unified-module-note">💡 Ventas a crédito y permutas con saldo pendiente.</div>
+</div>
+<div class="jcp-cx-wrap">
 <div id="salesReceivablesList"></div>
-<div id="loanReceivablesListV78" style="margin-top:14px"></div>
+<button class="jcp-rc-go" onclick="openRecaudo()" type="button">💰 REGISTRAR COBROS EN RECAUDO</button>
+</div>
+</section>
+<section class="view" id="carteraPrestamos">
+<div class="unified-module-header">
+<div class="unified-module-title-row"><div class="unified-module-brand">
+<img alt="MULTI INVERSIONES JCP" class="unified-module-logo" id="carteraPresLogo" src="logo-3.jpg"/>
+<h2 class="unified-module-title"><span class="unified-module-icon">🤝</span> POR COBRAR · PRÉSTAMOS</h2>
+</div></div>
+<div class="unified-module-gold-line"></div>
+<div class="unified-module-note">💡 Préstamos con su capital e intereses pendientes.</div>
+</div>
+<div class="jcp-cx-wrap">
+<div id="loanReceivablesListV78"></div>
+<button class="jcp-rc-go" onclick="openRecaudo()" type="button">💰 REGISTRAR COBROS EN RECAUDO</button>
 </div>
 </section>
 <section class="view" id="recaudo">
@@ -5485,9 +5514,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.26"></script>
-<script src="./jcp-sync.js?v=2026.09.20.26"></script>
-<script src="./jcp-images.js?v=2026.09.20.26"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.27"></script>
+<script src="./jcp-sync.js?v=2026.09.20.27"></script>
+<script src="./jcp-images.js?v=2026.09.20.27"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -7212,7 +7241,7 @@ function show(id){
       cajaCapital:'cashCapitalLogo',extractos:'extractosLogo',detalleCapital:'detalleCapitalLogo',
       capitalFinanciacion:'capitalFinLogo',pagoObligaciones:'pagoObligLogo',nuevaFinanciacion:'nuevaFinLogo',
       obligacionesPendientes:'obligPendLogo',cierreCaja:'cierreCajaLogo',historialFinanciero:'histFinLogo',
-      historialCapitalFinanciacion:'capitalFinHistLogo',carteraCaja:'carteraCajaLogo',
+      historialCapitalFinanciacion:'capitalFinHistLogo',carteraCaja:'carteraCajaLogo',carteraVehiculos:'carteraVehLogo',carteraPrestamos:'carteraPresLogo',
       historialRetiroGanancia:'profitWithdrawalHistoryLogo'
     };
     if(src&&logoMap[id]){
@@ -7239,7 +7268,7 @@ function show(id){
     try{previewCashClosure();}catch(e){}
     try{if(typeof window.bindCashCloseLive==='function')setTimeout(window.bindCashCloseLive,0);}catch(e){}
   }
-  if(id==='carteraCaja'){
+  if(id==='carteraCaja'||id==='carteraVehiculos'||id==='carteraPrestamos'){
     try{renderSalesReceivables();}catch(e){}
     try{renderLoanReceivablesV78();}catch(e){}
     try{syncFinancialUiV76();}catch(e){}
@@ -11891,7 +11920,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.26\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.27\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -12757,7 +12786,7 @@ h1{font-size:22px;margin:0}h2{font-size:14px;color:#555;margin:5px 0 18px}
       return;
     }
 
-    const rows=(Array.isArray(data.mov)?data.mov:[])
+    const rows=(typeof jcpExtractMov==='function'?jcpExtractMov():(Array.isArray(data.mov)?data.mov:[]))
       .filter(x=>{
         const t=ts(x);
         return t>=start&&t<=end&&(x.t==='ingreso'||x.t==='gasto');
@@ -12771,6 +12800,7 @@ h1{font-size:22px;margin:0}h2{font-size:14px;color:#555;margin:5px 0 18px}
 
     const category=x=>{
       if(x.interestOf)return 'INTERESES COBRADOS';
+      if(x.subtype==='prestamo_otorgado')return 'PRÉSTAMO OTORGADO';
       if(x.subtype==='cobro_cuenta_por_cobrar')return 'COBRO DE CARTERA';
       if(x.subtype==='venta'||(x.t==='ingreso'&&x.saleVehicleId))return 'VENTA';
       if(x.subtype==='compra_vehiculo')return 'COMPRA VEHÍCULO';
@@ -12892,7 +12922,7 @@ td.in{color:#167a42;font-weight:bold}td.out{color:#b12626;font-weight:bold}.empt
     // Los cierres continúan existiendo internamente, pero no agregan un filtro adicional.
   }
   function extractRunningBalances(){
-    const movements=(data.mov||[]).filter(x=>x&&!x.voided&&(x.t==='ingreso'||x.t==='gasto')).map((x,index)=>({x,index,time:ts(x)})).sort((a,b)=>a.time-b.time||a.index-b.index);
+    const movements=(typeof jcpExtractMov==='function'?jcpExtractMov():(data.mov||[])).filter(x=>x&&!x.voided&&(x.t==='ingreso'||x.t==='gasto')).map((x,index)=>({x,index,time:ts(x)})).sort((a,b)=>a.time-b.time||a.index-b.index);
     let balance=0;const map=new Map();
     movements.forEach(({x})=>{const before=balance;balance+=x.t==='ingreso'?(+x.v||0):-(+x.v||0);map.set(x,{before,after:balance});});
     return map;
@@ -13179,6 +13209,7 @@ window.renderExtractos=function(){
     const range=extractPeriodRange(),inRange=x=>{const t=ts(x);return t>=range.start&&t<=range.end;};
     const movementCategory=x=>{
       if(x.interestOf)return 'INTERESES COBRADOS';
+      if(x.subtype==='prestamo_otorgado')return 'PRÉSTAMO OTORGADO';
       if(x.subtype==='cobro_cuenta_por_cobrar')return 'COBRO DE CARTERA';
       if(x.subtype==='venta'||(x.t==='ingreso'&&x.saleVehicleId))return 'VENTA';
       if(x.subtype==='compra_vehiculo')return 'COMPRA VEHÍCULO';
@@ -13203,7 +13234,7 @@ window.renderExtractos=function(){
       if(c.includes('TRANSFERENCIA'))return 'TRANSFERENCIA';
       return 'NO ESPECIFICADO';
     };
-    const allCash=(data.mov||[]).filter(x=>!x.voided&&inRange(x)&&(x.t==='ingreso'||x.t==='gasto'));
+    const allCash=(typeof jcpExtractMov==='function'?jcpExtractMov():(data.mov||[])).filter(x=>!x.voided&&inRange(x)&&(x.t==='ingreso'||x.t==='gasto'));
     const categories=[...new Set(allCash.map(movementCategory))].sort(),catSel=document.getElementById('extCategoryFilter');
     if(catSel){const keep=categoryFilter;catSel.innerHTML='<option value="all">TODAS LAS CATEGORÍAS</option>'+categories.map(c=>'<option value="'+clientEsc(c)+'">'+clientEsc(c)+'</option>').join('');if([...catSel.options].some(o=>o.value===keep))catSel.value=keep;}
     const accounts=[...new Set(allCash.map(movementAccount))].sort(),accSel=document.getElementById('extAccountFilter');
@@ -15704,7 +15735,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.26',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.27',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -17536,6 +17567,109 @@ function save2(){
 }
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.26"></script>
+<style id="jcp-receivables-style">
+/* ===== Cuentas por cobrar: menú de fichas + listas sencillas ===== */
+#carteraCaja .cf-actions{background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;margin-top:14px!important}
+#carteraCaja .cf-action-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+#carteraCaja .cf-action{min-width:0!important;min-height:150px!important;box-sizing:border-box!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:10px!important;text-align:center!important;background:var(--card)!important;border:1px solid #3b321c!important;border-radius:18px!important;padding:16px 10px!important;color:#fff!important}
+#carteraCaja .cf-action>span{--jcp-icon-size:48px!important;margin:0 auto!important}
+#carteraCaja .cf-action div{display:flex!important;flex-direction:column!important;align-items:center!important;gap:0!important;min-width:0!important}
+#carteraCaja .cf-action b{font-size:11px!important;line-height:1.15!important;text-align:center!important}
+@media(max-width:600px){#carteraCaja .cf-action-grid{gap:10px!important}#carteraCaja .cf-action{min-height:138px!important;padding:12px 8px!important}}
+#carteraVehiculos .unified-module-title,#carteraPrestamos .unified-module-title{font-size:15px!important;white-space:normal!important;line-height:1.08!important}
+@media(max-width:480px){#carteraVehiculos .unified-module-title,#carteraPrestamos .unified-module-title{font-size:12px!important}}
+.jcp-cx-wrap{padding:6px 2px 24px}
+.jcp-cx-totals{display:flex;gap:14px;padding:6px 2px 10px}
+.jcp-cx-totals div{flex:1;min-width:0}
+.jcp-cx-totals span{display:block;font-size:9px;font-weight:900;letter-spacing:.8px;color:#a8a8a8}
+.jcp-cx-totals b{display:block;margin-top:2px;font-size:22px;color:var(--gold,#d4af37)}
+.jcp-cx-row{margin:0 0 9px;padding:12px 14px;background:#141414;border:1px solid #2a2a2a;border-radius:14px}
+.jcp-cx-l1,.jcp-cx-l2{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.jcp-cx-l1 b{font-size:15px;color:#fff;min-width:0;overflow-wrap:anywhere}
+.jcp-cx-l1 strong{font-size:15px;color:var(--gold,#d4af37);white-space:nowrap}
+.jcp-cx-l2{margin-top:2px;font-size:12px;color:#a8a8a8}
+.jcp-cx-l2 small{font-size:10px;color:#8f8f8f;white-space:nowrap}
+.jcp-cx-l3{margin-top:7px;padding-top:7px;border-top:1px solid #222;font-size:10.5px;line-height:1.4;color:#8f8f8f}
+.jcp-cx-empty{padding:22px 14px;text-align:center;color:#a8a8a8;border:1px dashed #333;border-radius:14px;margin-bottom:10px}
+</style>
+<script id="jcp-receivables-script">
+(function(){
+'use strict';
+if(window.__jcpReceivables)return;window.__jcpReceivables=true;
+function esc(v){return typeof clientEsc==='function'?clientEsc(v):String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function fm(v){return typeof money==='function'?money(v):'$ '+new Intl.NumberFormat('es-CO').format(Math.round(v||0))}
+function veh(x){x=x||{};var t=[(x.marca||x.m||''),(x.ref||'')].join(' ').trim();return t+(x.pl?(t?' — ':'')+x.pl:'')}
+function totals(items){return '<div class="jcp-cx-totals">'+items.map(function(i){return '<div><span>'+i[0]+'</span><b>'+i[1]+'</b></div>'}).join('')+'</div>'}
+function row(client,pend,line,detail){
+  return '<div class="jcp-cx-row"><div class="jcp-cx-l1"><b>'+esc(client)+'</b><strong>'+fm(pend)+'</strong></div>'
+    +'<div class="jcp-cx-l2"><span>'+esc(line)+'</span><small>pendiente</small></div>'
+    +'<div class="jcp-cx-l3">'+detail+'</div></div>';
+}
+
+window.renderSalesReceivables=function(){
+  var el=document.getElementById('salesReceivablesList');if(!el)return;
+  var items=[];
+  (data.sold||[]).forEach(function(x,i){
+    var s=x&&x.sale;if(!s||s.voided||x.status==='venta_anulada'||x.status==='permuta'||x.permuta)return;
+    var p=+s.pending||0;if(p<=0)return;
+    var t=0;try{t=saleTimestamp(x,i)}catch(e){}
+    items.push({t:t,client:s.buyer||'SIN REGISTRAR',pend:p,line:veh(x),kind:'Venta a crédito',total:+s.price||0,got:+s.received||0});
+  });
+  (data.permutas||[]).forEach(function(x,i){
+    if(!x||x.voided||x.status==='anulada')return;
+    var p=+x.pending||0;if(p<=0)return;
+    var t=0;try{t=permutaTimestamp(x,i)}catch(e){}
+    items.push({t:t,client:x.client||x.buyer||'SIN REGISTRAR',pend:p,line:veh(x.incomingVehicle),kind:'Permuta',total:+x.difference||0,got:+x.received||0});
+  });
+  items.sort(function(a,b){return b.t-a.t});
+  var tot=items.reduce(function(s,i){return s+i.pend},0);
+  el.innerHTML=totals([['TOTAL POR COBRAR',fm(tot)]])+(items.length?items.map(function(i){
+    return row(i.client,i.pend,i.line,esc(i.kind)+' · Acordado '+fm(i.total)+' · Recibido '+fm(i.got));
+  }).join(''):'<div class="jcp-cx-empty">No tienes cuentas por cobrar de vehículos.</div>');
+};
+
+window.renderLoanReceivablesV78=function(){
+  var el=document.getElementById('loanReceivablesListV78');if(!el)return;
+  var items=[];
+  (data.pres||[]).forEach(function(x){
+    if(!x)return;
+    var c=typeof window.jcpLoanCalc==='function'?window.jcpLoanCalc(x):{c:+x.c||0,p:+x.p||0,capPending:Math.max(0,(+x.c||0)-(+x.p||0)),rate:0,intPending:0};
+    if(c.capPending<=0&&c.intPending<=0)return;
+    items.push({x:x,c:c,t:Date.parse(x.createdAt||'')||0});
+  });
+  items.sort(function(a,b){return b.t-a.t});
+  var cap=items.reduce(function(s,i){return s+i.c.capPending},0),int=items.reduce(function(s,i){return s+i.c.intPending},0);
+  el.innerHTML=totals([['CAPITAL PENDIENTE',fm(cap)],['INTERESES',fm(int)]])+(items.length?items.map(function(i){
+    var x=i.x,c=i.c;
+    var line=c.rate?(String(c.rate).replace('.',',')+'% mensual · Intereses '+(x.payMode==='F'?'al final':(x.payMode==='M'?'mensual':'sin definir'))):'Sin intereses';
+    var det='Prestado '+fm(c.c)+' · Abonado '+fm(c.p)+(c.rate?' · Intereses pendientes '+fm(c.intPending):'');
+    return row(x.n||x.nombre||x.cliente||'SIN REGISTRAR',c.capPending,line,esc(det));
+  }).join(''):'<div class="jcp-cx-empty">No tienes préstamos por cobrar.</div>');
+};
+
+/* Al tocar "Cuentas por cobrar" (inicio, Finanzas o buscador) se abre el menú */
+window.openSalesReceivables=function(){show('carteraCaja')};
+
+/* ---------- Extractos: los préstamos otorgados salen como salida de dinero ---------- */
+var memo={mov:null,pres:null,tm:null,n:-1,m:-1,t:-1,list:null};
+window.jcpExtractMov=function(){
+  var mov=Array.isArray(data.mov)?data.mov:[],pres=Array.isArray(data.pres)?data.pres:[],tm=Array.isArray(data.treasuryMovements)?data.treasuryMovements:[];
+  if(memo.list&&memo.mov===mov&&memo.pres===pres&&memo.tm===tm&&memo.n===pres.length&&memo.m===mov.length&&memo.t===tm.length)return memo.list;
+  var have={};mov.forEach(function(m){if(m&&m.receiptNumber)have[String(m.receiptNumber)]=1});
+  var extra=[];
+  pres.forEach(function(p,i){
+    if(!p||p.voided||!p.receiptNumber||have[String(p.receiptNumber)])return;
+    var out=tm.some(function(t){return t&&!t.voided&&!t.isReversal&&t.direction==='out'&&String(t.receiptNumber)===String(p.receiptNumber)});
+    if(!out)return;
+    var d=p.paymentDistribution||{},cash=+d.cash||0,tr=0;
+    Object.keys(d).forEach(function(k){if(k!=='cash')tr+=+d[k]||0});
+    extra.push({id:'vmov_'+(p.id||i),t:'gasto',subtype:'prestamo_otorgado',c:'PRÉSTAMO OTORGADO — '+(p.n||''),v:+p.c||0,receiptNumber:p.receiptNumber,date:p.date||'',createdAt:p.createdAt||'',paymentDistribution:d,cash:cash,transfer:tr,nonOperatingExpense:true,virtual:true});
+  });
+  memo={mov:mov,pres:pres,tm:tm,n:pres.length,m:mov.length,t:tm.length,list:extra.length?mov.concat(extra):mov};
+  return memo.list;
+};
+})();
+</script>
+<script src="./app-update.js?v=2026.09.20.27"></script>
 </body>
 </html>
