@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.27</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.28</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5171,7 +5171,6 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 <div class="jcp-cx-wrap">
 <div id="salesReceivablesList"></div>
-<button class="jcp-rc-go" onclick="openRecaudo()" type="button">💰 REGISTRAR COBROS EN RECAUDO</button>
 </div>
 </section>
 <section class="view" id="carteraPrestamos">
@@ -5185,7 +5184,6 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 <div class="jcp-cx-wrap">
 <div id="loanReceivablesListV78"></div>
-<button class="jcp-rc-go" onclick="openRecaudo()" type="button">💰 REGISTRAR COBROS EN RECAUDO</button>
 </div>
 </section>
 <section class="view" id="recaudo">
@@ -5514,9 +5512,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.27"></script>
-<script src="./jcp-sync.js?v=2026.09.20.27"></script>
-<script src="./jcp-images.js?v=2026.09.20.27"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.28"></script>
+<script src="./jcp-sync.js?v=2026.09.20.28"></script>
+<script src="./jcp-images.js?v=2026.09.20.28"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -11920,7 +11918,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.27\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.28\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15735,7 +15733,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.27',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.28',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -17670,6 +17668,6 @@ window.jcpExtractMov=function(){
 };
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.27"></script>
+<script src="./app-update.js?v=2026.09.20.28"></script>
 </body>
 </html>
