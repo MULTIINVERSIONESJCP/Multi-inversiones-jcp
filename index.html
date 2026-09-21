@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.24</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.25</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5367,9 +5367,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.24"></script>
-<script src="./jcp-sync.js?v=2026.09.20.24"></script>
-<script src="./jcp-images.js?v=2026.09.20.24"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.25"></script>
+<script src="./jcp-sync.js?v=2026.09.20.25"></script>
+<script src="./jcp-images.js?v=2026.09.20.25"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -5436,6 +5436,7 @@ function normalizeCloudData(obj){
     treasuryMovements:Array.isArray(d.treasuryMovements)?d.treasuryMovements:[],
     treasuryConfig:(d.treasuryConfig&&typeof d.treasuryConfig==='object')?d.treasuryConfig:{initialized:false},
     activityLog:Array.isArray(d.activityLog)?d.activityLog:[],
+    settings:(d.settings&&typeof d.settings==='object'&&!Array.isArray(d.settings))?d.settings:{},
     _sync:{
       rev:Number(sync.rev||0),
       updatedAt:String(sync.updatedAt||''),
@@ -11772,7 +11773,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.24\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.25\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15583,7 +15584,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.24',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.25',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -16403,10 +16404,15 @@ window.openRecordCopy=function(number){
 
   function el(id){return document.getElementById(id)}
   function getSet(){
-    var s={};try{s=JSON.parse(localStorage.getItem(SKEY)||'{}')||{}}catch(e){}
+    var c=cfg(),s=c?c.general:localGeneral();s=s||{};
     return {ubicacion:s.ubicacion!=null?s.ubicacion:DEF_SET.ubicacion,telefono:s.telefono!=null?s.telefono:DEF_SET.telefono,observaciones:s.observaciones!=null?s.observaciones:DEF_SET.observaciones};
   }
-  function putSet(s){try{localStorage.setItem(SKEY,JSON.stringify(s))}catch(e){}}
+  function putSet(s){
+    var o=getSet();
+    if(o.ubicacion===s.ubicacion&&o.telefono===s.telefono&&o.observaciones===s.observaciones)return;
+    writeCfg(function(c){c.general={ubicacion:s.ubicacion,telefono:s.telefono,observaciones:s.observaciones}});
+    try{localStorage.setItem(SKEY,JSON.stringify(s))}catch(e){}
+  }
   function vehById(id){try{return (data.veh||[]).find(function(v){return String(v.id)===String(id)})||null}catch(e){return null}}
   function infoOf(v){return (v&&v.additionalInfo&&typeof v.additionalInfo==='object')?v.additionalInfo:{}}
   function nfmt(n){return new Intl.NumberFormat('es-CO').format(n)}
@@ -16670,10 +16676,35 @@ window.openRecordCopy=function(number){
   }
   /* ---- Atajos: se guardan una sola vez y valen para todos los carros ---- */
   var OKEY='jcp_pub_options_v1';
-  function loadOpts(){try{return JSON.parse(localStorage.getItem(OKEY)||'{}')||{}}catch(e){return {}}}
-  function getOpts(k){var s=loadOpts();if(Array.isArray(s[k]))return s[k].slice();return (FBY[k]&&FBY[k].o)?FBY[k].o.slice():[]}
-  function setOpts(k,arr){var s=loadOpts();s[k]=arr;try{localStorage.setItem(OKEY,JSON.stringify(s))}catch(e){}}
-  function resetOpts(k){var s=loadOpts();delete s[k];try{localStorage.setItem(OKEY,JSON.stringify(s))}catch(e){}}
+  /* Ajustes de redes: viven dentro de los datos de la app (data.settings.publication),
+     así se sincronizan con la nube y salen iguales en todos los dispositivos.
+     La copia local solo se lee como origen antiguo hasta que se migra. */
+  function localOpts(){try{return JSON.parse(localStorage.getItem(OKEY)||'{}')||{}}catch(e){return {}}}
+  function localGeneral(){try{return JSON.parse(localStorage.getItem(SKEY)||'{}')||{}}catch(e){return {}}}
+  function cfg(){var s=data&&data.settings,p=s&&typeof s==='object'?s.publication:null;return (p&&typeof p==='object')?p:null}
+  function writeCfg(mut){
+    var before,next;
+    try{
+      before=cloneAppData(data);next=cloneAppData(data);
+      next.settings=(next.settings&&typeof next.settings==='object'&&!Array.isArray(next.settings))?next.settings:{};
+      var c=(next.settings.publication&&typeof next.settings.publication==='object')?next.settings.publication:{options:Object.assign({},localOpts()),general:Object.assign({},localGeneral())};
+      if(!c.options||typeof c.options!=='object')c.options={};
+      if(!c.general||typeof c.general!=='object')c.general={};
+      mut(c);next.settings.publication=c;
+      data=next;save();return true;
+    }catch(e){console.warn('JCP ajustes de redes:',e);try{if(before)data=before}catch(_e){}return false}
+  }
+  function migrateLocal(){
+    if(cfg())return;
+    if(Object.keys(localOpts()).length||Object.keys(localGeneral()).length)writeCfg(function(){});
+  }
+  function getOpts(k){
+    var c=cfg(),src=c?c.options:localOpts();
+    if(src&&Array.isArray(src[k]))return src[k].slice();
+    return (FBY[k]&&FBY[k].o)?FBY[k].o.slice():[];
+  }
+  function setOpts(k,arr){if(!writeCfg(function(c){c.options[k]=arr}))alert('NO FUE POSIBLE GUARDAR EL ATAJO. INTENTA DE NUEVO.')}
+  function resetOpts(k){if(!writeCfg(function(c){delete c.options[k]}))alert('NO FUE POSIBLE RESTABLECER LOS ATAJOS. INTENTA DE NUEVO.')}
   function paintOpts(f,inp,box){
     box.innerHTML='';
     getOpts(f.k).forEach(function(t){
@@ -16874,6 +16905,8 @@ window.openRecordCopy=function(number){
   }
   function openEditor(id){
     var v=vehById(id);if(!v){alert('SELECCIONA UN VEHÍCULO.');return}
+    try{migrateLocal()}catch(e){}
+    v=vehById(id)||v;
     var d=defaultsFor(v),p=pubOf(v),vals={};
     F.forEach(function(f){vals[f.k]=up(p[f.k]!=null?p[f.k]:d[f.k])});
     var om={};(Array.isArray(p.omit)?p.omit:[]).forEach(function(k){om[k]=true});
@@ -16987,8 +17020,8 @@ window.openRecordCopy=function(number){
 .jcp-rc-sum b{display:block;margin-top:4px;font-size:30px;line-height:1.1;color:var(--rc-acc);font-family:Arial,sans-serif}
 .jcp-rc-sum small{display:block;margin-top:6px;font-size:12px;color:var(--rc-mut)}
 .jcp-rc-search{width:100%;min-height:48px;margin:0 0 10px;padding:0 14px;background:#101010;border:1px solid var(--rc-line);border-radius:14px;color:var(--rc-txt);font-size:16px;box-sizing:border-box}
-.jcp-rc-tabs{display:flex;gap:8px;margin:0 0 12px;overflow-x:auto;padding-bottom:2px}
-.jcp-rc-tabs button{flex:none;min-height:40px;padding:0 14px;border-radius:999px;background:var(--rc-card)!important;border:1px solid var(--rc-line)!important;color:var(--rc-txt)!important;font-size:12px;font-weight:800}
+.jcp-rc-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0 0 12px}
+.jcp-rc-tabs button{min-height:42px;padding:0 2px;border-radius:999px;background:var(--rc-card)!important;border:1px solid var(--rc-line)!important;color:var(--rc-txt)!important;font-size:11px;font-weight:800;letter-spacing:0}
 .jcp-rc-tabs button.on{background:var(--rc-acc)!important;border-color:var(--rc-acc)!important;color:#111!important}
 .jcp-rc-card{margin:0 0 10px;padding:14px;background:var(--rc-card);border:1px solid var(--rc-line);border-radius:16px}
 .jcp-rc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
@@ -17319,6 +17352,6 @@ window.voidCollectionReceipt=function(state,r,reason){
 window.jcpRecaudoRefresh=function(){try{if(el('recaudo')&&el('recaudo').classList.contains('active'))draw()}catch(e){}};
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.24"></script>
+<script src="./app-update.js?v=2026.09.20.25"></script>
 </body>
 </html>
