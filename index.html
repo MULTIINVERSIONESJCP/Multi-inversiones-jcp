@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.30</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.31</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5512,9 +5512,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.30"></script>
-<script src="./jcp-sync.js?v=2026.09.20.30"></script>
-<script src="./jcp-images.js?v=2026.09.20.30"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.31"></script>
+<script src="./jcp-sync.js?v=2026.09.20.31"></script>
+<script src="./jcp-images.js?v=2026.09.20.31"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -9492,6 +9492,7 @@ function openVehicleDetail(id){
   <div class="vd2-wrap">
     <div class="vd2-card vd2-first">
       <img class="vd2-photo" src="${jcpSafeImageSrc(photo)}" alt="Foto del vehículo">
+      ${(typeof jcpVehBadgesRow==='function')?jcpVehBadgesRow(veh):''}
       <div class="vd2-fields">
         <div class="vd2-field"><small>Marca</small><b>${esc(commercial.marca||'SIN REGISTRAR')}</b></div>
         <div class="vd2-field"><small>Referencia</small><b>${esc(commercial.referencia||'SIN REGISTRAR')}</b></div>
@@ -11875,8 +11876,8 @@ if(!data.veh.length){
 }else{
   const noPhoto='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
   vehList.innerHTML='<div class="inventory-cards">'+data.veh.map(x=>{
-    const img=x.photo||noPhoto; const total=(+x.c||0)+(+x.g||0);
-    return `<div class="vehicle-card" onclick="selectInventoryVehicle('${jcpInlineJsArg(x.id)}')"><img src="${jcpSafeImageSrc(img)}" alt="Foto del vehículo"><div class="vc-body"><b>${clientEsc(x.marca||x.m||'')}</b> <b>${clientEsc(x.ref||'SIN REFERENCIA')}</b><div class="vc-price">Total ${money(total)}</div></div></div>`;
+    const img=x.photo||noPhoto; const total=(+x.c||0)+(+x.g||0),badges=(typeof jcpVehBadgesInline==='function')?jcpVehBadgesInline(x):'';
+    return `<div class="vehicle-card" onclick="selectInventoryVehicle('${jcpInlineJsArg(x.id)}')"><img src="${jcpSafeImageSrc(img)}" alt="Foto del vehículo"><div class="vc-body"><b>${clientEsc(x.marca||x.m||'')}</b> <b>${clientEsc(x.ref||'SIN REFERENCIA')}</b>${badges}<div class="vc-price">Total ${money(total)}</div></div></div>`;
   }).join('')+'</div>';
 }
 let sold=data.sold||[];
@@ -11940,7 +11941,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.30\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.31\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15755,7 +15756,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.30',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.31',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -17143,8 +17144,8 @@ window.openRecordCopy=function(number){
         var im=document.createElement('img');im.alt='Imagen para publicar';im.src=URL.createObjectURL(b);
         var act=document.createElement('div');act.className='jcp-pb-act';
         var b0=document.createElement('button');b0.type='button';b0.className='jcp-pb-sec2';b0.textContent='📝 Ver texto';b0.onclick=openText;
-        var b1=document.createElement('button');b1.type='button';b1.className='jcp-pb-sec2';b1.textContent='⬇️ Descargar';b1.onclick=function(){download(f,fname)};
-        var b2=document.createElement('button');b2.type='button';b2.className='jcp-pb-pri';b2.textContent='Compartir';b2.onclick=function(){shareFiles([f])};
+        var b1=document.createElement('button');b1.type='button';b1.className='jcp-pb-sec2';b1.textContent='⬇️ Descargar';b1.onclick=function(){if(typeof window.markVehicleImageGenerated==='function')window.markVehicleImageGenerated(v.id);download(f,fname)};
+        var b2=document.createElement('button');b2.type='button';b2.className='jcp-pb-pri';b2.textContent='Compartir';b2.onclick=function(){if(typeof window.markVehicleImageGenerated==='function')window.markVehicleImageGenerated(v.id);shareFiles([f])};
         act.appendChild(b0);act.appendChild(b1);act.appendChild(b2);item.appendChild(im);item.appendChild(act);el('jcpPbList').appendChild(item);
       });
     }).catch(function(e){console.warn('JCP publicación:',e);var w=el('jcpPbWait');if(w){w.style.display='block';w.textContent='No se pudo crear la imagen.'}});
@@ -17634,6 +17635,15 @@ function save2(){
 }
 })();
 </script>
+<style id="jcp-vehicle-badges-style">
+.vc-badges{display:inline-flex;gap:4px;margin-left:6px;vertical-align:middle}
+.vc-badge{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;background:#0e2617;border-radius:50%;flex:none}
+#vehiculos #vehList .vc-badges{margin-left:4px}
+.vd2-badges{display:flex;flex-wrap:wrap;gap:8px;padding:0 12px 12px}
+.vd2-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:#1f1f1f;border:1px solid #333;color:#8a8a8a;font-size:11px;font-weight:800;letter-spacing:.02em}
+.vd2-badge-on{background:#12281a;border-color:#2f6b45;color:#8fd4a8}
+.vd2-badge-dot{width:8px;height:8px;border-radius:50%;background:#444}
+</style>
 <style id="jcp-receivables-style">
 /* ===== Cuentas por cobrar: menú de fichas + listas sencillas ===== */
 #carteraCaja .cf-actions{background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;margin-top:14px!important}
@@ -17659,6 +17669,58 @@ function save2(){
 .jcp-cx-l3{margin-top:7px;padding-top:7px;border-top:1px solid #222;font-size:10.5px;line-height:1.4;color:#8f8f8f}
 .jcp-cx-empty{padding:22px 14px;text-align:center;color:#a8a8a8;border:1px dashed #333;border-radius:14px;margin-bottom:10px}
 </style>
+<script id="jcp-vehicle-badges-script">
+(function(){
+'use strict';
+if(window.__jcpVehBadges)return;window.__jcpVehBadges=true;
+function up(v){return String(v==null?'':v).trim().toUpperCase()}
+function filled(v){var s=up(v);return s!==''&&s!=='SIN REGISTRAR'}
+function field(v,k,alt){
+  var info=(v&&v.additionalInfo)||{},raw=info[k];
+  if(raw===undefined||raw===null||String(raw).trim()==='')raw=v?v[k]:undefined;
+  if((raw===undefined||raw===null||String(raw).trim()==='')&&alt)raw=v?v[alt]:undefined;
+  return raw;
+}
+/* Información completa: los mismos campos del formulario "Completar información". */
+window.jcpVehInfoComplete=function(v){
+  if(!v)return false;
+  var km=Number(field(v,'kilometraje','km')||0),precio=Number(field(v,'precioEstimadoVenta')||0);
+  return filled(field(v,'soat'))&&filled(field(v,'tecnomecanica'))&&filled(field(v,'impuestos'))&&filled(field(v,'comparendos'))&&filled(field(v,'prendas'))&&filled(field(v,'embargos'))&&filled(field(v,'reportes'))&&filled(field(v,'cilindraje'))&&filled(field(v,'matricula','matriculaDe'))&&km>0&&precio>0;
+};
+/* Imagen para redes: se marca cuando se descarga o comparte la imagen generada. */
+window.jcpVehImageReady=function(v){return !!(v&&v.additionalInfo&&v.additionalInfo.imagenParaRedesGeneradaAt)};
+window.markVehicleImageGenerated=function(id){
+  var before,next;
+  try{
+    before=cloneAppData(data);next=cloneAppData(data);
+    var nv=(next.veh||[]).find(function(x){return String(x.id)===String(id)});
+    if(!nv)return;
+    nv.additionalInfo=Object.assign({},nv.additionalInfo||{},{imagenParaRedesGeneradaAt:new Date().toISOString()});
+    if(typeof assertInventoryUnchanged==='function')assertInventoryUnchanged(inventoryIdentity(before),next,'IMAGEN PARA REDES GENERADA');
+    data=next;save();
+    try{if(typeof render==='function')render()}catch(e){}
+  }catch(e){try{data=before}catch(_e){}console.warn('JCP imagen para redes:',e)}
+};
+var CHECK='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#2ecc71" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l4.2 4.2L19 6"></path></svg>';
+/* Chulitos compactos para las tarjetas de inventario. */
+window.jcpVehBadgesInline=function(v){
+  var a=window.jcpVehInfoComplete(v),b=window.jcpVehImageReady(v);
+  if(!a&&!b)return '';
+  var h='<span class="vc-badges">';
+  if(a)h+='<span class="vc-badge" title="Información completa" aria-label="Información completa">'+CHECK+'</span>';
+  if(b)h+='<span class="vc-badge" title="Imagen para redes generada" aria-label="Imagen para redes generada">'+CHECK+'</span>';
+  return h+'</span>';
+};
+/* Fila con etiquetas para el detalle del vehículo. */
+window.jcpVehBadgesRow=function(v){
+  var a=window.jcpVehInfoComplete(v),b=window.jcpVehImageReady(v);
+  function pill(ok,label){
+    return '<span class="vd2-badge'+(ok?' vd2-badge-on':'')+'">'+(ok?CHECK:'<span class="vd2-badge-dot"></span>')+label+'</span>';
+  }
+  return '<div class="vd2-badges">'+pill(a,'Información completa')+pill(b,'Imagen para redes')+'</div>';
+};
+})();
+</script>
 <script id="jcp-receivables-script">
 (function(){
 'use strict';
@@ -17739,6 +17801,6 @@ window.jcpExtractMov=function(){
 };
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.30"></script>
+<script src="./app-update.js?v=2026.09.20.31"></script>
 </body>
 </html>
