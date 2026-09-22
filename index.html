@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.31</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.32</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5512,9 +5512,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.31"></script>
-<script src="./jcp-sync.js?v=2026.09.20.31"></script>
-<script src="./jcp-images.js?v=2026.09.20.31"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.32"></script>
+<script src="./jcp-sync.js?v=2026.09.20.32"></script>
+<script src="./jcp-images.js?v=2026.09.20.32"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -11941,7 +11941,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.31\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.32\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15756,7 +15756,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.31',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.32',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -16486,6 +16486,9 @@ window.openRecordCopy=function(number){
 .jcp-pb-notrow small{display:block;margin-top:3px;font-size:12px;font-weight:400;color:var(--pb-mut)}
 .jcp-pb-not input[type=checkbox]{width:26px;height:26px;accent-color:#e5484d;flex:none}
 .jcp-pb-not .jcp-pb-f{margin:12px 0 0}
+.jcp-pb-ready{margin:10px 0 0;padding:14px;background:var(--pb-card);border:1px solid var(--pb-line);border-radius:18px}
+.jcp-pb-ready.on{background:#0e2617;border-color:#2f6b45}
+.jcp-pb-ready input[type=checkbox]{width:26px;height:26px;accent-color:#2ecc71;flex:none}
 .jcp-pb-omit{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;padding:6px 8px 6px 14px;min-height:48px;border:1px dashed #3a3320;border-radius:12px;font-size:14px;color:var(--pb-mut)}
 .jcp-pb-omit button{min-height:36px;padding:0 10px;background:none!important;border:0!important;color:var(--pb-acc)!important;font-size:13px;font-weight:800}
 .jcp-pb-bar{position:fixed;left:0;right:0;bottom:0;z-index:2;display:flex;gap:10px;padding:12px 20px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,#0a0a0a 78%,rgba(10,10,10,0))}
@@ -16629,6 +16632,7 @@ window.openRecordCopy=function(number){
     var om=Object.keys(cur.omit).filter(function(k){return cur.omit[k]});
     if(om.length)pub.omit=om;
     if(cur.noT){pub.noTraspaso=true;pub.motivoNoTraspaso=cur.motivo}
+    if(cur.listoRedes)pub.listoRedes=true;
     if(cur.title!==TITLES[0])pub.titulo=cur.title;
     if(up(cur.name)!==up(cur.defName))pub.nombre=cur.name;
     if(up(cur.obs)!==up(S.observaciones))pub.observaciones=cur.obs;
@@ -16638,8 +16642,9 @@ window.openRecordCopy=function(number){
       var nv=(next.veh||[]).find(function(x){return String(x.id)===String(cur.id)});
       if(!nv)return false;
       nv.additionalInfo=Object.assign({},nv.additionalInfo||{},{publicacion:pub});
+      var __refresh=true;
       if(typeof assertInventoryUnchanged==='function')assertInventoryUnchanged(inventoryIdentity(before),next,'INFORMACIÓN PARA REDES');
-      data=next;save();return true;
+      data=next;save();try{if(__refresh&&typeof render==='function')render()}catch(__e){}return true;
     }catch(e){console.warn('JCP publicación:',e);try{if(before)data=before}catch(_e){}return false}
   }
   function saveSettingsFromUI(){
@@ -16990,6 +16995,13 @@ window.openRecordCopy=function(number){
     nb.querySelector('b').textContent=vname(v)||'VEHÍCULO';nb.querySelector('span').textContent=up(v.pl||'SIN PLACA');
     card.appendChild(img);card.appendChild(nb);o.appendChild(card);
     loadImg(firstPhoto(v)).then(function(im){if(im)img.src=im.src});
+    /* Listo para redes (manual) */
+    var rd=document.createElement('div');rd.className='jcp-pb-ready'+(cur.listoRedes?' on':'');
+    var rdrow=document.createElement('label');rdrow.className='jcp-pb-notrow';
+    rdrow.innerHTML='<span>Listo para redes<small>Actívalo cuando ya publicaste este carro. Enciende los dos chulitos del inventario.</small></span>';
+    var rdcb=document.createElement('input');rdcb.type='checkbox';rdcb.checked=cur.listoRedes;rdcb.setAttribute('aria-label','Listo para redes');
+    rdcb.onchange=function(){commitAll();cur.listoRedes=rdcb.checked;persist();renderForm()};
+    rdrow.appendChild(rdcb);rd.appendChild(rdrow);o.appendChild(rd);
     /* Encabezado */
     o.appendChild(secNode('Encabezado'));
     var tw=document.createElement('div');tw.className='jcp-pb-opts';tw.style.marginTop='0';
@@ -17083,7 +17095,7 @@ window.openRecordCopy=function(number){
     F.forEach(function(f){vals[f.k]=up(p[f.k]!=null?p[f.k]:d[f.k])});
     var om={};(Array.isArray(p.omit)?p.omit:[]).forEach(function(k){om[k]=true});
     cur={id:v.id,vals:vals,defs:d,omit:om,title:p.titulo||TITLES[0],defName:vname(v),name:(p.nombre!=null?p.nombre:vname(v)),
-      obs:(p.observaciones!=null?p.observaciones:getSet().observaciones),noT:!!p.noTraspaso,motivo:p.motivoNoTraspaso||''};
+      obs:(p.observaciones!=null?p.observaciones:getSet().observaciones),noT:!!p.noTraspaso,motivo:p.motivoNoTraspaso||'',listoRedes:!!p.listoRedes};
     var o=ensureEditor();o.scrollTop=0;renderForm();o.scrollTop=0;
   }
   function commitAll(){
@@ -17144,8 +17156,8 @@ window.openRecordCopy=function(number){
         var im=document.createElement('img');im.alt='Imagen para publicar';im.src=URL.createObjectURL(b);
         var act=document.createElement('div');act.className='jcp-pb-act';
         var b0=document.createElement('button');b0.type='button';b0.className='jcp-pb-sec2';b0.textContent='📝 Ver texto';b0.onclick=openText;
-        var b1=document.createElement('button');b1.type='button';b1.className='jcp-pb-sec2';b1.textContent='⬇️ Descargar';b1.onclick=function(){if(typeof window.markVehicleImageGenerated==='function')window.markVehicleImageGenerated(v.id);download(f,fname)};
-        var b2=document.createElement('button');b2.type='button';b2.className='jcp-pb-pri';b2.textContent='Compartir';b2.onclick=function(){if(typeof window.markVehicleImageGenerated==='function')window.markVehicleImageGenerated(v.id);shareFiles([f])};
+        var b1=document.createElement('button');b1.type='button';b1.className='jcp-pb-sec2';b1.textContent='⬇️ Descargar';b1.onclick=function(){download(f,fname)};
+        var b2=document.createElement('button');b2.type='button';b2.className='jcp-pb-pri';b2.textContent='Compartir';b2.onclick=function(){shareFiles([f])};
         act.appendChild(b0);act.appendChild(b1);act.appendChild(b2);item.appendChild(im);item.appendChild(act);el('jcpPbList').appendChild(item);
       });
     }).catch(function(e){console.warn('JCP publicación:',e);var w=el('jcpPbWait');if(w){w.style.display='block';w.textContent='No se pudo crear la imagen.'}});
@@ -17682,33 +17694,19 @@ function field(v,k,alt){
   return raw;
 }
 /* Información completa: los mismos campos del formulario "Completar información". */
-window.jcpVehInfoComplete=function(v){
-  if(!v)return false;
-  var km=Number(field(v,'kilometraje','km')||0),precio=Number(field(v,'precioEstimadoVenta')||0);
-  return filled(field(v,'soat'))&&filled(field(v,'tecnomecanica'))&&filled(field(v,'impuestos'))&&filled(field(v,'comparendos'))&&filled(field(v,'prendas'))&&filled(field(v,'embargos'))&&filled(field(v,'reportes'))&&filled(field(v,'cilindraje'))&&filled(field(v,'matricula','matriculaDe'))&&km>0&&precio>0;
-};
-/* Imagen para redes: se marca cuando se descarga o comparte la imagen generada. */
-window.jcpVehImageReady=function(v){return !!(v&&v.additionalInfo&&v.additionalInfo.imagenParaRedesGeneradaAt)};
-window.markVehicleImageGenerated=function(id){
-  var before,next;
-  try{
-    before=cloneAppData(data);next=cloneAppData(data);
-    var nv=(next.veh||[]).find(function(x){return String(x.id)===String(id)});
-    if(!nv)return;
-    nv.additionalInfo=Object.assign({},nv.additionalInfo||{},{imagenParaRedesGeneradaAt:new Date().toISOString()});
-    if(typeof assertInventoryUnchanged==='function')assertInventoryUnchanged(inventoryIdentity(before),next,'IMAGEN PARA REDES GENERADA');
-    data=next;save();
-    try{if(typeof render==='function')render()}catch(e){}
-  }catch(e){try{data=before}catch(_e){}console.warn('JCP imagen para redes:',e)}
-};
+/* Los dos chulitos ahora dependen de un solo interruptor manual:
+   "Listo para redes", dentro del formulario de Información para redes. */
+function pubOf2(v){var p=(v&&v.additionalInfo&&v.additionalInfo.publicacion)||{};return p}
+window.jcpVehInfoComplete=function(v){return !!pubOf2(v).listoRedes};
+window.jcpVehImageReady=function(v){return !!pubOf2(v).listoRedes};
 var CHECK='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#2ecc71" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l4.2 4.2L19 6"></path></svg>';
 /* Chulitos compactos para las tarjetas de inventario. */
 window.jcpVehBadgesInline=function(v){
   var a=window.jcpVehInfoComplete(v),b=window.jcpVehImageReady(v);
   if(!a&&!b)return '';
   var h='<span class="vc-badges">';
-  if(a)h+='<span class="vc-badge" title="Información completa" aria-label="Información completa">'+CHECK+'</span>';
-  if(b)h+='<span class="vc-badge" title="Imagen para redes generada" aria-label="Imagen para redes generada">'+CHECK+'</span>';
+  if(a)h+='<span class="vc-badge" title="Listo para redes" aria-label="Listo para redes">'+CHECK+'</span>';
+  if(b)h+='<span class="vc-badge" title="Listo para redes" aria-label="Listo para redes">'+CHECK+'</span>';
   return h+'</span>';
 };
 /* Fila con etiquetas para el detalle del vehículo. */
@@ -17717,7 +17715,7 @@ window.jcpVehBadgesRow=function(v){
   function pill(ok,label){
     return '<span class="vd2-badge'+(ok?' vd2-badge-on':'')+'">'+(ok?CHECK:'<span class="vd2-badge-dot"></span>')+label+'</span>';
   }
-  return '<div class="vd2-badges">'+pill(a,'Información completa')+pill(b,'Imagen para redes')+'</div>';
+  return '<div class="vd2-badges">'+pill(a,'Listo para redes')+pill(b,'Publicado')+'</div>';
 };
 })();
 </script>
@@ -17801,6 +17799,6 @@ window.jcpExtractMov=function(){
 };
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.31"></script>
+<script src="./app-update.js?v=2026.09.20.32"></script>
 </body>
 </html>
