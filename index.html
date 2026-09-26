@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.34</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.38</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -2567,6 +2567,13 @@ body.jcp-custom-theme #settingsPanel .jcp-settings-note{
 .acc-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px 0}
 .acc-tabs button{background:#111!important;color:#bbb!important;border:1px solid #333!important;padding:9px 5px!important;font-size:8px!important;min-height:38px}
 .acc-tabs button.active{border-color:var(--gold)!important;color:var(--gold)!important;background:#19150b!important}
+.acc-tabs.acc-main-menu{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}
+.acc-tabs.acc-main-menu button{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:4px!important;text-align:left!important;padding:12px 11px!important;min-height:70px!important;font-size:10px!important}
+.acc-tabs.acc-main-menu button b{font-size:10.5px!important;font-weight:900!important;letter-spacing:.2px;color:inherit!important}
+.acc-tabs.acc-main-menu button small{font-size:7.5px!important;font-weight:650!important;color:#8a8a8a!important;line-height:1.3!important;white-space:normal!important}
+.acc-tabs.acc-main-menu button.active small{color:#b89a4a!important}
+.acc-general-report-btn{width:100%!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:3px!important;background:linear-gradient(90deg,#bf8e20,#e0b644)!important;color:#111!important;border:0!important;border-radius:11px!important;padding:13px 10px!important;margin-top:10px!important;font-size:12px!important;font-weight:900!important}
+.acc-general-report-btn small{font-size:8.5px!important;font-weight:650!important;color:#332507!important}
 .acc-panel{background:#0d0d0d;border:1px solid #303030;border-radius:13px;padding:12px;margin-top:10px;overflow:hidden}
 .acc-panel-title{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--gold);font-size:12px;font-weight:950;margin-bottom:9px}
 .acc-table-wrap{width:100%;overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid #292929;border-radius:9px}
@@ -5502,15 +5509,16 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="acc-kpi ok" id="accBalanceKpi"><span>DIFERENCIA</span><b id="accDifference">$0</b></div>
 </div>
 <div class="acc-tabs acc-main-menu">
-<button id="accTabResumen" onclick="openAccountingSubmodule('resumen')">RESUMEN</button>
-<button id="accTabDiario" onclick="openAccountingSubmodule('diario')">LIBRO DIARIO</button>
-<button id="accTabMayor" onclick="openAccountingSubmodule('mayor')">LIBRO MAYOR</button>
-<button id="accTabAuxiliar" onclick="openAccountingSubmodule('auxiliar')">LIBRO AUXILIAR</button>
-<button id="accTabBalance" onclick="openAccountingSubmodule('balance')">BALANCE PRUEBA</button>
-<button id="accTabSituacion" onclick="openAccountingSubmodule('situacion')">SITUACIÓN FINANCIERA</button>
-<button id="accTabResultados" onclick="openAccountingSubmodule('resultados')">RESULTADOS</button>
-<button id="accTabPlan" onclick="openAccountingSubmodule('plan')">PLAN DE CUENTAS</button>
+<button id="accTabResumen" onclick="openAccountingSubmodule('resumen')"><b>RESUMEN</b><small>Vista general de toda la contabilidad</small></button>
+<button id="accTabDiario" onclick="openAccountingSubmodule('diario')"><b>LIBRO DIARIO</b><small>Todos los movimientos, uno por uno, en orden</small></button>
+<button id="accTabMayor" onclick="openAccountingSubmodule('mayor')"><b>LIBRO MAYOR</b><small>El total de cada cuenta: caja, bancos, inventario...</small></button>
+<button id="accTabAuxiliar" onclick="openAccountingSubmodule('auxiliar')"><b>LIBRO AUXILIAR</b><small>El detalle de una cuenta, movimiento por movimiento</small></button>
+<button id="accTabBalance" onclick="openAccountingSubmodule('balance')"><b>BALANCE PRUEBA</b><small>Comprueba que débitos y créditos cuadren</small></button>
+<button id="accTabSituacion" onclick="openAccountingSubmodule('situacion')"><b>SITUACIÓN FINANCIERA</b><small>Lo que tienes, lo que debes y lo que es tuyo</small></button>
+<button id="accTabResultados" onclick="openAccountingSubmodule('resultados')"><b>RESULTADOS</b><small>Cuánto ganaste o perdiste en el período</small></button>
+<button id="accTabPlan" onclick="openAccountingSubmodule('plan')"><b>PLAN DE CUENTAS</b><small>El catálogo de todas las cuentas del sistema</small></button>
 </div>
+<button class="acc-general-report-btn" onclick="openAccountingGeneralReport()" type="button">📄 VER INFORME GENERAL <small>Documento vertical, listo para ver o imprimir</small></button>
 </div>
 </section>
 
@@ -5538,9 +5546,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.34"></script>
-<script src="./jcp-sync.js?v=2026.09.20.34"></script>
-<script src="./jcp-images.js?v=2026.09.20.34"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.38"></script>
+<script src="./jcp-sync.js?v=2026.09.20.38"></script>
+<script src="./jcp-images.js?v=2026.09.20.38"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -8272,6 +8280,7 @@ function saleSupportStyles(){
   .client-row span,.finance-row span,.pay-row span{color:#ddd}.client-row b,.finance-row b,.pay-row b{text-align:right;overflow-wrap:anywhere}
   .amount-hero{text-align:center;padding:13px 8px}.amount-hero small{display:block;color:#d8aa32;font-size:11px}.amount-hero b{display:block;color:#e6b936;font-size:27px;margin-top:5px}
   .green{color:#80ed28!important}.gold-total{background:linear-gradient(90deg,#bf8e20,#e0b644);color:#111;font-weight:1000;padding:10px;margin-top:7px}
+  .gold-total span,.gold-total b{color:#111}
   .result-hero{margin-top:12px;border:2px solid;border-radius:12px;padding:17px 12px;text-align:center}.result-hero small{display:block;font-size:12px;font-weight:1000;letter-spacing:.4px}.result-hero b{display:block;font-size:42px;line-height:1.05;margin:9px 0 6px}.result-hero em{display:block;font-size:12px;font-style:normal;font-weight:900}.result-hero.positive{background:#092117;border-color:#35b96b;color:#75ed9e}.result-hero.negative{background:#2a0d0d;border-color:#e24e4e;color:#ff7373}
   .obs{min-height:95px;font-size:11px;line-height:1.5;color:#e4e4e4}
   .expense-table{width:100%;border-collapse:collapse;font-size:10px}.expense-table th{color:#d8aa32;background:#111}.expense-table th,.expense-table td{border:1px solid #4b3a11;padding:7px;text-align:left}.expense-table td:last-child,.expense-table th:last-child{text-align:right}.expense-total td{background:#d8aa32;color:#111;font-weight:1000}
@@ -8447,6 +8456,7 @@ function saleInternalLandscapeStyles(){
   .land-docs{display:grid;grid-template-columns:1fr 1fr;column-gap:14px}.land-doc{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid #27210f;font-size:8px}.land-doc span{color:#75dd7d;font-weight:900}.land-doc b{text-align:right;overflow-wrap:anywhere}
   .land-grid-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.land-obs{min-height:58px;color:#ddd;font-size:9px;line-height:1.45}
   .land-pay-total{background:#d8aa32;color:#111;font-weight:900;padding:7px;margin-top:5px}
+  .land-pay-total span,.land-pay-total b{color:#111}
   .land-expense-layout{display:grid;grid-template-columns:1.55fr .85fr;gap:14px;margin-top:14px;height:575px}
   .land-expense-table{width:100%;border-collapse:collapse;font-size:9px}.land-expense-table th{color:#d8aa32;background:#111}.land-expense-table th,.land-expense-table td{border-bottom:1px solid #342a10;padding:5px 7px;text-align:left;height:24px}.land-expense-table td:first-child,.land-expense-table th:first-child{width:38px;text-align:center}.land-expense-table td:last-child,.land-expense-table th:last-child{text-align:right;white-space:nowrap}.land-expense-table .expense-total td{background:#d8aa32;color:#111;font-weight:1000;font-size:10px}
   .land-summary{display:flex;flex-direction:column;height:100%}.land-result{margin-top:auto;border:2px solid;border-radius:10px;text-align:center;padding:18px 8px}.land-result small{display:block;font-size:9px;font-weight:900}.land-result b{display:block;font-size:27px;margin:7px 0}.land-result em{font-size:9px;font-style:normal;font-weight:900}.land-result.positive{background:#092117;border-color:#35b96b;color:#75ed9e}.land-result.negative{background:#2a0d0d;border-color:#e24e4e;color:#ff7373}
@@ -11967,7 +11977,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.34\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.38\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -14737,6 +14747,78 @@ function accountingMetrics(entries){
 }
 function accFmt(v){return typeof money==='function'?money(v):new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(v||0);}
 function accEsc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function accountingGeneralReportHtml(){
+  const range=accountingDateRange();
+  const report=buildAccountingReport(data,range),m=accountingMetrics(report.entries);
+  const cumulative=buildAccountingReport(data,{toTs:range.toTs});
+  const pos=accountingMetrics(cumulative.entries);
+  const logo=typeof supportLogoSrc==='function'?supportLogoSrc():'';
+  const now=new Date();
+  const dateLabel=now.toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'});
+  const periodLabel=(range.from||range.to)?((range.from?new Date(range.from+'T00:00:00').toLocaleDateString('es-CO'):'INICIO')+' AL '+(range.to?new Date(range.to+'T00:00:00').toLocaleDateString('es-CO'):'HOY')):'INFORMACIÓN COMPLETA';
+  const row=(label,value,extra)=>`<div class="gr-row ${extra||''}"><span>${accEsc(label)}</span><b>${accEsc(value)}</b></div>`;
+  const ok=Math.abs(m.difference)<1;
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Informe contable general · MULTI INVERSIONES JCP</title><style>
+  *{box-sizing:border-box}html,body{margin:0;padding:0;background:#050505;color:#fff;font-family:Arial,sans-serif}
+  body{padding:16px}
+  .gr-page{max-width:480px;margin:0 auto;background:#050505;border:1px solid #9b7717;border-radius:14px;padding:20px}
+  .gr-head{text-align:center;border-bottom:2px solid #d8aa32;padding-bottom:14px;margin-bottom:14px}
+  .gr-logo{max-width:220px;max-height:64px;object-fit:contain;margin:0 auto 10px;display:block}
+  .gr-head h1{font-size:19px;margin:0;font-weight:1000;letter-spacing:.3px}
+  .gr-head p{font-size:11px;color:#aaa;margin:6px 0 0}
+  .gr-status{text-align:center;font-size:11px;font-weight:900;border-radius:9px;padding:9px;margin-bottom:14px}
+  .gr-status.ok{background:#0d2a1c;color:#6fe3a0;border:1px solid #1f5c3c}
+  .gr-status.bad{background:#2a0d0d;color:#ff8a8a;border:1px solid #5c1f1f}
+  .gr-section{margin-bottom:14px}
+  .gr-section h3{font-size:11px;color:#d8aa32;letter-spacing:.5px;margin:0 0 7px;border-bottom:1px solid #4b3a11;padding-bottom:6px}
+  .gr-row{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:4px 0;border-bottom:1px solid #201a08}
+  .gr-row span{color:#aaa}.gr-row b{text-align:right;overflow-wrap:anywhere}
+  .gr-row.total{font-weight:900;border-bottom:0}.gr-row.total b{color:#d8aa32}
+  .gr-row.gold{background:#d8aa32;padding:9px;border-radius:8px;margin-top:5px;border-bottom:0}
+  .gr-row.gold span,.gr-row.gold b{color:#111;font-weight:900}
+  .gr-foot{text-align:center;font-size:9px;color:#777;margin-top:14px;border-top:1px solid #333;padding-top:10px}
+  @media print{body{padding:0}.gr-page{border:0;margin:0}@page{size:A4 portrait;margin:10mm}}
+  </style></head><body>
+  <section class="gr-page">
+    <div class="gr-head">
+      ${logo?`<img class="gr-logo" src="${accEsc(logo)}">`:''}
+      <h1>INFORME CONTABLE GENERAL</h1>
+      <p>${accEsc(dateLabel)} · PERÍODO: ${accEsc(periodLabel)}</p>
+    </div>
+    <div class="gr-status ${ok?'ok':'bad'}">${ok?'✅ LIBROS CUADRADOS — DÉBITOS = CRÉDITOS':'⚠️ EXISTE UNA DIFERENCIA POR REVISAR'}</div>
+
+    <div class="gr-section">
+      <h3>RESUMEN CONTABLE</h3>
+      ${row('Asientos registrados',String(report.entries.length))}
+      ${row('Débitos',accFmt(m.debit))}
+      ${row('Créditos',accFmt(m.credit))}
+      ${row('Diferencia',accFmt(m.difference),'total')}
+    </div>
+
+    <div class="gr-section">
+      <h3>SITUACIÓN FINANCIERA (ACUMULADO)</h3>
+      ${row('Total activos',accFmt(pos.assets))}
+      ${row('Total pasivos',accFmt(pos.liabilities))}
+      ${row('Patrimonio',accFmt(pos.equity),'total')}
+    </div>
+
+    <div class="gr-section">
+      <h3>RESULTADOS DEL PERÍODO</h3>
+      ${row('Ingresos',accFmt(m.income))}
+      ${row('Costos y gastos',accFmt(m.expenses))}
+      <div class="gr-row gold"><span>${m.result>=0?'UTILIDAD':'PÉRDIDA'}</span><b>${accFmt(m.result)}</b></div>
+    </div>
+
+    <div class="gr-foot">SOPORTE INTERNO (CONTROL) · MULTI INVERSIONES JCP · Documento generado automáticamente desde la contabilidad.</div>
+  </section>
+  </body></html>`;
+}
+window.openAccountingGeneralReport=function(){
+  const w=window.open('','_blank','width=520,height=800');
+  if(!w){alert('EL NAVEGADOR BLOQUEÓ EL INFORME. HABILITA VENTANAS EMERGENTES.');return;}
+  w.document.write(accountingGeneralReportHtml());
+  w.document.close();
+};
 function accHumanLabel(v){
   const raw=String(v??'').trim();
   if(!raw)return '—';
@@ -15857,7 +15939,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.34',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.38',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -15865,7 +15947,7 @@ window.openRecordCopy=function(number){
   const recordDate=o=>val(o,'createdAt','date','fecha','purchaseDate','saleDate','fechaVenta','fechaRegistro','at','updatedAt','lastModifiedAt','cutoffAt','periodEnd');
   const expenseFor=v=>typeof getVehicleExpenseTotal==='function'?getVehicleExpenseTotal(v.id,data):num(v,'g','gastos');
   const isVehicleExpense=m=>typeof isVehicleExpenseMovement==='function'?isVehicleExpenseMovement(m,m?.vehicleId):Boolean(m?.vehicleId&&m?.t==='gasto');
-  const cleanLabel=value=>({compra_vehiculo:'Compra de vehículo',prestamo_recibido:'Préstamo recibido',aporte_capital:'Aporte de capital',compra:'Compra',gasto:'Gasto',ingreso:'Ingreso'}[String(value||'').trim().toLowerCase()]||String(value||'').replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
+  const cleanLabel=value=>({compra_vehiculo:'Compra de vehículo',prestamo_recibido:'Préstamo recibido',aporte_capital:'Aporte de capital',compra:'Compra',gasto:'Gasto',ingreso:'Ingreso',pago_deuda:'Pago de obligación'}[String(value||'').trim().toLowerCase()]||String(value||'').replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
   const isVehiclePurchase=m=>['compra_vehiculo','compra vehículo','compra de vehículo'].includes(String(val(m,'subtype','category','categoria','department','departamento')).trim().toLowerCase())||/compra\s+(de\s+)?veh[ií]culo/i.test(String(val(m,'c','concept','concepto')));
   const findVehicle=m=>{const id=String(val(m,'vehicleId','vehiculoId','vehicle_id'));return [...(data.veh||[]),...(data.sold||[])].find(v=>String(v?.id||'')===id)||{};};
   const modules=[
@@ -15875,8 +15957,20 @@ window.openRecordCopy=function(number){
     {id:'generalExpenses',label:'Gastos generales',sheet:'Gastos generales',build:()=>({headers:['Fecha','Categoría','Concepto','Valor','Soporte','Usuario'],rows:(data.mov||[]).filter(m=>m?.t==='gasto'&&!isVehicleExpense(m)&&!isVehiclePurchase(m)).map(m=>[fmtDate(recordDate(m)),cleanLabel(val(m,'subtype','category','categoria')),val(m,'c','concept','concepto'),num(m,'v','value','valor','amount'),val(m,'receiptNumber','soporte'),actor(m)])})},
     {id:'clients',label:'Clientes',sheet:'Clientes',build:()=>({headers:['Fecha registro','Nombre','Documento','Teléfono','Dirección','Ciudad','Usuario'],rows:(data.clientes||[]).map(c=>[fmtDate(recordDate(c)),val(c,'n','nombre','name'),val(c,'cedula','documento','document'),val(c,'tel','telefono','phone'),val(c,'dir','direccion','address'),val(c,'ciudad','city'),actor(c)])})},
     {id:'receivables',label:'Cuentas por cobrar',sheet:'Cuentas por cobrar',build:()=>({headers:['Fecha','Origen','Cliente','Concepto','Valor inicial','Abonos','Saldo','Estado','Usuario'],rows:[...(data.sold||[]).filter(s=>Number(s.sale?.pending||0)>0).map(s=>[fmtDate(recordDate(s.sale||s)),'VENTA',s.sale?.buyer||'Sin cliente',[val(s,'marca','m'),val(s,'ref','referencia'),val(s,'pl','placa')].filter(Boolean).join(' '),Number(s.sale?.price||0),Number(s.sale?.received||0),Number(s.sale?.pending||0),'PENDIENTE',actor(s.sale||s)]),...(data.permutas||[]).filter(p=>Number(p.pending||0)>0).map(p=>[fmtDate(recordDate(p)),'PERMUTA',p.client||p.buyer||'Sin cliente','DIFERENCIA DE PERMUTA '+(p.incomingVehicle?.pl||''),Number(p.difference||0),Number(p.received||0),Number(p.pending||0),'PENDIENTE',actor(p)])]})},
-    {id:'loans',label:'Préstamos otorgados',sheet:'Préstamos',build:()=>({headers:['Fecha','Cliente','Capital','Interés','Total esperado','Pagado','Saldo','Estado','Usuario'],rows:(data.pres||[]).map(p=>{const capital=num(p,'c','capital','value'),interest=num(p,'i','interest','interes'),paid=num(p,'paid','pagado','abonos');const total=num(p,'total')||capital+interest;return [fmtDate(recordDate(p)),val(p,'n','nombre','client','cliente'),capital,interest,total,paid,Math.max(0,total-paid),val(p,'estado','status')||'VIGENTE',actor(p)]})})},
-    {id:'obligations',label:'Obligaciones y financiaciones',sheet:'Obligaciones',build:()=>({headers:['Fecha','Tipo','Concepto / acreedor','Valor','Pagado','Saldo','Estado','Usuario'],rows:(data.capitalOps||[]).map(x=>[fmtDate(recordDate(x)),cleanLabel(val(x,'type','tipo')),val(x,'concept','concepto','creditor','acreedor'),num(x,'value','valor','capital'),num(x,'paid','pagado','abonos'),num(x,'balance','saldo')||Math.max(0,num(x,'value','valor','capital')-num(x,'paid','pagado','abonos')),val(x,'status','estado'),actor(x)])})},
+    {id:'loans',label:'Préstamos otorgados',sheet:'Préstamos',build:()=>({headers:['Fecha','Cliente','Capital','Interés','Total esperado','Pagado','Saldo','Estado','Usuario'],rows:(data.pres||[]).map(p=>{const capital=num(p,'c','capital','value'),interest=num(p,'i','interest','interes');const paid=num(p,'p')+(typeof jcpLoanCapCollected==='function'?jcpLoanCapCollected(p):0);const total=num(p,'total')||capital+interest;const balance=Math.max(0,total-paid);return [fmtDate(recordDate(p)),val(p,'n','nombre','client','cliente'),capital,interest,total,paid,balance,balance<=0?'PAGADO':(val(p,'estado','status')||'VIGENTE'),actor(p)]})})},
+    {id:'obligations',label:'Obligaciones y financiaciones',sheet:'Obligaciones',build:()=>{
+      const ops=data.capitalOps||[];
+      const isPayment=x=>String(val(x,'type','tipo')).trim().toLowerCase()==='pago_deuda';
+      const paidOf=id=>ops.filter(y=>isPayment(y)&&String(val(y,'financingId'))===String(id)).reduce((a,y)=>a+num(y,'value','valor','capital'),0);
+      return {headers:['Fecha','Tipo','Concepto / acreedor','Valor','Pagado','Saldo','Estado','Usuario'],rows:ops.map(x=>{
+        const value=num(x,'value','valor','capital');
+        if(isPayment(x)){
+          return [fmtDate(recordDate(x)),cleanLabel(val(x,'type','tipo')),val(x,'concept','concepto','creditor','acreedor'),value,value,0,'PAGO REGISTRADO',actor(x)];
+        }
+        const paid=paidOf(x.id),balance=Math.max(0,value-paid);
+        return [fmtDate(recordDate(x)),cleanLabel(val(x,'type','tipo')),val(x,'concept','concepto','creditor','acreedor'),value,paid,balance,balance<=0?'PAGADA':(val(x,'status','estado')||'VIGENTE'),actor(x)];
+      })};
+    }},
     {id:'treasury',label:'Tesorería y cuentas',sheet:'Tesorería',build:()=>({headers:['Fecha','Cuenta','Tipo','Concepto','Entrada','Salida','Soporte','Usuario'],rows:(data.treasuryMovements||[]).map(x=>{const amount=num(x,'amount','valor','value'),incoming=String(val(x,'direction','tipo')).toLowerCase()==='in';return [fmtDate(recordDate(x)),val(x,'accountName','cuenta')||'Cuenta sin nombre',incoming?'ENTRADA':'SALIDA',val(x,'concept','concepto'),incoming?amount:0,incoming?0:amount,val(x,'receiptNumber','soporte'),actor(x)]})})},
     {id:'investments',label:'Inversiones',sheet:'Inversiones',build:()=>({headers:['Fecha','Nombre','Capital','Ganancia esperada','Valor proyectado','Estado','Usuario'],rows:(data.inv||[]).map(x=>{const c=num(x,'c','capital'),g=num(x,'g','gain','ganancia');return [fmtDate(recordDate(x)),val(x,'n','nombre','name'),c,g,c+g,val(x,'status','estado')||'ACTIVA',actor(x)]})})},
     {id:'trades',label:'Permutas',sheet:'Permutas',build:()=>({headers:['Fecha','Vehículo entregado','Vehículo recibido','Dinero de encima','Dirección','Saldo heredado','Reconocimiento','Usuario'],rows:(data.permutas||[]).map(x=>[fmtDate(recordDate(x)),val(x,'outgoingVehicle','outgoingVehicleName','vehiculoSale'),val(x,'incomingVehicle','incomingVehicleName','vehiculoEntra'),num(x,'difference','cashDifference'),val(x,'differenceDirection')==='receive'?'RECIBIDO':(val(x,'differenceDirection')==='pay'?'ENTREGADO':'SIN DIFERENCIA'),num(x,'incomingInventoryCost','inheritedInvestment'),'DIFERIDO HASTA VENTA FINAL',actor(x)])})},
@@ -17900,6 +17994,6 @@ window.jcpExtractMov=function(){
 };
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.34"></script>
+<script src="./app-update.js?v=2026.09.20.38"></script>
 </body>
 </html>
