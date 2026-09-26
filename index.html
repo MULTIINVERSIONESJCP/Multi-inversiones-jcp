@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.33</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.34</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -2257,7 +2257,6 @@ nav button{display:flex!important;flex-direction:column!important;align-items:ce
 .jcp-sound-tests{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:8px}.jcp-sound-tests button{font-size:7px!important;padding:7px 3px!important;min-width:0!important}
 
 /* Categorías de gasto operacional */
-.jcp-expcat-inline-btn{float:right;font-size:8px!important;font-weight:800!important;letter-spacing:.3px;color:var(--jcp-ui-accent,#d4af37)!important;background:transparent!important;border:1px solid var(--jcp-ui-accent,#d4af37)!important;border-radius:7px!important;padding:3px 8px!important;text-transform:none!important;cursor:pointer}
 .jcp-expcat-list{display:flex;flex-direction:column;gap:7px;margin-top:10px}
 .jcp-expcat-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 10px;background:var(--jcp-ui-card2,#1b1b1b);border:1px solid var(--jcp-ui-border,#333);border-radius:10px}
 .jcp-expcat-row span{font-size:10px;font-weight:800;color:var(--jcp-ui-text,#fff);min-width:0;overflow-wrap:anywhere}
@@ -3950,11 +3949,6 @@ body.jcp-custom-theme .database-actions-list button{
 <span class="jcp-settings-list-copy"><b>Asistente de voz</b><small>Nombre, voz, micrófono y activación</small></span>
 <span class="jcp-settings-chevron">›</span>
 </button>
-<button class="jcp-settings-list-item" onclick="openSettingsSection('expenses')" type="button">
-<span class="jcp-settings-list-icon">🧾</span>
-<span class="jcp-settings-list-copy"><b>Categorías de gasto</b><small>Agrega o elimina las categorías del gasto operacional</small></span>
-<span class="jcp-settings-chevron">›</span>
-</button>
 </div>
 </div>
 <div class="jcp-settings-page" id="jcpSettingsPageTheme">
@@ -4354,13 +4348,18 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="sale-invoice-shell" id="operationsOperatingExpenseForm" style="display:none;margin:16px 0">
 <div class="sale-invoice-head">
 <div><div class="sale-invoice-kicker">SALIDA DEFINITIVA</div><h3>Registrar gasto operacional</h3></div>
-
+<div class="jcp-expmod-menu-wrap" style="position:relative">
+<button aria-expanded="false" aria-label="Más opciones de gasto operacional" class="dots-btn" onclick="toggleExpModMenu(event)" type="button">⋮</button>
+<div class="top-menu" id="jcpExpModMenu">
+<button onclick="openExpenseCategoriesFromForm();closeExpModMenu()" type="button">⚙️ Configurar categorías</button>
+</div>
+</div>
 </div>
 <div class="next-receipt-indicator expense"><div class="next-receipt-icon">🧾</div><div class="next-receipt-copy"><div class="next-receipt-label">PRÓXIMO RECIBO DE GASTO</div><div class="next-receipt-number" id="nextOperatingExpenseReceiptIndicator">RG-000001</div></div><div class="next-receipt-note">El RG se confirma únicamente al guardar el gasto.</div></div>
 <div class="sale-invoice-section">
 <div class="sale-section-title"><span>1</span> INFORMACIÓN DEL GASTO</div>
 <div class="sale-field-grid">
-<label class="sale-field"><b>Categoría *<button class="jcp-expcat-inline-btn" onclick="openExpenseCategoriesFromForm()" type="button">⚙️ Configurar</button></b>
+<label class="sale-field"><b>Categoría *</b>
 <select id="opExpenseCategory">
 <option>ADMINISTRACIÓN</option><option>ARRIENDO</option><option>SERVICIOS</option>
 <option>NÓMINA</option><option>TRANSPORTE</option><option>IMPUESTOS</option>
@@ -5539,9 +5538,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.33"></script>
-<script src="./jcp-sync.js?v=2026.09.20.33"></script>
-<script src="./jcp-images.js?v=2026.09.20.33"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.34"></script>
+<script src="./jcp-sync.js?v=2026.09.20.34"></script>
+<script src="./jcp-images.js?v=2026.09.20.34"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -11968,7 +11967,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.33\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.34\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -14656,6 +14655,20 @@ window.addEventListener('orientationchange',function(){try{closeTopMenu();}catch
     if(typeof openSettings==='function')openSettings();
     if(typeof openSettingsSection==='function')openSettingsSection('expenses');
   };
+  window.closeExpModMenu=function(){
+    var m=document.getElementById('jcpExpModMenu');if(m)m.classList.remove('open');
+  };
+  window.toggleExpModMenu=function(e){
+    if(e)e.stopPropagation();
+    var m=document.getElementById('jcpExpModMenu');if(!m)return;
+    var wasOpen=m.classList.contains('open');
+    closeExpModMenu();
+    if(!wasOpen)m.classList.add('open');
+  };
+  document.addEventListener('click',function(e){
+    var w=e.target.closest('.jcp-expmod-menu-wrap');
+    if(!w)closeExpModMenu();
+  });
   window.renderExpCatSettings=function(){
     var box=document.getElementById('jcpExpCatList');if(!box)return;
     var cats=getExpCats();
@@ -15844,7 +15857,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.33',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.34',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -17887,6 +17900,6 @@ window.jcpExtractMov=function(){
 };
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.33"></script>
+<script src="./app-update.js?v=2026.09.20.34"></script>
 </body>
 </html>
