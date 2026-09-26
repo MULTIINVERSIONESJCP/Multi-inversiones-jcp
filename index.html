@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.38</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.39</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5546,9 +5546,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.38"></script>
-<script src="./jcp-sync.js?v=2026.09.20.38"></script>
-<script src="./jcp-images.js?v=2026.09.20.38"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.39"></script>
+<script src="./jcp-sync.js?v=2026.09.20.39"></script>
+<script src="./jcp-images.js?v=2026.09.20.39"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -11977,7 +11977,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.38\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.39\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15939,7 +15939,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.38',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.39',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -15952,21 +15952,40 @@ window.openRecordCopy=function(number){
   const findVehicle=m=>{const id=String(val(m,'vehicleId','vehiculoId','vehicle_id'));return [...(data.veh||[]),...(data.sold||[])].find(v=>String(v?.id||'')===id)||{};};
   const modules=[
     {id:'inventory',label:'Inventario de vehículos',sheet:'Inventario',build:()=>({headers:['Fecha ingreso','Placa','Marca','Referencia','Modelo','Precio compra','Gastos asociados','Inversión total','Estado','Usuario'],rows:(data.veh||[]).filter(v=>v&&!v.deleted&&!v.sale&&!['VENDIDO','ELIMINADO','INACTIVO'].includes(String(v.status||v.estado||'').toUpperCase())).map(v=>{const g=expenseFor(v);return [fmtDate(recordDate(v)),val(v,'pl','placa'),val(v,'marca','m'),val(v,'ref','referencia'),val(v,'modelo'),num(v,'c','precioCompra'),g,num(v,'c','precioCompra')+g,val(v,'estado','status')||'DISPONIBLE',actor(v)]})})},
-    {id:'sales',label:'Ventas',sheet:'Ventas',build:()=>({headers:['Fecha venta','Placa','Vehículo','Cliente','Precio de venta','Valor recibido','Saldo','Utilidad','Usuario'],rows:(data.sold||[]).map(v=>[fmtDate(recordDate(v)),val(v,'pl','placa'),[val(v,'marca','m'),val(v,'ref','referencia'),val(v,'modelo')].filter(Boolean).join(' '),val(v,'clientName','cliente','comprador'),num(v,'v','salePrice','precioVenta'),num(v,'received','recibido'),num(v,'pending','saldo'),num(v,'profit','utilidad'),actor(v)])})},
+    {id:'sales',label:'Ventas',sheet:'Ventas',build:()=>({headers:['Fecha venta','Placa','Vehículo','Cliente','Precio de venta','Valor recibido','Saldo','Utilidad','Usuario'],rows:(data.sold||[]).map(v=>{
+      const s=v.sale||{};
+      const price=num(s,'price','v','salePrice','precioVenta')||num(v,'v','salePrice','precioVenta');
+      const received=num(s,'received','recibido');
+      const pending=num(s,'pending','saldo')||Math.max(0,price-received);
+      const purchase=num(v,'c','precioCompra');
+      const profit=price-(purchase+expenseFor(v));
+      return [fmtDate(recordDate(s)||recordDate(v)),val(v,'pl','placa'),[val(v,'marca','m'),val(v,'ref','referencia'),val(v,'modelo')].filter(Boolean).join(' '),val(s,'buyer','cliente','comprador')||val(v,'clientName','cliente','comprador'),price,received,pending,profit,actor(v)];
+    })})},
     {id:'vehicleExpenses',label:'Gastos de vehículos',sheet:'Gastos vehículos',build:()=>({headers:['Fecha','Placa','Marca','Referencia','Modelo','Concepto','Valor','Soporte','Usuario'],rows:(data.mov||[]).filter(isVehicleExpense).map(m=>{const v=findVehicle(m);return [fmtDate(recordDate(m)),val(m,'vehiclePlate','pl','placa')||val(v,'pl','placa'),val(m,'vehicleBrand','marca')||val(v,'marca','m'),val(m,'vehicleReference','referencia','ref')||val(v,'ref','referencia'),val(m,'vehicleModel','modelo')||val(v,'modelo'),val(m,'c','concept','concepto'),num(m,'v','value','valor','amount'),val(m,'receiptNumber','soporte'),actor(m)]})})},
     {id:'generalExpenses',label:'Gastos generales',sheet:'Gastos generales',build:()=>({headers:['Fecha','Categoría','Concepto','Valor','Soporte','Usuario'],rows:(data.mov||[]).filter(m=>m?.t==='gasto'&&!isVehicleExpense(m)&&!isVehiclePurchase(m)).map(m=>[fmtDate(recordDate(m)),cleanLabel(val(m,'subtype','category','categoria')),val(m,'c','concept','concepto'),num(m,'v','value','valor','amount'),val(m,'receiptNumber','soporte'),actor(m)])})},
     {id:'clients',label:'Clientes',sheet:'Clientes',build:()=>({headers:['Fecha registro','Nombre','Documento','Teléfono','Dirección','Ciudad','Usuario'],rows:(data.clientes||[]).map(c=>[fmtDate(recordDate(c)),val(c,'n','nombre','name'),val(c,'cedula','documento','document'),val(c,'tel','telefono','phone'),val(c,'dir','direccion','address'),val(c,'ciudad','city'),actor(c)])})},
-    {id:'receivables',label:'Cuentas por cobrar',sheet:'Cuentas por cobrar',build:()=>({headers:['Fecha','Origen','Cliente','Concepto','Valor inicial','Abonos','Saldo','Estado','Usuario'],rows:[...(data.sold||[]).filter(s=>Number(s.sale?.pending||0)>0).map(s=>[fmtDate(recordDate(s.sale||s)),'VENTA',s.sale?.buyer||'Sin cliente',[val(s,'marca','m'),val(s,'ref','referencia'),val(s,'pl','placa')].filter(Boolean).join(' '),Number(s.sale?.price||0),Number(s.sale?.received||0),Number(s.sale?.pending||0),'PENDIENTE',actor(s.sale||s)]),...(data.permutas||[]).filter(p=>Number(p.pending||0)>0).map(p=>[fmtDate(recordDate(p)),'PERMUTA',p.client||p.buyer||'Sin cliente','DIFERENCIA DE PERMUTA '+(p.incomingVehicle?.pl||''),Number(p.difference||0),Number(p.received||0),Number(p.pending||0),'PENDIENTE',actor(p)])]})},
+    {id:'receivables',label:'Cuentas por cobrar',sheet:'Cuentas por cobrar',build:()=>{
+      const collected=list=>typeof jcpColCap==='function'?jcpColCap(list):0;
+      const salesRows=(data.sold||[]).map(s=>{
+        const sale=s.sale||{};
+        const paid=num(sale,'received')+collected(sale.collections);
+        const pending=Math.max(0,num(sale,'pending')-collected(sale.collections));
+        return {pending,row:[fmtDate(recordDate(sale)||recordDate(s)),'VENTA',val(sale,'buyer')||'Sin cliente',[val(s,'marca','m'),val(s,'ref','referencia'),val(s,'pl','placa')].filter(Boolean).join(' '),num(sale,'price'),paid,pending,'PENDIENTE',actor(s)]};
+      }).filter(x=>x.pending>0).map(x=>x.row);
+      const tradeRows=(data.permutas||[]).map(p=>{
+        const paid=num(p,'received')+collected(p.collections);
+        const pending=Math.max(0,num(p,'pending')-collected(p.collections));
+        return {pending,row:[fmtDate(recordDate(p)),'PERMUTA',val(p,'client','buyer')||'Sin cliente','DIFERENCIA DE PERMUTA '+(val(p.incomingVehicle||{},'pl')||''),num(p,'difference'),paid,pending,'PENDIENTE',actor(p)]};
+      }).filter(x=>x.pending>0).map(x=>x.row);
+      return {headers:['Fecha','Origen','Cliente','Concepto','Valor inicial','Abonos','Saldo','Estado','Usuario'],rows:[...salesRows,...tradeRows]};
+    }},
     {id:'loans',label:'Préstamos otorgados',sheet:'Préstamos',build:()=>({headers:['Fecha','Cliente','Capital','Interés','Total esperado','Pagado','Saldo','Estado','Usuario'],rows:(data.pres||[]).map(p=>{const capital=num(p,'c','capital','value'),interest=num(p,'i','interest','interes');const paid=num(p,'p')+(typeof jcpLoanCapCollected==='function'?jcpLoanCapCollected(p):0);const total=num(p,'total')||capital+interest;const balance=Math.max(0,total-paid);return [fmtDate(recordDate(p)),val(p,'n','nombre','client','cliente'),capital,interest,total,paid,balance,balance<=0?'PAGADO':(val(p,'estado','status')||'VIGENTE'),actor(p)]})})},
     {id:'obligations',label:'Obligaciones y financiaciones',sheet:'Obligaciones',build:()=>{
       const ops=data.capitalOps||[];
       const isPayment=x=>String(val(x,'type','tipo')).trim().toLowerCase()==='pago_deuda';
       const paidOf=id=>ops.filter(y=>isPayment(y)&&String(val(y,'financingId'))===String(id)).reduce((a,y)=>a+num(y,'value','valor','capital'),0);
-      return {headers:['Fecha','Tipo','Concepto / acreedor','Valor','Pagado','Saldo','Estado','Usuario'],rows:ops.map(x=>{
+      return {headers:['Fecha','Tipo','Concepto / acreedor','Valor','Pagado','Saldo','Estado','Usuario'],rows:ops.filter(x=>!isPayment(x)).map(x=>{
         const value=num(x,'value','valor','capital');
-        if(isPayment(x)){
-          return [fmtDate(recordDate(x)),cleanLabel(val(x,'type','tipo')),val(x,'concept','concepto','creditor','acreedor'),value,value,0,'PAGO REGISTRADO',actor(x)];
-        }
         const paid=paidOf(x.id),balance=Math.max(0,value-paid);
         return [fmtDate(recordDate(x)),cleanLabel(val(x,'type','tipo')),val(x,'concept','concepto','creditor','acreedor'),value,paid,balance,balance<=0?'PAGADA':(val(x,'status','estado')||'VIGENTE'),actor(x)];
       })};
@@ -17994,6 +18013,6 @@ window.jcpExtractMov=function(){
 };
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.38"></script>
+<script src="./app-update.js?v=2026.09.20.39"></script>
 </body>
 </html>
