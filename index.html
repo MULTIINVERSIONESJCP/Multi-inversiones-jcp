@@ -3093,19 +3093,19 @@ body.jcp-custom-theme .database-actions-list button{
 
 /* ===== jcp-accounting-document-actions-style ===== */
 
-#contabilidad .accounting-document-actions{margin:12px 0 14px}
-#contabilidad .accounting-document-action-card{margin:0 0 14px}
-#contabilidad .acc-document-found{
+#gestionDocumentos .accounting-document-actions{margin:12px 0 14px}
+#gestionDocumentos .accounting-document-action-card{margin:0 0 14px}
+#gestionDocumentos .acc-document-found{
   display:grid;grid-template-columns:minmax(120px,.8fr) minmax(180px,1.6fr) 120px;
   gap:10px;align-items:center;padding:10px;border:1px solid #343434;border-radius:10px;
   background:#111;margin-bottom:10px
 }
-#contabilidad .acc-document-found b{color:var(--gold)}
-#contabilidad .acc-document-found span{color:#eee;overflow-wrap:anywhere}
-#contabilidad .acc-document-found strong{text-align:right;white-space:nowrap}
+#gestionDocumentos .acc-document-found b{color:var(--gold)}
+#gestionDocumentos .acc-document-found span{color:#eee;overflow-wrap:anywhere}
+#gestionDocumentos .acc-document-found strong{text-align:right;white-space:nowrap}
 @media(max-width:700px){
-  #contabilidad .acc-document-found{grid-template-columns:1fr}
-  #contabilidad .acc-document-found strong{text-align:left}
+  #gestionDocumentos .acc-document-found{grid-template-columns:1fr}
+  #gestionDocumentos .acc-document-found strong{text-align:left}
 }
 
 /* ===== jcp-registros-mobile-fix-real ===== */
@@ -3634,6 +3634,27 @@ body.jcp-custom-theme .database-actions-list button{
 }
 #gestionDocumentos .accounting-document-action-card{
   margin-top:12px;
+}
+@media(max-width:600px){
+  #gestionDocumentos .accounting-document-action-card .grid{
+    grid-template-columns:1fr;
+  }
+}
+#gestionDocumentos #accountingDocumentResult label{
+  display:block;margin-top:12px;font-weight:800;font-size:12px;
+  letter-spacing:.3px;color:#ccc;
+}
+#gestionDocumentos #accountingDocumentResult label input{
+  display:block;width:100%;margin-top:6px;padding:12px;
+  background:#0d0d0d;border:1px solid #333;color:#fff;
+  border-radius:9px;font-weight:400;font-size:14px;
+}
+#gestionDocumentos #accountingDocumentResult button{
+  margin-top:14px;width:100%;
+}
+#gestionDocumentos .unified-module-note{
+  font-size:12px;color:#ccc;background:#111;border:1px solid #343434;
+  border-radius:10px;padding:10px 12px;line-height:1.4;
 }
 @media(max-width:520px){
   #ventas .operations-register-grid{
