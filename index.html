@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.43</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.44</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5589,9 +5589,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.43"></script>
-<script src="./jcp-sync.js?v=2026.09.20.43"></script>
-<script src="./jcp-images.js?v=2026.09.20.43"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.44"></script>
+<script src="./jcp-sync.js?v=2026.09.20.44"></script>
+<script src="./jcp-images.js?v=2026.09.20.44"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -12043,7 +12043,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.43\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.44\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15503,6 +15503,15 @@ function accountingDocumentValueOf(record,type){
   return 0;
 }
 
+function accountingDocumentTypeLabel(type){
+  return ({
+    compra:'COMPRA DE VEHÍCULO',venta:'VENTA DE VEHÍCULO',permuta:'PERMUTA',
+    gasto_vehiculo:'GASTO DE VEHÍCULO',gasto_operativo:'GASTO DE OPERACIÓN',
+    pago_obligacion:'PAGO DE OBLIGACIÓN',financiacion:'FINANCIACIÓN',
+    prestamo_otorgado:'PRÉSTAMO OTORGADO',inversion:'INVERSIÓN',ingreso:'INGRESO'
+  })[type]||String(type||'DOCUMENTO').replaceAll('_',' ').toUpperCase();
+}
+
 function accountingDocumentReceiptType(type){
   // Tipos que ya cuentan con reversión completa de tesorería + soporte marcado
   // ANULADO mediante voidInternalReceipt(). El resto usa la anulación simple.
@@ -15530,17 +15539,6 @@ function renderAccountingDocumentDetail(record,type){
   const foundReceipt=receiptType&&typeof findInternalReceipt==='function'?findInternalReceipt(accountingDocumentNumberOf(record)):null;
   const linkedReceipt=(foundReceipt&&foundReceipt.type===receiptType)?foundReceipt:null;
 
-  // Para gastos de vehículo, "Modificar" también permite reasignar a qué
-  // vehículo pertenece el gasto (p. ej. corregir una placa digitada mal),
-  // sin tener que anular y volver a registrar el gasto desde cero.
-  const vehicles=Array.isArray(data?.veh)?data.veh:[];
-  const vehicleLabel=v=>(v.pl||'SIN PLACA')+' — '+(v.marca||v.m||'')+' '+(v.ref||'');
-  const vehicleSelectorHtml=(accountingDocumentActionMode==='modify'&&type==='gasto_vehiculo'&&vehicles.length)
-    ? '<label>VEHÍCULO ASOCIADO<select id="accountingEditVehicle">'+
-        vehicles.map(v=>'<option value="'+priceEsc(String(v.id))+'"'+(String(v.id)===String(record.vehicleId)?' selected':'')+'>'+priceEsc(vehicleLabel(v))+'</option>').join('')+
-      '</select></label>'
-    : '';
-
   host.innerHTML=
     '<div class="acc-document-found">'+
       '<b>'+priceEsc(accountingDocumentNumberOf(record))+'</b>'+
@@ -15556,7 +15554,6 @@ function renderAccountingDocumentDetail(record,type){
         )
       : '<label>CONCEPTO / DESCRIPCIÓN<input id="accountingEditConcept" value="'+priceEsc(concept)+'"></label>'+
         '<label>VALOR<input id="accountingEditValue" type="text" inputmode="numeric" data-money="1" value="'+String(value)+'"></label>'+
-        vehicleSelectorHtml+
         '<button type="button" onclick="modifyAccountingDocument()">GUARDAR MODIFICACIÓN</button>'
     );
 }
@@ -15596,9 +15593,29 @@ function searchAccountingDocument(){
 
   window.__accountingDocumentMatches=matches;
   window.__accountingDocumentMatchesType=type;
-  const actionWord=accountingDocumentActionMode==='void'?'anular':'modificar';
+  const total=matches.reduce((s,m)=>s+accountingDocumentValueOf(m,type),0);
+  const listHtml=matches.map(m=>{
+    const c=accountingDocumentConceptOf(m,type),v=accountingDocumentValueOf(m,type);
+    return '<div class="acc-document-found">'+
+      '<b>'+priceEsc(m.date||'')+'</b>'+
+      '<span>'+priceEsc(c||'SIN CONCEPTO')+'</span>'+
+      '<strong>'+money(v)+'</strong>'+
+    '</div>';
+  }).join('');
+
+  if(accountingDocumentActionMode==='void'){
+    // Un documento se anula completo, no concepto por concepto: se listan todos
+    // los que comparten el número y se anulan juntos en un solo paso.
+    host.innerHTML=
+      '<div class="unified-module-note" style="margin-bottom:10px">📋 ESTE NÚMERO AGRUPA '+matches.length+' CONCEPTOS POR UN TOTAL DE '+money(total)+'. AL ANULAR, SE ANULAN LOS '+matches.length+' JUNTOS.</div>'+
+      listHtml+
+      '<div class="unified-module-note" style="margin:10px 0">🔒 Se te pedirá la CLAVE DE SEGURIDAD y el motivo. Los valores quedarán en $0 en extractos (conservando el registro como ANULADO) y podrás imprimir la constancia.</div>'+
+      '<button type="button" onclick="voidAccountingDocumentGroup()">ANULAR DOCUMENTO COMPLETO ('+matches.length+' CONCEPTOS)</button>';
+    return;
+  }
+
   host.innerHTML=
-    '<div class="unified-module-note" style="margin-bottom:10px">📋 ESTE NÚMERO AGRUPA '+matches.length+' CONCEPTOS. TOCA EL QUE QUIERES '+actionWord.toUpperCase()+':</div>'+
+    '<div class="unified-module-note" style="margin-bottom:10px">📋 ESTE NÚMERO AGRUPA '+matches.length+' CONCEPTOS. TOCA EL QUE QUIERES MODIFICAR:</div>'+
     matches.map((m,i)=>{
       const c=accountingDocumentConceptOf(m,type),v=accountingDocumentValueOf(m,type);
       return '<div class="acc-document-found acc-document-match" onclick="selectAccountingDocumentMatch('+i+')">'+
@@ -15607,6 +15624,96 @@ function searchAccountingDocument(){
         '<strong>'+money(v)+'</strong>'+
       '</div>';
     }).join('');
+}
+
+function voidAccountingDocumentGroup(){
+  const matches=Array.isArray(window.__accountingDocumentMatches)?window.__accountingDocumentMatches:[];
+  const type=window.__accountingDocumentMatchesType||'';
+  if(!matches.length)return;
+
+  const number=accountingDocumentNumberOf(matches[0]);
+  // Misma protección que el resto de anulaciones: clave de seguridad + motivo
+  // obligatorio + confirmación, todo en un solo flujo.
+  const reason=typeof requestReceiptVoid==='function'?requestReceiptVoid(number):null;
+  if(!reason)return;
+
+  const now=new Date().toISOString();
+  const touchedVehicleIds=new Set();
+  const voidedItems=[];
+  matches.forEach(x=>{
+    if(x.voided)return; // ya estaba anulado, no se duplica el registro
+    const concept=accountingDocumentConceptOf(x,type);
+    const previousValue=accountingDocumentValueOf(x,type);
+    x.auditTrail=Array.isArray(x.auditTrail)?x.auditTrail:[];
+    x.auditTrail.push({action:'ANULACIÓN',at:now,reason,previousValue});
+    x.voided=true;
+    x.voidedAt=now;
+    x.voidReason=reason;
+    if(type==='prestamo_otorgado')x.estado='ANULADO';
+    if(type==='inversion')x.status='ANULADA';
+    if(x.vehicleId)touchedVehicleIds.add(String(x.vehicleId));
+    voidedItems.push({concept,value:previousValue,date:x.date||''});
+  });
+
+  // Si eran gastos de vehículo, recalcula el acumulado de cada vehículo afectado
+  // (esto también libera el dinero: el disponible se calcula descontando el
+  // acumulado de gastos de cada vehículo, así que al bajar ese acumulado el
+  // dinero vuelve a quedar disponible).
+  touchedVehicleIds.forEach(id=>{
+    const veh=(data.veh||[]).find(v=>String(v.id)===id);
+    if(veh)try{syncVehicleExpenseTotal(veh,data);}catch(e){}
+  });
+
+  save();
+  try{renderExtractos();}catch(e){}
+  try{renderAccountingModule();}catch(e){}
+  try{renderOperationsVehicleExpenseGrid();}catch(e){}
+  try{renderInventory();}catch(e){}
+  try{syncFinancialUiV76();}catch(e){}
+
+  const host=document.getElementById('accountingDocumentResult');
+  const total=voidedItems.reduce((s,i)=>s+i.value,0);
+  window.__accountingLastVoidGroup={number,type,reason,voidedAt:now,items:voidedItems,total};
+  if(host){
+    host.innerHTML=
+      '<div class="unified-module-note" style="margin-bottom:10px">✅ DOCUMENTO '+priceEsc(number)+' ANULADO COMPLETO ('+voidedItems.length+' CONCEPTOS). EL REGISTRO SE CONSERVA PARA TRAZABILIDAD Y QUEDA VISIBLE EN EXTRACTOS COMO ANULADO.</div>'+
+      '<button type="button" onclick="printVoidAnnulmentDocument()">🖨️ IMPRIMIR CONSTANCIA DE ANULACIÓN</button>';
+  }
+}
+
+function printVoidAnnulmentDocument(){
+  const g=window.__accountingLastVoidGroup;
+  if(!g){alert('NO HAY UNA ANULACIÓN RECIENTE PARA IMPRIMIR.');return;}
+  const w=window.open('','_blank','width=850,height=760');
+  if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}
+  const logo=typeof supportLogoSrc==='function'?supportLogoSrc():'';
+  const niceDate=new Date(g.voidedAt).toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'});
+  const rowsHtml=g.items.map(i=>'<div class="row"><span>'+priceEsc(i.concept||'SIN CONCEPTO')+(i.date?' · '+priceEsc(i.date):'')+'</span><b>'+priceMoney(i.value)+'</b></div>').join('');
+  const html=`<!doctype html><html><head><meta charset="utf-8"><title>Constancia de anulación ${priceEsc(g.number)}</title><style>
+  *{box-sizing:border-box}body{margin:0;padding:26px;background:#f3f3f3;color:#111;font-family:Arial,sans-serif}
+  .sheet{position:relative;max-width:760px;margin:auto;background:#fff;border:1px solid #d6d6d6;padding:24px 30px;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:hidden}
+  .sh-head{display:flex;align-items:center;gap:16px;border-bottom:3px solid #a33;padding-bottom:14px}.sh-logo{width:120px;max-height:66px;object-fit:contain;object-position:left center;flex:none}
+  .sh-text h1{font-size:19px;margin:0 0 5px;font-weight:900}.sh-text h2{font-size:12px;margin:0;color:#a33;text-transform:uppercase}
+  .numline{margin:18px 0 10px}.num{font-size:25px;font-weight:900}
+  .row{display:flex;justify-content:space-between;gap:24px;border-bottom:1px solid #e4e4e4;padding:9px 0;font-size:13px}.row span{color:#555}.row b{text-align:right}
+  .total{margin-top:8px;font-size:20px;font-weight:900;border-top:3px solid #111;padding-top:14px}
+  .reason{margin-top:18px;padding:13px;border:2px solid #a33;color:#a33;font-weight:800;border-radius:6px}
+  .footer{margin-top:22px;padding-top:12px;border-top:1px solid #ddd;font-size:9px;color:#777;text-align:center}
+  .actions{max-width:760px;margin:12px auto 0;text-align:right}.actions button{padding:10px 15px;border:0;border-radius:7px;background:#111;color:#fff;font-weight:800}
+  .stamp{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%) rotate(-25deg);font-size:72px;font-weight:900;color:rgba(170,51,51,.35);border:8px solid rgba(170,51,51,.35);padding:4px 28px;border-radius:10px;letter-spacing:4px;pointer-events:none;white-space:nowrap}
+  @media print{body{background:#fff;padding:0}.sheet{box-shadow:none;border:0}.actions{display:none}}
+  </style></head><body><div class="sheet">
+  <div class="stamp">ANULADO</div>
+  <div class="sh-head">${logo?`<img class="sh-logo" src="${priceEsc(logo)}">`:''}<div class="sh-text"><h1>MULTI INVERSIONES JCP</h1><h2>CONSTANCIA DE ANULACIÓN</h2></div></div>
+  <div class="numline"><div class="num">${priceEsc(g.number)}</div></div>
+  <div class="row"><span>Fecha de anulación</span><b>${priceEsc(niceDate)}</b></div>
+  <div class="row"><span>Tipo de documento</span><b>${priceEsc((typeof accountingDocumentTypeLabel==='function'?accountingDocumentTypeLabel(g.type):g.type)||'')}</b></div>
+  ${rowsHtml}
+  <div class="row total"><span>TOTAL ANULADO</span><b>${priceMoney(g.total)}</b></div>
+  <div class="reason">MOTIVO DE ANULACIÓN<br>${priceEsc(g.reason)}</div>
+  <div class="footer">Documento generado por MULTI INVERSIONES JCP · Constancia interna de anulación.</div>
+  </div><div class="actions"><button onclick="window.print()">IMPRIMIR / GUARDAR PDF</button></div></body></html>`;
+  w.document.open();w.document.write(html);w.document.close();
 }
 
 function voidAccountingDocumentFull(){
@@ -15637,43 +15744,22 @@ function modifyAccountingDocument(){
   const previousConcept=accountingDocumentConceptOf(x,type);
   const previousValue=accountingDocumentValueOf(x,type);
 
-  // Si es un gasto de vehículo, permite reasignarlo a otro vehículo del
-  // inventario (p. ej. corregir una placa digitada mal) sin anular el gasto.
-  const vehicleSelect=type==='gasto_vehiculo'?document.getElementById('accountingEditVehicle'):null;
-  const newVehicleId=vehicleSelect?vehicleSelect.value:null;
-  const previousVehicleId=x.vehicleId?String(x.vehicleId):'';
-  const vehicleChanged=vehicleSelect&&newVehicleId&&newVehicleId!==previousVehicleId;
-  const previousVehicle=vehicleChanged?(data.veh||[]).find(v=>String(v.id)===previousVehicleId):null;
-
   x.auditTrail=Array.isArray(x.auditTrail)?x.auditTrail:[];
   x.auditTrail.push({
     action:'MODIFICACIÓN',
     at:new Date().toISOString(),
     previousConcept,
-    previousValue,
-    previousVehicleId:vehicleChanged?previousVehicleId:undefined,
-    newVehicleId:vehicleChanged?newVehicleId:undefined
+    previousValue
   });
 
   map.conceptKeys.forEach(k=>{x[k]=concept;});
   map.valueKeys.forEach(k=>{x[k]=value;});
-  if(vehicleChanged)x.vehicleId=newVehicleId;
   save();
-
-  // Recalcula el acumulado de gastos del vehículo anterior y del nuevo.
-  if(vehicleChanged){
-    if(previousVehicle)try{syncVehicleExpenseTotal(previousVehicle,data);}catch(e){}
-    const newVehicle=(data.veh||[]).find(v=>String(v.id)===newVehicleId);
-    if(newVehicle)try{syncVehicleExpenseTotal(newVehicle,data);}catch(e){}
-    save();
-  }
 
   try{renderExtractos();}catch(e){}
   try{renderAccountingModule();}catch(e){}
-  try{renderOperationsVehicleExpenseGrid();}catch(e){}
-  try{renderInventory();}catch(e){}
 
-  alert(vehicleChanged?'✅ DOCUMENTO MODIFICADO Y REASIGNADO AL NUEVO VEHÍCULO. SE CONSERVÓ LA TRAZABILIDAD DEL CAMBIO.':'✅ DOCUMENTO MODIFICADO. SE CONSERVÓ LA TRAZABILIDAD DEL CAMBIO.');
+  alert('✅ DOCUMENTO MODIFICADO. SE CONSERVÓ LA TRAZABILIDAD DEL CAMBIO.');
   searchAccountingDocument();
 }
 
@@ -16297,7 +16383,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.43',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.44',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -18372,6 +18458,6 @@ window.jcpExtractMov=function(){
 };
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.43"></script>
+<script src="./app-update.js?v=2026.09.20.44"></script>
 </body>
 </html>
