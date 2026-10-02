@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>MULTI INVERSIONES JCP - V2026.09.20.40</title>
+<title>MULTI INVERSIONES JCP - V2026.09.20.42</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -1159,6 +1159,9 @@ body.internal-module-open .app > header{
 .ext-pro-row small{font-size:8px;color:#aaa}.ext-pro-row b{font-size:9px;line-height:1.25}
 .ext-pro-row .category{font-size:8px}.ext-pro-row .account{font-size:8px;color:#aaa}.ext-pro-row .amount{font-size:9px;font-weight:900;text-align:right;white-space:nowrap}
 .ext-pro-row .amount.in{color:#43d38b}.ext-pro-row .amount.out{color:#ff7777}
+.ext-pro-row.ext-row-voided{background:#150d0d;opacity:.65}
+.ext-pro-row.ext-row-voided .amount.in,.ext-pro-row.ext-row-voided .amount.out{color:#8a5a5a}
+.ext-pro-row.ext-row-voided .category{color:#c77}
 .ext-detail-card{padding:12px}.ext-detail-card h3{margin:0 0 10px;color:#fff;font-size:12px}
 .ext-detail-line{display:grid;grid-template-columns:88px 1fr;gap:6px;padding:6px 0;border-bottom:1px solid #222;font-size:9px}.ext-detail-line span{color:#999}.ext-detail-line b{word-break:break-word}
 .ext-box-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.ext-box-head button{width:auto!important;min-height:34px!important;padding:7px 10px!important}
@@ -4190,6 +4193,10 @@ body.jcp-custom-theme .database-actions-list button{
 </div><div class="paydist-summary"><div><span>VALOR TOTAL</span><b id="purchasePayTotal">$0</b></div><div><span>DISTRIBUIDO</span><b id="purchasePayDistributed">$0</b></div><div class="bad" id="purchasePayPendingBox"><span>FALTA</span><b id="purchasePayPending">$0</b></div></div><div class="paydist-hint">La operación se habilita únicamente cuando la distribución coincide exactamente con el valor total.</div></div>
 <input id="vplaca" placeholder="Placa"/>
 <input id="vmatricula" placeholder="Matrícula de (ej. Bogotá)" type="text"/>
+<label class="full" style="position:relative">
+  <input id="vVendedor" placeholder="Nombre del vendedor" autocomplete="off" oninput="purchaseSellerSuggestions()" style="width:100%"/>
+  <div class="client-suggestions" id="purchaseSellerSuggestions" style="display:none"></div>
+</label>
 <label class="full" style="color:#a8a8a8;font-size:13px">📷 Foto del vehículo
   <input accept="image/*" id="vfoto" style="margin-top:6px" type="file"/>
 </label>
@@ -5462,9 +5469,13 @@ body.jcp-custom-theme .database-actions-list button{
           <select id="accountingDocumentType">
 <option value="compra">COMPRA DE VEHÍCULO</option>
 <option value="venta">VENTA DE VEHÍCULO</option>
+<option value="permuta">PERMUTA</option>
 <option value="gasto_vehiculo">GASTO DE VEHÍCULO</option>
 <option value="gasto_operativo">GASTO DE OPERACIÓN</option>
+<option value="financiacion">FINANCIACIÓN / CAPITAL RECIBIDO</option>
 <option value="pago_obligacion">PAGO DE OBLIGACIÓN</option>
+<option value="prestamo_otorgado">PRÉSTAMO OTORGADO</option>
+<option value="inversion">INVERSIÓN</option>
 <option value="ingreso">OTRO INGRESO</option>
 </select>
 </label>
@@ -5550,9 +5561,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.40"></script>
-<script src="./jcp-sync.js?v=2026.09.20.40"></script>
-<script src="./jcp-images.js?v=2026.09.20.40"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.42"></script>
+<script src="./jcp-sync.js?v=2026.09.20.42"></script>
+<script src="./jcp-images.js?v=2026.09.20.42"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -6736,8 +6747,8 @@ function jcpAuditState(source){
 
   // Métricas independientes para la pantalla de auditoría.
   const vehicleInvestment=veh.reduce((a,x)=>a+(jcpAuditNum(x?.c)||0)+(jcpAuditNum(x?.g)||0),0);
-  const otherInvestment=inv.reduce((a,x)=>a+(jcpAuditNum(x?.c)||0),0);
-  const loanReceivable=pres.reduce((a,x)=>a+Math.max(0,(jcpAuditNum(x?.c)||0)-(jcpAuditNum(x?.p)||0)-(typeof jcpLoanCapCollected==='function'?jcpLoanCapCollected(x):0)),0);
+  const otherInvestment=inv.filter(x=>x&&!x.voided&&x.status!=='ANULADA').reduce((a,x)=>a+(jcpAuditNum(x?.c)||0),0);
+  const loanReceivable=pres.filter(x=>x&&!x.voided&&x.estado!=='ANULADO').reduce((a,x)=>a+Math.max(0,(jcpAuditNum(x?.c)||0)-(jcpAuditNum(x?.p)||0)-(typeof jcpLoanCapCollected==='function'?jcpLoanCapCollected(x):0)),0);
   const saleReceivable=sold.filter(x=>x&&x.status!=='permuta'&&!x.permuta&&!x.sale?.voided&&x.status!=='venta_anulada').reduce((a,x)=>a+Math.max(0,(jcpAuditNum(x?.sale?.pending)||0)-(typeof jcpColCap==='function'?jcpColCap(x?.sale?.collections):0)),0);
   // Las permutas mixtas pueden dejar una cuenta por cobrar independiente.
   // Se toma el saldo vigente de la operación, no el movimiento auxiliar, para
@@ -8706,6 +8717,7 @@ async function addVeh(){
  const cilindraje=(document.getElementById('vcilindraje')?.value||'').trim().toUpperCase();
  const placa=vplaca.value.trim().toUpperCase().replace(/\s+/g,'');
  const matricula=(document.getElementById('vmatricula')?.value||'').trim().toUpperCase();
+ const vendedor=(document.getElementById('vVendedor')?.value||'').trim().toUpperCase();
  const compra=numericValue('vcompra');
  if(!marca||!referencia||!modelo||!placa||compra<=0){alert('COMPLETA LOS DATOS DE LA COMPRA.');return;}
  if(!validatePaymentDistribution('purchase',compra))return;
@@ -8719,7 +8731,13 @@ async function addVeh(){
   const moveId='mov_compra_'+Date.now();
   const dist=applyPaymentDistribution(next,{prefix:'purchase',direction:'out',total:compra,operationType:'COMPRA VEHÍCULO',operationId:moveId,receiptNumber:receipt.number,concept:'COMPRA '+placa,date:receipt.date,createdAt:receipt.createdAt});
   receipt.snapshot.paymentDistribution=cloneAppData(dist);
-  next.veh.push({id,marca,m:marca,ref:referencia,modelo,cilindraje,pl:placa,matricula,c:compra,g:0,v:0,photo,purchaseDate:now.toISOString().slice(0,10),purchaseReceiptNumber:receipt.number});
+  next.veh.push({id,marca,m:marca,ref:referencia,modelo,cilindraje,pl:placa,matricula,vendedor,c:compra,g:0,v:0,photo,purchaseDate:now.toISOString().slice(0,10),purchaseReceiptNumber:receipt.number});
+  if(vendedor){
+   next.clientes=Array.isArray(next.clientes)?next.clientes:[];
+   if(!next.clientes.some(c=>String(c.nombre||'').trim().toUpperCase()===vendedor)){
+    next.clientes.push({id:'cli_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),nombre:vendedor,cedula:'',direccion:'',telefono:'',createdAt:now.toISOString()});
+   }
+  }
   next.mov.unshift({id:moveId,t:'gasto',subtype:'compra_vehiculo',c:'COMPRA VEHÍCULO — '+placa+' — '+marca+' '+referencia,v:compra,vehicleId:id,receiptNumber:receipt.number,paymentDistribution:dist,date:receipt.date,createdAt:receipt.createdAt,source:'vehicle_purchase',investmentMovement:true});
   data=next;save();clearVehicleForm();clearPaymentDistribution('purchase');populateVehicleSelect();document.getElementById('formVeh').style.display='none';openOperationsHub();alert('✅ '+receipt.number+' REGISTRADO.');
  }catch(e){data=before;alert('NO FUE POSIBLE REGISTRAR LA COMPRA.\n\n'+e.message);}
@@ -8730,6 +8748,7 @@ document.getElementById('vref').value="";
 document.getElementById('vmodelo').value="";
 document.getElementById('vcilindraje').value="";
 document.getElementById('vmatricula').value="";
+document.getElementById('vVendedor').value="";
 document.getElementById('vplaca').value="";
 document.getElementById('vcompra').value="";
 document.getElementById('vfoto').value="";
@@ -10947,6 +10966,21 @@ function selectPermutaClient(id){
   set('permutaClientAddress',String(c.direccion||'').toUpperCase());
   const box=document.getElementById('permutaClientSuggestions');if(box){box.innerHTML='';box.style.display='none';}
 }
+function purchaseSellerSuggestions(){
+  const input=document.getElementById('vVendedor'),box=document.getElementById('purchaseSellerSuggestions');
+  if(!input||!box)return;
+  const q=String(input.value||'').trim().toUpperCase();
+  if(!q){box.innerHTML='';box.style.display='none';return;}
+  const rows=(data.clientes||[]).filter(c=>[c.nombre,c.cedula,c.telefono].some(v=>String(v||'').toUpperCase().includes(q))).slice(0,8);
+  if(!rows.length){box.innerHTML='';box.style.display='none';return;}
+  box.innerHTML=rows.map(c=>'<button type="button" class="purchase-seller-option" data-seller-name="'+clientEsc(String(c.nombre||''))+'" style="display:block;width:100%;text-align:left;padding:10px;border:0;border-bottom:1px solid #2a2a2a;background:#111;color:#fff"><b>'+clientEsc(c.nombre||'')+'</b><br><small>'+clientEsc(c.cedula||'')+' · '+clientEsc(c.telefono||'')+'</small></button>').join('');
+  box.querySelectorAll('.purchase-seller-option').forEach(btn=>btn.addEventListener('click',()=>{
+    const name=btn.dataset.sellerName||'';
+    input.value=name;
+    box.innerHTML='';box.style.display='none';
+  }));
+  box.style.display='block';
+}
 async function savePermuta(){
   if(!requireTreasuryReady())return false;
   const saveBtn=document.getElementById('savePermutaBtn');
@@ -11770,10 +11804,10 @@ function getFinancialSnapshotV75(){
   const debt=Math.max(0,financing-debtPaid);
 
   const vehicleInvestment=data.veh.reduce((a,x)=>a+(+x.c||0)+(+x.g||0),0);
-  const otherInvestment=data.inv.reduce((a,x)=>a+(+x.c||0),0);
+  const otherInvestment=data.inv.filter(x=>x&&!x.voided&&x.status!=='ANULADA').reduce((a,x)=>a+(+x.c||0),0);
   const invested=vehicleInvestment+otherInvestment;
 
-  const loanReceivable=data.pres.reduce((a,x)=>a+Math.max(0,(+x.c||0)-(+x.p||0)-(typeof jcpLoanCapCollected==='function'?jcpLoanCapCollected(x):0)),0);
+  const loanReceivable=data.pres.filter(x=>x&&!x.voided&&x.estado!=='ANULADO').reduce((a,x)=>a+Math.max(0,(+x.c||0)-(+x.p||0)-(typeof jcpLoanCapCollected==='function'?jcpLoanCapCollected(x):0)),0);
   const saleReceivable=m.filter(x=>!x.voided&&x.t==='cuenta_por_cobrar').reduce((a,x)=>a+(+x.v||0),0);
   const receivable=loanReceivable+saleReceivable;
 
@@ -11981,7 +12015,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.40\nCuenta de nube: '+account);
+  alert('MULTI INVERSIONES JCP\nVersión instalada: 2026.09.20.42\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -13127,9 +13161,9 @@ td.in{color:#167a42;font-weight:bold}td.out{color:#b12626;font-weight:bold}.empt
     // Los cierres continúan existiendo internamente, pero no agregan un filtro adicional.
   }
   function extractRunningBalances(){
-    const movements=(typeof jcpExtractMov==='function'?jcpExtractMov():(data.mov||[])).filter(x=>x&&!x.voided&&(x.t==='ingreso'||x.t==='gasto')).map((x,index)=>({x,index,time:ts(x)})).sort((a,b)=>a.time-b.time||a.index-b.index);
+    const movements=(typeof jcpExtractMov==='function'?jcpExtractMov():(data.mov||[])).filter(x=>x&&(x.t==='ingreso'||x.t==='gasto')).map((x,index)=>({x,index,time:ts(x)})).sort((a,b)=>a.time-b.time||a.index-b.index);
     let balance=0;const map=new Map();
-    movements.forEach(({x})=>{const before=balance;balance+=x.t==='ingreso'?(+x.v||0):-(+x.v||0);map.set(x,{before,after:balance});});
+    movements.forEach(({x})=>{const before=balance;if(!x.voided){balance+=x.t==='ingreso'?(+x.v||0):-(+x.v||0);}map.set(x,{before,after:balance});});
     return map;
   }
   
@@ -13440,12 +13474,14 @@ window.renderExtractos=function(){
       return 'NO ESPECIFICADO';
     };
     const allCash=(typeof jcpExtractMov==='function'?jcpExtractMov():(data.mov||[])).filter(x=>!x.voided&&inRange(x)&&(x.t==='ingreso'||x.t==='gasto'));
+    const voidedCash=(typeof jcpExtractMov==='function'?jcpExtractMov():(data.mov||[])).filter(x=>x&&x.voided&&inRange(x)&&(x.t==='ingreso'||x.t==='gasto'));
     const categories=[...new Set(allCash.map(movementCategory))].sort(),catSel=document.getElementById('extCategoryFilter');
     if(catSel){const keep=categoryFilter;catSel.innerHTML='<option value="all">TODAS LAS CATEGORÍAS</option>'+categories.map(c=>'<option value="'+clientEsc(c)+'">'+clientEsc(c)+'</option>').join('');if([...catSel.options].some(o=>o.value===keep))catSel.value=keep;}
     const accounts=[...new Set(allCash.map(movementAccount))].sort(),accSel=document.getElementById('extAccountFilter');
     if(accSel){const keep=accountFilter;accSel.innerHTML='<option value="all">TODOS LOS MEDIOS / CUENTAS</option>'+accounts.map(c=>'<option value="'+clientEsc(c)+'">'+clientEsc(c)+'</option>').join('');if([...accSel.options].some(o=>o.value===keep))accSel.value=keep;}
 
     // La misma selección que se muestra en la tabla alimenta el resumen superior.
+    // Las sumas y los saldos solo consideran movimientos vigentes (no anulados).
     let rows=allCash.slice();
     if(flowType==='income')rows=rows.filter(x=>x.t==='ingreso');
     if(flowType==='expense')rows=rows.filter(x=>x.t==='gasto');
@@ -13460,18 +13496,29 @@ window.renderExtractos=function(){
     const inCount=document.getElementById('extInCount'),outCount=document.getElementById('extOutCount');
     if(inCount)inCount.textContent=rows.filter(x=>x.t==='ingreso').length+' movimientos';
     if(outCount)outCount.textContent=rows.filter(x=>x.t==='gasto').length+' movimientos';
-    rows.sort((a,b)=>ts(b)-ts(a));
-    const balances=extractRunningBalances();window.__extRowsV75=rows;
+
+    // Los movimientos anulados se muestran igual en el listado (en cero, marcados
+    // ANULADO) para que quede huella visible del error, pero nunca entran en las
+    // sumas ni en el saldo corrido de arriba.
+    let voidedRows=voidedCash.slice();
+    if(flowType==='income')voidedRows=voidedRows.filter(x=>x.t==='ingreso');
+    if(flowType==='expense')voidedRows=voidedRows.filter(x=>x.t==='gasto');
+    if(categoryFilter!=='all')voidedRows=voidedRows.filter(x=>movementCategory(x)===categoryFilter);
+    if(accountFilter!=='all')voidedRows=voidedRows.filter(x=>movementAccount(x)===accountFilter);
+
+    const displayRows=rows.concat(voidedRows);
+    displayRows.sort((a,b)=>ts(b)-ts(a));
+    const balances=extractRunningBalances();window.__extRowsV75=displayRows;
     const rowsEl=document.getElementById('extRows');
-    if(rowsEl)rowsEl.innerHTML=rows.length?rows.map((x,i)=>{
-      const incoming=x.t==='ingreso',cat=movementCategory(x),bal=balances.get(x)||{before:0,after:0};
-      return '<div class="ext-pro-row">'+
+    if(rowsEl)rowsEl.innerHTML=displayRows.length?displayRows.map((x,i)=>{
+      const incoming=x.t==='ingreso',cat=movementCategory(x),bal=balances.get(x)||{before:0,after:0},voided=!!x.voided;
+      return '<div class="ext-pro-row'+(voided?' ext-row-voided':'')+'">'+
         '<small class="ext-date-cell">'+
           clientEsc(x.date||'').replace(',','<br>')+
           '<span class="ext-doc-number">'+priceEsc(String(x.receiptNumber||x.receipt||x.recibo||x.documentNumber||x.numeroDocumento||''))+'</span>'+
         '</small>'+
-        '<b><span class="category">'+(incoming?'↑ ':'↓ ')+clientEsc(cat)+'</span><br>'+clientEsc(extractMovementConcept(x,cat))+'</b>'+
-        '<span class="amount '+(incoming?'in':'out')+'">'+(incoming?'+ ':'- ')+money(+x.v||0)+'</span>'+
+        '<b><span class="category">'+(incoming?'↑ ':'↓ ')+clientEsc(cat)+(voided?' · ANULADO':'')+'</span><br>'+clientEsc(extractMovementConcept(x,cat))+(voided?' — ANULADO':'')+'</b>'+
+        '<span class="amount '+(incoming?'in':'out')+'">'+(voided?money(0):(incoming?'+ ':'- ')+money(+x.v||0))+'</span>'+
         '<span class="amount">'+money(bal.before)+'</span>'+
         '<span class="amount '+(incoming?'in':'out')+'">'+money(bal.after)+'</span>'+
       '</div>';
@@ -15387,6 +15434,10 @@ function accountingDocumentCandidates(type){
   if(type==='gasto_vehiculo')return mov.filter(x=>x&&x.subtype==='vehiculos');
   if(type==='gasto_operativo')return mov.filter(x=>x&&(x.subtype==='gasto_operativo'||x.subtype==='varios'));
   if(type==='pago_obligacion')return mov.filter(x=>x&&x.subtype==='pago_deuda');
+  if(type==='financiacion')return (Array.isArray(data?.capitalOps)?data.capitalOps:[]).filter(x=>x&&String(x.type||'').trim().toLowerCase()!=='pago_deuda');
+  if(type==='prestamo_otorgado')return Array.isArray(data?.pres)?data.pres:[];
+  if(type==='inversion')return Array.isArray(data?.inv)?data.inv:[];
+  if(type==='permuta')return Array.isArray(data?.permutas)?data.permutas:[];
   if(type==='ingreso')return mov.filter(x=>x&&x.t==='ingreso');
   return mov.filter(Boolean);
 }
@@ -15401,6 +15452,33 @@ function accountingDocumentNumberOf(x){
     x?.id ??
     ''
   ).trim().toUpperCase();
+}
+
+function accountingDocumentFieldMap(type){
+  if(type==='prestamo_otorgado')return {conceptKeys:['n'],valueKeys:['c','capital']};
+  if(type==='inversion')return {conceptKeys:['n'],valueKeys:['c','capital']};
+  if(type==='permuta')return {conceptKeys:['buyer','client'],valueKeys:['difference']};
+  if(type==='financiacion')return {conceptKeys:['concept'],valueKeys:['value']};
+  return {conceptKeys:['c','concept'],valueKeys:['v','value']};
+}
+function accountingDocumentConceptOf(record,type){
+  if(type==='compra'||type==='venta'||type==='gasto_vehiculo'||type==='gasto_operativo'||type==='pago_obligacion'||type==='ingreso'){
+    return typeof extractMovementConcept==='function'?extractMovementConcept(record,record.c||''):String(record.c||'');
+  }
+  const map=accountingDocumentFieldMap(type);
+  for(const k of map.conceptKeys){if(record?.[k])return String(record[k]);}
+  return '';
+}
+function accountingDocumentValueOf(record,type){
+  const map=accountingDocumentFieldMap(type);
+  for(const k of map.valueKeys){if(record?.[k]!==undefined&&record?.[k]!==null)return +record[k]||0;}
+  return 0;
+}
+
+function accountingDocumentReceiptType(type){
+  // Tipos que ya cuentan con reversión completa de tesorería + soporte marcado
+  // ANULADO mediante voidInternalReceipt(). El resto usa la anulación simple.
+  return ({compra:'purchase',venta:'sale',gasto_vehiculo:'vehicle_expense',gasto_operativo:'operating_expense'})[type]||null;
 }
 
 function searchAccountingDocument(){
@@ -15421,48 +15499,71 @@ function searchAccountingDocument(){
   }
 
   window.__accountingSelectedDocument=record;
+  window.__accountingSelectedDocumentType=type;
 
-  const concept=typeof extractMovementConcept==='function'
-    ? extractMovementConcept(record,record.c||'')
-    : String(record.c||'');
+  const concept=accountingDocumentConceptOf(record,type);
+  const value=accountingDocumentValueOf(record,type);
+
+  const receiptType=accountingDocumentReceiptType(type);
+  const linkedReceipt=receiptType&&typeof findInternalReceipt==='function'?findInternalReceipt(accountingDocumentNumberOf(record)):null;
 
   host.innerHTML=
     '<div class="acc-document-found">'+
       '<b>'+priceEsc(accountingDocumentNumberOf(record))+'</b>'+
       '<span>'+priceEsc(concept||'SIN CONCEPTO')+'</span>'+
-      '<strong>'+money(+record.v||0)+'</strong>'+
+      '<strong>'+money(value)+'</strong>'+
     '</div>'+
     (accountingDocumentActionMode==='void'
-      ? '<label>MOTIVO DE ANULACIÓN<input id="accountingVoidReason" placeholder="INDICA EL MOTIVO"></label>'+
-        '<button type="button" onclick="voidAccountingDocument()">ANULAR DOCUMENTO</button>'
-      : '<label>CONCEPTO / DESCRIPCIÓN<input id="accountingEditConcept" value="'+priceEsc(String(record.c||''))+'"></label>'+
-        '<label>VALOR<input id="accountingEditValue" type="text" inputmode="numeric" data-money="1" value="'+String(+record.v||0)+'"></label>'+
+      ? (linkedReceipt
+          ? '<div class="unified-module-note" style="margin:10px 0">🔒 Este documento tiene soporte con reversión completa: se te pedirá la CLAVE DE SEGURIDAD y el motivo. El dinero vuelve a Tesorería y el soporte queda marcado ANULADO.</div>'+
+            '<button type="button" onclick="voidAccountingDocumentFull()">ANULAR CON REVERSIÓN COMPLETA</button>'
+          : '<label>MOTIVO DE ANULACIÓN<input id="accountingVoidReason" placeholder="INDICA EL MOTIVO"></label>'+
+            '<button type="button" onclick="voidAccountingDocument()">ANULAR DOCUMENTO</button>'
+        )
+      : '<label>CONCEPTO / DESCRIPCIÓN<input id="accountingEditConcept" value="'+priceEsc(concept)+'"></label>'+
+        '<label>VALOR<input id="accountingEditValue" type="text" inputmode="numeric" data-money="1" value="'+String(value)+'"></label>'+
         '<button type="button" onclick="modifyAccountingDocument()">GUARDAR MODIFICACIÓN</button>'
     );
 }
 
+function voidAccountingDocumentFull(){
+  const record=window.__accountingSelectedDocument;
+  if(!record)return;
+  const number=accountingDocumentNumberOf(record);
+  const ok=typeof voidInternalReceipt==='function'?voidInternalReceipt(number):false;
+  if(ok){
+    try{renderAccountingModule();}catch(e){}
+    searchAccountingDocument();
+  }
+}
+
 function modifyAccountingDocument(){
   const x=window.__accountingSelectedDocument;
+  const type=window.__accountingSelectedDocumentType||'';
   if(!x)return;
 
   const concept=(document.getElementById('accountingEditConcept')?.value||'').trim().toUpperCase();
-  const value=parseMoney(document.getElementById('accountingEditValue')?.value||'0');
+  const value=parseFormattedMoney(document.getElementById('accountingEditValue')?.value||'0');
 
   if(!concept||value<0){
     alert('REVISA LOS DATOS DEL DOCUMENTO.');
     return;
   }
 
+  const map=accountingDocumentFieldMap(type);
+  const previousConcept=accountingDocumentConceptOf(x,type);
+  const previousValue=accountingDocumentValueOf(x,type);
+
   x.auditTrail=Array.isArray(x.auditTrail)?x.auditTrail:[];
   x.auditTrail.push({
     action:'MODIFICACIÓN',
     at:new Date().toISOString(),
-    previousConcept:x.c||'',
-    previousValue:+x.v||0
+    previousConcept,
+    previousValue
   });
 
-  x.c=concept;
-  x.v=value;
+  map.conceptKeys.forEach(k=>{x[k]=concept;});
+  map.valueKeys.forEach(k=>{x[k]=value;});
   save();
 
   try{renderExtractos();}catch(e){}
@@ -15474,6 +15575,7 @@ function modifyAccountingDocument(){
 
 function voidAccountingDocument(){
   const x=window.__accountingSelectedDocument;
+  const type=window.__accountingSelectedDocumentType||'';
   if(!x)return;
 
   const reason=(document.getElementById('accountingVoidReason')?.value||'').trim().toUpperCase();
@@ -15484,17 +15586,21 @@ function voidAccountingDocument(){
 
   if(!confirm('¿CONFIRMAS LA ANULACIÓN DE ESTE DOCUMENTO?'))return;
 
+  const previousValue=accountingDocumentValueOf(x,type);
+
   x.auditTrail=Array.isArray(x.auditTrail)?x.auditTrail:[];
   x.auditTrail.push({
     action:'ANULACIÓN',
     at:new Date().toISOString(),
     reason,
-    previousValue:+x.v||0
+    previousValue
   });
 
   x.voided=true;
   x.voidedAt=new Date().toISOString();
   x.voidReason=reason;
+  if(type==='prestamo_otorgado')x.estado='ANULADO';
+  if(type==='inversion')x.status='ANULADA';
   save();
 
   try{renderExtractos();}catch(e){}
@@ -16087,7 +16193,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.40',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.42',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -18162,6 +18268,6 @@ window.jcpExtractMov=function(){
 };
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.40"></script>
+<script src="./app-update.js?v=2026.09.20.42"></script>
 </body>
 </html>
