@@ -1,7 +1,7 @@
 (()=>{
   'use strict';
 
-  const APP_VERSION='2026.09.20.46';
+  const APP_VERSION='2026.09.20.47';
   const CHECK_EVERY_MS=10*60*1000;
   let registrationRef=null;
   let banner=null;
@@ -239,7 +239,7 @@
     overlay.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:18px;font-family:Arial,sans-serif;color:#fff';
     overlay.innerHTML=`<div style="width:min(480px,100%);max-height:90vh;overflow:auto;background:#111;border:1px solid #d4af37;border-radius:18px;padding:18px;box-shadow:0 24px 70px #000">
       <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
-        <div><div style="color:#d4af37;font-weight:900;font-size:18px">MULTI INVERSIONES JCP</div><div style="color:#aaa;font-size:11px;margin-top:3px">Información de versión y sincronización</div></div>
+        <div><div style="color:#d4af37;font-weight:900;font-size:18px">COLOMBIAUTOS JP</div><div style="color:#aaa;font-size:11px;margin-top:3px">Información de versión y sincronización</div></div>
         <button id="jcpVersionClose" type="button" style="width:34px;height:34px;padding:0;border-radius:50%;border:1px solid #444;background:#222;color:#fff">×</button>
       </div>
       <div style="display:grid;gap:8px;margin-top:16px;font-size:12px">
@@ -279,7 +279,7 @@
   async function initUpdater(){
     window.JCP_APP_VERSION=APP_VERSION;
     updateMenuLabel();
-    ensureToast('MULTI INVERSIONES JCP · Versión '+APP_VERSION+' · verificando actualización…','normal',false);
+    ensureToast('COLOMBIAUTOS JP · Versión '+APP_VERSION+' · verificando actualización…','normal',false);
 
     if('serviceWorker' in navigator){
       try{
@@ -305,7 +305,7 @@
     }
 
     const result=await checkForUpdate(registrationRef);
-    if(result.status==='current')ensureToast('MULTI INVERSIONES JCP · Versión '+APP_VERSION+' · ✓ aplicación actualizada','ok',true);
+    if(result.status==='current')ensureToast('COLOMBIAUTOS JP · Versión '+APP_VERSION+' · ✓ aplicación actualizada','ok',true);
     else if(result.status==='outdated')ensureToast('Hay una versión más reciente: '+result.latest,'normal',true);
     else ensureToast('Versión '+APP_VERSION+' · no fue posible verificar la última publicada','error',true);
 
