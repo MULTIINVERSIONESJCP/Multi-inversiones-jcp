@@ -1,6 +1,6 @@
 {
-  "name": "MULTI INVERSIONES JCP",
-  "short_name": "MULTI JCP",
+  "name": "COLOMBIAUTOS JP",
+  "short_name": "ColombiAutos JP",
   "description": "Aplicación web de gestión de inversiones",
   "start_url": "./index.html",
   "scope": "./",
