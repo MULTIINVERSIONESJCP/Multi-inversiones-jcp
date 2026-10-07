@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.09.20.52</title>
+<title>COLOMBIAUTOS JP - V2026.09.20.55</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5589,9 +5589,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.52"></script>
-<script src="./jcp-sync.js?v=2026.09.20.52"></script>
-<script src="./jcp-images.js?v=2026.09.20.52"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.55"></script>
+<script src="./jcp-sync.js?v=2026.09.20.55"></script>
+<script src="./jcp-images.js?v=2026.09.20.55"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -12181,7 +12181,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.09.20.52\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.09.20.55\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -16536,7 +16536,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.52',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.55',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -16589,7 +16589,15 @@ window.openRecordCopy=function(number){
     }},
     {id:'treasury',label:'Tesorería y cuentas',sheet:'Tesorería',build:()=>({headers:['Fecha','Cuenta','Tipo','Concepto','Entrada','Salida','Soporte','Usuario'],rows:(data.treasuryMovements||[]).map(x=>{const amount=num(x,'amount','valor','value'),incoming=String(val(x,'direction','tipo')).toLowerCase()==='in';return [fmtDate(recordDate(x)),val(x,'accountName','cuenta')||'Cuenta sin nombre',incoming?'ENTRADA':'SALIDA',val(x,'concept','concepto'),incoming?amount:0,incoming?0:amount,val(x,'receiptNumber','soporte'),actor(x)]})})},
     {id:'investments',label:'Inversiones',sheet:'Inversiones',build:()=>({headers:['Fecha','Nombre','Capital','Ganancia esperada','Valor proyectado','Estado','Usuario'],rows:(data.inv||[]).map(x=>{const c=num(x,'c','capital'),g=num(x,'g','gain','ganancia');return [fmtDate(recordDate(x)),val(x,'n','nombre','name'),c,g,c+g,val(x,'status','estado')||'ACTIVA',actor(x)]})})},
-    {id:'trades',label:'Permutas',sheet:'Permutas',build:()=>({headers:['Fecha','Vehículo entregado','Vehículo recibido','Dinero de encima','Dirección','Saldo heredado','Reconocimiento','Usuario'],rows:(data.permutas||[]).map(x=>[fmtDate(recordDate(x)),val(x,'outgoingVehicle','outgoingVehicleName','vehiculoSale'),val(x,'incomingVehicle','incomingVehicleName','vehiculoEntra'),num(x,'difference','cashDifference'),val(x,'differenceDirection')==='receive'?'RECIBIDO':(val(x,'differenceDirection')==='pay'?'ENTREGADO':'SIN DIFERENCIA'),num(x,'incomingInventoryCost','inheritedInvestment'),'DIFERIDO HASTA VENTA FINAL',actor(x)])})},
+    {id:'trades',label:'Permutas',sheet:'Permutas',build:()=>({headers:['Fecha','Cliente','Vehículo entregado','Valor vehículo entregado','Vehículo recibido','Valor vehículo recibido','Dinero de encima','Dirección','Saldo heredado al vehículo recibido','Saldo pendiente por cobrar','Estado','Reconocimiento de utilidad','Usuario'],rows:(data.permutas||[]).map(x=>{
+      const out=x.outgoingVehicle||{}, inc=x.incomingVehicle||{};
+      const outText=[val(out,'marca','m'),val(out,'ref','referencia'),val(out,'modelo')].filter(Boolean).join(' ')+(val(out,'pl')?' — '+val(out,'pl'):'');
+      const incText=[val(inc,'marca','m'),val(inc,'ref','referencia'),val(inc,'modelo')].filter(Boolean).join(' ')+(val(inc,'pl')?' — '+val(inc,'pl'):'');
+      const outValue=num(out,'c')+num(out,'g');
+      const incValue=num(inc,'c')+num(inc,'g');
+      const pending=num(x,'pending');
+      return [fmtDate(val(x,'date')||recordDate(x)),val(x,'client','buyer')||'SIN REGISTRAR',outText||'SIN REGISTRAR',outValue,incText||'SIN REGISTRAR',incValue,num(x,'difference','cashDifference'),val(x,'differenceDirection')==='receive'?'RECIBIDO':(val(x,'differenceDirection')==='pay'?'ENTREGADO':'SIN DIFERENCIA'),num(x,'incomingInventoryCost','inheritedInvestment'),pending,pending>0?'PENDIENTE':'AL DÍA',x.voided?'ANULADA':'DIFERIDO HASTA VENTA FINAL',actor(x)];
+    })})},
     {id:'movements',label:'Movimientos',sheet:'Movimientos',build:()=>({headers:['Fecha','Tipo','Departamento','Concepto','Entrada','Salida','Soporte','Usuario'],rows:(data.mov||[]).map(x=>{const amount=num(x,'v','value','valor','amount'),incoming=x.t==='ingreso';return [fmtDate(recordDate(x)),cleanLabel(val(x,'t','type','tipo')),cleanLabel(val(x,'subtype','department','departamento')),val(x,'c','concept','concepto'),incoming?amount:0,incoming?0:amount,val(x,'receiptNumber','soporte'),actor(x)]})})},
     {id:'supports',label:'Soportes y comprobantes',sheet:'Soportes',build:()=>({headers:['Número','Fecha','Tipo','Departamento','Concepto','Valor','Usuario'],rows:(data.receipts||[]).map(x=>[val(x,'number','receiptNumber'),fmtDate(recordDate(x)),cleanLabel(val(x,'type','tipo')),cleanLabel(val(x,'operationType','department','departamento')),val(x,'concept','title','concepto'),num(x,'amount','valor','value'),actor(x)])})},
     {id:'history',label:'Historial de usuarios',sheet:'Historial usuarios',build:()=>({headers:['Fecha y hora','Usuario','Correo','Acción','Detalle'],rows:(data.activityLog||[]).map(x=>[fmtDate(recordDate(x)),val(x,'actorName','usuario')||'Sin usuario registrado',val(x,'actorEmail','correo'),val(x,'action','accion'),val(x,'summary','detail','detalle')])})}
@@ -17560,8 +17568,11 @@ window.openRecordCopy=function(number){
     var bg=x.createLinearGradient(0,0,W,HEAD);bg.addColorStop(0,'#050505');bg.addColorStop(.62,'#0b0b0b');bg.addColorStop(1,'#2b220b');x.fillStyle=bg;x.fillRect(0,0,W,HEAD);
     x.fillStyle='rgba(212,175,55,.14)';x.beginPath();x.moveTo(720,0);x.lineTo(W,0);x.lineTo(W,HEAD);x.lineTo(650,HEAD);x.closePath();x.fill();
     x.textAlign='left';x.fillStyle='#ffffff';x.font='italic bold 34px '+SANS;x.fillText(o.title,P+8,58);
+    var lgW=0,lgH=0;if(o.logo){var lgMaxW=230,lgMaxH=108,lgS=Math.min(lgMaxW/o.logo.width,lgMaxH/o.logo.height);lgW=o.logo.width*lgS;lgH=o.logo.height*lgS;}
+    var nmX=P+6+(lgW?lgW+24:0);
     var nm=o.name||'VEHÍCULO';
-    x.fillStyle=goldGrad(x,P,W-P);fit(x,nm,W-2*P-16,112,50,'italic bold',SANS);x.fillText(nm,P+6,158);
+    x.fillStyle=goldGrad(x,P,W-P);fit(x,nm,W-2*P-16-(lgW?lgW+24:0),112,50,'italic bold',SANS);x.fillText(nm,nmX,158);
+    if(o.logo)x.drawImage(o.logo,P,HEAD/2-lgH/2,lgW,lgH);
     if(v.modelo){
       x.fillStyle='#ffffff';x.font='italic bold 38px '+SANS;x.textAlign='center';var mt='MODELO '+v.modelo;x.fillText(mt,W/2,206);
       var hw=x.measureText(mt).width/2;x.strokeStyle=goldGrad(x,P,W-P);x.lineWidth=3;x.beginPath();x.moveTo(P+8,196);x.lineTo(W/2-hw-18,196);x.moveTo(W/2+hw+18,196);x.lineTo(W-P-8,196);x.stroke();
@@ -17955,8 +17966,9 @@ window.openRecordCopy=function(number){
     o.innerHTML='<div class="jcp-pb-top"><button type="button" class="jcp-pb-back" id="jcpPbOutBack" aria-label="Volver">'+backSvg()+'</button><div><div class="jcp-pb-kick">Publicación</div><h2>Tu imagen</h2></div></div><div class="jcp-pb-rule"></div><div class="jcp-pb-msg" id="jcpPbWait">Creando la imagen…</div><div id="jcpPbList"></div>';
     o.classList.add('open');o.scrollTop=0;
     el('jcpPbOutBack').onclick=function(){o.classList.remove('open')};
-    loadImg(firstPhoto(v)).then(function(photo){
-      var cv=drawDesign({title:cur.title,name:up(cur.name),brand:up(v.marca||v.m||''),vals:shown(),obs:shownObs(),photo:photo,S:S,noT:cur.noT,motivo:up(cur.motivo)});
+    Promise.all([loadImg(firstPhoto(v)),loadImg(typeof supportLogoSrc==='function'?supportLogoSrc():'')]).then(function(res){
+      var photo=res[0],logo=res[1];
+      var cv=drawDesign({title:cur.title,name:up(cur.name),brand:up(v.marca||v.m||''),vals:shown(),obs:shownObs(),photo:photo,logo:logo,S:S,noT:cur.noT,motivo:up(cur.motivo)});
       window.__jcpPbLast=[cv];
       return toBlob(cv).then(function(b){
         var wait=el('jcpPbWait');
@@ -18611,6 +18623,6 @@ window.jcpExtractMov=function(){
 };
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.52"></script>
+<script src="./app-update.js?v=2026.09.20.55"></script>
 </body>
 </html>
