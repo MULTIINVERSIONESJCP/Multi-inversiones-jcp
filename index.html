@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.09.20.61</title>
+<title>COLOMBIAUTOS JP - V2026.09.20.62</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5589,9 +5589,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.61"></script>
-<script src="./jcp-sync.js?v=2026.09.20.61"></script>
-<script src="./jcp-images.js?v=2026.09.20.61"></script>
+<script src="./jcp-accounting.js?v=2026.09.20.62"></script>
+<script src="./jcp-sync.js?v=2026.09.20.62"></script>
+<script src="./jcp-images.js?v=2026.09.20.62"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -12181,7 +12181,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.09.20.61\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.09.20.62\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -15808,6 +15808,12 @@ function voidAccountingDocumentGroup(){
     voidedItems.push({concept,value:previousValue,date:x.date||''});
   });
 
+  // CRÍTICO: revertir el movimiento de tesorería ligado a este soporte.
+  // Sin esto, el dinero sale de Tesorería al registrar el gasto y nunca
+  // vuelve a entrar al anularlo, aunque el gasto ya no cuente en ningún
+  // reporte — el Disponible queda permanentemente corto por ese valor.
+  try{if(typeof reverseTreasuryByReceipt==='function')reverseTreasuryByReceipt(data,number,reason);}catch(e){}
+
   // Si eran gastos de vehículo, recalcula el acumulado de cada vehículo afectado
   // (esto también libera el dinero: el disponible se calcula descontando el
   // acumulado de gastos de cada vehículo, así que al bajar ese acumulado el
@@ -15944,10 +15950,24 @@ function voidAccountingDocument(){
   x.voidReason=reason;
   if(type==='prestamo_otorgado')x.estado='ANULADO';
   if(type==='inversion')x.status='ANULADA';
+
+  // CRÍTICO: revertir el movimiento de tesorería ligado a este soporte.
+  // Sin esto, el dinero sale de Tesorería al registrar el gasto y nunca
+  // vuelve a entrar al anularlo — el Disponible queda permanentemente
+  // corto por ese valor aunque el gasto ya no cuente en ningún reporte.
+  try{if(typeof reverseTreasuryByReceipt==='function')reverseTreasuryByReceipt(data,accountingDocumentNumberOf(x),reason);}catch(e){}
+
+  if(x.vehicleId){
+    const veh=(data.veh||[]).find(v=>String(v.id)===String(x.vehicleId));
+    if(veh)try{syncVehicleExpenseTotal(veh,data);}catch(e){}
+  }
+
   save();
 
   try{renderExtractos();}catch(e){}
   try{renderAccountingModule();}catch(e){}
+  try{renderInventory();}catch(e){}
+  try{syncFinancialUiV76();}catch(e){}
 
   alert('✅ DOCUMENTO ANULADO. EL REGISTRO SE CONSERVA PARA TRAZABILIDAD.');
   searchAccountingDocument();
@@ -15989,6 +16009,72 @@ function voidAccountingDocument(){
     }catch(err){console.warn('Migración de consecutivos de financiación:',err);}
   }
   function runAfterCloudBootstrap(){setTimeout(migrateFinanceConsecutives,120);}
+  if(window.jcpCloudBootstrapReady===true)runAfterCloudBootstrap();
+  else window.addEventListener('jcp-cloud-bootstrap-ready',runAfterCloudBootstrap,{once:true});
+})();
+</script>
+
+<script id="jcp-treasury-orphan-void-repair-v1">
+(function(){
+  // CORRECCIÓN DE UNA SOLA VEZ: antes de esta versión, anular un documento
+  // desde "Registros" (voidAccountingDocument / voidAccountingDocumentGroup)
+  // marcaba el movimiento como anulado pero NUNCA revertía su salida de
+  // Tesorería. El gasto dejaba de contar en los reportes, pero el dinero
+  // nunca volvía a aparecer como disponible. Esta rutina detecta esos
+  // recibos (todos sus movimientos están anulados, pero su movimiento de
+  // tesorería sigue activo) y aplica la reversión que debió hacerse en su
+  // momento. Es segura de ejecutar en cada arranque: un recibo ya reparado
+  // ya tiene su reversión registrada, así que no vuelve a tocarse.
+  function repairOrphanedTreasuryVoids(){
+    try{
+      if(typeof data==='undefined'||!data)return;
+      if(!Array.isArray(data.mov)||!Array.isArray(data.treasuryMovements))return;
+      if(typeof reverseTreasuryByReceipt!=='function')return;
+
+      const byReceipt={};
+      data.mov.forEach(m=>{
+        if(!m||m.isReversal||!m.receiptNumber)return;
+        const key=String(m.receiptNumber);
+        (byReceipt[key]=byReceipt[key]||[]).push(m);
+      });
+
+      const fixedReceipts=[];
+      let fixedTotal=0;
+
+      Object.keys(byReceipt).forEach(number=>{
+        const movs=byReceipt[number];
+        if(!movs.length||!movs.every(m=>m.voided))return;
+        const openTreasury=(data.treasuryMovements||[]).filter(m=>
+          m&&String(m.receiptNumber||'')===number&&!m.voided&&!m.isReversal
+        );
+        if(!openTreasury.length)return;
+        try{
+          reverseTreasuryByReceipt(data,number,'CORRECCIÓN AUTOMÁTICA — ANULACIÓN SIN REVERSO DE TESORERÍA');
+          fixedTotal+=openTreasury.reduce((s,m)=>s+(Number(m.amount)||0),0);
+          fixedReceipts.push(number);
+        }catch(e){console.error('No se pudo reparar la tesorería del recibo '+number,e);}
+      });
+
+      if(fixedReceipts.length){
+        if(typeof save==='function')save();
+        try{renderExtractos();}catch(e){}
+        try{renderTreasuryModule();}catch(e){}
+        try{renderCashCapital();}catch(e){}
+        try{syncFinancialUiV76();}catch(e){}
+        try{render();}catch(e){}
+        setTimeout(()=>{
+          alert(
+            '🔧 CORRECCIÓN AUTOMÁTICA APLICADA\n\n'+
+            'Se encontraron '+fixedReceipts.length+' recibo(s) anulado(s) cuyo dinero nunca '+
+            'había vuelto a quedar disponible: '+fixedReceipts.join(', ')+'.\n\n'+
+            'Total devuelto al disponible: '+(typeof money==='function'?money(fixedTotal):fixedTotal)+'\n\n'+
+            'Este ajuste queda registrado en Tesorería como una reversión, igual que cualquier anulación normal.'
+          );
+        },300);
+      }
+    }catch(err){console.warn('Reparación de tesorería huérfana:',err);}
+  }
+  function runAfterCloudBootstrap(){setTimeout(repairOrphanedTreasuryVoids,200);}
   if(window.jcpCloudBootstrapReady===true)runAfterCloudBootstrap();
   else window.addEventListener('jcp-cloud-bootstrap-ready',runAfterCloudBootstrap,{once:true});
 })();
@@ -16536,7 +16622,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.61',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.09.20.62',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -18637,6 +18723,6 @@ window.jcpExtractMov=function(){
 };
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.61"></script>
+<script src="./app-update.js?v=2026.09.20.62"></script>
 </body>
 </html>
