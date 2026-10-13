@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.09.20.62</title>
+<title>COLOMBIAUTOS JP - V2026.10.12.63</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4194,6 +4194,40 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </div>
 </div>
+<div class="card" id="homeTasks" onclick="openTasksModule()" style="margin-top:12px;cursor:pointer">
+<div style="display:flex;align-items:center;gap:12px">
+<span style="font-size:30px;line-height:1">✅</span>
+<div>
+<h3 style="margin:0">Lista de tareas</h3>
+<div class="label" id="homeTasksLabel" style="margin-top:5px">Pendientes del día a día</div>
+</div>
+</div>
+</div>
+</section>
+<section class="view" id="tareas">
+<div class="unified-module-header">
+<div class="unified-module-title-row"><div class="unified-module-brand">
+<img alt="COLOMBIAUTOS JP" class="unified-module-logo" id="tareasLogo" src="logo-3.jpg"/>
+<h2 class="unified-module-title"><span class="unified-module-icon">✅</span> LISTA DE TAREAS</h2>
+</div></div>
+<div class="unified-module-gold-line"></div>
+<div class="unified-module-note">💡 Agrega tareas y márcalas al cumplirlas para verlas tachadas.</div>
+</div>
+<div class="jcp-tasks-card">
+<div class="jcp-tasks-head"><b>MIS TAREAS</b><span id="tasksCount">0 de 0 completadas</span></div>
+<div class="jcp-tasks-bar"><div id="tasksBar"></div></div>
+<div class="jcp-tasks-add">
+<input id="taskInput" autocomplete="off" maxlength="200" placeholder="Llamar al contador" onkeydown="if(event.key==='Enter')addTask()" oninput="document.getElementById('taskError').textContent=''"/>
+<button onclick="addTask()" type="button">＋ AGREGAR</button>
+</div>
+<div class="jcp-tasks-error" id="taskError"></div>
+<div class="jcp-tasks-filter">
+<button class="active" data-task-filter="all" onclick="setTaskFilter('all')" type="button">TODAS</button>
+<button data-task-filter="pending" onclick="setTaskFilter('pending')" type="button">PENDIENTES</button>
+<button data-task-filter="done" onclick="setTaskFilter('done')" type="button">COMPLETADAS</button>
+</div>
+<div id="tasksList"></div>
+</div>
 </section>
 <section class="view" id="vehiculos">
 <div style="margin-bottom:0">
@@ -4221,10 +4255,11 @@ body.jcp-custom-theme .database-actions-list button{
 </div><div class="paydist-summary"><div><span>VALOR TOTAL</span><b id="purchasePayTotal">$0</b></div><div><span>DISTRIBUIDO</span><b id="purchasePayDistributed">$0</b></div><div class="bad" id="purchasePayPendingBox"><span>FALTA</span><b id="purchasePayPending">$0</b></div></div><div class="paydist-hint">La operación se habilita únicamente cuando la distribución coincide exactamente con el valor total.</div></div>
 <input id="vplaca" placeholder="Placa"/>
 <input id="vmatricula" placeholder="Matrícula de (ej. Bogotá)" type="text"/>
-<label class="full" style="position:relative">
-  <input id="vVendedor" placeholder="Nombre del vendedor" autocomplete="off" oninput="purchaseSellerSuggestions()" style="width:100%"/>
+<label class="full" style="position:relative;display:block">
+  <input id="vVendedor" placeholder="🔍 Buscar proveedor" autocomplete="off" oninput="purchaseSellerInput()" onfocus="purchaseSellerSuggestions()" onblur="setTimeout(hidePurchaseSellerSuggestions,200)" style="width:100%"/>
   <div class="client-suggestions" id="purchaseSellerSuggestions" style="display:none"></div>
 </label>
+<small class="full" id="purchaseSellerHint" style="display:block;margin-top:-4px;color:#8a8a8a;font-size:11px">Si el proveedor no existe, créalo primero en Base de datos.</small>
 <label class="full" style="color:#a8a8a8;font-size:13px">📷 Foto del vehículo
   <input accept="image/*" id="vfoto" style="margin-top:6px" type="file"/>
 </label>
@@ -4761,7 +4796,6 @@ body.jcp-custom-theme .database-actions-list button{
 <button class="cf-action" onclick="show('detalleCapital')"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="capital"></span><div><b>Capital</b><small>Consulta origen y movimientos del capital</small></div></button>
 <button class="cf-action" onclick="show('extractos')"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="extracts"></span><div><b>Extractos</b><small>Gastos operacionales y resultados</small></div></button>
 <button class="cf-action" onclick="show('carteraCaja')"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="receivable"></span><div><b>Cuentas por cobrar</b><small>Ventas a crédito y préstamos pendientes</small></div></button>
-<button class="cf-action" onclick="openRecaudo()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="receipt"></span><div><b>Recaudo</b><small>Cobra abonos y saldos pendientes</small></div></button>
 <button class="cf-action" onclick="openObligationsModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="loans"></span><div><b>Obligaciones</b><small>Financiaciones, saldos y pagos pendientes</small></div></button>
 <button class="cf-action" onclick="openUtilitiesModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="capital"></span><div><b>Utilidades</b><small>Utilidad acumulada, retiros e historial</small></div></button>
 
@@ -5223,12 +5257,13 @@ body.jcp-custom-theme .database-actions-list button{
 <h2 class="unified-module-title"><span class="unified-module-icon">💳</span> CUENTAS POR COBRAR</h2>
 </div></div>
 <div class="unified-module-gold-line"></div>
-<div class="unified-module-note">💡 Elige qué cuentas por cobrar quieres consultar.</div>
+<div class="unified-module-note">💡 Consulta tus cuentas por cobrar o registra un recaudo.</div>
 </div>
 <div class="cf-actions">
 <div class="cf-action-grid">
 <button class="cf-action" onclick="show('carteraVehiculos')" type="button"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="vehicle"></span><div><b>Vehículos</b></div></button>
 <button class="cf-action" onclick="show('carteraPrestamos')" type="button"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="loans"></span><div><b>Préstamos</b></div></button>
+<button class="cf-action" onclick="openRecaudo()" type="button"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="receipt"></span><div><b>Recaudo</b></div></button>
 </div>
 </div>
 </section>
@@ -5589,9 +5624,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.09.20.62"></script>
-<script src="./jcp-sync.js?v=2026.09.20.62"></script>
-<script src="./jcp-images.js?v=2026.09.20.62"></script>
+<script src="./jcp-accounting.js?v=2026.10.12.63"></script>
+<script src="./jcp-sync.js?v=2026.10.12.63"></script>
+<script src="./jcp-images.js?v=2026.10.12.63"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -5659,6 +5694,7 @@ function normalizeCloudData(obj){
     treasuryConfig:(d.treasuryConfig&&typeof d.treasuryConfig==='object')?d.treasuryConfig:{initialized:false},
     activityLog:Array.isArray(d.activityLog)?d.activityLog:[],
     settings:(d.settings&&typeof d.settings==='object'&&!Array.isArray(d.settings))?d.settings:{},
+    tareas:Array.isArray(d.tareas)?d.tareas.filter(t=>t&&t.id):[],
     _sync:{
       rev:Number(sync.rev||0),
       updatedAt:String(sync.updatedAt||''),
@@ -6056,7 +6092,7 @@ function jcpWriteLocalSnapshot(snapshot){
 // FUSIÓN AUTOMÁTICA 2026-09-19: si otro dispositivo guardó primero y ambos
 // tocaron registros distintos, se combinan por id. Si tocaron el mismo
 // registro, o cualquier validación falla, se conserva el aviso manual.
-const JCP_MERGE_KEYS=['veh','sold','clientes','pres','inv','mov','permutas','capitalOps','cashClosures','receipts','treasuryAccounts','treasuryMovements'];
+const JCP_MERGE_KEYS=['veh','sold','clientes','pres','inv','mov','permutas','capitalOps','cashClosures','receipts','treasuryAccounts','treasuryMovements','tareas'];
 async function jcpMergeOnConflict({request,central}){
   try{
     const baseRaw=window.jcpMergeBase;
@@ -6876,7 +6912,7 @@ function jcpActivityDelta(before,after){
     veh:'vehículos',sold:'ventas',clientes:'clientes',pres:'préstamos',inv:'inversiones',
     mov:'movimientos',permutas:'permutas',capitalOps:'operaciones de capital',
     cashClosures:'cierres de caja',receipts:'soportes',treasuryAccounts:'cuentas de tesorería',
-    treasuryMovements:'movimientos de tesorería'
+    treasuryMovements:'movimientos de tesorería',tareas:'tareas'
   };
   const areas=[];
   for(const key of Object.keys(labels)){
@@ -7318,7 +7354,7 @@ function show(id){
       capitalFinanciacion:'capitalFinLogo',pagoObligaciones:'pagoObligLogo',nuevaFinanciacion:'nuevaFinLogo',
       obligacionesPendientes:'obligPendLogo',cierreCaja:'cierreCajaLogo',historialFinanciero:'histFinLogo',
       historialCapitalFinanciacion:'capitalFinHistLogo',carteraCaja:'carteraCajaLogo',carteraVehiculos:'carteraVehLogo',carteraPrestamos:'carteraPresLogo',
-      historialRetiroGanancia:'profitWithdrawalHistoryLogo'
+      historialRetiroGanancia:'profitWithdrawalHistoryLogo',tareas:'tareasLogo'
     };
     if(src&&logoMap[id]){
       const dst=document.getElementById(logoMap[id]);
@@ -7956,6 +7992,33 @@ function reversalMovement(base,flow,subtype,concept,value,extra={}){
 }
 function markMovementVoided(m,number,reason){
   if(!m)return;m.voided=true;m.receiptStatus='ANULADO';m.voidedReceiptNumber=number;m.voidedReason=reason;m.voidedAt=new Date().toISOString();
+}
+// Toda anulación de un gasto debe dejar su contrapartida en movimientos, no solo en
+// tesorería. Algunas rutas (Registros / documentos contables y la reparación automática)
+// devolvían el dinero en tesorería sin crear el reverso del gasto, y el libro diario
+// quedaba descuadrado frente a tesorería. Esta rutina crea el reverso que falte.
+const JCP_REVERSAL_SUBTYPE={vehiculos:'reverso_gasto_vehiculo',gasto_operativo:'reverso_gasto_operativo',varios:'reverso_gasto_operativo',compra_vehiculo:'reverso_compra_vehiculo'};
+function jcpEnsureMovementReversals(state){
+  if(!state||!Array.isArray(state.mov))return [];
+  const reversed=new Set(state.mov.filter(x=>x&&x.isReversal&&x.reversalOf).map(x=>String(x.reversalOf)));
+  const treasuryReversed=new Set((state.treasuryMovements||[]).filter(t=>t&&t.isReversal&&t.receiptNumber).map(t=>String(t.receiptNumber)));
+  const created=[];
+  state.mov.slice().forEach(m=>{
+    if(!m||!m.id||!m.voided||m.isReversal||m.t!=='gasto')return;
+    const sub=JCP_REVERSAL_SUBTYPE[String(m.subtype||'').toLowerCase()];
+    const number=String(m.receiptNumber||'');
+    if(!sub||!number||reversed.has(String(m.id))||!treasuryReversed.has(number))return;
+    const at=m.voidedAt||new Date().toISOString();
+    const rev=reversalMovement(m,'ingreso',sub,'REVERSIÓN '+number+' — '+(m.c||'GASTO'),m.v,{
+      vehicleId:String(m.vehicleId||''),receiptNumber:number,reversalOf:m.id,
+      expenseOperationId:m.expenseOperationId||undefined,
+      createdAt:at,date:new Date(at).toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),
+      autoRepairedReversal:true
+    });
+    if(rev.expenseOperationId===undefined)delete rev.expenseOperationId;
+    state.mov.unshift(rev);reversed.add(String(m.id));created.push(rev);
+  });
+  return created;
 }
 function receiptVehicleExpenseTotal(rec,state=data){
   // RC identifica exclusivamente la compra del vehículo.
@@ -8747,7 +8810,12 @@ async function addVeh(){
  const cilindraje=(document.getElementById('vcilindraje')?.value||'').trim().toUpperCase();
  const placa=vplaca.value.trim().toUpperCase().replace(/\s+/g,'');
  const matricula=(document.getElementById('vmatricula')?.value||'').trim().toUpperCase();
- const vendedor=(document.getElementById('vVendedor')?.value||'').trim().toUpperCase();
+ const vendedorInput=document.getElementById('vVendedor');
+ const vendedorTyped=(vendedorInput?.value||'').trim().toUpperCase();
+ const vendedorId=String(vendedorInput?.dataset.sellerId||'');
+ const vendedorRec=vendedorId?(data.clientes||[]).find(c=>String(c.id||'')===vendedorId):null;
+ if(vendedorTyped&&!vendedorRec){alert('SELECCIONA EL PROVEEDOR DE LA LISTA DE LA BASE DE DATOS. SI NO EXISTE, CRÉALO PRIMERO EN BASE DE DATOS.');vendedorInput?.focus();return;}
+ const vendedor=vendedorRec?String(vendedorRec.nombre||'').trim().toUpperCase():'';
  const compra=numericValue('vcompra');
  if(!marca||!referencia||!modelo||!placa||compra<=0){alert('COMPLETA LOS DATOS DE LA COMPRA.');return;}
  if(!validatePaymentDistribution('purchase',compra))return;
@@ -8761,13 +8829,7 @@ async function addVeh(){
   const moveId='mov_compra_'+Date.now();
   const dist=applyPaymentDistribution(next,{prefix:'purchase',direction:'out',total:compra,operationType:'COMPRA VEHÍCULO',operationId:moveId,receiptNumber:receipt.number,concept:'COMPRA '+placa,date:receipt.date,createdAt:receipt.createdAt});
   receipt.snapshot.paymentDistribution=cloneAppData(dist);
-  next.veh.push({id,marca,m:marca,ref:referencia,modelo,cilindraje,pl:placa,matricula,vendedor,c:compra,g:0,v:0,photo,purchaseDate:now.toISOString().slice(0,10),purchaseReceiptNumber:receipt.number});
-  if(vendedor){
-   next.clientes=Array.isArray(next.clientes)?next.clientes:[];
-   if(!next.clientes.some(c=>String(c.nombre||'').trim().toUpperCase()===vendedor)){
-    next.clientes.push({id:'cli_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),nombre:vendedor,cedula:'',direccion:'',telefono:'',createdAt:now.toISOString()});
-   }
-  }
+  next.veh.push({id,marca,m:marca,ref:referencia,modelo,cilindraje,pl:placa,matricula,vendedor,vendedorId:vendedorRec?vendedorId:'',c:compra,g:0,v:0,photo,purchaseDate:now.toISOString().slice(0,10),purchaseReceiptNumber:receipt.number});
   next.mov.unshift({id:moveId,t:'gasto',subtype:'compra_vehiculo',c:'COMPRA VEHÍCULO — '+placa+' — '+marca+' '+referencia,v:compra,vehicleId:id,receiptNumber:receipt.number,paymentDistribution:dist,date:receipt.date,createdAt:receipt.createdAt,source:'vehicle_purchase',investmentMovement:true});
   data=next;save();clearVehicleForm();clearPaymentDistribution('purchase');populateVehicleSelect();document.getElementById('formVeh').style.display='none';openOperationsHub();alert('✅ '+receipt.number+' REGISTRADO.');
  }catch(e){data=before;alert('NO FUE POSIBLE REGISTRAR LA COMPRA.\n\n'+e.message);}
@@ -8778,7 +8840,7 @@ document.getElementById('vref').value="";
 document.getElementById('vmodelo').value="";
 document.getElementById('vcilindraje').value="";
 document.getElementById('vmatricula').value="";
-document.getElementById('vVendedor').value="";
+document.getElementById('vVendedor').value="";document.getElementById('vVendedor').dataset.sellerId="";document.getElementById('vVendedor').style.borderColor="";
 document.getElementById('vplaca').value="";
 document.getElementById('vcompra').value="";
 document.getElementById('vfoto').value="";
@@ -11132,18 +11194,48 @@ function selectPermutaClient(id){
   set('permutaClientAddress',String(c.direccion||'').toUpperCase());
   const box=document.getElementById('permutaClientSuggestions');if(box){box.innerHTML='';box.style.display='none';}
 }
+function purchaseSellerFrequency(){
+  const counts={};
+  const add=v=>{if(!v)return;const k=v.vendedorId?'id:'+v.vendedorId:'n:'+String(v.vendedor||'').trim().toUpperCase();if(k==='n:')return;counts[k]=(counts[k]||0)+1;};
+  (data.veh||[]).forEach(add);(data.sold||[]).forEach(add);
+  return c=>(counts['id:'+String(c.id||'')]||0)+(counts['n:'+String(c.nombre||'').trim().toUpperCase()]||0);
+}
+function purchaseSellerOptionHtml(c,freq){
+  return '<button type="button" class="purchase-seller-option" data-seller-id="'+clientEsc(String(c.id||''))+'" style="display:block;width:100%;text-align:left;padding:10px;border:0;border-bottom:1px solid #2a2a2a;background:#111;color:#fff"><b>'+clientEsc(c.nombre||'')+'</b>'+(freq?'<span style="float:right;color:#d8aa32;font-size:11px">'+freq+' compra'+(freq===1?'':'s')+'</span>':'')+'<br><small>'+clientEsc(c.cedula||'')+' · '+clientEsc(c.telefono||'')+'</small></button>';
+}
+function purchaseSellerInput(){
+  const input=document.getElementById('vVendedor');
+  if(input){input.dataset.sellerId='';input.style.borderColor='';}
+  purchaseSellerSuggestions();
+}
+function hidePurchaseSellerSuggestions(){
+  const box=document.getElementById('purchaseSellerSuggestions');if(box){box.innerHTML='';box.style.display='none';}
+}
 function purchaseSellerSuggestions(){
   const input=document.getElementById('vVendedor'),box=document.getElementById('purchaseSellerSuggestions');
   if(!input||!box)return;
   const q=String(input.value||'').trim().toUpperCase();
-  if(!q){box.innerHTML='';box.style.display='none';return;}
-  const rows=(data.clientes||[]).filter(c=>[c.nombre,c.cedula,c.telefono].some(v=>String(v||'').toUpperCase().includes(q))).slice(0,8);
-  if(!rows.length){box.innerHTML='';box.style.display='none';return;}
-  box.innerHTML=rows.map(c=>'<button type="button" class="purchase-seller-option" data-seller-name="'+clientEsc(String(c.nombre||''))+'" style="display:block;width:100%;text-align:left;padding:10px;border:0;border-bottom:1px solid #2a2a2a;background:#111;color:#fff"><b>'+clientEsc(c.nombre||'')+'</b><br><small>'+clientEsc(c.cedula||'')+' · '+clientEsc(c.telefono||'')+'</small></button>').join('');
-  box.querySelectorAll('.purchase-seller-option').forEach(btn=>btn.addEventListener('click',()=>{
-    const name=btn.dataset.sellerName||'';
-    input.value=name;
-    box.innerHTML='';box.style.display='none';
+  const all=(data.clientes||[]).filter(c=>c&&String(c.nombre||'').trim());
+  const freqOf=purchaseSellerFrequency();
+  let html='';
+  if(!q){
+    const top=all.map(c=>({c,f:freqOf(c)})).filter(x=>x.f>0).sort((a,b)=>b.f-a.f).slice(0,5);
+    if(!top.length){hidePurchaseSellerSuggestions();return;}
+    html='<div style="padding:8px 10px 4px;color:#d8aa32;font-size:11px;background:#0d0d0d">FRECUENTES</div>'+top.map(x=>purchaseSellerOptionHtml(x.c,x.f)).join('');
+  }else{
+    if(input.dataset.sellerId){hidePurchaseSellerSuggestions();return;}
+    const rows=all.filter(c=>[c.nombre,c.cedula,c.telefono].some(v=>String(v||'').toUpperCase().includes(q)))
+      .map(c=>({c,f:freqOf(c)})).sort((a,b)=>b.f-a.f).slice(0,8);
+    html=rows.length?rows.map(x=>purchaseSellerOptionHtml(x.c,x.f)).join(''):'<div style="padding:10px;color:#a8a8a8;font-size:12px;background:#111">No está en la base de datos. Créalo primero en Base de datos.</div>';
+  }
+  box.innerHTML=html;
+  box.querySelectorAll('.purchase-seller-option').forEach(btn=>btn.addEventListener('mousedown',ev=>{
+    ev.preventDefault();
+    const c=(data.clientes||[]).find(x=>String(x.id||'')===String(btn.dataset.sellerId||''));if(!c)return;
+    input.value=String(c.nombre||'').toUpperCase();
+    input.dataset.sellerId=String(c.id||'');
+    input.style.borderColor='#d8aa32';
+    hidePurchaseSellerSuggestions();
   }));
   box.style.display='block';
 }
@@ -12059,6 +12151,7 @@ function syncFinancialUiV76(){
 }
 
 function render(){
+  try{if(typeof renderTasks==='function')renderTasks();}catch(e){}
 // La tabla de clientes también se refresca con cada guardado, para que un cliente
 // recién registrado aparezca inmediatamente sin tener que salir del módulo.
 renderClientes();
@@ -12181,7 +12274,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.09.20.62\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.12.63\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -14374,6 +14467,7 @@ function globalSearchModules(){
     {type:'MÓDULO',title:'Retiro de ganancia',meta:'Historial de retiros de utilidad',action:"show('historialRetiroGanancia')"},
     {type:'MÓDULO',title:'Extractos',meta:'Movimientos financieros',action:"show('extractos')"},
     {type:'MÓDULO',title:'Base de datos',meta:'Clientes registrados',action:"show('clientes')"},
+    {type:'MÓDULO',title:'Lista de tareas',meta:'Pendientes y tareas cumplidas',action:"openTasksModule()"},
     {type:'MÓDULO',title:'Préstamos',meta:'Préstamos y pagos',action:"openLoanModule()"}
   ];
 }
@@ -15813,6 +15907,7 @@ function voidAccountingDocumentGroup(){
   // vuelve a entrar al anularlo, aunque el gasto ya no cuente en ningún
   // reporte — el Disponible queda permanentemente corto por ese valor.
   try{if(typeof reverseTreasuryByReceipt==='function')reverseTreasuryByReceipt(data,number,reason);}catch(e){}
+  try{jcpEnsureMovementReversals(data);}catch(e){console.error(e);}
 
   // Si eran gastos de vehículo, recalcula el acumulado de cada vehículo afectado
   // (esto también libera el dinero: el disponible se calcula descontando el
@@ -15956,6 +16051,7 @@ function voidAccountingDocument(){
   // vuelve a entrar al anularlo — el Disponible queda permanentemente
   // corto por ese valor aunque el gasto ya no cuente en ningún reporte.
   try{if(typeof reverseTreasuryByReceipt==='function')reverseTreasuryByReceipt(data,accountingDocumentNumberOf(x),reason);}catch(e){}
+  try{jcpEnsureMovementReversals(data);}catch(e){console.error(e);}
 
   if(x.vehicleId){
     const veh=(data.veh||[]).find(v=>String(v.id)===String(x.vehicleId));
@@ -16055,6 +16151,17 @@ function voidAccountingDocument(){
         }catch(e){console.error('No se pudo reparar la tesorería del recibo '+number,e);}
       });
 
+      let movFixed=[];
+      try{if(typeof jcpEnsureMovementReversals==='function')movFixed=jcpEnsureMovementReversals(data);}catch(e){console.error('No se pudieron crear los reversos de gastos anulados',e);}
+      if(movFixed.length&&!fixedReceipts.length){
+        try{if(typeof save==='function')save();}catch(e){console.warn('Reverso contable pendiente de guardar:',e);return;}
+        try{renderExtractos();}catch(e){}
+        try{renderAccountingModule();}catch(e){}
+        try{render();}catch(e){}
+        const nums=[...new Set(movFixed.map(m=>m.receiptNumber))];
+        setTimeout(()=>alert('🔧 CORRECCIÓN CONTABLE APLICADA\n\nSe registró el reverso contable de '+nums.length+' gasto(s) anulado(s) que solo se habían reversado en tesorería: '+nums.join(', ')+'.\n\nEl libro diario y tesorería quedan conciliados.'),300);
+        return;
+      }
       if(fixedReceipts.length){
         if(typeof save==='function')save();
         try{renderExtractos();}catch(e){}
@@ -16622,7 +16729,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.09.20.62',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.10.12.63',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -18723,6 +18830,70 @@ window.jcpExtractMov=function(){
 };
 })();
 </script>
-<script src="./app-update.js?v=2026.09.20.62"></script>
+<style>
+#tareas .jcp-tasks-card{max-width:680px;margin:16px auto 0;background:#111;border:1px solid #3a3320;border-radius:16px;padding:18px}
+#tareas .jcp-tasks-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+#tareas .jcp-tasks-head b{color:#fff;font-size:16px}
+#tareas .jcp-tasks-head span{color:#a8a8a8;font-size:12px}
+#tareas .jcp-tasks-bar{height:6px;background:#2a2a2a;border-radius:4px;margin:12px 0 16px;overflow:hidden}
+#tareas .jcp-tasks-bar div{height:100%;width:0;background:#d8aa32;transition:width .25s}
+#tareas .jcp-tasks-add{display:flex;gap:8px}
+#tareas .jcp-tasks-add input{flex:1;min-width:0}
+#tareas .jcp-tasks-add button{white-space:nowrap;background:#d8aa32;color:#111;border:0;border-radius:10px;padding:0 16px;font-weight:700}
+#tareas .jcp-tasks-error{color:#ff6b6b;font-size:12px;min-height:16px;margin-top:4px}
+#tareas .jcp-tasks-filter{display:flex;gap:8px;margin:8px 0 6px;flex-wrap:wrap}
+#tareas .jcp-tasks-filter button{background:#151515;color:#d0d0d0;border:1px solid #333;border-radius:10px;padding:8px 14px;font-size:12px}
+#tareas .jcp-tasks-filter button.active{border-color:#d8aa32;color:#d8aa32}
+#tareas .jcp-task-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #222}
+#tareas .jcp-task-row:last-child{border-bottom:0}
+#tareas .jcp-task-row input[type=checkbox]{width:20px;height:20px;accent-color:#d8aa32;flex:0 0 auto;margin:0}
+#tareas .jcp-task-text{flex:1;color:#fff;font-size:14px;word-break:break-word;cursor:pointer}
+#tareas .jcp-task-row.done .jcp-task-text{text-decoration:line-through;color:#777}
+#tareas .jcp-task-del{background:transparent;border:1px solid #333;color:#d0d0d0;border-radius:8px;width:36px;height:36px;flex:0 0 auto}
+#tareas .jcp-tasks-empty{color:#8a8a8a;font-size:13px;padding:16px 0;text-align:center}
+</style>
+<script>
+(function(){
+  var taskFilter='all';
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function list(){return Array.isArray(data.tareas)?data.tareas:[]}
+  function persist(mutate){
+    var before=cloneAppData(data);
+    try{data.tareas=Array.isArray(data.tareas)?data.tareas:[];mutate(data.tareas);save();return true}
+    catch(e){data=before;alert('NO FUE POSIBLE GUARDAR LA TAREA.\n\n'+(e&&e.message||e));return false}
+    finally{renderTasks()}
+  }
+  window.renderTasks=function(){
+    var all=list(),done=all.filter(function(t){return t.done}).length;
+    var c=document.getElementById('tasksCount');if(c)c.textContent=done+' de '+all.length+' completadas';
+    var b=document.getElementById('tasksBar');if(b)b.style.width=(all.length?Math.round(done/all.length*100):0)+'%';
+    var h=document.getElementById('homeTasksLabel');if(h){var p=all.length-done;h.textContent=p?(p+' pendiente'+(p===1?'':'s')):'Pendientes del día a día'}
+    document.querySelectorAll('#tareas [data-task-filter]').forEach(function(x){x.classList.toggle('active',x.dataset.taskFilter===taskFilter)});
+    var box=document.getElementById('tasksList');if(!box)return;
+    var rows=all.filter(function(t){return taskFilter==='all'||(taskFilter==='done'?t.done:!t.done)});
+    if(!rows.length){box.innerHTML='<div class="jcp-tasks-empty">'+(all.length?'No hay tareas en esta vista.':'Agrega tu primera tarea.')+'</div>';return}
+    box.innerHTML=rows.map(function(t){var id=esc(t.id);return '<div class="jcp-task-row'+(t.done?' done':'')+'"><input type="checkbox" aria-label="Marcar como cumplida" '+(t.done?'checked':'')+' onchange="toggleTask(\''+id+'\')"><span class="jcp-task-text" onclick="toggleTask(\''+id+'\')">'+esc(t.text)+'</span><button class="jcp-task-del" aria-label="Eliminar tarea" onclick="deleteTask(\''+id+'\')" type="button">🗑</button></div>'}).join('');
+  };
+  window.openTasksModule=function(){show('tareas');renderTasks()};
+  window.setTaskFilter=function(f){taskFilter=f;renderTasks()};
+  window.addTask=function(){
+    var input=document.getElementById('taskInput'),err=document.getElementById('taskError');
+    var text=String(input&&input.value||'').trim();
+    if(!text){if(err)err.textContent='Escribe la tarea primero.';return}
+    var now=new Date().toISOString();
+    if(persist(function(arr){arr.unshift({id:'task_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),text:text,done:false,createdAt:now})})){input.value='';if(taskFilter==='done')taskFilter='all';renderTasks()}
+  };
+  window.toggleTask=function(id){
+    persist(function(arr){var t=arr.find(function(x){return String(x.id)===String(id)});if(t){t.done=!t.done;t.doneAt=t.done?new Date().toISOString():''}});
+  };
+  window.deleteTask=function(id){
+    var t=list().find(function(x){return String(x.id)===String(id)});if(!t)return;
+    if(!confirm('¿ELIMINAR LA TAREA "'+String(t.text).toUpperCase()+'"?'))return;
+    persist(function(arr){var i=arr.findIndex(function(x){return String(x.id)===String(id)});if(i>=0)arr.splice(i,1)});
+  };
+  try{setTimeout(function(){try{renderTasks()}catch(e){}},1500)}catch(e){}
+})();
+</script>
+<script src="./app-update.js?v=2026.10.12.63"></script>
 </body>
 </html>
