@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.10.12.63</title>
+<title>COLOMBIAUTOS JP - V2026.10.13.65</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4788,20 +4788,16 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </div>
 <div class="unified-module-gold-line"></div>
-<div class="unified-module-note">💡 Finanzas concentra capital, obligaciones, cuentas por cobrar, extractos, efectivo y cierre de caja.</div>
+<div class="unified-module-note">💡 Finanzas concentra cuentas por cobrar, obligaciones, utilidades y contabilidad.</div>
 </div>
 <div class="cf-actions">
 
 <div class="cf-action-grid">
-<button class="cf-action" onclick="show('detalleCapital')"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="capital"></span><div><b>Capital</b><small>Consulta origen y movimientos del capital</small></div></button>
-<button class="cf-action" onclick="show('extractos')"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="extracts"></span><div><b>Extractos</b><small>Gastos operacionales y resultados</small></div></button>
 <button class="cf-action" onclick="show('carteraCaja')"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="receivable"></span><div><b>Cuentas por cobrar</b><small>Ventas a crédito y préstamos pendientes</small></div></button>
 <button class="cf-action" onclick="openObligationsModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="loans"></span><div><b>Obligaciones</b><small>Financiaciones, saldos y pagos pendientes</small></div></button>
 <button class="cf-action" onclick="openUtilitiesModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="capital"></span><div><b>Utilidades</b><small>Utilidad acumulada, retiros e historial</small></div></button>
 
-<button class="cf-action" onclick="show('cierreCaja')"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="closure"></span><div><b>Cierre de caja</b><small>Cuadrar efectivo, bancos y resultados</small></div></button>
 <button class="cf-action" onclick="openAccountingModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="accounting"><svg aria-hidden="true" viewbox="0 0 48 48"><path d="M10 8h21a7 7 0 0 1 7 7v25H16a6 6 0 0 1-6-6V8Z" fill="none" stroke="currentColor" stroke-width="2"></path><path d="M16 8v32M21 16h11M21 22h11M21 28h7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span><div><b>Contabilidad</b><small>Libros y estados financieros</small></div></button>
-<button class="cf-action" onclick="show('auditoriaFinanciera')"><span>🛡️</span><div><b>Auditoría financiera</b><small>Motor de integridad, alertas y protección de cálculos</small></div></button>
 
 </div>
 </div>
@@ -4949,6 +4945,7 @@ body.jcp-custom-theme .database-actions-list button{
   <div class="unified-module-gold-line"></div>
   <div class="unified-module-note">💡 Consulta cuánto dejó cada vehículo vendido, del más reciente al más antiguo.</div>
 </div>
+<div class="jcp-date-filter" data-history-filter="veh"><div class="jdf-quick"><button type="button" data-q="week">ESTA SEMANA</button><button type="button" data-q="lastweek">SEMANA PASADA</button><button type="button" data-q="month">ESTE MES</button></div><div class="jdf-range"><label><span>DESDE</span><input type="date" data-k="from"/></label><label><span>HASTA</span><input type="date" data-k="to"/></label><button type="button" data-q="clear">LIMPIAR</button></div><div class="jdf-label">Mostrando todo el historial</div></div>
 
 <div class="vehicle-utility-summary-grid">
   <div class="vehicle-utility-summary-card">
@@ -4972,6 +4969,7 @@ body.jcp-custom-theme .database-actions-list button{
   <div class="unified-module-gold-line"></div>
   <div class="unified-module-note">💡 Consulta los retiros de utilidades del más reciente al más antiguo.</div>
 </div>
+<div class="jcp-date-filter" data-history-filter="ret"><div class="jdf-quick"><button type="button" data-q="week">ESTA SEMANA</button><button type="button" data-q="lastweek">SEMANA PASADA</button><button type="button" data-q="month">ESTE MES</button></div><div class="jdf-range"><label><span>DESDE</span><input type="date" data-k="from"/></label><label><span>HASTA</span><input type="date" data-k="to"/></label><button type="button" data-q="clear">LIMPIAR</button></div><div class="jdf-label">Mostrando todo el historial</div></div>
 <div class="profit-history-summary">
   <div><span>RETIROS REGISTRADOS</span><b id="profitWithdrawalCount">0</b></div>
   <div><span>TOTAL RETIRADO</span><b id="profitWithdrawalTotal">$0</b></div>
@@ -5242,13 +5240,18 @@ body.jcp-custom-theme .database-actions-list button{
 <b>= Caja esperada</b><span id="ccExpResult">$0</span>
 </div>
 </div>
+<div class="cc-excel-box">
+<div class="cc-excel-title">CIERRE CON EXCEL</div>
+<div class="cc-excel-steps">1. Exporta el cierre · 2. Llena en Excel las celdas amarillas con tus saldos reales · 3. Importa el archivo para revisar y guardar.</div>
+<div class="cc-excel-actions">
+<button class="cash-save-close" onclick="exportCashClosureExcel()" type="button">📤 EXPORTAR CIERRE A EXCEL</button>
+<button class="cash-save-close" onclick="importCashClosureExcel()" type="button">📥 IMPORTAR CIERRE</button>
+</div>
+</div>
 <div class="cash-close-actions" style="grid-template-columns:1fr">
 <button class="cash-save-close" onclick="saveCashClosure()">💾 GUARDAR CIERRE Y GENERAR INFORME</button>
 </div>
-<div class="cash-close-actions" style="grid-template-columns:1fr 1fr;margin-top:8px">
-<button class="cash-save-close" style="background:#1a1a1a;border:1px solid #d8aa32;color:#d8aa32" onclick="openCashClosureDetailReport()">📄 INFORME DETALLADO</button>
-<button class="cash-save-close" style="background:#1a1a1a;border:1px solid #d8aa32;color:#d8aa32" onclick="exportCashClosureDetailExcel()">📊 EXPORTAR A EXCEL</button>
-</div></div>
+</div>
 </section>
 <section class="view" id="carteraCaja">
 <div class="unified-module-header">
@@ -5586,6 +5589,14 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="acc-kpi"><span>CRÉDITOS</span><b id="accCredits">$0</b></div>
 <div class="acc-kpi ok" id="accBalanceKpi"><span>DIFERENCIA</span><b id="accDifference">$0</b></div>
 </div>
+<div class="acc-group-title">GESTIÓN FINANCIERA</div>
+<div class="acc-tabs acc-main-menu acc-fin-menu">
+<button onclick="show('extractos')" type="button"><b>EXTRACTOS</b><small>Gastos operacionales y resultados</small></button>
+<button onclick="show('detalleCapital')" type="button"><b>CAPITAL</b><small>Origen y movimientos del capital</small></button>
+<button onclick="show('cierreCaja')" type="button"><b>CIERRE DE CAJA</b><small>Cuadrar efectivo, bancos y resultados</small></button>
+<button onclick="show('auditoriaFinanciera')" type="button"><b>AUDITORÍA FINANCIERA</b><small>Integridad, alertas y protección de cálculos</small></button>
+</div>
+<div class="acc-group-title">LIBROS Y ESTADOS FINANCIEROS</div>
 <div class="acc-tabs acc-main-menu">
 <button id="accTabResumen" onclick="openAccountingSubmodule('resumen')"><b>RESUMEN</b><small>Vista general de toda la contabilidad</small></button>
 <button id="accTabDiario" onclick="openAccountingSubmodule('diario')"><b>LIBRO DIARIO</b><small>Todos los movimientos, uno por uno, en orden</small></button>
@@ -5624,9 +5635,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.10.12.63"></script>
-<script src="./jcp-sync.js?v=2026.10.12.63"></script>
-<script src="./jcp-images.js?v=2026.10.12.63"></script>
+<script src="./jcp-accounting.js?v=2026.10.13.65"></script>
+<script src="./jcp-sync.js?v=2026.10.13.65"></script>
+<script src="./jcp-images.js?v=2026.10.13.65"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -7249,6 +7260,56 @@ function getVehicleUtilitySnapshot(v){
   };
 }
 
+// Filtro de fechas compartido por los historiales de utilidades.
+var jcpHistoryFilters={veh:{from:'',to:'',q:''},ret:{from:'',to:'',q:''}};
+function jcpHistoryTs(createdAt,date){
+  var t=Date.parse(createdAt||'');if(Number.isFinite(t))return t;
+  var m=String(date||'').match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+  if(m){var y=+m[3];if(y<100)y+=2000;return new Date(y,+m[2]-1,+m[1],12,0,0).getTime();}
+  t=Date.parse(date||'');return Number.isFinite(t)?t:0;
+}
+function jcpHistoryBounds(kind){
+  var f=jcpHistoryFilters[kind]||{};
+  var p=function(v,end){if(!v)return null;var a=String(v).split('-');return new Date(+a[0],+a[1]-1,+a[2],end?23:0,end?59:0,end?59:0,end?999:0).getTime();};
+  return {from:p(f.from,false),to:p(f.to,true)};
+}
+function jcpHistoryInRange(kind,ts){
+  var b=jcpHistoryBounds(kind);if(b.from===null&&b.to===null)return true;
+  if(!ts)return false;return (b.from===null||ts>=b.from)&&(b.to===null||ts<=b.to);
+}
+function jcpHistoryFilterActive(kind){var f=jcpHistoryFilters[kind]||{};return !!(f.from||f.to);}
+function jcpIsoDay(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function jcpHistorySync(kind){
+  var box=document.querySelector('[data-history-filter="'+kind+'"]');if(!box)return;
+  var f=jcpHistoryFilters[kind];
+  box.querySelector('[data-k="from"]').value=f.from||'';box.querySelector('[data-k="to"]').value=f.to||'';
+  box.querySelectorAll('[data-q]').forEach(function(b){b.classList.toggle('active',b.dataset.q===f.q);});
+  var fmt=function(v){var a=v.split('-');return a[2]+'/'+a[1]+'/'+a[0];};
+  var names={week:'Esta semana',lastweek:'Semana pasada',month:'Este mes'};
+  box.querySelector('.jdf-label').textContent=!f.from&&!f.to?'Mostrando todo el historial':'Mostrando '+(names[f.q]?names[f.q].toLowerCase()+': ':'')+(f.from?fmt(f.from):'el inicio')+' al '+(f.to?fmt(f.to):'hoy');
+}
+function jcpHistoryApply(kind){
+  jcpHistorySync(kind);
+  try{if(kind==='veh')renderVehicleUtilityHistory();else renderProfitWithdrawalHistory();}catch(e){console.error(e);}
+}
+document.addEventListener('click',function(e){
+  var btn=e.target.closest&&e.target.closest('[data-history-filter] [data-q]');if(!btn)return;
+  var kind=btn.closest('[data-history-filter]').dataset.historyFilter,f=jcpHistoryFilters[kind],now=new Date(),q=btn.dataset.q;
+  var today=new Date(now.getFullYear(),now.getMonth(),now.getDate()),monday=new Date(today);monday.setDate(today.getDate()-((today.getDay()+6)%7));
+  if(q==='week'){f.from=jcpIsoDay(monday);f.to=jcpIsoDay(today);}
+  else if(q==='lastweek'){var lm=new Date(monday);lm.setDate(monday.getDate()-7);var ls=new Date(monday);ls.setDate(monday.getDate()-1);f.from=jcpIsoDay(lm);f.to=jcpIsoDay(ls);}
+  else if(q==='month'){f.from=jcpIsoDay(new Date(today.getFullYear(),today.getMonth(),1));f.to=jcpIsoDay(today);}
+  else{f.from='';f.to='';}
+  f.q=q==='clear'?'':q;jcpHistoryApply(kind);
+});
+document.addEventListener('change',function(e){
+  var input=e.target.closest&&e.target.closest('[data-history-filter] [data-k]');if(!input)return;
+  var kind=input.closest('[data-history-filter]').dataset.historyFilter,f=jcpHistoryFilters[kind];
+  f[input.dataset.k]=input.value||'';f.q='';
+  if(f.from&&f.to&&f.from>f.to){var t=f.from;f.from=f.to;f.to=t;}
+  jcpHistoryApply(kind);
+});
+
 function renderVehicleUtilityHistory(){
   const list=document.getElementById('vehicleUtilityHistoryList');
   const countEl=document.getElementById('vehicleUtilitySoldCount');
@@ -7257,6 +7318,7 @@ function renderVehicleUtilityHistory(){
 
   const rows=(Array.isArray(data.sold)?data.sold:[])
     .map(v=>({vehicle:v,util:getVehicleUtilitySnapshot(v)}))
+    .filter(r=>jcpHistoryInRange('veh',jcpHistoryTs(r.util.createdAt,r.util.date)))
     .sort((a,b)=>{
       const ta=Date.parse(a.util.createdAt||a.util.date||'');
       const tb=Date.parse(b.util.createdAt||b.util.date||'');
@@ -7268,7 +7330,7 @@ function renderVehicleUtilityHistory(){
   totalEl.textContent=money(totalProfit);
 
   if(!rows.length){
-    list.innerHTML='<div class="empty">NO HAY VEHÍCULOS VENDIDOS REGISTRADOS.</div>';
+    list.innerHTML='<div class="empty">'+(jcpHistoryFilterActive('veh')?'NO HAY VEHÍCULOS VENDIDOS EN ESTE PERÍODO.':'NO HAY VEHÍCULOS VENDIDOS REGISTRADOS.')+'</div>';
     return;
   }
 
@@ -12274,7 +12336,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.12.63\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.13.65\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -12891,18 +12953,28 @@ window.renderObligationHistory=function(){
     return d;
   };
 
-  window.saveCashClosure=function(){
-    ensure();const d=previewCashClosure(),obs=(document.getElementById('ccCloseObs')?.value||'').trim().toUpperCase();
-    if(Math.abs(d.difference)>=1){alert('NO SE PUEDE CERRAR EL PERÍODO: HAY UNA DIFERENCIA DE '+money(d.difference)+'. PRIMERO CUADRA LAS CUENTAS.');return;}
-    if(d.actual<=0&&!confirm('EL TOTAL REAL ESTÁ EN $0. ¿DESEAS GUARDAR EL CIERRE?'))return;
+  window.saveCashClosure=function(opts){
+    opts=(opts&&typeof opts==='object'&&!(typeof Event!=='undefined'&&opts instanceof Event))?opts:{};
+    ensure();const d=previewCashClosure(),obs=String(opts.obs!=null?opts.obs:(document.getElementById('ccCloseObs')?.value||'')).trim().toUpperCase();
+    const adjustments=Array.isArray(opts.adjustments)?opts.adjustments:[];
+    const adjustedTotal=adjustments.reduce((s,a)=>s+(Number(a.difference)||0),0);
+    const remaining=d.difference-adjustedTotal;
+    if(Math.abs(remaining)>=1&&!opts.allowDifference){alert('NO SE PUEDE CERRAR EL PERÍODO: HAY UNA DIFERENCIA DE '+money(d.difference)+'. PRIMERO CUADRA LAS CUENTAS O USA EXPORTAR / IMPORTAR CIERRE PARA AJUSTARLA O DEJARLA ANOTADA.');return false;}
+    if(Math.abs(remaining)>=1&&!obs){alert('ESCRIBE UNA OBSERVACIÓN QUE EXPLIQUE LA DIFERENCIA.');return false;}
+    if(d.actual<=0&&!confirm('EL TOTAL REAL ESTÁ EN $0. ¿DESEAS GUARDAR EL CIERRE?'))return false;
     const before=cloneAppData(data),next=cloneAppData(data),nfo=nowInfo(),id='close_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
-    try{const receipt=addInternalReceipt(next,'cash_close',{entityId:id,amount:d.actual,title:(d.mode==='monthly'?'CIERRE MENSUAL':'CIERRE SEMANAL'),concept:'CIERRE DE CAJA',date:nfo.label,createdAt:nfo.iso,snapshot:{period:(d.mode==='monthly'?'MENSUAL':'SEMANAL')+' · '+new Date(d.start).toLocaleDateString('es-CO')+' → '+new Date(d.end).toLocaleDateString('es-CO'),expected:d.s.expected,actual:d.actual,difference:d.difference,obs}});
-    next.cashClosures.unshift({id,receiptNumber:receipt.number,date:nfo.label,createdAt:nfo.iso,cutoffAt:nfo.iso,closureType:d.mode,periodStart:new Date(d.start).toISOString(),periodEnd:new Date(d.end).toISOString(),expected:d.s.expected,cash:d.cash,bank:d.bank,accounts:d.accounts,actual:d.actual,difference:d.difference,grossProfit:d.p.gross,operatingExpenses:d.p.op,netProfit:d.p.net,profitWithdrawals:d.p.withdrawals,profitAvailable:d.p.profitAvailable,salesCount:d.p.salesCount,permutaCount:d.p.permutaCount,debt:d.s.debt,ownCapital:d.s.own,financing:d.s.finance,obs});
+    try{
+    const applied=adjustments.length&&typeof window.jcpApplyCashAdjustments==='function'?window.jcpApplyCashAdjustments(next,adjustments,nfo):[];
+    const extra={source:opts.source||'manual',importCode:opts.importCode||'',adjustments:applied,adjustmentTotal:adjustedTotal,differenceAfterAdjustments:remaining,lineChecks:Array.isArray(opts.lineChecks)?opts.lineChecks:[]};
+    const receipt=addInternalReceipt(next,'cash_close',{entityId:id,amount:d.actual,title:(d.mode==='monthly'?'CIERRE MENSUAL':'CIERRE SEMANAL'),concept:'CIERRE DE CAJA',date:nfo.label,createdAt:nfo.iso,snapshot:{period:(d.mode==='monthly'?'MENSUAL':'SEMANAL')+' · '+new Date(d.start).toLocaleDateString('es-CO')+' → '+new Date(d.end).toLocaleDateString('es-CO'),expected:d.s.expected,actual:d.actual,difference:d.difference,obs,...extra}});
+    next.cashClosures.unshift({id,receiptNumber:receipt.number,date:nfo.label,createdAt:nfo.iso,cutoffAt:nfo.iso,closureType:d.mode,periodStart:new Date(d.start).toISOString(),periodEnd:new Date(d.end).toISOString(),expected:d.s.expected,cash:d.cash,bank:d.bank,accounts:d.accounts,actual:d.actual,difference:d.difference,grossProfit:d.p.gross,operatingExpenses:d.p.op,netProfit:d.p.net,profitWithdrawals:d.p.withdrawals,profitAvailable:d.p.profitAvailable,salesCount:d.p.salesCount,permutaCount:d.p.permutaCount,debt:d.s.debt,ownCapital:d.s.own,financing:d.s.finance,obs,...extra});
     data=next;save();let reportOk=false;try{reportOk=generateCashClosurePdf(id)!==false;}catch(e){console.error(e);}
     ['ccCashCount','ccBancolombia','ccDaviplata','ccDavivienda','ccNequi','ccCloseObs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
     const extDateFrom=document.getElementById('extDateFrom'),extDateTo=document.getElementById('extDateTo');if(extDateFrom)extDateFrom.value='';if(extDateTo)extDateTo.value='';
-    renderCashCapital();try{renderExtractos();renderRecordsModule();}catch(e){}alert('✅ CIERRE GUARDADO. SOPORTE '+receipt.number+' GENERADO.'+(reportOk?' INFORME DE CIERRE DISPONIBLE.':''));
-    }catch(e){data=before;alert('NO FUE POSIBLE GUARDAR EL CIERRE.\n\n'+e.message);}
+    renderCashCapital();try{renderExtractos();renderRecordsModule();renderTreasuryModule();}catch(e){}
+    alert('✅ CIERRE GUARDADO. SOPORTE '+receipt.number+' GENERADO.'+(applied.length?' SE REGISTRARON '+applied.length+' AJUSTE(S): '+applied.map(a=>a.receiptNumber).join(', ')+'.':'')+(Math.abs(remaining)>=1?' QUEDÓ ANOTADA UNA DIFERENCIA DE '+money(remaining)+'.':'')+(reportOk?' INFORME DE CIERRE DISPONIBLE.':''));
+    return true;
+    }catch(e){data=before;alert('NO FUE POSIBLE GUARDAR EL CIERRE.\n\n'+e.message);return false;}
   };
 
   function jcpCcCollected(list){return typeof jcpColCap==='function'?jcpColCap(list):0;}
@@ -14427,7 +14499,7 @@ function renderProfitWithdrawalHistory(){
   const list=document.getElementById('profitWithdrawalHistoryList');
   if(!list)return;
   const rows=(data.mov||[])
-    .filter(x=>x?.subtype==='retiro_ganancias')
+    .filter(x=>x?.subtype==='retiro_ganancias'&&jcpHistoryInRange('ret',jcpHistoryTs(x.createdAt,x.date)))
     .slice()
     .sort((a,b)=>{
       const ta=Date.parse(a.createdAt||a.date||'');
@@ -14448,7 +14520,7 @@ function renderProfitWithdrawalHistory(){
       <b>${clientEsc((x.c||'RETIRO DE GANANCIA').toUpperCase())}</b>
       <strong>${money(+x.v||0)}</strong>
     </div>`;
-  }).join(''):'<div class="empty">NO HAY RETIROS DE GANANCIA REGISTRADOS.</div>';
+  }).join(''):'<div class="empty">'+(jcpHistoryFilterActive('ret')?'NO HAY RETIROS DE GANANCIA EN ESTE PERÍODO.':'NO HAY RETIROS DE GANANCIA REGISTRADOS.')+'</div>';
 }
 
 function globalSearchNormalize(v){
@@ -14460,7 +14532,7 @@ function globalSearchModules(){
     {type:'MÓDULO',title:'Inicio',meta:'Resumen principal',action:"openMainNavigation('dashboard')"},
     {type:'MÓDULO',title:'Inventario',meta:'Inventario y detalle de vehículos',action:"openVehiclesHub()"},
     {type:'MÓDULO',title:'Operaciones',meta:'Ventas, compras y registro de gastos',action:"openOperationsHub()"},
-    {type:'MÓDULO',title:'Finanzas',meta:'Capital, cierres, extractos y cuentas',action:"openMainNavigation('cajaCapital')"},
+    {type:'MÓDULO',title:'Finanzas',meta:'Cuentas por cobrar, obligaciones, utilidades y contabilidad',action:"openMainNavigation('cajaCapital')"},
     {type:'MÓDULO',title:'Capital',meta:'Consulta de capital y fuentes de financiación',action:"show('detalleCapital')"},
     {type:'MÓDULO',title:'Cierre de caja',meta:'Cierre semanal y mensual',action:"show('cierreCaja')"},
     {type:'MÓDULO',title:'Historial de capital y financiación',meta:'Movimientos de capital y obligaciones',action:"show('historialCapitalFinanciacion')"},
@@ -16729,7 +16801,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.10.12.63',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.10.13.65',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -18831,6 +18903,465 @@ window.jcpExtractMov=function(){
 })();
 </script>
 <style>
+.jcp-date-filter{margin:14px 0 4px;border:1px solid #3a3320;border-radius:14px;padding:12px;background:#111}
+.jcp-date-filter .jdf-quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.jcp-date-filter .jdf-range{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-top:10px;align-items:end}
+.jcp-date-filter label{display:flex;flex-direction:column;gap:4px;min-width:0}
+.jcp-date-filter label span{color:#d8aa32;font-size:10px;font-weight:900;letter-spacing:.4px}
+.jcp-date-filter input[type=date]{width:100%;min-width:0;box-sizing:border-box;color-scheme:dark}
+.jcp-date-filter button{background:#151515;color:#d0d0d0;border:1px solid #333;border-radius:10px;padding:9px 8px;font-size:11px;font-weight:800}
+.jcp-date-filter button.active{border-color:#d8aa32;color:#d8aa32;background:#1a1408}
+.jcp-date-filter .jdf-label{color:#9a9a9a;font-size:11px;margin-top:8px}
+@media(max-width:480px){.jcp-date-filter .jdf-range{grid-template-columns:1fr 1fr}.jcp-date-filter .jdf-range button{grid-column:1/-1}}
+#contabilidad .acc-group-title{color:#d8aa32;font-weight:900;font-size:12px;letter-spacing:.5px;margin:16px 0 8px}
+#cierreCaja .cc-excel-box{margin-top:14px;border:1px solid #d8aa32;border-radius:14px;padding:14px;background:#111}
+#cierreCaja .cc-excel-title{color:#d8aa32;font-weight:900;font-size:13px;letter-spacing:.4px}
+#cierreCaja .cc-excel-steps{color:#bdbdbd;font-size:12px;margin:6px 0 10px;line-height:1.4}
+#cierreCaja .cc-excel-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:600px){#cierreCaja .cc-excel-actions{grid-template-columns:1fr}}
+.cc-import-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.75);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:24px 12px}
+.cc-import-modal{width:100%;max-width:640px;background:#0b0b0b;border:1px solid #d8aa32;border-radius:16px;padding:18px;color:#fff;box-sizing:border-box}
+.cc-import-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.cc-import-head b{color:#d8aa32;font-size:15px}
+.cc-import-x{background:transparent;border:1px solid #444;color:#ddd;border-radius:8px;width:34px;height:34px}
+.cc-import-sub{color:#9a9a9a;font-size:12px;margin:4px 0 12px}
+.cc-import-table{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr .9fr;font-size:12px;border:1px solid #2a2a2a;border-radius:10px;overflow:hidden}
+.cc-import-table>div{padding:8px;border-bottom:1px solid #1f1f1f;min-width:0;overflow-wrap:anywhere}
+.cc-import-table .h{background:#1a1a1a;color:#d8aa32;font-weight:800;font-size:11px}
+.cc-import-table .t{font-weight:900;background:#151515;border-bottom:0}
+.cc-import-table .bad{color:#ff8a8a;font-weight:800}.cc-import-table .ok{color:#6fe3a0}
+.cc-adj{display:flex;align-items:center;gap:4px;cursor:pointer}.cc-adj input{accent-color:#d8aa32;width:16px;height:16px;margin:0}
+.cc-import-warn{margin-top:12px;border:1px dashed #8a6d1c;border-radius:10px;padding:10px;font-size:12px;background:#15110a}
+.cc-import-warn b{color:#d8aa32;display:block;margin-bottom:6px}
+.cc-import-line{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid #2a220f}
+.cc-import-warn small{display:block;color:#9a9a9a;margin-top:6px}
+.cc-import-adjust{margin-top:12px}.cc-import-adjust label,.cc-import-label{display:block;color:#d8aa32;font-size:12px;font-weight:800;margin:12px 0 6px}
+.cc-import-adjust input,.cc-import-modal textarea{width:100%;box-sizing:border-box}
+.cc-import-adjust small{display:block;color:#9a9a9a;font-size:11px;margin-top:4px}
+.cc-import-status{margin-top:12px;font-size:12px;border-radius:8px;padding:9px;font-weight:700}
+.cc-import-status.ok{background:#0d2a1c;color:#6fe3a0;border:1px solid #1f5c3c}.cc-import-status.bad{background:#2a0d0d;color:#ff8a8a;border:1px solid #5c1f1f}
+.cc-import-actions{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:14px}
+.cc-import-actions button{border-radius:10px;padding:12px;font-weight:900;border:1px solid #d8aa32}
+.cc-import-cancel{background:#1a1a1a;color:#d8aa32}.cc-import-save{background:#d8aa32;color:#111}
+@media(max-width:520px){.cc-import-modal{padding:14px}.cc-import-table{grid-template-columns:1.05fr 1fr 1fr .95fr;font-size:11px}.cc-import-table>div{padding:7px 5px;overflow-wrap:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cc-import-table .adjcell-empty{display:none}.cc-import-table .adjcell{grid-column:1/-1;background:#1a1408}.cc-import-line{flex-direction:column;gap:2px}}
+</style>
+<script id="jcp-cierre-xlsx-core">
+(function(root){
+  'use strict';
+  // Núcleo sin dependencias: genera y lee el Excel del cierre de caja.
+  // No usa librerías externas para que funcione también sin internet.
+  var VERSION='jcp-cierre-1';
+  var SHEET='CIERRE';
+  var FIRST=6;
+
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]});}
+  function unesc(v){return String(v).replace(/&(lt|gt|quot|apos|amp|#(\d+)|#x([0-9a-fA-F]+));/g,function(m,n,d,h){if(d)return String.fromCharCode(+d);if(h)return String.fromCharCode(parseInt(h,16));return {lt:'<',gt:'>',quot:'"',apos:"'",amp:'&'}[n];});}
+  function round(n){return Math.round(Number(n)||0);}
+
+  var crcTable=(function(){var t=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=(c&1)?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+  function crc32(bytes){var c=0xffffffff;for(var i=0;i<bytes.length;i++)c=crcTable[(c^bytes[i])&255]^(c>>>8);return (c^0xffffffff)>>>0;}
+  function hash(text){return crc32(new TextEncoder().encode(String(text))).toString(16).toUpperCase().padStart(8,'0');}
+
+  function zip(files){
+    var enc=new TextEncoder(),chunks=[],central=[],offset=0;
+    function u16(a,n){a.push(n&255,(n>>>8)&255);}
+    function u32(a,n){a.push(n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255);}
+    files.forEach(function(f){
+      var name=enc.encode(f.name),bytes=enc.encode(f.data),crc=crc32(bytes),l=[];
+      u32(l,0x04034b50);u16(l,20);u16(l,0x800);u16(l,0);u16(l,0);u16(l,0);u32(l,crc);u32(l,bytes.length);u32(l,bytes.length);u16(l,name.length);u16(l,0);
+      chunks.push(new Uint8Array(l),name,bytes);
+      var c=[];u32(c,0x02014b50);u16(c,20);u16(c,20);u16(c,0x800);u16(c,0);u16(c,0);u16(c,0);u32(c,crc);u32(c,bytes.length);u32(c,bytes.length);u16(c,name.length);u16(c,0);u16(c,0);u16(c,0);u16(c,0);u32(c,0);u32(c,offset);
+      central.push(new Uint8Array(c),name);offset+=l.length+name.length+bytes.length;
+    });
+    var cdLen=central.reduce(function(s,a){return s+a.length},0),e=[];
+    u32(e,0x06054b50);u16(e,0);u16(e,0);u16(e,files.length);u16(e,files.length);u32(e,cdLen);u32(e,offset);u16(e,0);
+    var all=chunks.concat(central,[new Uint8Array(e)]),total=all.reduce(function(s,a){return s+a.length},0),out=new Uint8Array(total),pos=0;
+    all.forEach(function(a){out.set(a,pos);pos+=a.length;});
+    return out;
+  }
+
+  async function inflateRaw(bytes){
+    if(typeof DecompressionStream!=='function')throw new Error('ESTE NAVEGADOR NO PUEDE LEER ARCHIVOS DE EXCEL. ACTUALÍZALO O USA CHROME.');
+    var stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+    return new Uint8Array(await new Response(stream).arrayBuffer());
+  }
+  async function unzip(buf){
+    var b=new Uint8Array(buf),dv=new DataView(b.buffer,b.byteOffset,b.byteLength),eocd=-1;
+    for(var i=b.length-22;i>=Math.max(0,b.length-66000);i--){if(dv.getUint32(i,true)===0x06054b50){eocd=i;break;}}
+    if(eocd<0)throw new Error('EL ARCHIVO NO ES UN EXCEL (.XLSX) VÁLIDO.');
+    var count=dv.getUint16(eocd+10,true),p=dv.getUint32(eocd+16,true),dec=new TextDecoder(),out={};
+    for(var k=0;k<count;k++){
+      if(dv.getUint32(p,true)!==0x02014b50)throw new Error('EL ARCHIVO DE EXCEL ESTÁ DAÑADO.');
+      var method=dv.getUint16(p+10,true),csize=dv.getUint32(p+20,true),nlen=dv.getUint16(p+28,true),xlen=dv.getUint16(p+30,true),clen=dv.getUint16(p+32,true),lo=dv.getUint32(p+42,true);
+      var name=dec.decode(b.subarray(p+46,p+46+nlen));
+      var start=lo+30+dv.getUint16(lo+26,true)+dv.getUint16(lo+28,true),data=b.subarray(start,start+csize);
+      out[name]={method:method,data:data};
+      p+=46+nlen+xlen+clen;
+    }
+    return {read:async function(name){var e=out[name.replace(/^\//,'')];if(!e)return null;var raw=e.method===0?e.data:(e.method===8?await inflateRaw(e.data):null);if(!raw)throw new Error('FORMATO DE COMPRESIÓN NO SOPORTADO.');return dec.decode(raw);}};
+  }
+
+  function colName(n){var s='';for(n++;n;n=Math.floor((n-1)/26))s=String.fromCharCode(65+(n-1)%26)+s;return s;}
+  function colIndex(letters){var n=0;for(var i=0;i<letters.length;i++)n=n*26+(letters.charCodeAt(i)-64);return n-1;}
+
+  // ---------- ESCRITURA ----------
+  var S={def:0,title:1,sub:2,head:3,text:4,money:5,input:6,formula:7,totLabel:8,totMoney:9,inputText:10,note:11,headLeft:12};
+  function styles(){
+    var money='&quot;$&quot; #,##0;-&quot;$&quot; #,##0';
+    var border='<border><left style="thin"><color rgb="FFBFBFBF"/></left><right style="thin"><color rgb="FFBFBFBF"/></right><top style="thin"><color rgb="FFBFBFBF"/></top><bottom style="thin"><color rgb="FFBFBFBF"/></bottom><diagonal/></border>';
+    var xf=function(numFmt,font,fill,brd,extra,locked){return '<xf numFmtId="'+numFmt+'" fontId="'+font+'" fillId="'+fill+'" borderId="'+brd+'" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1" applyProtection="1">'+(extra||'')+'<protection locked="'+(locked===false?0:1)+'"/></xf>';};
+    var cellXfs=[
+      xf(0,0,0,0,'',true),
+      xf(0,1,2,0,'<alignment vertical="center"/>',true),
+      xf(0,2,0,0,'<alignment vertical="center"/>',true),
+      xf(0,3,3,1,'<alignment horizontal="center" vertical="center" wrapText="1"/>',true),
+      xf(0,0,0,1,'<alignment vertical="center"/>',true),
+      xf(164,0,0,1,'<alignment vertical="center"/>',true),
+      xf(164,0,4,1,'<alignment vertical="center"/>',false),
+      xf(164,0,5,1,'<alignment vertical="center"/>',true),
+      xf(0,4,6,1,'<alignment vertical="center"/>',true),
+      xf(164,4,6,1,'<alignment vertical="center"/>',true),
+      xf(0,0,4,1,'<alignment vertical="top" wrapText="1"/>',false),
+      xf(0,5,0,0,'<alignment vertical="center" wrapText="1"/>',true),
+      xf(0,3,3,1,'<alignment horizontal="left" vertical="center"/>',true)
+    ];
+    return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+      +'<numFmts count="1"><numFmt numFmtId="164" formatCode="'+money+'"/></numFmts>'
+      +'<fonts count="6"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="15"/><color rgb="FFD8AA32"/><name val="Calibri"/></font><font><sz val="10"/><color rgb="FF595959"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><i/><sz val="10"/><color rgb="FF7F6000"/><name val="Calibri"/></font></fonts>'
+      +'<fills count="7"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF111111"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FF262626"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFF2CC"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF2F2F2"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE7E6E6"/><bgColor indexed="64"/></patternFill></fill></fills>'
+      +'<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>'+border+'</borders>'
+      +'<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
+      +'<cellXfs count="'+cellXfs.length+'">'+cellXfs.join('')+'</cellXfs>'
+      +'<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>'
+      +'<dxfs count="2"><dxf><font><b/><color rgb="FF9C0006"/></font><fill><patternFill><bgColor rgb="FFFFC7CE"/></patternFill></fill></dxf><dxf><font><color rgb="FF006100"/></font><fill><patternFill><bgColor rgb="FFC6EFCE"/></patternFill></fill></dxf></dxfs>'
+      +'</styleSheet>';
+  }
+
+  function buildSheet(m){
+    var rows={},merges=[],cf=[];
+    function put(ref,xml){var r=+ref.replace(/^[A-Z]+/,'');(rows[r]=rows[r]||[]).push({c:colIndex(ref.replace(/\d+$/,'')),x:xml});}
+    function str(ref,v,s){put(ref,'<c r="'+ref+'" s="'+s+'" t="inlineStr"><is><t xml:space="preserve">'+esc(v)+'</t></is></c>');}
+    function num(ref,v,s){put(ref,'<c r="'+ref+'" s="'+s+'"><v>'+round(v)+'</v></c>');}
+    function empty(ref,s){put(ref,'<c r="'+ref+'" s="'+s+'"/>');}
+    function fml(ref,f,cached,s){put(ref,'<c r="'+ref+'" s="'+s+'"'+(typeof cached==='string'?' t="str"':'')+'><f>'+esc(f)+'</f><v>'+(typeof cached==='string'?esc(cached):round(cached))+'</v></c>');}
+
+    var n=m.lines.length,last=FIRST+n-1,total=last+1;
+    str('A1','COLOMBIAUTOS JP — CIERRE DE CAJA',S.title);merges.push('A1:K1');
+    str('A2','Período: '+m.period+'   ·   Generado: '+m.generatedLabel+'   ·   Código: '+m.code,S.sub);merges.push('A2:K2');
+    str('A3','Llena solo las celdas amarillas: en REAL el saldo de cada cuenta. Luego importa este archivo en Cierre de caja → Importar cierre.',S.note);merges.push('A3:K3');
+    ['CONCEPTO','ENTRADA','SALIDA','SALDO ACTUAL','SALDO SISTEMA','DIFERENCIA'].forEach(function(h,i){str(colName(i)+'5',h,S.head);});
+    ['DISPONIBLE','SISTEMA','REAL','DIFERENCIA'].forEach(function(h,i){str(colName(7+i)+'5',h,S.head);});
+
+    var running=0,sysRunning=0;
+    m.lines.forEach(function(l,i){
+      var r=FIRST+i,inV=l.kind==='in'?round(l.value):0,outV=l.kind==='out'?round(l.value):0;
+      running+=inV-outV;sysRunning+=inV-outV;
+      str('A'+r,l.label,S.text);
+      if(l.kind==='in')num('B'+r,inV,S.input);else empty('B'+r,S.input);
+      if(l.kind==='out')num('C'+r,outV,S.input);else empty('C'+r,S.input);
+      fml('D'+r,i===0?'B'+r+'-C'+r:'D'+(r-1)+'+B'+r+'-C'+r,running,S.formula);
+      num('E'+r,sysRunning,S.money);
+      fml('F'+r,'D'+r+'-E'+r,0,S.formula);
+    });
+    str('A'+total,'= CAJA ESPERADA (CASCADA)',S.totLabel);empty('B'+total,S.totLabel);empty('C'+total,S.totLabel);
+    fml('D'+total,'D'+last,running,S.totMoney);num('E'+total,sysRunning,S.totMoney);fml('F'+total,'D'+total+'-E'+total,0,S.totMoney);
+    cf.push({range:'F'+FIRST+':F'+total,top:'F'+FIRST});
+
+    var aFirst=FIRST,aLast=FIRST+m.accounts.length-1,aTot=aLast+1,sysTotal=0;
+    m.accounts.forEach(function(a,i){
+      var r=aFirst+i;sysTotal+=round(a.system);
+      str('H'+r,a.name,S.text);num('I'+r,a.system,S.money);empty('J'+r,S.input);
+      fml('K'+r,'IF(J'+r+'="","",J'+r+'-I'+r+')','',S.formula);
+    });
+    str('H'+aTot,'TOTAL',S.totLabel);fml('I'+aTot,'SUM(I'+aFirst+':I'+aLast+')',sysTotal,S.totMoney);
+    fml('J'+aTot,'SUM(J'+aFirst+':J'+aLast+')',0,S.totMoney);fml('K'+aTot,'J'+aTot+'-I'+aTot,-sysTotal,S.totMoney);
+    cf.push({range:'K'+aFirst+':K'+aTot,top:'K'+aFirst});
+
+    var rs=total+2;
+    str('A'+rs,'RESUMEN',S.headLeft);['B','C','D'].forEach(function(c){empty(c+rs,S.headLeft);});merges.push('A'+rs+':D'+rs);
+    var sumRows=[
+      ['Caja esperada según la cascada','D'+total,running],
+      ['Saldo en cuentas según el sistema','I'+aTot,sysTotal],
+      ['Saldo real contado (tus valores)','J'+aTot,0],
+      ['Diferencia: real menos sistema','J'+aTot+'-I'+aTot,-sysTotal],
+      ['Diferencia: cascada menos sistema','D'+total+'-I'+aTot,running-sysTotal]
+    ];
+    sumRows.forEach(function(x,i){var r=rs+1+i,bold=i>=3;str('A'+r,x[0],bold?S.totLabel:S.text);empty('B'+r,bold?S.totLabel:S.text);empty('C'+r,bold?S.totLabel:S.text);merges.push('A'+r+':C'+r);fml('D'+r,x[1],x[2],bold?S.totMoney:S.formula);});
+    cf.push({range:'D'+(rs+4)+':D'+(rs+5),top:'D'+(rs+4)});
+    str('E'+(rs+5),'Si no es $0, hay movimientos que la cascada no incluye: revísalos antes de ajustar.',S.note);merges.push('E'+(rs+5)+':K'+(rs+5));
+    var ro=rs+7;
+    str('A'+ro,'OBSERVACIONES',S.totLabel);str('B'+ro,m.obs||'',S.inputText);
+    ['C','D','E','F','G','H','I','J','K'].forEach(function(c){empty(c+ro,S.inputText);});
+    merges.push('B'+ro+':K'+ro);
+
+    var body=Object.keys(rows).map(Number).sort(function(a,b){return a-b}).map(function(r){
+      var h=r===1?' ht="26" customHeight="1"':(r===3?' ht="32" customHeight="1"':(r===5?' ht="22" customHeight="1"':(r===ro?' ht="48" customHeight="1"':' ht="19" customHeight="1"')));
+      return '<row r="'+r+'"'+h+'>'+rows[r].sort(function(a,b){return a.c-b.c}).map(function(x){return x.x}).join('')+'</row>';
+    }).join('');
+    var widths=[34,16,16,17,17,15,3,15,16,16,15];
+    var cfXml=cf.map(function(x,i){return '<conditionalFormatting sqref="'+x.range+'"><cfRule type="expression" dxfId="0" priority="'+(i*2+1)+'"><formula>AND(ISNUMBER('+x.top+'),ABS('+x.top+')&gt;=1)</formula></cfRule><cfRule type="expression" dxfId="1" priority="'+(i*2+2)+'"><formula>AND(ISNUMBER('+x.top+'),ABS('+x.top+')&lt;1)</formula></cfRule></conditionalFormatting>';}).join('');
+    return {xml:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+      +'<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0" showGridLines="0" tabSelected="1"><selection activeCell="J'+aFirst+'" sqref="J'+aFirst+'"/></sheetView></sheetViews>'
+      +'<sheetFormatPr defaultRowHeight="15"/><cols>'+widths.map(function(w,i){return '<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>';}).join('')+'</cols>'
+      +'<sheetData>'+body+'</sheetData>'
+      +'<sheetProtection sheet="1" objects="1" scenarios="1" formatColumns="0" formatRows="0"/>'
+      +'<mergeCells count="'+merges.length+'">'+merges.map(function(x){return '<mergeCell ref="'+x+'"/>';}).join('')+'</mergeCells>'
+      +cfXml
+      +'<pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/><pageSetup orientation="landscape" fitToWidth="1" fitToHeight="0"/>'
+      +'</worksheet>',layout:{first:FIRST,last:last,total:total,aFirst:aFirst,aLast:aLast,obsRow:ro}};
+  }
+
+  function controlSheet(m,layout){
+    var rows=[['version',VERSION],['code',m.code],['signature',m.signature],['generatedAt',m.generatedAt],['lines',m.lines.map(function(l){return l.id}).join(',')],['accounts',m.accounts.map(function(a){return a.id}).join(',')],['layout',JSON.stringify(layout)]];
+    return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>'
+      +rows.map(function(r,i){return '<row r="'+(i+1)+'"><c r="A'+(i+1)+'" t="inlineStr"><is><t>'+esc(r[0])+'</t></is></c><c r="B'+(i+1)+'" t="inlineStr"><is><t>'+esc(r[1])+'</t></is></c></row>';}).join('')
+      +'</sheetData><sheetProtection sheet="1"/></worksheet>';
+  }
+
+  function build(m){
+    var sheet=buildSheet(m);
+    var files=[
+      {name:'[Content_Types].xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>'},
+      {name:'_rels/.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},
+      {name:'xl/workbook.xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView activeTab="0"/></bookViews><sheets><sheet name="'+SHEET+'" sheetId="1" r:id="rId1"/><sheet name="_control" sheetId="2" state="veryHidden" r:id="rId2"/></sheets><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>'},
+      {name:'xl/_rels/workbook.xml.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'},
+      {name:'xl/styles.xml',data:styles()},
+      {name:'xl/worksheets/sheet1.xml',data:sheet.xml},
+      {name:'xl/worksheets/sheet2.xml',data:controlSheet(m,sheet.layout)}
+    ];
+    return zip(files);
+  }
+
+  // ---------- LECTURA ----------
+  function attr(tag,name){var m=tag.match(new RegExp('\\s'+name+'="([^"]*)"'));return m?unesc(m[1]):null;}
+  function parseShared(xml){
+    if(!xml)return [];
+    var out=[],re=/<si\b[^>]*>([\s\S]*?)<\/si>/g,m;
+    while((m=re.exec(xml))){var t='',r=/<t\b[^>]*>([\s\S]*?)<\/t>/g,x;while((x=r.exec(m[1])))t+=unesc(x[1]);out.push(t);}
+    return out;
+  }
+  function parseCells(xml,shared){
+    var cells={},re=/<c\b([^>]*?)(\/>|>([\s\S]*?)<\/c>)/g,m;
+    while((m=re.exec(xml))){
+      var attrs=' '+m[1],ref=attr(attrs,'r'),t=attr(attrs,'t'),inner=m[3]||'',val=null;
+      if(!ref)continue;
+      var vm=inner.match(/<v\b[^>]*>([\s\S]*?)<\/v>/);
+      if(t==='s'&&vm)val=shared[+vm[1]];
+      else if(t==='inlineStr'){var tt='',r=/<t\b[^>]*>([\s\S]*?)<\/t>/g,x;while((x=r.exec(inner)))tt+=unesc(x[1]);val=tt;}
+      else if(t==='str'||t==='e')val=vm?unesc(vm[1]):'';
+      else if(t==='b')val=vm?vm[1]==='1':null;
+      else if(vm)val=Number(vm[1]);
+      cells[ref]=val;
+    }
+    return cells;
+  }
+  function toNumber(v){
+    if(v===null||v===undefined||v==='')return null;
+    if(typeof v==='number')return isFinite(v)?v:null;
+    var s=String(v).trim();if(!s)return null;
+    var neg=/^-|^\(|-\s*\$/.test(s);
+    s=s.replace(/[^\d,.\-]/g,'').replace(/^-/,'');
+    if(!s)return null;
+    var lastSep=Math.max(s.lastIndexOf(','),s.lastIndexOf('.'));
+    if(lastSep>=0&&s.length-lastSep-1<=2&&s.length-lastSep-1>0){s=s.slice(0,lastSep).replace(/[.,]/g,'')+'.'+s.slice(lastSep+1);}else s=s.replace(/[.,]/g,'');
+    var n=Number(s);return isFinite(n)?(neg?-n:n):null;
+  }
+  async function sheetPath(z,name){
+    var wb=await z.read('xl/workbook.xml'),rels=await z.read('xl/_rels/workbook.xml.rels');
+    if(!wb||!rels)throw new Error('EL ARCHIVO NO ES UN EXCEL VÁLIDO.');
+    var sm=wb.match(new RegExp('<sheet\\b[^>]*name="'+name+'"[^>]*/?>'));if(!sm)return null;
+    var rid=attr(sm[0],'r:id'),rm=null,re=/<Relationship\b[^>]*\/?>/g,x;
+    while((x=re.exec(rels))){if(attr(x[0],'Id')===rid){rm=attr(x[0],'Target');break;}}
+    if(!rm)return null;
+    return rm.charAt(0)==='/'?rm.slice(1):'xl/'+rm.replace(/^\.\//,'');
+  }
+  async function parse(buf){
+    var z=await unzip(buf),shared=parseShared(await z.read('xl/sharedStrings.xml'));
+    var cp=await sheetPath(z,'_control'),mp=await sheetPath(z,SHEET);
+    if(!cp||!mp)throw new Error('ESTE ARCHIVO NO ES UN CIERRE EXPORTADO DESDE LA APP. EXPORTA EL CIERRE Y USA ESE ARCHIVO.');
+    var ctl=parseCells(await z.read(cp),shared),get=function(k){for(var i=1;i<=20;i++){if(ctl['A'+i]===k)return ctl['B'+i];}return null;};
+    if(get('version')!==VERSION)throw new Error('LA VERSIÓN DEL ARCHIVO NO ES COMPATIBLE. EXPORTA EL CIERRE DE NUEVO.');
+    var layout=JSON.parse(get('layout')||'{}'),lineIds=String(get('lines')||'').split(',').filter(Boolean),accIds=String(get('accounts')||'').split(',').filter(Boolean);
+    var c=parseCells(await z.read(mp),shared);
+    return {
+      code:get('code'),signature:get('signature'),generatedAt:get('generatedAt'),
+      lines:lineIds.map(function(id,i){var r=layout.first+i;return {id:id,label:c['A'+r]||id,inValue:toNumber(c['B'+r]),outValue:toNumber(c['C'+r])};}),
+      accounts:accIds.map(function(id,i){var r=layout.aFirst+i;return {id:id,name:c['H'+r]||id,real:toNumber(c['J'+r])};}),
+      obs:String(c['B'+layout.obsRow]||'').trim()
+    };
+  }
+
+  root.JcpCierreXlsx={build:build,parse:parse,hash:hash,toNumber:toNumber,VERSION:VERSION};
+})(typeof window==='object'?window:globalThis);
+
+</script>
+<script id="jcp-cierre-xlsx-app">
+(function(){
+  'use strict';
+  // Cierre de caja con Excel: exportar → verificar en Excel → importar y guardar.
+  var ACCOUNT_ORDER=[['bancolombia','BANCOLOMBIA'],['nequi','NEQUI'],['davivienda','DAVIVIENDA'],['daviplata','DAVIPLATA'],['cash','EFECTIVO']];
+  var INPUT_BY_ACCOUNT={cash:'ccCashCount',bancolombia:'ccBancolombia',daviplata:'ccDaviplata',davivienda:'ccDavivienda',nequi:'ccNequi'};
+  function n(v){return Math.round(Number(v)||0);}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});}
+  function fmtDate(x){return new Date(x).toLocaleDateString('es-CO');}
+
+  // Firma de los datos que afectan el cierre: si cambia, el archivo exportado ya no está vigente.
+  function closureSignature(){
+    var pick=function(list,f){return (Array.isArray(list)?list:[]).map(f);};
+    return JcpCierreXlsx.hash(JSON.stringify([
+      pick(data.treasuryMovements,function(t){return [t.id,t.accountId,t.direction,n(t.amount),!!t.voided];}),
+      pick(data.mov,function(m){return [m.id,m.t,m.subtype,n(m.v),!!m.voided];}),
+      pick(data.veh,function(v){return [v.id,n(v.c),n(v.g)];}),
+      pick(data.sold,function(v){return [v.id,v.status,!!(v.sale&&v.sale.voided),n(v.sale&&v.sale.price),n(v.sale&&v.sale.received)];}),
+      pick(data.pres,function(p){return [p.id,n(p.c),n(p.p),!!p.voided];}),
+      pick(data.inv,function(p){return [p.id,n(p.c),!!p.voided];})
+    ]));
+  }
+
+  function cascadeLines(){
+    var f=getFinancialSnapshotV75();
+    var purchases=(data.veh||[]).reduce(function(a,x){return a+(+x.c||0);},0);
+    var vehExpenses=(data.veh||[]).reduce(function(a,x){return a+(+x.g||0);},0);
+    return [
+      {id:'capital',label:'CAPITAL PROPIO',kind:'in',value:f.ownCapital},
+      {id:'obligaciones',label:'OBLIGACIONES',kind:'in',value:f.financing},
+      {id:'pago_obligaciones',label:'PAGO OBLIGACIONES',kind:'out',value:f.debtPaid},
+      {id:'inventario',label:'INVENTARIO',kind:'out',value:purchases},
+      {id:'gastos_vehiculos',label:'GASTOS VEHÍCULOS',kind:'out',value:vehExpenses},
+      {id:'otras_inversiones',label:'OTRAS INVERSIONES',kind:'out',value:f.otherInvestment},
+      {id:'prestamos',label:'PRÉSTAMOS',kind:'out',value:f.loanReceivable},
+      {id:'pendientes',label:'PENDIENTES POR COBRAR',kind:'out',value:f.soldUnrecoveredCost},
+      {id:'utilidades',label:'UTILIDADES (VENTAS)',kind:'in',value:f.grossProfit},
+      {id:'gastos_operacionales',label:'GASTOS OPERACIONALES',kind:'out',value:f.operatingExpenses},
+      {id:'retiros',label:'RETIROS DE UTILIDADES',kind:'out',value:f.profitWithdrawals}
+    ].map(function(l){l.value=n(l.value);return l;});
+  }
+  function accountsModel(){
+    var tb=treasuryBalances(data);
+    return ACCOUNT_ORDER.map(function(a){return {id:a[0],name:a[1],system:n(tb[a[0]])};});
+  }
+
+  window.exportCashClosureExcel=function(){
+    try{
+      var d=previewCashClosure(),now=new Date();
+      var code='CC-'+now.toISOString().slice(2,10).replace(/-/g,'')+'-'+Math.random().toString(36).slice(2,6).toUpperCase();
+      var model={
+        code:code,signature:closureSignature(),generatedAt:now.toISOString(),
+        generatedLabel:now.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),
+        period:(d.mode==='monthly'?'MENSUAL':'SEMANAL')+' · '+fmtDate(d.start)+' al '+fmtDate(d.end),
+        obs:(document.getElementById('ccCloseObs')||{}).value||'',
+        lines:cascadeLines(),accounts:accountsModel()
+      };
+      var bytes=JcpCierreXlsx.build(model),url=URL.createObjectURL(new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})),a=document.createElement('a');
+      a.href=url;a.download='CIERRE_CAJA_'+now.toISOString().slice(0,10)+'_'+code+'.xlsx';document.body.appendChild(a);a.click();a.remove();
+      setTimeout(function(){URL.revokeObjectURL(url);},60000);
+    }catch(e){console.error(e);alert('NO FUE POSIBLE EXPORTAR EL CIERRE.\n\n'+(e&&e.message||e));}
+  };
+
+  window.importCashClosureExcel=function(){
+    var input=document.getElementById('ccImportFile');
+    if(!input){input=document.createElement('input');input.type='file';input.id='ccImportFile';input.accept='.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';input.style.display='none';document.body.appendChild(input);
+      input.addEventListener('change',function(){var f=input.files&&input.files[0];input.value='';if(f)handleImportFile(f);});}
+    input.click();
+  };
+
+  async function handleImportFile(file){
+    var parsed;
+    try{parsed=await JcpCierreXlsx.parse(await file.arrayBuffer());}
+    catch(e){console.error(e);alert('NO FUE POSIBLE LEER EL ARCHIVO.\n\n'+(e&&e.message||e));return;}
+    if(parsed.signature!==closureSignature()){
+      alert('⚠️ ESTE ARCHIVO YA NO ESTÁ VIGENTE\n\nDespués de exportarlo ('+parsed.code+') se registraron movimientos nuevos en la app, así que los saldos del sistema cambiaron.\n\nExporta el cierre de nuevo y llena ese archivo.');
+      return;
+    }
+    var missing=parsed.accounts.filter(function(a){return a.real===null;}).map(function(a){return a.name;});
+    if(missing.length){alert('FALTA EL SALDO REAL DE: '+missing.join(', ')+'.\n\nLlénalo en el Excel (columna REAL, celdas amarillas) y vuelve a importarlo. Si una cuenta está en cero, escribe 0.');return;}
+    openReview(parsed);
+  }
+
+  function openReview(parsed){
+    var sys={};accountsModel().forEach(function(a){sys[a.id]=a;});
+    var rows=parsed.accounts.map(function(a){var s=sys[a.id]?sys[a.id].system:0,real=n(a.real);return {id:a.id,name:(sys[a.id]&&sys[a.id].name)||a.name,system:s,real:real,diff:real-s};});
+    var sysLines={};cascadeLines().forEach(function(l){sysLines[l.id]=l;});
+    var changed=parsed.lines.map(function(l){var s=sysLines[l.id];if(!s)return null;var mine=s.kind==='in'?l.inValue:l.outValue,other=s.kind==='in'?l.outValue:l.inValue;mine=mine===null?0:n(mine);other=other===null?0:n(other);if(Math.abs(mine-s.value)<1&&Math.abs(other)<1)return null;return {id:l.id,label:s.label,system:s.value,yours:mine-other,kind:s.kind};}).filter(Boolean);
+    var totSys=rows.reduce(function(a,r){return a+r.system;},0),totReal=rows.reduce(function(a,r){return a+r.real;},0);
+
+    var old=document.getElementById('ccImportReview');if(old)old.remove();
+    var ov=document.createElement('div');ov.id='ccImportReview';ov.className='cc-import-overlay';
+    ov.innerHTML='<div class="cc-import-modal" role="dialog" aria-modal="true" aria-label="Revisión del cierre importado">'
+      +'<div class="cc-import-head"><b>REVISIÓN DEL CIERRE IMPORTADO</b><button type="button" class="cc-import-x" aria-label="Cerrar">✕</button></div>'
+      +'<div class="cc-import-sub">Archivo '+esc(parsed.code)+' · revisa antes de guardar.</div>'
+      +'<div class="cc-import-table"><div class="h">CUENTA</div><div class="h">SISTEMA</div><div class="h">REAL</div><div class="h">DIFERENCIA</div><div class="h adjcell-empty">AJUSTAR</div>'
+      +rows.map(function(r){var bad=Math.abs(r.diff)>=1;return '<div>'+esc(r.name)+'</div><div>'+money(r.system)+'</div><div>'+money(r.real)+'</div><div class="'+(bad?'bad':'ok')+'">'+money(r.diff)+'</div><div class="'+(bad?'adjcell':'adjcell-empty')+'">'+(bad?'<label class="cc-adj"><input type="checkbox" data-adj="'+esc(r.id)+'"> '+(r.diff<0?'Faltante':'Sobrante')+'</label>':'<span class="ok">✓</span>')+'</div>';}).join('')
+      +'<div class="t">TOTAL</div><div class="t">'+money(totSys)+'</div><div class="t">'+money(totReal)+'</div><div class="t '+(Math.abs(totReal-totSys)>=1?'bad':'ok')+'">'+money(totReal-totSys)+'</div><div class="t adjcell-empty"></div></div>'
+      +(changed.length?'<div class="cc-import-warn"><b>Líneas de la cascada que no coinciden con la app</b>'+changed.map(function(c){return '<div class="cc-import-line"><span>'+esc(c.label)+'</span><span>App '+money(c.system)+' · Tu Excel '+money(c.yours)+'</span></div>';}).join('')+'<small>Esto no cambia los datos de la app. Si tu valor es el correcto, falta registrar o corregir una operación en ese módulo.</small></div>':'')
+      +'<div class="cc-import-adjust" style="display:none"><label>Motivo del ajuste</label><input type="text" id="ccImportAdjReason" maxlength="160" placeholder="Billete mal contado, comisión bancaria..."><small>El ajuste registra un gasto (faltante) o un ingreso (sobrante) para que la app quede igual a lo real. Se pedirá la clave de seguridad.</small></div>'
+      +'<label class="cc-import-label">Observaciones del cierre</label><textarea id="ccImportObs" rows="3" placeholder="Anota qué revisaste o por qué hay diferencia">'+esc(parsed.obs)+'</textarea>'
+      +'<div class="cc-import-status" id="ccImportStatus"></div>'
+      +'<div class="cc-import-actions"><button type="button" class="cc-import-cancel">CANCELAR</button><button type="button" class="cc-import-save">GUARDAR CIERRE</button></div>'
+      +'</div>';
+    document.body.appendChild(ov);
+
+    var status=ov.querySelector('#ccImportStatus'),adjBox=ov.querySelector('.cc-import-adjust');
+    function selected(){return Array.prototype.slice.call(ov.querySelectorAll('[data-adj]:checked')).map(function(c){return c.dataset.adj;});}
+    function refresh(){
+      var sel=selected(),rest=rows.filter(function(r){return Math.abs(r.diff)>=1&&sel.indexOf(r.id)<0;}).reduce(function(a,r){return a+r.diff;},0);
+      var pending=rows.some(function(r){return Math.abs(r.diff)>=1&&sel.indexOf(r.id)<0;});
+      adjBox.style.display=sel.length?'block':'none';
+      status.className='cc-import-status '+(pending?'bad':'ok');
+      status.textContent=pending?'El cierre se guardará con una diferencia sin ajustar de '+money(rest)+'. Escribe en observaciones qué pasó.':(sel.length?'Con los ajustes, la caja queda cuadrada.':'La caja está cuadrada. Puedes guardar el cierre.');
+    }
+    ov.querySelectorAll('[data-adj]').forEach(function(c){c.addEventListener('change',refresh);});
+    var close=function(){ov.remove();};
+    ov.querySelector('.cc-import-x').addEventListener('click',close);
+    ov.querySelector('.cc-import-cancel').addEventListener('click',close);
+    ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    refresh();
+
+    ov.querySelector('.cc-import-save').addEventListener('click',function(){
+      var sel=selected(),obs=String(ov.querySelector('#ccImportObs').value||'').trim();
+      var pending=rows.filter(function(r){return Math.abs(r.diff)>=1&&sel.indexOf(r.id)<0;});
+      if(pending.length&&!obs){alert('ESCRIBE EN OBSERVACIONES POR QUÉ QUEDA LA DIFERENCIA.');ov.querySelector('#ccImportObs').focus();return;}
+      if(parsed.signature!==closureSignature()){alert('SE REGISTRARON MOVIMIENTOS MIENTRAS REVISABAS. EXPORTA EL CIERRE DE NUEVO.');close();return;}
+      var adjustments=null;
+      if(sel.length){
+        var reason=String(ov.querySelector('#ccImportAdjReason').value||'').trim().toUpperCase();
+        if(!reason){alert('ESCRIBE EL MOTIVO DEL AJUSTE.');ov.querySelector('#ccImportAdjReason').focus();return;}
+        var key=prompt('🔒 AJUSTE DE CAJA PROTEGIDO\n\nIngresa la clave de seguridad:');
+        if(key===null)return;
+        if(String(key).trim()!==JCP_VOID_PIN){alert('CLAVE INCORRECTA. NO SE GUARDÓ EL CIERRE.');return;}
+        adjustments=rows.filter(function(r){return sel.indexOf(r.id)>=0;}).map(function(r){return {accountId:r.id,accountName:r.name,system:r.system,real:r.real,difference:r.diff,reason:reason};});
+      }
+      var summary=rows.map(function(r){return r.name+': '+money(r.real)+(Math.abs(r.diff)>=1?' (dif. '+money(r.diff)+(sel.indexOf(r.id)>=0?', se ajusta':'')+')':'');}).join('\n');
+      if(!confirm('¿GUARDAR EL CIERRE CON ESTOS SALDOS REALES?\n\n'+summary))return;
+      rows.forEach(function(r){var el=document.getElementById(INPUT_BY_ACCOUNT[r.id]);if(el)el.value=String(r.real);});
+      var obsEl=document.getElementById('ccCloseObs');if(obsEl)obsEl.value=obs;
+      var ok=saveCashClosure({
+        source:'excel',importCode:parsed.code,obs:obs,allowDifference:pending.length>0,
+        lineChecks:changed.map(function(c){return {id:c.id,concept:c.label,system:c.system,excel:c.yours};}),
+        adjustments:adjustments
+      });
+      if(ok)close();
+    });
+  }
+
+  // Ajuste de caja: deja tesorería igual al saldo real contado. Se llama dentro del guardado del cierre.
+  window.jcpApplyCashAdjustments=function(state,adjustments,nfo){
+    return (adjustments||[]).filter(function(a){return Math.abs(n(a.difference))>=1;}).map(function(a,i){
+      var faltante=a.difference<0,amount=Math.abs(n(a.difference)),id='mov_adj_'+Date.now()+'_'+i+'_'+Math.random().toString(36).slice(2,6);
+      var label=(faltante?'FALTANTE DE CAJA':'SOBRANTE DE CAJA')+' — '+a.accountName;
+      var receipt=addInternalReceipt(state,'general_movement',{entityId:id,amount:amount,title:'AJUSTE DE CIERRE — '+label,concept:a.reason,date:nfo.label,createdAt:nfo.iso,snapshot:{operationType:'AJUSTE CIERRE DE CAJA',account:a.accountId,system:a.system,real:a.real,difference:a.difference,reason:a.reason}});
+      var mov=faltante
+        ?{id:id,t:'gasto',subtype:'gasto_operativo',category:'FALTANTE DE CAJA',c:label+' — '+a.reason,v:amount,vehicleId:'',receiptNumber:receipt.number,date:nfo.label,createdAt:nfo.iso,source:'cash_close_adjustment'}
+        :{id:id,t:'ingreso',subtype:'ingreso_vario',c:label+' — '+a.reason,v:amount,receiptNumber:receipt.number,date:nfo.label,createdAt:nfo.iso,source:'cash_close_adjustment'};
+      state.mov.unshift(mov);
+      addTreasuryMovement(state,{accountId:a.accountId,direction:faltante?'out':'in',amount:amount,operationType:'AJUSTE CIERRE DE CAJA',operationId:id,receiptNumber:receipt.number,concept:label+' — '+a.reason,allowNegative:true,date:nfo.label,createdAt:nfo.iso});
+      return {accountId:a.accountId,difference:a.difference,amount:amount,type:faltante?'faltante':'sobrante',receiptNumber:receipt.number,movementId:id,reason:a.reason};
+    });
+  };
+})();
+
+</script>
+<style>
 #tareas .jcp-tasks-card{max-width:680px;margin:16px auto 0;background:#111;border:1px solid #3a3320;border-radius:16px;padding:18px}
 #tareas .jcp-tasks-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 #tareas .jcp-tasks-head b{color:#fff;font-size:16px}
@@ -18894,6 +19425,6 @@ window.jcpExtractMov=function(){
   try{setTimeout(function(){try{renderTasks()}catch(e){}},1500)}catch(e){}
 })();
 </script>
-<script src="./app-update.js?v=2026.10.12.63"></script>
+<script src="./app-update.js?v=2026.10.13.65"></script>
 </body>
 </html>
