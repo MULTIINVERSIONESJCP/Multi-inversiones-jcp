@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.10.15.67</title>
+<title>COLOMBIAUTOS JP - V2026.10.19.68</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4163,11 +4163,11 @@ body.jcp-custom-theme .database-actions-list button{
 <small>Vehículos e inversiones activas actualmente</small>
 <span class="home-kpi-link">VER INVENTARIO →</span>
 </button>
-<button aria-label="Abrir obligaciones pendientes" class="cf-card cf-orange home-kpi-button" onclick="openObligationsModule()" type="button">
+<button aria-label="Abrir cuentas por pagar" class="cf-card cf-orange home-kpi-button" onclick="openObligationsModule()" type="button">
 <div class="cf-card-label">🏦 TOTAL DE DEUDAS</div>
 <div class="cf-card-value" id="ccDeuda">$0</div>
-<small>Préstamos, créditos y aportes propios pendientes de devolver</small>
-<span class="home-kpi-link">VER OBLIGACIONES →</span>
+<small>Préstamos y créditos pendientes de pago</small>
+<span class="home-kpi-link">VER CUENTAS POR PAGAR →</span>
 </button>
 </div>
 <div class="section">Accesos rápidos</div>
@@ -4788,13 +4788,13 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </div>
 <div class="unified-module-gold-line"></div>
-<div class="unified-module-note">💡 Finanzas concentra cuentas por cobrar, obligaciones, utilidades y contabilidad.</div>
+<div class="unified-module-note">💡 Finanzas concentra cuentas por cobrar, cuentas por pagar, utilidades y contabilidad.</div>
 </div>
 <div class="cf-actions">
 
 <div class="cf-action-grid">
 <button class="cf-action" onclick="show('carteraCaja')"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="receivable"></span><div><b>Cuentas por cobrar</b><small>Ventas a crédito y préstamos pendientes</small></div></button>
-<button class="cf-action" onclick="openObligationsModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="loans"></span><div><b>Obligaciones</b><small>Financiaciones, saldos y pagos pendientes</small></div></button>
+<button class="cf-action" onclick="openObligationsModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="loans"></span><div><b>Cuentas por pagar</b><small>Préstamos, créditos, saldos y pagos pendientes</small></div></button>
 <button class="cf-action" onclick="openUtilitiesModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="capital"></span><div><b>Utilidades</b><small>Utilidad acumulada, retiros e historial</small></div></button>
 
 <button class="cf-action" onclick="openAccountingModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="accounting"><svg aria-hidden="true" viewbox="0 0 48 48"><path d="M10 8h21a7 7 0 0 1 7 7v25H16a6 6 0 0 1-6-6V8Z" fill="none" stroke="currentColor" stroke-width="2"></path><path d="M16 8v32M21 16h11M21 22h11M21 28h7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span><div><b>Contabilidad</b><small>Libros y estados financieros</small></div></button>
@@ -4835,12 +4835,12 @@ body.jcp-custom-theme .database-actions-list button{
 <h2 class="unified-module-title"><span class="unified-module-icon">🏦</span> CAPITAL Y FINANCIACIÓN</h2>
 </div></div>
 <div class="unified-module-gold-line"></div>
-<div class="unified-module-note">💡 Consulta capital, obligaciones, cuentas e historial. Las operaciones se registran desde Operaciones.</div>
+<div class="unified-module-note">💡 Consulta capital, cuentas por pagar, cuentas e historial. Las operaciones se registran desde Operaciones.</div>
 </div>
 <div class="cf-actions cf-finance-hub">
 <div class="cf-actions-title">CONSULTA FINANCIERA</div>
 <div class="cf-action-grid">
-<button class="cf-action" onclick="show('obligacionesPendientes')"><span>📋</span><div><b>Obligaciones pendientes</b><small>Consultar deudas activas y sus saldos pendientes</small></div></button>
+<button class="cf-action" onclick="show('obligacionesPendientes')"><span>📋</span><div><b>Cuentas por pagar pendientes</b><small>Consultar deudas activas y sus saldos pendientes</small></div></button>
 <button class="cf-action" onclick="show('historialCapitalFinanciacion')"><span>🧾</span><div><b>Historial de movimientos</b><small>Capital, créditos, préstamos, pagos y abonos</small></div></button>
 <button class="cf-action" onclick="show('cuentasEfectivo')"><span>🏦</span><div><b>Cuentas y efectivo</b><small>Consulta dónde está el dinero y realiza transferencias entre cuentas</small></div></button>
 
@@ -4852,14 +4852,14 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="unified-module-header">
   <div class="unified-module-title-row"><div class="unified-module-brand">
     <img alt="COLOMBIAUTOS JP" class="unified-module-logo" id="obligacionesLogo" src="logo-3.jpg"/>
-    <h2 class="unified-module-title"><span class="unified-module-icon">🏦</span> OBLIGACIONES</h2>
+    <h2 class="unified-module-title"><span class="unified-module-icon">🏦</span> CUENTAS POR PAGAR</h2>
   </div></div>
   <div class="unified-module-gold-line"></div>
   <div class="unified-module-note">💡 Administra las financiaciones que generan deuda para COLOMBIAUTOS JP.</div>
 </div>
 
 <div class="obligations-summary-grid">
-  <div class="obligations-summary-card"><span>OBLIGACIONES ACTIVAS</span><b id="obligationsHubActive">0</b></div>
+  <div class="obligations-summary-card"><span>CUENTAS POR PAGAR ACTIVAS</span><b id="obligationsHubActive">0</b></div>
   <div class="obligations-summary-card"><span>SALDO TOTAL PENDIENTE</span><b id="obligationsHubBalance">$0</b></div>
 </div>
 
@@ -4870,11 +4870,11 @@ body.jcp-custom-theme .database-actions-list button{
   </div>
   <div class="sales-menu-card jcp-icon-card" onclick="show('pagoObligaciones')">
     <span class="jcp-app-icon sales-menu-icon" data-jcp-icon="closure"></span>
-    <b>Cancelar obligación</b>
+    <b>Pagar cuenta</b>
   </div>
   <div class="sales-menu-card jcp-icon-card" onclick="show('historialObligaciones')">
     <span class="jcp-app-icon sales-menu-icon" data-jcp-icon="history"></span>
-    <b>Historial de obligaciones</b>
+    <b>Historial de cuentas por pagar</b>
   </div>
 </div>
 </section>
@@ -4883,7 +4883,7 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="unified-module-header">
   <div class="unified-module-title-row"><div class="unified-module-brand">
     <img alt="COLOMBIAUTOS JP" class="unified-module-logo" id="historialObligacionesLogo" src="logo-3.jpg"/>
-    <h2 class="unified-module-title"><span class="unified-module-icon">🧾</span> HISTORIAL DE OBLIGACIONES</h2>
+    <h2 class="unified-module-title"><span class="unified-module-icon">🧾</span> HISTORIAL DE CUENTAS POR PAGAR</h2>
   </div></div>
   <div class="unified-module-gold-line"></div>
   <div class="unified-module-note">💡 Consulta financiaciones pendientes y pagadas, con valor inicial, abonos y saldo.</div>
@@ -5111,14 +5111,14 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="unified-module-header">
 <div class="unified-module-title-row"><div class="unified-module-brand">
 <img alt="COLOMBIAUTOS JP" class="unified-module-logo" id="pagoObligLogo" src="logo-3.jpg"/>
-<h2 class="unified-module-title"><span class="unified-module-icon">💳</span> PAGO DE OBLIGACIONES</h2>
+<h2 class="unified-module-title"><span class="unified-module-icon">💳</span> PAGAR CUENTA</h2>
 </div></div>
 <div class="unified-module-gold-line"></div>
-<div class="unified-module-note">💡 Selecciona una obligación, elige abono o pago total y revisa el saldo resultante antes de registrar.</div>
+<div class="unified-module-note">💡 Selecciona una cuenta por pagar, elige abono o pago total y revisa el saldo resultante antes de registrar.</div>
 </div>
 <div class="debt-pay-shell">
 <div class="debt-pay-form">
-<label class="debt-pay-label" for="ccDebtSelect">OBLIGACIÓN</label>
+<label class="debt-pay-label" for="ccDebtSelect">CUENTA POR PAGAR</label>
 <select id="ccDebtSelect" onchange="onDebtSelectionChange()"></select>
 <label class="debt-pay-label">TIPO DE PAGO</label>
 <div class="debt-pay-type-grid">
@@ -5133,7 +5133,7 @@ body.jcp-custom-theme .database-actions-list button{
 <input data-money="1" id="ccDebtValue" inputmode="numeric" oninput="refreshDebtPaymentPreview();updatePaymentDistribution('debt')" placeholder="$ 0" type="text"/>
 <div class="debt-pay-secondary">
 <div>
-<div class="paydist" id="debtPayDist"><div class="paydist-title">FORMA DE PAGO DE LA OBLIGACIÓN</div><div class="paydist-grid">
+<div class="paydist" id="debtPayDist"><div class="paydist-title">FORMA DE PAGO DE LA CUENTA</div><div class="paydist-grid">
 <label class="paydist-row"><span>EFECTIVO</span><input data-money="1" id="debtPayCash" inputmode="numeric" oninput="payDistInput('debt',this)" placeholder="$ 0" type="text"/></label>
 <label class="paydist-row"><span>BANCOLOMBIA</span><input data-money="1" id="debtPayBancolombia" inputmode="numeric" oninput="payDistInput('debt',this)" placeholder="$ 0" type="text"/></label>
 <label class="paydist-row"><span>DAVIVIENDA</span><input data-money="1" id="debtPayDavivienda" inputmode="numeric" oninput="payDistInput('debt',this)" placeholder="$ 0" type="text"/></label>
@@ -5150,7 +5150,7 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="debt-pay-summary">
 <div class="debt-pay-summary-title">RESUMEN DEL PAGO</div>
 <div class="debt-pay-summary-grid">
-<div><span>OBLIGACIÓN</span><b id="ccDebtSummaryConcept">—</b></div>
+<div><span>CUENTA POR PAGAR</span><b id="ccDebtSummaryConcept">—</b></div>
 <div><span>TIPO</span><b id="ccDebtSummaryType">—</b></div>
 <div><span>VALOR INICIAL</span><b id="ccDebtSummaryInitial">$0</b></div>
 <div><span>TOTAL PAGADO</span><b id="ccDebtSummaryPaid">$0</b></div>
@@ -5160,9 +5160,9 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="debt-pay-result">
 <span>SALDO DESPUÉS DEL PAGO</span>
 <strong id="ccDebtResultInfo">$0</strong>
-<small id="ccDebtResultNote">SELECCIONA UNA OBLIGACIÓN</small>
+<small id="ccDebtResultNote">SELECCIONA UNA CUENTA POR PAGAR</small>
 </div>
-<button class="debt-pay-submit paydist-locked" disabled="" id="debtSubmit" onclick="saveDebtPayment()">REGISTRAR PAGO DE OBLIGACIÓN</button>
+<button class="debt-pay-submit paydist-locked" disabled="" id="debtSubmit" onclick="saveDebtPayment()">REGISTRAR PAGO</button>
 </div>
 </div>
 </section>
@@ -5170,14 +5170,14 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="unified-module-header">
 <div class="unified-module-title-row"><div class="unified-module-brand">
 <img alt="COLOMBIAUTOS JP" class="unified-module-logo" id="obligPendLogo" src="logo-3.jpg"/>
-<h2 class="unified-module-title"><span class="unified-module-icon">📋</span> OBLIGACIONES PENDIENTES</h2>
+<h2 class="unified-module-title"><span class="unified-module-icon">📋</span> CUENTAS POR PAGAR PENDIENTES</h2>
 </div></div>
 <div class="unified-module-gold-line"></div>
-<div class="unified-module-note">💡 Consulta todas las obligaciones activas, cuánto has pagado y cuánto debes actualmente.</div>
+<div class="unified-module-note">💡 Consulta todas las cuentas por pagar activas, cuánto has pagado y cuánto debes actualmente.</div>
 </div>
 <div class="cf-detail-panel cf-standalone-v78">
 <div class="pending-obligations-summary">
-<div><span>OBLIGACIONES ACTIVAS</span><b id="pendingDebtCount">0</b></div>
+<div><span>CUENTAS POR PAGAR ACTIVAS</span><b id="pendingDebtCount">0</b></div>
 <div><span>SALDO TOTAL PENDIENTE</span><b id="pendingDebtTotal">$0</b></div>
 </div>
 <div id="pendingObligationsList"></div>
@@ -5385,7 +5385,7 @@ body.jcp-custom-theme .database-actions-list button{
 <option value="operating_expense">GASTOS OPERACIONALES</option>
 <option value="vehicle_expense">GASTOS DE VEHÍCULO</option>
 <option value="finance">FINANCIACIÓN</option>
-<option value="debt_payment">ABONOS / PAGOS DE OBLIGACIONES</option>
+<option value="debt_payment">ABONOS / PAGOS DE CUENTAS POR PAGAR</option>
 <option value="loan">PRÉSTAMOS OTORGADOS</option>
 <option value="investment">INVERSIONES</option>
 <option value="general_movement">MOVIMIENTOS GENERALES</option>
@@ -5480,7 +5480,7 @@ body.jcp-custom-theme .database-actions-list button{
 <option value="gasto_vehiculo">GASTO DE VEHÍCULO</option>
 <option value="gasto_operativo">GASTO DE OPERACIÓN</option>
 <option value="financiacion">FINANCIACIÓN / CAPITAL RECIBIDO</option>
-<option value="pago_obligacion">PAGO DE OBLIGACIÓN</option>
+<option value="pago_obligacion">PAGO DE CUENTA POR PAGAR</option>
 <option value="prestamo_otorgado">PRÉSTAMO OTORGADO</option>
 <option value="inversion">INVERSIÓN</option>
 <option value="ingreso">OTRO INGRESO</option>
@@ -5576,9 +5576,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.10.15.67"></script>
-<script src="./jcp-sync.js?v=2026.10.15.67"></script>
-<script src="./jcp-images.js?v=2026.10.15.67"></script>
+<script src="./jcp-accounting.js?v=2026.10.19.68"></script>
+<script src="./jcp-sync.js?v=2026.10.19.68"></script>
+<script src="./jcp-images.js?v=2026.10.19.68"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -6828,7 +6828,7 @@ function renderIntegrityAudit(report=window.jcpLastAuditReport||jcpAuditState(da
   meta.textContent='Última revisión: '+new Date(report.generatedAt).toLocaleString('es-CO')+' · El protector bloquea inconsistencias críticas nuevas antes del guardado.';
   const m=report.metrics||{};
   grid.innerHTML=[
-    ['Vehículos activos',String(m.vehicles||0)],['Inventario',money(m.vehicleInvestment||0)],['Tesorería',money(m.treasury||0)],['Cuentas por cobrar',money(m.receivable||0)],['Obligaciones',money(m.debt||0)],['Utilidad neta',money(m.netProfit||0)],['Utilidad disponible',money(m.profitAvailable||0)],['Diferencia contable',money(m.accountingDiff||0)]
+    ['Vehículos activos',String(m.vehicles||0)],['Inventario',money(m.vehicleInvestment||0)],['Tesorería',money(m.treasury||0)],['Cuentas por cobrar',money(m.receivable||0)],['Cuentas por pagar',money(m.debt||0)],['Utilidad neta',money(m.netProfit||0)],['Utilidad disponible',money(m.profitAvailable||0)],['Diferencia contable',money(m.accountingDiff||0)]
   ].map(([k,v])=>'<div class="audit-kpi"><span>'+k.toUpperCase()+'</span><b>'+v+'</b></div>').join('');
   if(!report.issues.length){issuesEl.innerHTML='<div class="audit-empty">✓ No se detectaron inconsistencias en las verificaciones activas.</div>';return;}
   const order={critical:0,warning:1,info:2};
@@ -7965,7 +7965,7 @@ function receiptTypeLabel(type){
   const labels={
     purchase:'SOPORTE DE COMPRA',sale:'SOPORTE DE VENTA',
     operating_expense:'SOPORTE DE GASTO OPERACIONAL',vehicle_expense:'SOPORTE DE GASTO DE VEHÍCULO',
-    finance:'SOPORTE DE FINANCIACIÓN',debt_payment:'SOPORTE DE PAGO DE OBLIGACIÓN',
+    finance:'SOPORTE DE FINANCIACIÓN',debt_payment:'SOPORTE DE PAGO DE CUENTA POR PAGAR',
     trade:'SOPORTE DE PERMUTA',loan:'SOPORTE DE PRÉSTAMO OTORGADO',
     investment:'SOPORTE DE INVERSIÓN',general_movement:'SOPORTE DE MOVIMIENTO',
     profit_withdrawal:'SOPORTE DE RETIRO DE GANANCIA',cash_close:'SOPORTE DE CIERRE DE CAJA',
@@ -12277,7 +12277,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.15.67\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.19.68\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -12445,7 +12445,7 @@ function allObligations(){
   const m=Array.isArray(data?.mov)?data.mov:[];
   const financing=m.filter(x=>
     x && x.t==='ingreso' &&
-    ['credito','prestamo_recibido','tarjeta_credito','aporte_capital'].includes(x.subtype)
+    ['credito','prestamo_recibido','tarjeta_credito'].includes(x.subtype)
   );
   const payments=m.filter(x=>x && x.t==='gasto' && x.subtype==='pago_deuda');
 
@@ -12513,7 +12513,7 @@ window.renderObligationHistory=function(){
   if(!box)return;
 
   if(!rows.length){
-    box.innerHTML='<div class="empty">NO HAY OBLIGACIONES PARA ESTE FILTRO.</div>';
+    box.innerHTML='<div class="empty">NO HAY CUENTAS POR PAGAR PARA ESTE FILTRO.</div>';
     return;
   }
 
@@ -12534,7 +12534,7 @@ window.renderObligationHistory=function(){
 
   function debts(){
     ensure();
-    const financing=data.mov.filter(x=>x.t==='ingreso'&&(x.subtype==='credito'||x.subtype==='prestamo_recibido'||x.subtype==='tarjeta_credito'||x.subtype==='aporte_capital'));
+    const financing=data.mov.filter(x=>x.t==='ingreso'&&(x.subtype==='credito'||x.subtype==='prestamo_recibido'||x.subtype==='tarjeta_credito'));
     const payments=data.mov.filter(x=>x.t==='gasto'&&x.subtype==='pago_deuda');
     return financing.map(f=>{
       const key=f.capitalOpId||f.id;
@@ -12562,7 +12562,7 @@ window.renderObligationHistory=function(){
     if(total)total.textContent=money(list.reduce((a,x)=>a+x.balance,0));
     if(!box)return;
     if(!list.length){
-      box.innerHTML='<div class="empty">NO HAY OBLIGACIONES PENDIENTES.</div>';
+      box.innerHTML='<div class="empty">NO HAY CUENTAS POR PAGAR PENDIENTES.</div>';
       return;
     }
     const head='<div class="obligation-list-head"><span>TIPO / CONCEPTO</span><span>VALOR INICIAL</span><span>ABONADO</span><span>SALDO</span><span>FECHA</span><span>REFERENCIA</span><span>ESTADO</span></div>';
@@ -12655,7 +12655,7 @@ window.renderObligationHistory=function(){
       ccDebtSummaryConcept:'—',ccDebtSummaryType:'—',
       ccDebtSummaryInitial:money(0),ccDebtSummaryPaid:money(0),
       ccDebtBalanceInfo:money(0),ccDebtSummaryPayment:money(0),
-      ccDebtResultInfo:money(0),ccDebtResultNote:'SELECCIONA UNA OBLIGACIÓN'
+      ccDebtResultInfo:money(0),ccDebtResultNote:'SELECCIONA UNA CUENTA POR PAGAR'
     };
     Object.entries(text).forEach(([id,v])=>{const e=document.getElementById(id);if(e)e.textContent=v;});
     resetDebtPaymentDistributionFields();
@@ -12740,7 +12740,7 @@ window.renderObligationHistory=function(){
     if(!f){
       if(result)result.textContent=money(0);
       if(pay)pay.textContent=money(0);
-      if(note)note.textContent='SELECCIONA UNA OBLIGACIÓN';
+      if(note)note.textContent='SELECCIONA UNA CUENTA POR PAGAR';
       return;
     }
     let amount=type==='total'?f.balance:val('ccDebtValue');
@@ -12749,7 +12749,7 @@ window.renderObligationHistory=function(){
     const next=Math.max(0,f.balance-applied);
     if(pay)pay.textContent=money(applied);
     if(result)result.textContent=money(next);
-    if(note)note.textContent=next===0&&applied>0?'OBLIGACIÓN CANCELADA EN SU TOTALIDAD':(applied>0?'NUEVO SALDO PENDIENTE':'INGRESA EL VALOR DEL ABONO');
+    if(note)note.textContent=next===0&&applied>0?'CUENTA PAGADA EN SU TOTALIDAD':(applied>0?'NUEVO SALDO PENDIENTE':'INGRESA EL VALOR DEL ABONO');
     updatePaymentDistribution('debt');
 };
 
@@ -12791,7 +12791,7 @@ window.renderObligationHistory=function(){
     updatePaymentDistribution('debt');
   };
 
-  window.saveDebtPayment=function(){ensure();const paymentType=ccDebtPaymentType.value||'partial',f=selectedDebt();let amount=val('ccDebtValue');if(paymentType==='total'&&f)amount=f.balance;if(!f||amount<=0)return alert('SELECCIONA UNA DEUDA E INGRESA EL VALOR.');if(amount>f.balance)return alert('EL ABONO SUPERA EL SALDO.');if(!validatePaymentDistribution('debt',amount))return;const before=cloneAppData(data),next=cloneAppData(data),d=nowInfo(),id='cap_'+Date.now(),prev=f.balance,newBalance=paymentType==='total'?0:Math.max(0,prev-amount);try{const receipt=addInternalReceipt(next,'debt_payment',{entityId:id,amount,title:(paymentType==='total'?'PAGO TOTAL DE OBLIGACIÓN — ':'ABONO A OBLIGACIÓN — ')+f.concept,concept:f.concept,date:d.label,createdAt:d.iso,snapshot:{operationType:paymentType==='total'?'PAGO TOTAL':'ABONO',previousBalance:prev,newBalance,paymentDistribution:paymentDistribution('debt')}});const dist=applyPaymentDistribution(next,{prefix:'debt',direction:'out',total:amount,operationType:'PAGO OBLIGACIÓN',operationId:id,receiptNumber:receipt.number,concept:f.concept,date:d.label,createdAt:d.iso});receipt.snapshot.paymentDistribution=cloneAppData(dist);next.capitalOps.unshift({id,type:'pago_deuda',paymentType,financingId:String(f.id),concept:(paymentType==='total'?'PAGO TOTAL ':'ABONO ')+f.concept,value:amount,previousBalance:prev,newBalance,receiptNumber:receipt.number,paymentDistribution:dist,date:d.label,createdAt:d.iso});next.mov.unshift({id:'mov_'+id,t:'gasto',subtype:'pago_deuda',c:'PAGO DEUDA — '+f.concept,v:amount,financingId:String(f.id),receiptNumber:receipt.number,paymentDistribution:dist,date:d.label,createdAt:d.iso,nonOperatingExpense:true});data=next;save();clearPaymentDistribution('debt');renderCashCapital();renderPendingObligations();renderTreasuryModule();try{renderObligationsHub();renderObligationHistory();}catch(e){}try{renderRecordsModule();}catch(e){}alert('✅ '+receipt.number+' — SOPORTE GENERADO.');setTimeout(openObligationsModule,0);}catch(e){data=before;alert('NO FUE POSIBLE REGISTRAR EL PAGO.\n\n'+e.message);}};
+  window.saveDebtPayment=function(){ensure();const paymentType=ccDebtPaymentType.value||'partial',f=selectedDebt();let amount=val('ccDebtValue');if(paymentType==='total'&&f)amount=f.balance;if(!f||amount<=0)return alert('SELECCIONA UNA DEUDA E INGRESA EL VALOR.');if(amount>f.balance)return alert('EL ABONO SUPERA EL SALDO.');if(!validatePaymentDistribution('debt',amount))return;const before=cloneAppData(data),next=cloneAppData(data),d=nowInfo(),id='cap_'+Date.now(),prev=f.balance,newBalance=paymentType==='total'?0:Math.max(0,prev-amount);try{const receipt=addInternalReceipt(next,'debt_payment',{entityId:id,amount,title:(paymentType==='total'?'PAGO TOTAL DE CUENTA POR PAGAR — ':'ABONO A CUENTA POR PAGAR — ')+f.concept,concept:f.concept,date:d.label,createdAt:d.iso,snapshot:{operationType:paymentType==='total'?'PAGO TOTAL':'ABONO',previousBalance:prev,newBalance,paymentDistribution:paymentDistribution('debt')}});const dist=applyPaymentDistribution(next,{prefix:'debt',direction:'out',total:amount,operationType:'PAGO OBLIGACIÓN',operationId:id,receiptNumber:receipt.number,concept:f.concept,date:d.label,createdAt:d.iso});receipt.snapshot.paymentDistribution=cloneAppData(dist);next.capitalOps.unshift({id,type:'pago_deuda',paymentType,financingId:String(f.id),concept:(paymentType==='total'?'PAGO TOTAL ':'ABONO ')+f.concept,value:amount,previousBalance:prev,newBalance,receiptNumber:receipt.number,paymentDistribution:dist,date:d.label,createdAt:d.iso});next.mov.unshift({id:'mov_'+id,t:'gasto',subtype:'pago_deuda',c:'PAGO DEUDA — '+f.concept,v:amount,financingId:String(f.id),receiptNumber:receipt.number,paymentDistribution:dist,date:d.label,createdAt:d.iso,nonOperatingExpense:true});data=next;save();clearPaymentDistribution('debt');renderCashCapital();renderPendingObligations();renderTreasuryModule();try{renderObligationsHub();renderObligationHistory();}catch(e){}try{renderRecordsModule();}catch(e){}alert('✅ '+receipt.number+' — SOPORTE GENERADO.');setTimeout(openObligationsModule,0);}catch(e){data=before;alert('NO FUE POSIBLE REGISTRAR EL PAGO.\n\n'+e.message);}};
 
   window.saveOperatingExpense=function(){
     ensure();
@@ -12898,7 +12898,7 @@ h1{font-size:22px;margin:0}h2{font-size:14px;color:#555;margin:5px 0 18px}
   <div class="card"><span>Diferencia</span><b class="${Math.abs(+c.difference||0)<1?'diff-ok':'diff-bad'}">${safe(money(c.difference||0))}</b></div>
 </div>
 
-<div class="section">CAPITAL Y OBLIGACIONES</div>
+<div class="section">CAPITAL Y CUENTAS POR PAGAR</div>
 <div class="grid">
   <div class="card"><span>Capital propio</span><b>${safe(money(c.ownCapital||0))}</b></div>
   <div class="card"><span>Financiación recibida</span><b>${safe(money(c.financing||0))}</b></div>
@@ -12921,7 +12921,7 @@ h1{font-size:22px;margin:0}h2{font-size:14px;color:#555;margin:5px 0 18px}
     put('ccGrossProfit',s.gross);put('ccOpExpenses',s.opExp);put('ccNetProfit',s.net);put('ccExpectedCash',s.expected);
 
     const sel=document.getElementById('ccDebtSelect');
-    if(sel){const current=sel.value;const ds=debts();sel.innerHTML=ds.length?'<option value="">SELECCIONA UNA OBLIGACIÓN...</option>'+ds.map(x=>'<option value="'+clientEsc(String(x.id))+'" data-debt-id="'+clientEsc(String(x.id))+'" data-balance="'+Number(x.balance||0)+'">'+clientEsc(x.concept)+' — SALDO '+clientEsc(money(x.balance))+'</option>').join(''):'<option value="">NO HAY OBLIGACIONES ACTIVAS</option>';if(ds.some(x=>String(x.id)===String(current)))sel.value=String(current);if(window.refreshDebtPaymentForm)refreshDebtPaymentForm();}
+    if(sel){const current=sel.value;const ds=debts();sel.innerHTML=ds.length?'<option value="">SELECCIONA UNA CUENTA POR PAGAR...</option>'+ds.map(x=>'<option value="'+clientEsc(String(x.id))+'" data-debt-id="'+clientEsc(String(x.id))+'" data-balance="'+Number(x.balance||0)+'">'+clientEsc(x.concept)+' — SALDO '+clientEsc(money(x.balance))+'</option>').join(''):'<option value="">NO HAY CUENTAS POR PAGAR ACTIVAS</option>';if(ds.some(x=>String(x.id)===String(current)))sel.value=String(current);if(window.refreshDebtPaymentForm)refreshDebtPaymentForm();}
 
     const hist=document.getElementById('ccCapitalHistory');
     if(hist){
@@ -13227,7 +13227,7 @@ function recordNumberOf(item){
 }
 
 function recordTypeLabel(type){
-  return ({purchase:'COMPRA',sale:'VENTA / FACTURA',operating_expense:'GASTO OPERACIONAL',vehicle_expense:'GASTO DE VEHÍCULO',finance:'FINANCIACIÓN',debt_payment:'ABONO / PAGO DE OBLIGACIÓN',loan:'PRÉSTAMO OTORGADO',investment:'INVERSIÓN',general_movement:'MOVIMIENTO GENERAL',profit_withdrawal:'RETIRO DE GANANCIA',trade:'PERMUTA',cash_close:'CIERRE DE CAJA',treasury_transfer:'TRANSFERENCIA INTERNA',collection:'COBRO DE CARTERA'})[type]||String(type||'REGISTRO').replaceAll('_',' ').toUpperCase();
+  return ({purchase:'COMPRA',sale:'VENTA / FACTURA',operating_expense:'GASTO OPERACIONAL',vehicle_expense:'GASTO DE VEHÍCULO',finance:'FINANCIACIÓN',debt_payment:'ABONO / PAGO DE CUENTA POR PAGAR',loan:'PRÉSTAMO OTORGADO',investment:'INVERSIÓN',general_movement:'MOVIMIENTO GENERAL',profit_withdrawal:'RETIRO DE GANANCIA',trade:'PERMUTA',cash_close:'CIERRE DE CAJA',treasury_transfer:'TRANSFERENCIA INTERNA',collection:'COBRO DE CARTERA'})[type]||String(type||'REGISTRO').replaceAll('_',' ').toUpperCase();
 }
 
 function collectRecordsModuleRows(){
@@ -14225,13 +14225,14 @@ function globalSearchModules(){
     {type:'MÓDULO',title:'Inicio',meta:'Resumen principal',action:"openMainNavigation('dashboard')"},
     {type:'MÓDULO',title:'Inventario',meta:'Inventario y detalle de vehículos',action:"openVehiclesHub()"},
     {type:'MÓDULO',title:'Operaciones',meta:'Ventas, compras y registro de gastos',action:"openOperationsHub()"},
-    {type:'MÓDULO',title:'Finanzas',meta:'Cuentas por cobrar, obligaciones, utilidades y contabilidad',action:"openMainNavigation('cajaCapital')"},
+    {type:'MÓDULO',title:'Finanzas',meta:'Cuentas por cobrar, cuentas por pagar, utilidades y contabilidad',action:"openMainNavigation('cajaCapital')"},
     {type:'MÓDULO',title:'Capital',meta:'Consulta de capital y fuentes de financiación',action:"show('detalleCapital')"},
     {type:'MÓDULO',title:'Cierre de caja',meta:'Cierre semanal y mensual',action:"show('cierreCaja')"},
-    {type:'MÓDULO',title:'Historial de capital y financiación',meta:'Movimientos de capital y obligaciones',action:"show('historialCapitalFinanciacion')"},
+    {type:'MÓDULO',title:'Historial de capital y financiación',meta:'Movimientos de capital y cuentas por pagar',action:"show('historialCapitalFinanciacion')"},
     {type:'MÓDULO',title:'Retiro de ganancia',meta:'Historial de retiros de utilidad',action:"show('historialRetiroGanancia')"},
     {type:'MÓDULO',title:'Extractos',meta:'Movimientos financieros',action:"show('extractos')"},
     {type:'MÓDULO',title:'Base de datos',meta:'Clientes registrados',action:"show('clientes')"},
+    {type:'MÓDULO',title:'Cuentas por pagar',meta:'Préstamos y créditos recibidos, saldos y pagos',action:"openObligationsModule()"},
     {type:'MÓDULO',title:'Lista de tareas',meta:'Pendientes y tareas cumplidas',action:"openTasksModule()"},
     {type:'MÓDULO',title:'Préstamos',meta:'Préstamos y pagos',action:"openLoanModule()"}
   ];
@@ -15061,8 +15062,8 @@ function accHumanLabel(v){
     credito:'CRÉDITO RECIBIDO',
     prestamo_recibido:'PRÉSTAMO RECIBIDO',
     tarjeta_credito:'TARJETA DE CRÉDITO',
-    debt_payment:'PAGO DE OBLIGACIÓN',
-    pago_deuda:'PAGO DE OBLIGACIÓN',
+    debt_payment:'PAGO DE CUENTA POR PAGAR',
+    pago_deuda:'PAGO DE CUENTA POR PAGAR',
     loan:'PRÉSTAMO OTORGADO',
     loan_legacy:'PRÉSTAMO OTORGADO',
     loan_payment_legacy:'PAGO DE PRÉSTAMO OTORGADO',
@@ -15343,7 +15344,7 @@ function renderAccountingPosition(m,bits){
       <div class="acc-statement-row acc-statement-total"><span>TOTAL ACTIVOS</span><b>${accFmt(m.assets)}</b></div>
     </div>
     <div class="acc-statement-card"><h4>PASIVOS Y PATRIMONIO</h4>
-      <div class="acc-statement-row"><span>Obligaciones financieras</span><b>${accFmt(m.liabilities)}</b></div>
+      <div class="acc-statement-row"><span>Cuentas por pagar</span><b>${accFmt(m.liabilities)}</b></div>
       <div class="acc-statement-row"><span>Capital y aportes</span><b>${accFmt(m.capital)}</b></div>
       <div class="acc-statement-row"><span>Resultado acumulado</span><b>${accFmt(m.result)}</b></div>
       <div class="acc-statement-row"><span>Utilidades retiradas</span><b>− ${accFmt(m.withdrawals||0)}</b></div>
@@ -15504,7 +15505,7 @@ function accountingDocumentTypeLabel(type){
   return ({
     compra:'COMPRA DE VEHÍCULO',venta:'VENTA DE VEHÍCULO',permuta:'PERMUTA',
     gasto_vehiculo:'GASTO DE VEHÍCULO',gasto_operativo:'GASTO DE OPERACIÓN',
-    pago_obligacion:'PAGO DE OBLIGACIÓN',financiacion:'FINANCIACIÓN',
+    pago_obligacion:'PAGO DE CUENTA POR PAGAR',financiacion:'FINANCIACIÓN',
     prestamo_otorgado:'PRÉSTAMO OTORGADO',inversion:'INVERSIÓN',ingreso:'INGRESO'
   })[type]||String(type||'DOCUMENTO').replaceAll('_',' ').toUpperCase();
 }
@@ -15986,7 +15987,7 @@ function voidAccountingDocument(){
     return ({
       purchase:'COMPRA',sale:'VENTA / FACTURA',operating_expense:'GASTO OPERACIONAL',
       vehicle_expense:'GASTO DE VEHÍCULO',finance:'FINANCIACIÓN',
-      debt_payment:'ABONO / PAGO DE OBLIGACIÓN',trade:'PERMUTA',
+      debt_payment:'ABONO / PAGO DE CUENTA POR PAGAR',trade:'PERMUTA',
       cash_close:'CIERRE DE CAJA',loan:'PRÉSTAMO OTORGADO',investment:'INVERSIÓN',
       general_movement:'MOVIMIENTO GENERAL',profit_withdrawal:'RETIRO DE GANANCIA',
       treasury_transfer:'TRANSFERENCIA INTERNA',collection:'COBRO DE CARTERA'
@@ -16494,7 +16495,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.10.15.67',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.10.19.68',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -16502,7 +16503,7 @@ window.openRecordCopy=function(number){
   const recordDate=o=>val(o,'createdAt','date','fecha','purchaseDate','saleDate','fechaVenta','fechaRegistro','at','updatedAt','lastModifiedAt','cutoffAt','periodEnd');
   const expenseFor=v=>typeof getVehicleExpenseTotal==='function'?getVehicleExpenseTotal(v.id,data):num(v,'g','gastos');
   const isVehicleExpense=m=>typeof isVehicleExpenseMovement==='function'?isVehicleExpenseMovement(m,m?.vehicleId):Boolean(m?.vehicleId&&m?.t==='gasto');
-  const cleanLabel=value=>({compra_vehiculo:'Compra de vehículo',prestamo_recibido:'Préstamo recibido',aporte_capital:'Aporte de capital',compra:'Compra',gasto:'Gasto',ingreso:'Ingreso',pago_deuda:'Pago de obligación'}[String(value||'').trim().toLowerCase()]||String(value||'').replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
+  const cleanLabel=value=>({compra_vehiculo:'Compra de vehículo',prestamo_recibido:'Préstamo recibido',aporte_capital:'Aporte de capital',compra:'Compra',gasto:'Gasto',ingreso:'Ingreso',pago_deuda:'Pago de cuenta por pagar'}[String(value||'').trim().toLowerCase()]||String(value||'').replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
   const isVehiclePurchase=m=>['compra_vehiculo','compra vehículo','compra de vehículo'].includes(String(val(m,'subtype','category','categoria','department','departamento')).trim().toLowerCase())||/compra\s+(de\s+)?veh[ií]culo/i.test(String(val(m,'c','concept','concepto')));
   const isDebtPayment=m=>String(val(m,'subtype','category','categoria')).trim().toLowerCase()==='pago_deuda';
   const findVehicle=m=>{const id=String(val(m,'vehicleId','vehiculoId','vehicle_id'));return [...(data.veh||[]),...(data.sold||[])].find(v=>String(v?.id||'')===id)||{};};
@@ -16540,11 +16541,11 @@ window.openRecordCopy=function(number){
       return {headers:['Fecha','Origen','Cliente','Concepto','Valor inicial','Abonos','Saldo','Estado','Usuario'],rows:[...salesRows,...tradeRows]};
     }},
     {id:'loans',label:'Préstamos otorgados',sheet:'Préstamos',build:()=>({headers:['Fecha','Cliente','Capital','Interés','Total esperado','Pagado','Saldo','Estado','Usuario'],rows:(data.pres||[]).map(p=>{const capital=num(p,'c','capital','value'),interest=num(p,'i','interest','interes');const paid=num(p,'p')+(typeof jcpLoanCapCollected==='function'?jcpLoanCapCollected(p):0);const total=num(p,'total')||capital+interest;const balance=Math.max(0,total-paid);return [fmtDate(recordDate(p)),val(p,'n','nombre','client','cliente'),capital,interest,total,paid,balance,balance<=0?'PAGADO':(val(p,'estado','status')||'VIGENTE'),actor(p)]})})},
-    {id:'obligations',label:'Obligaciones y financiaciones',sheet:'Obligaciones',build:()=>{
+    {id:'obligations',label:'Cuentas por pagar',sheet:'Cuentas por pagar',build:()=>{
       const ops=data.capitalOps||[];
       const isPayment=x=>String(val(x,'type','tipo')).trim().toLowerCase()==='pago_deuda';
       const paidOf=id=>ops.filter(y=>isPayment(y)&&String(val(y,'financingId'))===String(id)).reduce((a,y)=>a+num(y,'value','valor','capital'),0);
-      return {headers:['Fecha','Tipo','Concepto / acreedor','Valor','Pagado','Saldo','Estado','Usuario'],rows:ops.filter(x=>!isPayment(x)).map(x=>{
+      return {headers:['Fecha','Tipo','Concepto / acreedor','Valor','Pagado','Saldo','Estado','Usuario'],rows:ops.filter(x=>!isPayment(x)&&['credito','prestamo_recibido','tarjeta_credito'].includes(String(val(x,'type','tipo')).trim().toLowerCase())).map(x=>{
         const value=num(x,'value','valor','capital');
         const paid=paidOf(x.id),balance=Math.max(0,value-paid);
         return [fmtDate(recordDate(x)),cleanLabel(val(x,'type','tipo')),val(x,'concept','concepto','creditor','acreedor'),value,paid,balance,balance<=0?'PAGADA':(val(x,'status','estado')||'VIGENTE'),actor(x)];
@@ -16709,7 +16710,7 @@ window.openRecordCopy=function(number){
     finanzas:    {label:'Finanzas',       icon:'card',    go:function(){show('cajaCapital')}},
     capital:     {label:'Capital',        icon:'wallet',  go:function(){show('detalleCapital')}},
     disponible:  {label:'Disponible',     icon:'cash',    go:function(){openAvailableDetail()}},
-    obligaciones:{label:'Obligaciones',   icon:'bank',    go:function(){openObligationsModule()}},
+    obligaciones:{label:'Cuentas por pagar',   icon:'bank',    go:function(){openObligationsModule()}},
     utilidades:  {label:'Utilidades',     icon:'trend',   go:function(){openUtilitiesModule()}},
     cierre:      {label:'Cierre de caja', icon:'lock',    go:function(){show('cierreCaja')}},
     extractos:   {label:'Extractos',      icon:'list',    go:function(){show('extractos')}},
@@ -18981,7 +18982,7 @@ window.jcpExtractMov=function(){
     sh.merges.push('B'+ro+':I'+ro);sh.heights[ro]=48;
     var rn=ro+2;
     ['Hojas del archivo: MOVIMIENTOS (cada entrada y salida de plata del período, con su línea), CUENTAS (saldo inicial y final por cuenta),',
-     'VENTAS, G.V y G.O (lo registrado en el período) y FINANCIACIONES, INVENTARIO, CXC y PRESTAMOS (saldo al inicio + lo del período = saldo al corte).']
+     'VENTAS, G.V y G.O (lo registrado en el período) y CUENTAS POR PAGAR, INVENTARIO, CXC y PRESTAMOS (saldo al inicio + lo del período = saldo al corte).']
       .forEach(function(t,i){sh.str('A'+(rn+i),t,S.note);sh.merges.push('A'+(rn+i)+':I'+(rn+i));});
     sh.widths=[38,16,16,17,3,15,16,16,15];
     return {sheet:sh,layout:{aFirst:aF,obsRow:ro}};
@@ -19090,10 +19091,10 @@ window.jcpExtractMov=function(){
     {id:'ventas',label:'Ventas y permutas (lo cobrado)',core:true},
     {id:'recaudos',label:'Recaudos de cartera',core:true},
     {id:'cobro_prestamos',label:'Cobro de préstamos',core:true},
-    {id:'obligaciones',label:'Obligaciones recibidas',core:true},
+    {id:'obligaciones',label:'Préstamos y créditos recibidos',core:true},
     {id:'capital',label:'Capital y aportes'},
     {id:'otros_ingresos',label:'Otros ingresos'},
-    {id:'pago_obligaciones',label:'Pago de obligaciones',core:true},
+    {id:'pago_obligaciones',label:'Pago de cuentas por pagar',core:true},
     {id:'compras',label:'Compras de vehículos y permutas',core:true},
     {id:'gastos_vehiculos',label:'Gastos de vehículos',core:true},
     {id:'gastos_operacionales',label:'Gastos operacionales',core:true},
@@ -19198,7 +19199,7 @@ window.jcpExtractMov=function(){
       var value=n(o.value),created=ts(o),paidTo=0,paidPer=0;
       pays.forEach(function(p){if(String(p.financingId)!==String(o.id))return;var t=ts(p);if(t>to)return;paidTo+=n(p.value);if(t>=from)paidPer+=n(p.value);});
       var hoy=Math.max(0,value-paidTo),rec=created>=from?value:0;
-      return {name:String(o.concept||o.type||'OBLIGACIÓN').toUpperCase(),start:hoy-rec+paidPer,plus:rec,minus:paidPer,end:hoy};
+      return {name:String(o.concept||o.type||'CUENTA POR PAGAR').toUpperCase(),start:hoy-rec+paidPer,plus:rec,minus:paidPer,end:hoy};
     });
     // Préstamos otorgados
     out.prestamos=list(state.pres).filter(function(p){return p&&!p.voided&&p.estado!=='ANULADO'&&ts(p)<=to;}).map(function(p){
@@ -19290,7 +19291,7 @@ window.jcpExtractMov=function(){
     h+='<div class="t">TOTAL</div><div class="t r">'+money(m.closingTotal)+'</div><div class="t r" id="cc2RealTotal"></div><div class="t r" id="cc2DiffTotal"></div></div>'
       +'<div class="cc2-reason" id="cc2ReasonBox"><label>MOTIVO DEL AJUSTE</label><input type="text" id="cc2Reason" maxlength="160" placeholder="Billete mal contado, comisión bancaria..." value="'+esc(st.reason)+'"><small>El ajuste registra un gasto (faltante) o un ingreso (sobrante) para que la app quede igual a lo real. Pide la clave de seguridad.</small></div>'
       +'</div>';
-    var groups=[['financiaciones','FINANCIACIONES (LO QUE DEBES)','Recibido','Pagado'],['inventario','INVENTARIO (COSTO)','Comprado','Vendido'],['cxc','CUENTAS POR COBRAR','Nuevo saldo','Cobrado'],['prestamos','PRÉSTAMOS OTORGADOS','Prestado','Cobrado']];
+    var groups=[['financiaciones','CUENTAS POR PAGAR (LO QUE DEBES)','Recibido','Pagado'],['inventario','INVENTARIO (COSTO)','Comprado','Vendido'],['cxc','CUENTAS POR COBRAR','Nuevo saldo','Cobrado'],['prestamos','PRÉSTAMOS OTORGADOS','Prestado','Cobrado']];
     h+='<div class="cc2-card"><div class="cc2-title">SALDOS DEL PERÍODO <small>Al inicio + lo del período = al corte</small></div><div class="cc2-table cc2-bal"><div class="h">CONCEPTO</div><div class="h r">AL INICIO</div><div class="h r">AL CORTE</div>';
     groups.forEach(function(g){
       var rows=bal[g[0]],open=st.open['b_'+g[0]];
@@ -19475,7 +19476,7 @@ window.jcpExtractMov=function(){
         {name:'VENTAS',title:'VENTAS DEL PERÍODO',sub:'Ventas registradas entre '+fmtTs(m.from)+' y '+fmtTs(cutoff)+'. Lo cobrado en efectivo o bancos aparece en MOVIMIENTOS.',headers:['FECHA','PLACA','VEHÍCULO','CLIENTE','PRECIO','RECIBIDO','SALDO','UTILIDAD'],widths:[17,11,30,26,15,15,15,15],money:[4,5,6,7],rows:sales},
         {name:'G.V',title:'GASTOS DE VEHÍCULOS DEL PERÍODO',sub:'Gastos registrados en el período (sin anulados).',headers:['FECHA','PLACA','VEHÍCULO','CONCEPTO','VALOR','SOPORTE'],widths:[17,11,26,40,15,13],money:[4],rows:gv},
         {name:'G.O',title:'GASTOS OPERACIONALES DEL PERÍODO',sub:'Gastos registrados en el período (sin anulados).',headers:['FECHA','CATEGORÍA','CONCEPTO','VALOR','SOPORTE'],widths:[17,20,46,15,13],money:[3],rows:go},
-        balSpec('FINANCIACIONES','FINANCIACIONES — LO QUE DEBES',['OBLIGACIÓN','SALDO AL INICIO','RECIBIDO','PAGADO','SALDO AL CORTE'],bal.financiaciones.map(function(r){return [r.name,r.start,r.plus,r.minus];}),'Recibido y Pagado cuadran con las líneas "Obligaciones recibidas" y "Pago de obligaciones" cuando se movió plata.'),
+        balSpec('CUENTAS POR PAGAR','CUENTAS POR PAGAR — LO QUE DEBES',['CUENTA POR PAGAR','SALDO AL INICIO','RECIBIDO','PAGADO','SALDO AL CORTE'],bal.financiaciones.map(function(r){return [r.name,r.start,r.plus,r.minus];}),'Recibido y Pagado cuadran con las líneas "Préstamos y créditos recibidos" y "Pago de cuentas por pagar" cuando se movió plata.'),
         balSpec('INVENTARIO','INVENTARIO — COSTO DE LOS VEHÍCULOS',['VEHÍCULO','COSTO AL INICIO','COMPRADO / RECIBIDO','GASTOS','VENDIDO (COSTO)','COSTO AL CORTE'],bal.inventario.map(function(r){return [r.name,r.start,r.plus,r.plus2||0,r.minus];}),'Es costo, no plata: una compra a crédito o por permuta suma aquí aunque no haya salido dinero.'),
         balSpec('CXC','CUENTAS POR COBRAR',['CLIENTE','SALDO AL INICIO','NUEVO SALDO','COBRADO','SALDO AL CORTE'],bal.cxc.map(function(r){return [r.name,r.start,r.plus,r.minus];}),'Cobrado cuadra con la línea "Recaudos de cartera".'),
         balSpec('PRESTAMOS','PRÉSTAMOS OTORGADOS',['PERSONA','SALDO AL INICIO','PRESTADO','COBRADO','SALDO AL CORTE'],bal.prestamos.map(function(r){return [r.name,r.start,r.plus,r.minus];}),'Prestado y Cobrado (capital) cuadran con sus líneas de la cascada; los intereses cobrados también suman en "Cobro de préstamos".')
@@ -19528,7 +19529,7 @@ window.jcpExtractMov=function(){
     var run=n(c.opening),rowsH='<tr><td><b>SALDO INICIAL</b></td><td></td><td></td><td class="r"><b>'+money(c.opening)+'</b></td></tr>'+list(c.lines).map(function(l){run+=n(l.in)-n(l.out);return '<tr><td>'+esc(l.label)+'</td><td class="r">'+(l.in?money(l.in):'')+'</td><td class="r">'+(l.out?money(l.out):'')+'</td><td class="r">'+money(run)+'</td></tr>';}).join('')+'<tr class="t"><td>SALDO ESPERADO</td><td></td><td></td><td class="r">'+money(c.expected)+'</td></tr>';
     var acc=list(c.accountsDetail).map(function(a){return '<tr><td>'+esc(a.name)+'</td><td class="r">'+money(a.system)+'</td><td class="r">'+money(a.real)+'</td><td class="r '+(Math.abs(n(a.difference))>=1?'bad':'')+'">'+money(a.difference)+(a.adjusted?' (ajustado)':'')+'</td></tr>';}).join('')+'<tr class="t"><td>TOTAL</td><td class="r">'+money(c.expected)+'</td><td class="r">'+money(c.actual)+'</td><td class="r">'+money(c.difference)+'</td></tr>';
     var adj=list(c.adjustments).length?'<h3>AJUSTES</h3><table>'+c.adjustments.map(function(a){return '<tr><td>'+esc(a.receiptNumber)+'</td><td>'+esc(a.type==='faltante'?'Faltante':'Sobrante')+' en '+esc(accName(a.accountId))+'</td><td>'+esc(a.reason)+'</td><td class="r">'+money(a.amount)+'</td></tr>';}).join('')+'</table>':'';
-    var bl=c.balances||{},bn={financiaciones:'Financiaciones (lo que debes)',inventario:'Inventario (costo)',cxc:'Cuentas por cobrar',prestamos:'Préstamos otorgados'};
+    var bl=c.balances||{},bn={financiaciones:'Cuentas por pagar (lo que debes)',inventario:'Inventario (costo)',cxc:'Cuentas por cobrar',prestamos:'Préstamos otorgados'};
     var balH=Object.keys(bn).filter(function(k){return bl[k];}).map(function(k){return '<tr><td>'+bn[k]+'</td><td class="r">'+money(bl[k].start)+'</td><td class="r">'+money(bl[k].end)+'</td></tr>';}).join('');
     var after=c.differenceAfterAdjustments!=null?n(c.differenceAfterAdjustments):n(c.difference);
     w.document.open();
@@ -19602,6 +19603,6 @@ window.jcpExtractMov=function(){
   else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.10.15.67"></script>
+<script src="./app-update.js?v=2026.10.19.68"></script>
 </body>
 </html>
