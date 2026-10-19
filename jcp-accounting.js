@@ -104,8 +104,12 @@
       const a=meta(m,'acc_'+(m.id||m._index),m.c,{isReversal:!!m.isReversal});
       if(!Number.isFinite(value)||value<0){issue('INVALID_MOVEMENT',a,'Importe de movimiento inválido.');continue;}
       if(value===0)continue;
+      // Utilidades usadas para pagar una cuenta por pagar: pasan de utilidades a capital sin mover plata.
+      if(sub==='capitalizacion_utilidades'){if(m.voided)continue;a.cashClass='financing';push(a,[line('360505',value),line('310505',0,value)]);continue;}
       let code,dir=m.t==='ingreso'?'in':'out';
       if(['capital_inicial','aporte_capital'].includes(sub)){code='310505';a.cashClass='financing';}
+      else if(sub==='reverso_financiacion'){code=['capital_inicial','aporte_capital'].includes(String(m.origSubtype||''))?'310505':'210505';a.cashClass='financing';}
+      else if(sub==='reverso_pago_deuda'){code='210505';a.cashClass='financing';}
       else if(['credito','prestamo_recibido','tarjeta_credito','pago_deuda'].includes(sub)){code='210505';a.cashClass='financing';}
       else if(['compra_vehiculo','vehiculos','ajuste_compra_comercial','reverso_compra_vehiculo','reverso_gasto_vehiculo'].includes(sub)){
         code='143505';a.cashClass='investing';
