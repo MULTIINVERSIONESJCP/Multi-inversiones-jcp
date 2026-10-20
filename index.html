@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.10.19.71</title>
+<title>COLOMBIAUTOS JP - V2026.10.19.72</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5504,6 +5504,7 @@ body.jcp-custom-theme .database-actions-list button{
 </label>
 </div>
 <button onclick="searchAccountingDocument()" type="button">BUSCAR DOCUMENTO</button>
+<div class="acc-recent" id="accountingDocumentRecent"></div>
 <div id="accountingDocumentResult" style="margin-top:10px"></div>
 </div>
 </section>
@@ -5589,9 +5590,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.10.19.71"></script>
-<script src="./jcp-sync.js?v=2026.10.19.71"></script>
-<script src="./jcp-images.js?v=2026.10.19.71"></script>
+<script src="./jcp-accounting.js?v=2026.10.19.72"></script>
+<script src="./jcp-sync.js?v=2026.10.19.72"></script>
+<script src="./jcp-images.js?v=2026.10.19.72"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -12327,7 +12328,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.19.71\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.19.72\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -16546,7 +16547,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.10.19.71',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.10.19.72',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -19738,6 +19739,126 @@ window.jcpExtractMov=function(){
   window.addEventListener('jcp-cloud-bootstrap-ready',function(){setTimeout(function(){try{paintSplit();}catch(e){}},500);});
 })();
 </script>
-<script src="./app-update.js?v=2026.10.19.71"></script>
+<style id="jcp-v72-style">
+#accountingDocumentRecent{margin-top:12px}
+#accountingDocumentRecent .acc-recent-title{color:#d8aa32;font-size:11px;font-weight:900;letter-spacing:.4px;margin:0 0 6px}
+#accountingDocumentRecent .acc-recent-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:10px;margin:0 0 6px;color:#fff;cursor:pointer;font-family:inherit}
+#accountingDocumentRecent .acc-recent-row:hover{border-color:#d8aa32}
+#accountingDocumentRecent .acc-recent-row b{color:#d8aa32;font-size:12px;white-space:nowrap}
+#accountingDocumentRecent .acc-recent-row span{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#accountingDocumentRecent .acc-recent-row span small{display:block;color:#8a8a8a;font-size:10px}
+#accountingDocumentRecent .acc-recent-row strong{font-size:12px;white-space:nowrap}
+#accountingDocumentRecent .acc-recent-empty{color:#8a8a8a;font-size:12px;padding:8px 0}
+</style>
+<script id="jcp-v72-script">
+(function(){
+  'use strict';
+  // ---------- 1. Barra "Volver" en soportes e informes que se abren como página aparte ----------
+  var nativeOpen=window.open;
+  function injectBack(w){
+    try{
+      var d=w.document;if(!d||!d.body||d.getElementById('jcpBackBar'))return;
+      var st=d.createElement('style');
+      st.textContent='#jcpBackBar{position:sticky;top:0;z-index:99999;display:flex;align-items:center;gap:10px;padding:10px 12px;background:#111;border-bottom:2px solid #d8aa32;font-family:Arial,sans-serif}#jcpBackBar button{background:#d8aa32;color:#111;border:0;border-radius:8px;padding:10px 16px;font-weight:900;font-size:14px;cursor:pointer}#jcpBackBar span{color:#ccc;font-size:12px}@media print{#jcpBackBar{display:none!important}}';
+      d.head?d.head.appendChild(st):d.body.appendChild(st);
+      var bar=d.createElement('div');bar.id='jcpBackBar';bar.setAttribute('data-html2canvas-ignore','true');
+      bar.innerHTML='<button type="button">← VOLVER A LA APP</button><span>COLOMBIAUTOS JP</span>';
+      bar.querySelector('button').addEventListener('click',function(){
+        try{if(w.opener&&!w.opener.closed){try{w.opener.focus();}catch(e){}}}catch(e){}
+        try{w.close();}catch(e){}
+        setTimeout(function(){try{if(!w.closed){if(w.history.length>1)w.history.back();else if(w.opener&&w.opener.location)w.location.href=w.opener.location.href;}}catch(e){}},250);
+      });
+      d.body.insertBefore(bar,d.body.firstChild);
+    }catch(e){}
+  }
+  window.open=function(url){
+    var w=nativeOpen.apply(window,arguments);
+    try{
+      if(w&&(!url||url==='about:blank')){
+        var doc=w.document,origClose=doc.close;
+        doc.close=function(){var r=origClose.apply(doc,arguments);injectBack(w);return r;};
+        setTimeout(function(){injectBack(w);},1200);
+      }
+    }catch(e){}
+    return w;
+  };
+
+  // ---------- 2. Últimos 10 documentos al escoger el tipo, para anular o modificar sin escribir el número ----------
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function tsOf(x){var t=Date.parse(x&&x.createdAt||'');if(isFinite(t))return t;var m=String(x&&x.date||'').match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);if(m){var y=+m[3];if(y<100)y+=2000;return new Date(y,+m[2]-1,+m[1]).getTime();}return 0;}
+  function renderRecent(){
+    var host=document.getElementById('accountingDocumentRecent');if(!host)return;
+    var type=(document.getElementById('accountingDocumentType')||{}).value||'';
+    var list=[];try{list=accountingDocumentCandidates(type)||[];}catch(e){}
+    var groups={};
+    list.forEach(function(x){
+      if(!x||x.voided||x.isReversal||String(x.estado||x.status||'').toUpperCase().indexOf('ANULAD')===0)return;
+      var num='';try{num=accountingDocumentNumberOf(x);}catch(e){}
+      if(!num||/^(MOV_|CAP_|VEH_|TM_|ID)/.test(num)&&!x.receiptNumber)return;
+      var g=groups[num]||(groups[num]={num:num,ts:0,value:0,concept:'',date:'',n:0});
+      var t=tsOf(x);if(t>=g.ts){g.ts=t;g.date=x.date||'';}
+      try{g.value+=Number(accountingDocumentValueOf(x,type))||0;}catch(e){}
+      if(!g.concept){try{g.concept=accountingDocumentConceptOf(x,type)||'';}catch(e){}}
+      g.n++;
+    });
+    var rows=Object.keys(groups).map(function(k){return groups[k];}).sort(function(a,b){return b.ts-a.ts;}).slice(0,10);
+    host.innerHTML='<div class="acc-recent-title">ÚLTIMOS '+rows.length+' REGISTROS · TOCA UNO PARA ABRIRLO</div>'+(rows.length?rows.map(function(g){
+      return '<button type="button" class="acc-recent-row" data-acc-recent="'+esc(g.num)+'"><b>'+esc(g.num)+'</b><span>'+esc(g.concept||'SIN CONCEPTO')+(g.n>1?' ('+g.n+' conceptos)':'')+'<small>'+esc(g.ts?new Date(g.ts).toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}):(g.date||''))+'</small></span><strong>'+(typeof money==='function'?money(g.value):g.value)+'</strong></button>';
+    }).join(''):'<div class="acc-recent-empty">No hay registros vigentes de este tipo.</div>');
+  }
+  window.renderAccountingDocumentRecent=renderRecent;
+  document.addEventListener('change',function(e){if(e.target&&e.target.id==='accountingDocumentType'){var r=document.getElementById('accountingDocumentResult');if(r)r.innerHTML='';var n=document.getElementById('accountingDocumentNumber');if(n)n.value='';renderRecent();}});
+  document.addEventListener('click',function(e){
+    var b=e.target&&e.target.closest&&e.target.closest('[data-acc-recent]');
+    if(!b)return;
+    var n=document.getElementById('accountingDocumentNumber');if(n)n.value=b.getAttribute('data-acc-recent');
+    try{searchAccountingDocument();}catch(err){console.error(err);}
+    var r=document.getElementById('accountingDocumentResult');if(r)setTimeout(function(){try{r.scrollIntoView({behavior:'smooth',block:'start'});}catch(_e){}},50);
+  });
+  var origOpen=window.openAccountingDocumentAction;
+  if(typeof origOpen==='function'){window.openAccountingDocumentAction=function(){var r=origOpen.apply(this,arguments);try{renderRecent();}catch(e){}return r;};try{openAccountingDocumentAction=window.openAccountingDocumentAction;}catch(e){}}
+
+  // ---------- 3. Corrección de una sola vez: eliminar RG-000120 y RG-000121 (gastos operacionales registrados para cuadrar) ----------
+  var NUMS=['RG-000120','RG-000121'],FIX_ID='eliminar-RG-000120-RG-000121';
+  function list(v){return Array.isArray(v)?v:[];}
+  function up(v){return String(v||'').trim().toUpperCase();}
+  function runFix(){
+    try{
+      if(typeof data==='undefined'||!data)return;
+      var settings=(data.settings&&typeof data.settings==='object')?data.settings:{};
+      if(settings.jcpFixes&&settings.jcpFixes[FIX_ID])return;
+      var targets=[],skipped=[];
+      NUMS.forEach(function(num){
+        var movs=list(data.mov).filter(function(m){return m&&up(m.receiptNumber)===num;});
+        var tms=list(data.treasuryMovements).filter(function(t){return t&&up(t.receiptNumber)===num;});
+        var recs=list(data.receipts).filter(function(r){return r&&up(r.number)===num;});
+        if(!movs.length&&!tms.length&&!recs.length)return;
+        var okTypes=movs.every(function(m){return ['gasto_operativo','varios','reverso_gasto_operativo'].indexOf(String(m.subtype||'').toLowerCase())>=0;});
+        if(!okTypes){skipped.push(num);return;}
+        var value=movs.filter(function(m){return !m.isReversal;}).reduce(function(a,m){return a+(Number(m.v)||0);},0);
+        targets.push({num:num,movs:movs,tms:tms,recs:recs,value:value,concept:(movs.find(function(m){return !m.isReversal;})||{}).c||''});
+      });
+      if(!targets.length){if(skipped.length)console.warn('No se eliminaron '+skipped.join(', ')+': no son gastos operacionales.');return;}
+      var dropMov={},dropTm={},dropRec={};
+      targets.forEach(function(t){t.movs.forEach(function(m){dropMov[m.id]=1;});t.tms.forEach(function(x){dropTm[x.id]=1;});t.recs.forEach(function(r){dropRec[r.id||r.number]=1;});});
+      var before=cloneAppData(data);
+      try{
+        data.mov=list(data.mov).filter(function(m){return !(m&&(dropMov[m.id]||(m.reversalOf&&dropMov[m.reversalOf])));});
+        data.treasuryMovements=list(data.treasuryMovements).filter(function(t){return !(t&&(dropTm[t.id]||(t.reversalOf&&dropTm[t.reversalOf])));});
+        data.receipts=list(data.receipts).filter(function(r){return !(r&&dropRec[r.id||r.number]);});
+        data.settings=Object.assign({},settings,{jcpFixes:Object.assign({},settings.jcpFixes||{})});
+        data.settings.jcpFixes[FIX_ID]={at:new Date().toISOString(),removed:targets.map(function(t){return {number:t.num,value:t.value,movimientos:t.movs.length,tesoreria:t.tms.length,soportes:t.recs.length};})};
+        save();
+      }catch(err){data=before;console.warn('Eliminación de gastos pendiente; se reintentará al abrir la app:',err);return;}
+      ['render','renderCashCapital','renderTreasuryModule','renderExtractos','renderRecordsModule','syncFinancialUiV76','renderUtilitiesModule'].forEach(function(f){try{if(typeof window[f]==='function')window[f]();}catch(e){}});
+      var next='';try{next=nextReceiptNumber(data,'operating_expense');}catch(e){}
+      setTimeout(function(){alert('✅ GASTOS ELIMINADOS\n\n'+targets.map(function(t){return t.num+' · '+String(t.concept).toUpperCase()+(t.value?' · '+money(t.value):'');}).join('\n')+'\n\nSe eliminaron con sus movimientos, tesorería (incluidas reversiones si estaban anulados) y soportes. Ya no aparecen en extractos, utilidades, registros ni contabilidad.'+(skipped.length?'\n\nNo se tocaron '+skipped.join(', ')+' porque no son gastos operacionales.':'')+(next?'\n\nPróximo consecutivo de gastos: '+next+'.':''));},400);
+    }catch(err){console.error('Corrección RG-000120/121:',err);}
+  }
+  function start(){setTimeout(runFix,1200);}
+  if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
+})();
+</script>
+<script src="./app-update.js?v=2026.10.19.72"></script>
 </body>
 </html>
