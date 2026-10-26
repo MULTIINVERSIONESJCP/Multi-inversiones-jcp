@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.10.24.78</title>
+<title>COLOMBIAUTOS JP - V2026.10.25.80</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4947,6 +4947,14 @@ body.jcp-custom-theme .database-actions-list button{
     <span class="jcp-app-icon sales-menu-icon" data-jcp-icon="finance"></span>
     <b>Pasar a capital</b>
   </div>
+  <div class="utilities-menu-card jcp-icon-card" onclick="show('resumenMensualUtil')">
+    <span class="jcp-app-icon sales-menu-icon" data-jcp-icon="history"></span>
+    <b>Resumen mensual</b>
+  </div>
+  <div class="utilities-menu-card jcp-icon-card" onclick="show('acumuladoCadenas')">
+    <span class="jcp-app-icon sales-menu-icon" data-jcp-icon="receivable"></span>
+    <b>Acumulado cadenas</b>
+  </div>
   <div class="utilities-menu-card jcp-icon-card" onclick="show('historialUtilidades')">
     <span class="jcp-app-icon sales-menu-icon" data-jcp-icon="history"></span>
     <b>Historial de retiros</b>
@@ -5035,6 +5043,28 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 <button class="profit-withdraw-btn paydist-locked" disabled="" id="profitWithdrawSubmit" onclick="saveProfitWithdrawal()" type="button">REGISTRAR RETIRO DE GANANCIA</button>
 </div>
+</section>
+<section class="view" id="resumenMensualUtil">
+<div class="unified-module-header">
+<div class="unified-module-title-row"><div class="unified-module-brand">
+<img alt="COLOMBIAUTOS JP" class="unified-module-logo" id="resumenMensualLogo" src="logo-3.jpg"/>
+<h2 class="unified-module-title"><span class="unified-module-icon">📅</span> RESUMEN MENSUAL</h2>
+</div></div>
+<div class="unified-module-gold-line"></div>
+<div class="unified-module-note">💡 Por cada mes: lo que dejaron las ventas, lo que se llevaron los gastos operacionales, la ganancia limpia y en qué se usó (retiros o pagos de deudas pasados a capital).</div>
+</div>
+<div id="rmuContent"></div>
+</section>
+<section class="view" id="acumuladoCadenas">
+<div class="unified-module-header">
+<div class="unified-module-title-row"><div class="unified-module-brand">
+<img alt="COLOMBIAUTOS JP" class="unified-module-logo" id="acumuladoCadenasLogo" src="logo-3.jpg"/>
+<h2 class="unified-module-title"><span class="unified-module-icon">🔗</span> ACUMULADO CADENAS</h2>
+</div></div>
+<div class="unified-module-gold-line"></div>
+<div class="unified-module-note">💡 Dato informativo: suma los gastos de la categoría CADENA. Siguen contando como gasto operacional; aquí solo ves cuánto llevas pagado.</div>
+</div>
+<div id="cadContent"></div>
 </section>
 <section class="view" id="pasarCapital">
 <div class="unified-module-header">
@@ -5178,11 +5208,11 @@ body.jcp-custom-theme .database-actions-list button{
 </select>
 <label class="debt-pay-label">¿DE DÓNDE SALE LA PLATA?</label>
 <div class="debt-pay-type-grid">
-<button class="debt-pay-type active" id="ccDebtSrcCapital" onclick="setDebtPaymentSource('capital')" type="button">DEL CAPITAL</button>
+<button class="debt-pay-type" id="ccDebtSrcCapital" onclick="setDebtPaymentSource('capital')" type="button">DEL CAPITAL</button>
 <button class="debt-pay-type" id="ccDebtSrcProfit" onclick="setDebtPaymentSource('utilidades')" type="button">DE LAS UTILIDADES</button>
 </div>
-<input id="ccDebtSource" type="hidden" value="capital"/>
-<small class="debt-src-note" id="ccDebtSourceNote">El pago baja la deuda y el capital de trabajo. Tus utilidades no cambian.</small>
+<input id="ccDebtSource" type="hidden" value=""/>
+<small class="debt-src-note bad" id="ccDebtSourceNote">Obligatorio: escoge si la plata sale del capital o de las utilidades.</small>
 <label class="debt-pay-label" for="ccDebtValue">VALOR A PAGAR</label>
 <input data-money="1" id="ccDebtValue" inputmode="numeric" oninput="refreshDebtPaymentPreview();updatePaymentDistribution('debt')" placeholder="$ 0" type="text"/>
 <div class="debt-pay-secondary">
@@ -5650,9 +5680,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.10.24.78"></script>
-<script src="./jcp-sync.js?v=2026.10.24.78"></script>
-<script src="./jcp-images.js?v=2026.10.24.78"></script>
+<script src="./jcp-accounting.js?v=2026.10.25.80"></script>
+<script src="./jcp-sync.js?v=2026.10.25.80"></script>
+<script src="./jcp-images.js?v=2026.10.25.80"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -7227,10 +7257,40 @@ function renderAvailableDetail(){
 }
 
 
+function jcpTsOf(x){const t=Date.parse(x?.createdAt||'');if(isFinite(t))return t;const m=String(x?.date||'').match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);if(m){let y=+m[3];if(y<100)y+=2000;return new Date(y,+m[2]-1,+m[1]).getTime();}return 0;}
+const JCP_MONTHS=['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+function renderMonthlyUtilities(){
+  const host=document.getElementById('rmuContent');if(!host)return;
+  const M={};const key=t=>{if(!t)return '0000-00';const d=new Date(t);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');};
+  const get=k=>M[k]||(M[k]={sales:0,n:0,op:0,ret:0,cap:0});
+  (data.sold||[]).forEach(x=>{if(!x||x.status==='permuta'||x.permuta||!x.sale||x.sale.voided||x.status==='venta_anulada')return;const r=get(key(jcpTsOf(x.sale)));r.sales+=(+x.sale.price||0)-((+x.c||0)+(+x.g||0));r.n++;});
+  (data.mov||[]).forEach(m=>{if(!m||m.voided)return;const t=jcpTsOf(m);
+    if(m.t==='gasto'&&(m.subtype==='gasto_operativo'||m.subtype==='varios'))get(key(t)).op+=(+m.v||0);
+    else if(m.t==='gasto'&&m.subtype==='retiro_ganancias')get(key(t)).ret+=(+m.v||0);
+    else if(m.subtype==='capitalizacion_utilidades')get(key(t)).cap+=(+m.v||0);});
+  const keys=Object.keys(M).sort().reverse();
+  if(!keys.length){host.innerHTML='<div class="empty">TODAVÍA NO HAY MOVIMIENTOS.</div>';return;}
+  const label=k=>{if(k==='0000-00')return 'SIN FECHA';const [y,mm]=k.split('-');return JCP_MONTHS[+mm-1]+' '+y;};
+  const row=(l,v,cls)=>'<div style="display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid #222;font-size:12px"><span style="color:#bbb">'+l+'</span><b style="white-space:nowrap;'+(cls||'')+'">'+money(v)+'</b></div>';
+  let acc=0;const order=keys.slice().reverse(),running={};order.forEach(k=>{const r=M[k];acc+=r.sales-r.op-r.ret-r.cap;running[k]=acc;});
+  host.innerHTML=keys.map(k=>{const r=M[k],net=r.sales-r.op,left=net-r.ret-r.cap;return '<div class="card" style="margin-top:12px"><div class="section" style="margin-top:0;display:flex;justify-content:space-between"><span>'+label(k)+'</span><small style="color:#999">'+r.n+(r.n===1?' venta':' ventas')+'</small></div>'
+    +row('+ Ganancia de ventas',r.sales)+row('− Gastos operacionales',-r.op)
+    +row('= Ganancia limpia del mes',net,'color:'+(net<0?'#ff6b6b':'#57d68d'))
+    +row('− Retiros de utilidades',-r.ret)+row('− Pagos de deudas pasados a capital',-r.cap)
+    +row('= Quedó del mes',left,'color:'+(left<0?'#ff6b6b':'#fff'))
+    +row('Utilidades por retirar acumuladas al cierre del mes',running[k],'color:'+(running[k]<0?'#ff6b6b':'#d4af37'))+'</div>';}).join('');
+}
+function renderChainSavings(){
+  const host=document.getElementById('cadContent');if(!host)return;
+  const rows=(data.mov||[]).filter(m=>m&&!m.voided&&m.t==='gasto'&&(m.subtype==='gasto_operativo'||m.subtype==='varios')&&(String(m.category||'').toUpperCase().includes('CADENA')||/^CADENA\b/.test(String(m.c||'').toUpperCase()))).sort((a,b)=>jcpTsOf(b)-jcpTsOf(a));
+  const total=rows.reduce((a,m)=>a+(+m.v||0),0);
+  host.innerHTML='<div class="card" style="margin-top:12px;text-align:center"><div style="font-size:11px;color:#aaa;font-weight:800;letter-spacing:.5px">ACUMULADO EN CADENAS</div><div style="font-size:26px;font-weight:900;color:#d4af37;margin:6px 0">'+money(total)+'</div><div style="font-size:11px;color:#999">'+rows.length+(rows.length===1?' pago':' pagos')+'</div></div>'
+    +'<div class="card" style="margin-top:12px"><div class="section" style="margin-top:0">PAGOS DE CADENA</div>'+(rows.length?rows.map(m=>'<div style="display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #222;font-size:11px;color:#ddd"><span style="flex:1;min-width:0;overflow-wrap:anywhere">'+priceEsc(String(m.c||'CADENA').toUpperCase())+'<br><small style="color:#999">'+priceEsc(m.date||(jcpTsOf(m)?new Date(jcpTsOf(m)).toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}):''))+(m.receiptNumber?' · '+priceEsc(m.receiptNumber):'')+'</small></span><strong style="white-space:nowrap;color:#fff">'+money(+m.v||0)+'</strong></div>').join(''):'<div class="empty">NO HAY GASTOS DE CADENA REGISTRADOS.</div>')+'</div>';
+}
 function renderProfitCapitalization(){
   const f=getFinancialSnapshotV75();
   const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-  set('pcAvailable',money(Math.max(0,f.profitAvailable||0)));
+  set('pcAvailable',money(f.profitAvailable||0));
   const m=(data.mov||[]);
   const own=m.filter(x=>x&&!x.voided&&x.t==='ingreso'&&(x.subtype==='capital_inicial'||x.subtype==='aporte_capital')).reduce((a,x)=>a+(+x.v||0),0)+m.filter(x=>x&&!x.voided&&x.subtype==='capitalizacion_utilidades').reduce((a,x)=>a+(+x.v||0),0);
   set('pcOwnCapital',money(own));
@@ -7244,8 +7304,7 @@ function saveProfitCapitalization(){
   const concept=(cin?.value||'').trim().toUpperCase()||'UTILIDADES PASADAS A CAPITAL';
   const f=getFinancialSnapshotV75(),avail=Math.round(f.profitAvailable||0);
   if(amount<=0)return alert('INGRESA EL VALOR.');
-  if(amount>avail)return alert('LAS UTILIDADES POR RETIRAR ('+money(Math.max(0,avail))+') NO ALCANZAN PARA PASAR '+money(amount)+' A CAPITAL.');
-  if(!confirm('¿PASAR '+money(amount)+' DE UTILIDADES A CAPITAL?\n\nNo sale plata de la caja: solo baja "Utilidades por retirar" y sube tu capital.'))return;
+  if(!confirm('¿PASAR '+money(amount)+' DE UTILIDADES A CAPITAL?\n\nNo sale plata de la caja: solo baja "Utilidades por retirar" y sube tu capital.'+(amount>avail?'\n\nOJO: las utilidades por retirar son '+money(avail)+' y quedarán en '+money(avail-amount)+', que las próximas ganancias deben reponer.':'')))return;
   const before=cloneAppData(data),next=cloneAppData(data),now=new Date(),id='mov_capu_m_'+Date.now(),date=now.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),createdAt=now.toISOString();
   try{
     const receipt=addInternalReceipt(next,'general_movement',{entityId:id,amount,title:'UTILIDADES PASADAS A CAPITAL — '+concept,concept,date,createdAt,snapshot:{operationType:'PASO DE UTILIDADES A CAPITAL',nonCash:true}});
@@ -7435,6 +7494,8 @@ function show(id){
   if(id==='pasarCapital'){
     try{renderProfitCapitalization();}catch(e){}
   }
+  if(id==='resumenMensualUtil'){try{renderMonthlyUtilities();}catch(e){console.error(e);}}
+  if(id==='acumuladoCadenas'){try{renderChainSavings();}catch(e){console.error(e);}}
   if(id==='utilidades'){
     try{renderUtilitiesModule();}catch(e){}
   }
@@ -7461,7 +7522,7 @@ function show(id){
   try{
     const src=document.querySelector('#vehiculos .inventory-inline-logo');
     const logoMap={
-      cajaCapital:'cashCapitalLogo',pasarCapital:'pasarCapitalLogo',contabilidadLibros:'accLibrosLogo',extractos:'extractosLogo',detalleCapital:'detalleCapitalLogo',
+      cajaCapital:'cashCapitalLogo',resumenMensualUtil:'resumenMensualLogo',acumuladoCadenas:'acumuladoCadenasLogo',pasarCapital:'pasarCapitalLogo',contabilidadLibros:'accLibrosLogo',extractos:'extractosLogo',detalleCapital:'detalleCapitalLogo',
       capitalFinanciacion:'capitalFinLogo',pagoObligaciones:'pagoObligLogo',nuevaFinanciacion:'nuevaFinLogo',
       obligacionesPendientes:'obligPendLogo',cierreCaja:'cierreCajaLogo',historialFinanciero:'histFinLogo',
       historialCapitalFinanciacion:'capitalFinHistLogo',carteraCaja:'carteraCajaLogo',carteraVehiculos:'carteraVehLogo',carteraPrestamos:'carteraPresLogo',
@@ -12421,7 +12482,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.24.78\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.25.80\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -12935,7 +12996,7 @@ window.renderObligationHistory=function(){
     updatePaymentDistribution('debt');
   };
 
-  window.saveDebtPayment=function(){ensure();const paymentType=ccDebtPaymentType.value||'partial',f=selectedDebt();let amount=val('ccDebtValue');if(paymentType==='total'&&f)amount=f.balance;if(!f||amount<=0)return alert('SELECCIONA UNA DEUDA E INGRESA EL VALOR.');if(amount>f.balance)return alert('EL ABONO SUPERA EL SALDO.');if(!validatePaymentDistribution('debt',amount))return;const fundingSource=(document.getElementById('ccDebtSource')?.value==='utilidades')?'utilidades':'capital';if(fundingSource==='utilidades'){const avail=Math.round(getFinancialSnapshotV75().profitAvailable||0);if(amount>avail)return alert('LAS UTILIDADES DISPONIBLES ('+money(Math.max(0,avail))+') NO ALCANZAN PARA ESTE PAGO DE '+money(amount)+'. PÁGALO DEL CAPITAL O REDUCE EL VALOR.');}const before=cloneAppData(data),next=cloneAppData(data),d=nowInfo(),id='cap_'+Date.now(),prev=f.balance,newBalance=paymentType==='total'?0:Math.max(0,prev-amount);try{const receipt=addInternalReceipt(next,'debt_payment',{entityId:id,amount,title:(paymentType==='total'?'PAGO TOTAL DE CUENTA POR PAGAR — ':'ABONO A CUENTA POR PAGAR — ')+f.concept,concept:f.concept,date:d.label,createdAt:d.iso,snapshot:{operationType:paymentType==='total'?'PAGO TOTAL':'ABONO',previousBalance:prev,newBalance,fundingSource,paymentDistribution:paymentDistribution('debt')}});const dist=applyPaymentDistribution(next,{prefix:'debt',direction:'out',total:amount,operationType:'PAGO OBLIGACIÓN',operationId:id,receiptNumber:receipt.number,concept:f.concept,date:d.label,createdAt:d.iso});receipt.snapshot.paymentDistribution=cloneAppData(dist);next.capitalOps.unshift({id,type:'pago_deuda',paymentType,financingId:String(f.id),concept:(paymentType==='total'?'PAGO TOTAL ':'ABONO ')+f.concept,value:amount,previousBalance:prev,newBalance,receiptNumber:receipt.number,paymentDistribution:dist,date:d.label,createdAt:d.iso});next.mov.unshift({id:'mov_'+id,t:'gasto',subtype:'pago_deuda',c:'PAGO DEUDA — '+f.concept,v:amount,financingId:String(f.id),receiptNumber:receipt.number,paymentDistribution:dist,date:d.label,createdAt:d.iso,nonOperatingExpense:true,fundingSource});if(fundingSource==='utilidades')next.mov.unshift({id:'mov_capu_'+id,t:'traslado',subtype:'capitalizacion_utilidades',c:'PASADO A CAPITAL — PAGO CON UTILIDADES '+f.concept,v:amount,capitalizationOf:'mov_'+id,financingId:String(f.id),receiptNumber:receipt.number,date:d.label,createdAt:d.iso,nonCash:true});data=next;save();clearPaymentDistribution('debt');try{setDebtPaymentSource('capital');}catch(_e){}renderCashCapital();renderPendingObligations();renderTreasuryModule();try{renderObligationsHub();renderObligationHistory();}catch(e){}try{renderRecordsModule();}catch(e){}alert('✅ '+receipt.number+' — SOPORTE GENERADO.'+(fundingSource==='utilidades'?' SE DESCONTÓ '+money(amount)+' DE LAS UTILIDADES Y PASÓ A CAPITAL.':''));setTimeout(openObligationsModule,0);}catch(e){data=before;alert('NO FUE POSIBLE REGISTRAR EL PAGO.\n\n'+e.message);}};
+  window.saveDebtPayment=function(){ensure();const paymentType=ccDebtPaymentType.value||'partial',f=selectedDebt();let amount=val('ccDebtValue');if(paymentType==='total'&&f)amount=f.balance;if(!f||amount<=0)return alert('SELECCIONA UNA DEUDA E INGRESA EL VALOR.');if(amount>f.balance)return alert('EL ABONO SUPERA EL SALDO.');if(!validatePaymentDistribution('debt',amount))return;const fundingSource=String(document.getElementById('ccDebtSource')?.value||'');if(fundingSource!=='capital'&&fundingSource!=='utilidades')return alert('ESCOGE DE DÓNDE SALE LA PLATA: DEL CAPITAL O DE LAS UTILIDADES.');if(fundingSource==='utilidades'){const avail=Math.round(getFinancialSnapshotV75().profitAvailable||0);if(amount>avail&&!confirm('LAS UTILIDADES POR RETIRAR SON '+money(avail)+' Y EL PAGO ES DE '+money(amount)+'.\n\nSI CONTINÚAS, UTILIDADES QUEDARÁ EN '+money(avail-amount)+': ES LO QUE LAS PRÓXIMAS GANANCIAS DEBEN REPONER.\n\n¿CONTINUAR?'))return;}const before=cloneAppData(data),next=cloneAppData(data),d=nowInfo(),id='cap_'+Date.now(),prev=f.balance,newBalance=paymentType==='total'?0:Math.max(0,prev-amount);try{const receipt=addInternalReceipt(next,'debt_payment',{entityId:id,amount,title:(paymentType==='total'?'PAGO TOTAL DE CUENTA POR PAGAR — ':'ABONO A CUENTA POR PAGAR — ')+f.concept,concept:f.concept,date:d.label,createdAt:d.iso,snapshot:{operationType:paymentType==='total'?'PAGO TOTAL':'ABONO',previousBalance:prev,newBalance,fundingSource,paymentDistribution:paymentDistribution('debt')}});const dist=applyPaymentDistribution(next,{prefix:'debt',direction:'out',total:amount,operationType:'PAGO OBLIGACIÓN',operationId:id,receiptNumber:receipt.number,concept:f.concept,date:d.label,createdAt:d.iso});receipt.snapshot.paymentDistribution=cloneAppData(dist);next.capitalOps.unshift({id,type:'pago_deuda',paymentType,financingId:String(f.id),concept:(paymentType==='total'?'PAGO TOTAL ':'ABONO ')+f.concept,value:amount,previousBalance:prev,newBalance,receiptNumber:receipt.number,paymentDistribution:dist,date:d.label,createdAt:d.iso});next.mov.unshift({id:'mov_'+id,t:'gasto',subtype:'pago_deuda',c:'PAGO DEUDA — '+f.concept,v:amount,financingId:String(f.id),receiptNumber:receipt.number,paymentDistribution:dist,date:d.label,createdAt:d.iso,nonOperatingExpense:true,fundingSource});if(fundingSource==='utilidades')next.mov.unshift({id:'mov_capu_'+id,t:'traslado',subtype:'capitalizacion_utilidades',c:'PASADO A CAPITAL — PAGO CON UTILIDADES '+f.concept,v:amount,capitalizationOf:'mov_'+id,financingId:String(f.id),receiptNumber:receipt.number,date:d.label,createdAt:d.iso,nonCash:true});data=next;save();clearPaymentDistribution('debt');try{setDebtPaymentSource('');}catch(_e){}renderCashCapital();renderPendingObligations();renderTreasuryModule();try{renderObligationsHub();renderObligationHistory();}catch(e){}try{renderRecordsModule();}catch(e){}alert('✅ '+receipt.number+' — SOPORTE GENERADO.'+(fundingSource==='utilidades'?' SE DESCONTÓ '+money(amount)+' DE LAS UTILIDADES Y PASÓ A CAPITAL.':''));setTimeout(openObligationsModule,0);}catch(e){data=before;alert('NO FUE POSIBLE REGISTRAR EL PAGO.\n\n'+e.message);}};
 
   window.saveOperatingExpense=function(){
     ensure();
@@ -16644,7 +16705,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.10.24.78',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.10.25.80',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -19687,10 +19748,11 @@ window.jcpExtractMov=function(){
   function exportExcel(){
     try{
       var cutoff=st.cutoff||Date.now(),m=compute(data,root()._model.from,cutoff);
-      var code=st.code||('CC-'+new Date(cutoff).toISOString().slice(2,10).replace(/-/g,'')+'-'+Math.random().toString(36).slice(2,6).toUpperCase());
+      var localYmd=(function(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');})(new Date(cutoff));
+      var code=st.code||('CC-'+localYmd.slice(2).replace(/-/g,'')+'-'+Math.random().toString(36).slice(2,6).toUpperCase());
       var bytes=JcpCierreXlsx.build(exportModel(m,cutoff,code));
       var url=URL.createObjectURL(new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})),a=document.createElement('a');
-      a.href=url;a.download='CIERRE_CAJA_'+new Date(cutoff).toISOString().slice(0,10)+'_'+code+'.xlsx';document.body.appendChild(a);a.click();a.remove();
+      a.href=url;a.download='CIERRE_CAJA_'+localYmd+'_'+code+'.xlsx';document.body.appendChild(a);a.click();a.remove();
       setTimeout(function(){URL.revokeObjectURL(url);},60000);
       st.cutoff=cutoff;st.code=code;st.source='excel';
       st.notice='Archivo exportado. Llena en Excel la columna REAL y vuelve a importarlo, o escribe los saldos aquí mismo.';
@@ -19824,22 +19886,23 @@ window.jcpExtractMov=function(){
   function el(id){return document.getElementById(id);}
   function snap(){try{return getFinancialSnapshotV75();}catch(e){return null;}}
   window.setDebtPaymentSource=function(src){
-    src=src==='utilidades'?'utilidades':'capital';
+    src=src==='utilidades'?'utilidades':(src==='capital'?'capital':'');
     var input=el('ccDebtSource');if(input)input.value=src;
     var a=el('ccDebtSrcCapital'),b=el('ccDebtSrcProfit');
     if(a)a.classList.toggle('active',src==='capital');if(b)b.classList.toggle('active',src==='utilidades');
     refreshDebtSourceNote();
   };
   function refreshDebtSourceNote(){
-    var src=(el('ccDebtSource')||{}).value||'capital',note=el('ccDebtSourceNote'),sum=el('ccDebtSummarySource');
-    if(sum)sum.textContent=src==='utilidades'?'UTILIDADES':'CAPITAL';
+    var src=(el('ccDebtSource')||{}).value||'',note=el('ccDebtSourceNote'),sum=el('ccDebtSummarySource');
+    if(sum)sum.textContent=src==='utilidades'?'UTILIDADES':(src==='capital'?'CAPITAL':'SIN ESCOGER');
     if(!note)return;
-    if(src==='capital'){note.className='debt-src-note';note.textContent='El pago baja la deuda y el capital de trabajo. Tus utilidades no cambian.';return;}
+    if(!src){note.className='debt-src-note bad';note.textContent='Obligatorio: escoge si la plata sale del capital o de las utilidades.';return;}
+    if(src==='capital'){note.className='debt-src-note';note.textContent='Sale del capital: baja la caja y baja la deuda. Tu capital propio y tus utilidades no cambian.';return;}
     var f=snap(),avail=f?Math.round(f.profitAvailable||0):0,amount=0;
     try{amount=parseFormattedMoney((el('ccDebtValue')||{}).value||'');}catch(e){}
     var over=amount>avail;
     note.className='debt-src-note'+(over?' bad':'');
-    note.textContent='Utilidades disponibles: '+money(Math.max(0,avail))+'. El valor se descuenta de tus utilidades y pasa a tu capital como aporte; la plata sale igual de la cuenta que elijas.'+(over?' El valor supera las utilidades disponibles.':'');
+    note.textContent='Sale de las utilidades: baja la caja, baja la deuda, bajan tus utilidades por retirar ('+money(avail)+') y sube tu capital propio.'+(over?' El valor supera las utilidades: quedarán en '+money(avail-amount)+' por reponer.':'');
   }
   window.refreshDebtSourceNote=refreshDebtSourceNote;
   document.addEventListener('input',function(e){if(e.target&&e.target.id==='ccDebtValue')refreshDebtSourceNote();});
@@ -20062,6 +20125,61 @@ window.jcpExtractMov=function(){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.10.24.78"></script>
+<script id="jcp-v80-script">
+(function(){
+  'use strict';
+  // Corrección de una sola vez (acordada el 25/10/26):
+  // 1) Se ANULAN los abonos a Horacio RPD-000007 ($3.000.000) y RPD-000011 ($10.000.000): esa plata no se entregó, está guardada aparte.
+  //    El consecutivo se conserva (queda ANULADO), la plata vuelve a la cuenta de donde salió y la deuda con Horacio vuelve a subir.
+  // 2) RPD-000006 (Eddy Milena, $6.800.000) queda COMPLETO como pagado de las utilidades.
+  var FIX_ID='v80-anular-abonos-horacio',ANULAR=['RPD-000007','RPD-000011'],UTIL='RPD-000006',REASON='ABONO NO ENTREGADO: LA PLATA SIGUE GUARDADA (CORRECCIÓN ACORDADA)';
+  function list(v){return Array.isArray(v)?v:[];}
+  function up(v){return String(v||'').trim().toUpperCase();}
+  function runFix(){
+    try{
+      if(typeof data==='undefined'||!data)return;
+      var settings=(data.settings&&typeof data.settings==='object')?data.settings:{};
+      if(settings.jcpFixes&&settings.jcpFixes[FIX_ID])return;
+      var before=cloneAppData(data),log={anulados:[],util:null,omitidos:[]},now=new Date().toISOString();
+      try{
+        ANULAR.forEach(function(num){
+          var movs=list(data.mov).filter(function(m){return m&&!m.voided&&!m.isReversal&&m.subtype==='pago_deuda'&&up(m.receiptNumber)===num;});
+          if(!movs.length){log.omitidos.push(num+' (no existe o ya estaba anulado)');return;}
+          var val=0;
+          movs.forEach(function(m){val+=Number(m.v)||0;m.auditTrail=Array.isArray(m.auditTrail)?m.auditTrail:[];m.auditTrail.push({action:'ANULACIÓN',at:now,reason:REASON,previousValue:m.v});m.voided=true;m.voidedAt=now;m.voidReason=REASON;m.receiptStatus='ANULADO';});
+          list(data.capitalOps).forEach(function(o){if(o&&up(o.receiptNumber)===num&&!o.voided){o.voided=true;o.voidedAt=now;o.voidReason=REASON;}});
+          list(data.receipts).forEach(function(r){if(r&&up(r.number)===num&&r.status!=='ANULADO'){r.status='ANULADO';r.voidReason=REASON;r.voidedAt=now;r.voidDate=new Date().toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'});}});
+          try{reverseTreasuryByReceipt(data,num,REASON);}catch(e){}
+          log.anulados.push({num:num,valor:val});
+        });
+        try{jcpEnsureMovementReversals(data);}catch(e){console.error(e);}
+        try{jcpSyncCapitalizations(data);}catch(e){}
+        var pay=list(data.mov).find(function(m){return m&&!m.voided&&!m.isReversal&&m.subtype==='pago_deuda'&&up(m.receiptNumber)===UTIL;});
+        if(!pay)log.omitidos.push(UTIL+' (no existe)');
+        else{
+          var full=Number(pay.v)||0,caps=list(data.mov).filter(function(m){return m&&!m.voided&&m.subtype==='capitalizacion_utilidades'&&m.capitalizationOf===pay.id;});
+          var prev=caps.reduce(function(a,m){return a+(Number(m.v)||0);},0),concept='PASADO A CAPITAL — PAGO CON UTILIDADES '+String(pay.c||'').replace(/^PAGO DEUDA — /,'');
+          if(caps.length){caps[0].v=full-(prev-(Number(caps[0].v)||0));caps[0].c=concept;caps[0].fixId=FIX_ID;}
+          else data.mov.unshift({id:'mov_capu_v80_'+String(pay.id||'').replace(/^mov_/,''),t:'traslado',subtype:'capitalizacion_utilidades',c:concept,v:full,capitalizationOf:pay.id,financingId:pay.financingId,receiptNumber:pay.receiptNumber,date:pay.date,createdAt:pay.createdAt,nonCash:true,fixId:FIX_ID});
+          pay.fundingSource='utilidades';pay.fundedFromProfit=full;
+          var rec=list(data.receipts).find(function(r){return r&&up(r.number)===UTIL;});
+          if(rec){rec.snapshot=rec.snapshot&&typeof rec.snapshot==='object'?rec.snapshot:{};rec.snapshot.fundingSource='utilidades';rec.snapshot.fundedFromProfit=full;}
+          log.util={num:UTIL,valor:full};
+        }
+        data.settings=Object.assign({},settings,{jcpFixes:Object.assign({},settings.jcpFixes||{})});
+        data.settings.jcpFixes[FIX_ID]={at:now,log:log};
+        save();
+      }catch(err){data=before;console.warn('Corrección v80 pendiente:',err);return;}
+      ['render','renderCashCapital','renderTreasuryModule','renderExtractos','renderUtilitiesModule','syncFinancialUiV76','renderRecordsModule','renderPendingObligations'].forEach(function(f){try{if(typeof window[f]==='function')window[f]();}catch(e){}});
+      var f={};try{f=getFinancialSnapshotV75();}catch(e){}
+      var own=0;try{own=list(data.mov).filter(function(m){return m&&!m.voided&&((m.t==='ingreso'&&(m.subtype==='capital_inicial'||m.subtype==='aporte_capital'))||m.subtype==='capitalizacion_utilidades');}).reduce(function(a,m){return a+(Number(m.v)||0);},0);}catch(e){}
+      setTimeout(function(){alert('✅ CORRECCIÓN APLICADA\n\n'+log.anulados.map(function(a){return '• '+a.num+' ANULADO · '+money(a.valor)+' (la plata volvió a la caja y la deuda con Horacio subió)';}).join('\n')+(log.util?'\n• '+log.util.num+' · '+money(log.util.valor)+' completo de las utilidades → pasó a capital':'')+(log.omitidos.length?'\n\nNo se tocó: '+log.omitidos.join(', '):'')+'\n\nDisponible (caja y bancos): '+money(f.available||0)+'\nTu capital propio: '+money(own)+'\nUtilidades por retirar: '+money(f.profitAvailable||0)+'\n\nRecuerda contar en el cierre los $13.000.000 de Horacio que tienes guardados aparte.');},400);
+    }catch(err){console.error('Corrección v80:',err);}
+  }
+  function start(){setTimeout(runFix,2200);}
+  if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
+})();
+</script>
+<script src="./app-update.js?v=2026.10.25.80"></script>
 </body>
 </html>
