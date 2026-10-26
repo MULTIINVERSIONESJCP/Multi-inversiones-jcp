@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.10.26.84</title>
+<title>COLOMBIAUTOS JP - V2026.10.26.86</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4816,7 +4816,7 @@ body.jcp-custom-theme .database-actions-list button{
 <button class="cf-action" onclick="show('carteraCaja')"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="receivable"></span><div><b>Cuentas por cobrar</b><small>Ventas a crédito y préstamos pendientes</small></div></button>
 <button class="cf-action" onclick="openObligationsModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="loans"></span><div><b>Cuentas por pagar</b><small>Préstamos, créditos, saldos y pagos pendientes</small></div></button>
 <button class="cf-action" onclick="openUtilitiesModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="capital"></span><div><b>Utilidades</b><small>Utilidad acumulada, retiros e historial</small></div></button>
-<button class="cf-action" onclick="openFixedExpenses()"><span class="jcp-app-icon jcp-fin-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="2"/><path d="M8 2v4M16 2v4M4 9h16M8 13l2 2 4-4"/></svg></span><div><b>Gastos fijos</b><small>Pagos del mes y su avance</small></div></button>
+<button class="cf-action" onclick="openFixedExpenses()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="fixed"><svg aria-hidden="true" viewbox="0 0 48 48"><rect x="9" y="10" width="30" height="30" rx="4" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M17 6v8M31 6v8M9 19h30M18 29l4 4 8-8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></span><div><b>Gastos fijos</b><small>Pagos del mes y su avance</small></div></button>
 
 <button class="cf-action" onclick="openAccountingModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="accounting"><svg aria-hidden="true" viewbox="0 0 48 48"><path d="M10 8h21a7 7 0 0 1 7 7v25H16a6 6 0 0 1-6-6V8Z" fill="none" stroke="currentColor" stroke-width="2"></path><path d="M16 8v32M21 16h11M21 22h11M21 28h7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span><div><b>Contabilidad</b><small>Libros y estados financieros</small></div></button>
 
@@ -4935,9 +4935,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 
 <div class="utilities-kpi-grid">
+  <div class="utilities-kpi-card"><span>GANANCIA DE VENTAS (ANTES DE GASTOS)</span><b id="utilitiesGross">$0</b></div>
   <div class="utilities-kpi-card"><span>UTILIDAD ACUMULADA</span><b id="utilitiesAccumulated">$0</b></div>
   <div class="utilities-kpi-card"><span>UTILIDADES RETIRADAS</span><b id="utilitiesWithdrawn">$0</b></div>
-  <div class="utilities-kpi-card"><span>PASADAS A CAPITAL</span><b id="utilitiesCapitalized">$0</b></div>
   <div class="utilities-kpi-card"><span>UTILIDADES POR RETIRAR</span><b id="utilitiesAvailable">$0</b></div>
   <div class="utilities-kpi-card"><span>GANANCIAS EN CADENAS</span><b id="utilitiesCadenas">$0</b></div>
 </div>
@@ -5065,6 +5065,20 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="unified-module-note">💡 Cada cadena es ganancia guardada: la cuota sale de la caja pero no es gasto. Se registra desde Gastos operacionales con la categoría CADENA. Aquí ves el avance de cada una y registras cuando te toque el turno.</div>
 </div>
 <div id="cadContent"></div>
+</section>
+<section class="view" id="estadoCuenta">
+<div class="unified-module-header">
+<div class="unified-module-title-row"><div class="unified-module-brand">
+<img alt="COLOMBIAUTOS JP" class="unified-module-logo" id="estadoCuentaLogo" src="logo-3.jpg"/>
+<h2 class="unified-module-title"><span class="unified-module-icon">📄</span> ESTADO DE CUENTA</h2>
+</div></div>
+<div class="unified-module-gold-line"></div>
+<div class="unified-module-note">💡 Escoge una persona para ver cuánto te debe, cuánto le deben y el detalle de cada cuenta.</div>
+</div>
+<div class="card" style="margin-top:12px"><label style="display:block;font-size:11px;color:#aaa;font-weight:800;margin-bottom:6px">PERSONA</label>
+<div style="display:flex;gap:8px"><input id="ecPerson" list="ecPersonList" placeholder="ESCRIBE O ESCOGE EL NOMBRE" style="flex:1;min-width:0;text-transform:uppercase" autocomplete="off"/><button type="button" onclick="renderAccountStatement()" style="min-height:42px;padding:0 16px;border-radius:10px;border:0;background:#d4af37;color:#111;font-weight:900">VER</button></div>
+<datalist id="ecPersonList"></datalist></div>
+<div id="ecContent"></div>
 </section>
 <section class="view" id="gastosFijos">
 <div class="unified-module-header">
@@ -5280,6 +5294,7 @@ body.jcp-custom-theme .database-actions-list button{
 <button class="cf-action" onclick="show('carteraVehiculos')" type="button"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="vehicle"></span><div><b>Vehículos</b></div></button>
 <button class="cf-action" onclick="show('carteraPrestamos')" type="button"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="loans"></span><div><b>Préstamos</b></div></button>
 <button class="cf-action" onclick="openRecaudo()" type="button"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="receipt"></span><div><b>Recaudo</b></div></button>
+<button class="cf-action" onclick="openAccountStatement('')" type="button"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="history"></span><div><b>Estado de cuenta</b></div></button>
 </div>
 </div>
 </section>
@@ -5674,9 +5689,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.10.26.84"></script>
-<script src="./jcp-sync.js?v=2026.10.26.84"></script>
-<script src="./jcp-images.js?v=2026.10.26.84"></script>
+<script src="./jcp-accounting.js?v=2026.10.26.86"></script>
+<script src="./jcp-sync.js?v=2026.10.26.86"></script>
+<script src="./jcp-images.js?v=2026.10.26.86"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -7207,6 +7222,7 @@ function renderUtilitiesModule(){
   setMoney('utilitiesCapitalized',f.profitCapitalized||0);
   setMoney('utilitiesAvailable',f.profitAvailable);
   setMoney('utilitiesCadenas',f.profitInCadenas||0);
+  setMoney('utilitiesGross',f.grossProfit||0);
 }
 
 function openAvailableDetail(){
@@ -7745,7 +7761,7 @@ function show(id){
   try{
     const src=document.querySelector('#vehiculos .inventory-inline-logo');
     const logoMap={
-      cajaCapital:'cashCapitalLogo',gastosFijos:'gastosFijosLogo',resumenMensualUtil:'resumenMensualLogo',acumuladoCadenas:'acumuladoCadenasLogo',pasarCapital:'pasarCapitalLogo',contabilidadLibros:'accLibrosLogo',extractos:'extractosLogo',detalleCapital:'detalleCapitalLogo',
+      cajaCapital:'cashCapitalLogo',estadoCuenta:'estadoCuentaLogo',gastosFijos:'gastosFijosLogo',resumenMensualUtil:'resumenMensualLogo',acumuladoCadenas:'acumuladoCadenasLogo',pasarCapital:'pasarCapitalLogo',contabilidadLibros:'accLibrosLogo',extractos:'extractosLogo',detalleCapital:'detalleCapitalLogo',
       capitalFinanciacion:'capitalFinLogo',pagoObligaciones:'pagoObligLogo',nuevaFinanciacion:'nuevaFinLogo',
       obligacionesPendientes:'obligPendLogo',cierreCaja:'cierreCajaLogo',historialFinanciero:'histFinLogo',
       historialCapitalFinanciacion:'capitalFinHistLogo',carteraCaja:'carteraCajaLogo',carteraVehiculos:'carteraVehLogo',carteraPrestamos:'carteraPresLogo',
@@ -9492,7 +9508,7 @@ function renderClientes(){
       '<table class="database-table">'+
         '<thead><tr><th>NOMBRE</th><th>CÉDULA</th><th>DIRECCIÓN</th><th>TELÉFONO</th></tr></thead>'+
         '<tbody>'+
-          rows.map(c=>'<tr>'+
+          rows.map(c=>'<tr style="cursor:pointer" title="Ver estado de cuenta" onclick="openAccountStatement(this.dataset.n)" data-n="'+clientEsc(c.nombre||'')+'">'+
             '<td><b>'+clientEsc(c.nombre||'')+'</b></td>'+
             '<td>'+clientEsc(c.cedula||'')+'</td>'+
             '<td>'+clientEsc(c.direccion||'')+'</td>'+
@@ -12711,7 +12727,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.26.84\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.26.86\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -12873,6 +12889,7 @@ window.addEventListener('load',function(){
   const labelType=t=>({capital_inicial:'CAPITAL INICIAL',aporte_capital:'APORTE PROPIO',credito:'CRÉDITO RECIBIDO',prestamo_recibido:'PRÉSTAMO RECIBIDO',tarjeta_credito:'TARJETA DE CRÉDITO',pago_deuda:'PAGO / DEVOLUCIÓN DE DEUDA'}[t]||t);
 
 
+try{window.jcpAllObligations=function(){return allObligations();};}catch(e){}
 let obligationHistoryFilter='all';
 
 function allObligations(){
@@ -14674,6 +14691,7 @@ function globalSearchModules(){
     {type:'MÓDULO',title:'Cuentas por pagar',meta:'Préstamos y créditos recibidos, saldos y pagos',action:"openObligationsModule()"},
     {type:'MÓDULO',title:'Lista de tareas',meta:'Pendientes y tareas cumplidas',action:"openTasksModule()"},
     {type:'MÓDULO',title:'Préstamos',meta:'Préstamos y pagos',action:"openLoanModule()"},
+    {type:'MÓDULO',title:'Estado de cuenta',meta:'Cuánto me debe y cuánto le debemos a una persona',action:"openAccountStatement('')"},
     {type:'MÓDULO',title:'Cuentas y transferencias',meta:'Efectivo, bancos, Nequi · transferencia o traslado entre cuentas propias',action:"show('cuentasEfectivo')"},
     {type:'MÓDULO',title:'Capital y financiación',meta:'Cuentas por pagar, historial, cuentas y efectivo',action:"show('capitalFinanciacion')"}
   ];
@@ -16939,7 +16957,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.10.26.84',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.10.26.86',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -20387,6 +20405,114 @@ window.jcpExtractMov=function(){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
+<script id="jcp-estado-cuenta">
+(function(){
+  'use strict';
+  function list(v){return Array.isArray(v)?v:[];}
+  function norm(v){return String(v==null?'':v).normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/[^A-Z0-9Ñ ]+/g,' ').replace(/\s+/g,' ').trim();}
+  function esc(v){return typeof priceEsc==='function'?priceEsc(v):String(v==null?'':v);}
+  function fm(v){return money(Math.round(+v||0));}
+  function tsOf(x){var t=Date.parse(x&&x.createdAt||'');return isFinite(t)?t:(typeof jcpTsOf==='function'?jcpTsOf(x):0);}
+  function dt(x){var t=tsOf(x);return t?new Date(t).toLocaleDateString('es-CO'):(x&&x.date||'');}
+  function obligationName(concept){var parts=String(concept||'').split(' — ');return parts.length>1?parts.slice(1).join(' — '):String(concept||'');}
+  // ¿El texto pertenece a la persona? Nombre contenido, o todas las palabras del nombre (de 3+ letras) presentes.
+  function matches(person,text){
+    var p=norm(person),t=norm(text);if(!p||!t||p.length<3)return false;
+    if((' '+t+' ').indexOf(' '+p+' ')>=0||t===p)return true;
+    var pw=p.split(' ').filter(function(w){return w.length>=3;}),tw=t.split(' ');
+    if(pw.length>=2&&pw.every(function(w){return tw.indexOf(w)>=0;}))return true;
+    var tn=norm(text);if(tn.length>=4&&(' '+p+' ').indexOf(' '+tn+' ')>=0)return true;
+    return false;
+  }
+  function people(){
+    var set={};
+    function add(n){n=String(n||'').trim().toUpperCase();if(n&&n.length>=3)set[n]=1;}
+    list(data.clientes).forEach(function(c){add(c&&c.nombre);});
+    list(data.sold).forEach(function(v){if(v&&v.sale)add(v.sale.buyer);});
+    list(data.permutas).forEach(function(p){if(p)add(p.client||p.buyer);});
+    list(data.pres).forEach(function(x){if(x)add(x.n);});
+    try{(window.jcpAllObligations?window.jcpAllObligations():[]).forEach(function(o){add(obligationName(o.concept).replace(/^(PRÉSTAMO|CRÉDITO) RECIBIDO\s*—?\s*/,''));});}catch(e){}
+    return Object.keys(set).sort();
+  }
+  function collect(person){
+    var owes=[],owed=[];
+    list(data.sold).forEach(function(v){
+      var s=v&&v.sale;if(!s||s.voided||v.status==='venta_anulada'||!matches(person,s.buyer))return;
+      var cols=list(s.collections).filter(function(k){return k&&!k.voided;});
+      var got=cols.filter(function(k){return (k.component||'capital')==='capital';}).reduce(function(a,k){return a+(+k.amount||0);},0);
+      var pending=Math.max(0,(+s.pending||0)-got);
+      owes.push({kind:'VENTA A CRÉDITO',title:[v.marca||v.m,v.ref,v.pl].filter(Boolean).join(' ').toUpperCase(),date:dt(s),receipt:s.receiptNumber||'',initial:+s.price||0,paid:(+s.received||0)+got,balance:pending,
+        moves:[{d:dt(s),c:'Venta · cuota inicial',v:+s.received||0}].concat(cols.map(function(k){return {d:dt(k),c:'Abono '+(k.receiptNumber||''),v:+k.amount||0};}))});
+    });
+    list(data.permutas).forEach(function(p){
+      if(!p||p.voided||p.status==='anulada'||!matches(person,p.client||p.buyer))return;
+      var cols=list(p.collections).filter(function(k){return k&&!k.voided;}),got=cols.reduce(function(a,k){return a+(+k.amount||0);},0),pending=Math.max(0,(+p.pending||0)-got);
+      if(!(+p.pending>0))return;
+      owes.push({kind:'PERMUTA',title:((p.outgoingVehicle&&p.outgoingVehicle.pl)||'')+' → '+((p.incomingVehicle&&p.incomingVehicle.pl)||''),date:dt(p),receipt:p.receiptNumber||'',initial:+p.pending||0,paid:got,balance:pending,
+        moves:cols.map(function(k){return {d:dt(k),c:'Abono '+(k.receiptNumber||''),v:+k.amount||0};})});
+    });
+    list(data.pres).forEach(function(x){
+      if(!x||x.voided||x.estado==='ANULADO'||!matches(person,x.n))return;
+      var c={};try{c=window.jcpLoanCalc(x);}catch(e){c={c:+x.c||0,p:+x.p||0,capPending:Math.max(0,(+x.c||0)-(+x.p||0)),intPending:0};}
+      var cols=list(x.collections).filter(function(k){return k&&!k.voided;});
+      owes.push({kind:'PRÉSTAMO',title:'PRÉSTAMO'+(x.rate?' · '+x.rate+'% MENSUAL':''),date:dt(x),receipt:x.receiptNumber||'',initial:c.c,paid:c.p,balance:c.capPending,interest:c.intPending||0,
+        moves:cols.map(function(k){return {d:dt(k),c:(k.component==='interest'?'Intereses ':'Abono capital ')+(k.fromProfit?'(con utilidades) ':'')+(k.receiptNumber||''),v:+k.amount||0};})});
+    });
+    try{(window.jcpAllObligations?window.jcpAllObligations():[]).forEach(function(o){
+      if(!matches(person,obligationName(o.concept)))return;
+      var pays=list(data.mov).filter(function(m){return m&&!m.voided&&m.subtype==='pago_deuda'&&String(m.financingId||'')===String(o.id);});
+      owed.push({kind:/CR[EÉ]DITO/i.test(o.concept)?'CRÉDITO RECIBIDO':'PRÉSTAMO RECIBIDO',title:String(obligationName(o.concept)).toUpperCase(),date:dt({createdAt:o.createdAt,date:o.date}),receipt:o.receiptNumber||'',initial:+o.value||0,paid:+o.paid||0,balance:+o.balance||0,
+        moves:pays.map(function(m){return {d:dt(m),c:'Pago '+(m.receiptNumber||'')+(m.fundingSource==='utilidades'?' (de utilidades)':''),v:+m.v||0};})});
+    });}catch(e){}
+    var owesT=owes.reduce(function(a,r){return a+r.balance+(r.interest||0);},0),owedT=owed.reduce(function(a,r){return a+r.balance;},0);
+    return {owes:owes,owed:owed,owesT:owesT,owedT:owedT,net:owesT-owedT};
+  }
+  var last=null;
+  function fillList(){var dl=document.getElementById('ecPersonList');if(dl)dl.innerHTML=people().map(function(n){return '<option value="'+esc(n)+'"></option>';}).join('');}
+  window.openAccountStatement=function(name){
+    show('estadoCuenta');fillList();
+    var inp=document.getElementById('ecPerson');if(inp){inp.value=name||'';}
+    if(name)renderAccountStatement();else{var h=document.getElementById('ecContent');if(h)h.innerHTML='';setTimeout(function(){try{inp.focus();}catch(e){}},80);}
+  };
+  function section(title,rows,color){
+    if(!rows.length)return '<div class="card" style="margin-top:12px"><div class="section" style="margin-top:0">'+title+'</div><div class="empty">NO HAY CUENTAS.</div></div>';
+    return '<div class="card" style="margin-top:12px"><div class="section" style="margin-top:0">'+title+'</div>'+rows.map(function(r){
+      return '<div style="padding:10px 0;border-bottom:1px solid #2a2a2a"><div style="display:flex;justify-content:space-between;gap:10px"><div style="min-width:0"><b style="font-size:12px;color:#fff;overflow-wrap:anywhere">'+esc(r.kind)+' · '+esc(r.title)+'</b><div style="font-size:10.5px;color:#999">'+esc(r.date)+(r.receipt?' · '+esc(r.receipt):'')+'</div></div><b style="white-space:nowrap;color:'+color+'">'+fm(r.balance)+'</b></div>'
+        +'<div style="display:flex;flex-wrap:wrap;gap:4px 14px;font-size:10.5px;color:#bbb;margin-top:5px"><span>Valor inicial <b style="color:#ddd">'+fm(r.initial)+'</b></span><span>Pagado <b style="color:#ddd">'+fm(r.paid)+'</b></span><span>Saldo <b style="color:#ddd">'+fm(r.balance)+'</b></span>'+(r.interest?'<span>Intereses pendientes <b style="color:#ddd">'+fm(r.interest)+'</b></span>':'')+'</div>'
+        +(r.moves.length?'<div style="margin-top:6px;padding-left:8px;border-left:2px solid #3a321f">'+r.moves.map(function(m){return '<div style="display:flex;justify-content:space-between;gap:8px;font-size:10.5px;color:#999;padding:2px 0"><span>'+esc(m.d)+' · '+esc(m.c)+'</span><span>'+fm(m.v)+'</span></div>';}).join('')+'</div>':'')+'</div>';
+    }).join('')+'</div>';
+  }
+  window.renderAccountStatement=function(){
+    var inp=document.getElementById('ecPerson'),host=document.getElementById('ecContent');if(!inp||!host)return;
+    var name=String(inp.value||'').trim().toUpperCase();inp.value=name;
+    if(name.length<3){host.innerHTML='<div class="card" style="margin-top:12px"><div class="empty">ESCRIBE AL MENOS 3 LETRAS DEL NOMBRE.</div></div>';return;}
+    var r=collect(name);last={name:name,r:r,at:new Date()};
+    var netTxt=r.net>0?'TE DEBE '+fm(r.net):(r.net<0?'LE DEBEMOS '+fm(-r.net):'ESTÁN A PAZ Y SALVO');
+    var card=function(l,v,c){return '<div style="flex:1;min-width:140px;background:#121212;border:1px solid #3a321f;border-radius:12px;padding:10px;text-align:center"><div style="font-size:10px;color:#aaa;font-weight:800">'+l+'</div><div style="font-size:17px;font-weight:900;color:'+c+';margin-top:4px">'+v+'</div></div>';};
+    host.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">'+card('ME DEBE',fm(r.owesT),'#57d68d')+card('LE DEBEMOS',fm(r.owedT),'#ff6b6b')+card('SALDO NETO',netTxt,'#d4af37')+'</div>'
+      +section('LO QUE ME DEBE',r.owes,'#57d68d')+section('LO QUE LE DEBEMOS',r.owed,'#ff6b6b')
+      +'<button type="button" onclick="printAccountStatement()" style="width:100%;margin-top:12px;min-height:44px;border-radius:12px;border:0;background:#d4af37;color:#111;font-weight:900">🖨️ GENERAR PDF</button>'
+      +'<div style="font-size:10px;color:#888;margin-top:8px">La app une las cuentas por el nombre. Si alguna no aparece, revisa que el nombre esté escrito igual en la venta, el préstamo o la cuenta por pagar.</div>';
+  };
+  window.printAccountStatement=function(){
+    if(!last)return;var r=last.r,logo=typeof supportLogoSrc==='function'?supportLogoSrc():'';
+    var w=window.open('','_blank','width=900,height=800');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}
+    var tbl=function(title,rows){if(!rows.length)return '<h3>'+title+'</h3><p class="muted">No hay cuentas.</p>';
+      return '<h3>'+title+'</h3><table><thead><tr><th>CUENTA</th><th>FECHA</th><th>SOPORTE</th><th class="n">VALOR INICIAL</th><th class="n">PAGADO</th><th class="n">SALDO</th></tr></thead><tbody>'+rows.map(function(x){
+        return '<tr><td><b>'+esc(x.kind)+'</b><br><small>'+esc(x.title)+'</small>'+(x.moves.length?'<div class="mv">'+x.moves.map(function(m){return esc(m.d)+' · '+esc(m.c)+' · '+fm(m.v);}).join('<br>')+'</div>':'')+'</td><td>'+esc(x.date)+'</td><td>'+esc(x.receipt)+'</td><td class="n">'+fm(x.initial)+'</td><td class="n">'+fm(x.paid)+'</td><td class="n"><b>'+fm(x.balance)+'</b>'+(x.interest?'<br><small>+ int. '+fm(x.interest)+'</small>':'')+'</td></tr>';}).join('')+'</tbody></table>';};
+    var netTxt=r.net>0?'TE DEBE '+fm(r.net):(r.net<0?'LE DEBEMOS '+fm(-r.net):'A PAZ Y SALVO');
+    var html='<!doctype html><html><head><meta charset="utf-8"><title>Estado de cuenta '+esc(last.name)+'</title><style>body{font-family:Arial,sans-serif;color:#111;margin:0;padding:24px;background:#f3f3f3}.sheet{max-width:800px;margin:auto;background:#fff;padding:26px 30px;border:1px solid #ddd}.head{display:flex;align-items:center;gap:16px;border-bottom:3px solid #c9a227;padding-bottom:12px}.head img{width:120px;max-height:64px;object-fit:contain}h1{font-size:19px;margin:0}h2{font-size:12px;margin:4px 0 0;color:#8a6d12}h3{font-size:13px;margin:20px 0 6px;border-bottom:1px solid #ccc;padding-bottom:4px}table{width:100%;border-collapse:collapse;font-size:11px}th{background:#222;color:#fff;padding:6px;text-align:left}td{padding:6px;border-bottom:1px solid #e5e5e5;vertical-align:top}.n{text-align:right;white-space:nowrap}.mv{margin-top:4px;color:#666;font-size:10px}.tot{display:flex;gap:10px;margin-top:14px}.tot div{flex:1;border:1px solid #ddd;border-radius:6px;padding:8px;text-align:center}.tot span{display:block;font-size:10px;color:#666}.tot b{font-size:15px}.muted{color:#888;font-size:11px}.foot{margin-top:20px;font-size:9px;color:#777;text-align:center;border-top:1px solid #ddd;padding-top:8px}.actions{max-width:800px;margin:10px auto;text-align:right}.actions button{padding:10px 16px;border:0;border-radius:7px;background:#111;color:#fff;font-weight:800}@media print{body{background:#fff;padding:0}.sheet{border:0}.actions{display:none}}</style></head><body><div class="sheet">'
+      +'<div class="head">'+(logo?'<img src="'+esc(logo)+'">':'')+'<div><h1>COLOMBIAUTOS JP</h1><h2>ESTADO DE CUENTA</h2></div></div>'
+      +'<p style="font-size:13px;margin:14px 0 0"><b>'+esc(last.name)+'</b><br><span class="muted">Generado el '+esc(last.at.toLocaleString('es-CO',{dateStyle:'long',timeStyle:'short'}))+'</span></p>'
+      +'<div class="tot"><div><span>ME DEBE</span><b>'+fm(r.owesT)+'</b></div><div><span>LE DEBEMOS</span><b>'+fm(r.owedT)+'</b></div><div><span>SALDO NETO</span><b>'+netTxt+'</b></div></div>'
+      +tbl('LO QUE ME DEBE',r.owes)+tbl('LO QUE LE DEBEMOS',r.owed)
+      +'<div class="foot">Documento generado por COLOMBIAUTOS JP · Estado de cuenta informativo.</div></div><div class="actions"><button onclick="window.print()">IMPRIMIR / GUARDAR PDF</button></div></body></html>';
+    w.document.open();w.document.write(html);w.document.close();
+  };
+  document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.id==='ecPerson'){e.preventDefault();renderAccountStatement();}});
+  document.addEventListener('change',function(e){if(e.target&&e.target.id==='ecPerson')renderAccountStatement();});
+})();
+</script>
 <script id="jcp-v80-script">
 (function(){
   'use strict';
@@ -20476,6 +20602,6 @@ window.jcpExtractMov=function(){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.10.26.84"></script>
+<script src="./app-update.js?v=2026.10.26.86"></script>
 </body>
 </html>

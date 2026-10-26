@@ -1,7 +1,7 @@
 (()=>{
   'use strict';
 
-  const APP_VERSION='2026.10.26.84';
+  const APP_VERSION='2026.10.26.86';
   const CHECK_EVERY_MS=10*60*1000;
   let registrationRef=null;
   let banner=null;
