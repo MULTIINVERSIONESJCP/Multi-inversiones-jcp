@@ -12,6 +12,7 @@
     '119999':{name:'DISPONIBLE SIN CUENTA IDENTIFICADA',type:'asset',group:'ACTIVOS'},
     '130505':{name:'CUENTAS POR COBRAR — VENTAS Y PERMUTAS',type:'asset',group:'ACTIVOS'},
     '130510':{name:'PRÉSTAMOS POR COBRAR',type:'asset',group:'ACTIVOS'},
+    '125505':{name:'AHORRO EN CADENAS',type:'asset',group:'ACTIVOS'},
     '143505':{name:'INVENTARIO DE VEHÍCULOS',type:'asset',group:'ACTIVOS'},
     '149005':{name:'OTRAS INVERSIONES',type:'asset',group:'ACTIVOS'},
     '210505':{name:'OBLIGACIONES FINANCIERAS',type:'liability',group:'PASIVOS'},
@@ -106,6 +107,10 @@
       if(value===0)continue;
       // Utilidades usadas para pagar una cuenta por pagar: pasan de utilidades a capital sin mover plata.
       if(sub==='capitalizacion_utilidades'){if(m.voided)continue;a.cashClass='financing';push(a,[line('360505',value),line('310505',0,value)]);continue;}
+      // Cuota de cadena recibida y llevada para el dueño: sale del ahorro como retiro, sin mover plata.
+      if(sub==='cadena_retirada'){if(m.voided)continue;a.cashClass='financing';push(a,[line('360505',value),line('125505',0,value)]);continue;}
+      // Abono a un préstamo propio con utilidades: el dueño usa ganancia para cancelar lo que debe, sin mover plata.
+      if(sub==='abono_prestamo_utilidades'){if(m.voided)continue;a.cashClass='financing';push(a,[line('360505',value),line('130510',0,value)]);continue;}
       let code,dir=m.t==='ingreso'?'in':'out';
       if(['capital_inicial','aporte_capital'].includes(sub)){code='310505';a.cashClass='financing';}
       else if(sub==='reverso_financiacion'){code=['capital_inicial','aporte_capital'].includes(String(m.origSubtype||''))?'310505':'210505';a.cashClass='financing';}
@@ -117,6 +122,8 @@
         if(sub==='vehiculos')expenseByVehicle[m.vehicleId]=(expenseByVehicle[m.vehicleId]||0)+value;
       }else if(['gasto_operativo','varios','reverso_gasto_operativo'].includes(sub))code='510505';
       else if(sub==='retiro_ganancias'){code='360505';a.cashClass='financing';}
+      else if(['ahorro_cadena','reverso_ahorro_cadena','cadena_recibida'].includes(sub)){code='125505';a.cashClass='investing';}
+      else if(sub==='cobro_cuenta_por_cobrar'){code=(m.collectionOf&&m.collectionOf.kind==='loan')?'130510':'130505';a.cashClass='investing';}
       else if(m.t==='ingreso')code='421005';
       else if(m.t==='gasto')code='519505';
       else{issue('UNSUPPORTED_MOVEMENT',a,'Movimiento sin regla contable.',value,'warning');continue;}

@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.10.25.80</title>
+<title>COLOMBIAUTOS JP - V2026.10.26.84</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -3336,7 +3336,7 @@ body.jcp-custom-theme .database-actions-list button{
 .utilities-menu-card{min-width:0;box-sizing:border-box;background:#191919;border:1px solid #3a321f;border-radius:12px;min-height:132px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;cursor:pointer}
 .utilities-menu-card .sales-menu-icon{width:48px;height:48px;margin:0 0 10px}
 .utilities-menu-card b{display:block;max-width:100%;color:#f1f1f1;font-size:12px;line-height:1.2;overflow-wrap:anywhere}
-.utilities-vehicle-history-card{grid-column:1/-1;min-height:112px}
+.utilities-vehicle-history-card{grid-column:auto}
 .vehicle-utility-summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
 .vehicle-utility-summary-card{min-width:0;background:#111;border:1px solid #3c321d;border-radius:12px;padding:12px 8px;text-align:center;overflow:hidden}
 .vehicle-utility-summary-card span{display:block;color:#999;font-size:8px;font-weight:900;line-height:1.2}
@@ -3379,7 +3379,7 @@ body.jcp-custom-theme .database-actions-list button{
   .utilities-menu-card{min-height:118px;padding:10px 5px}
   .utilities-menu-card .sales-menu-icon{width:42px;height:42px;margin-bottom:8px}
   .utilities-menu-card b{font-size:10px}
-  .utilities-vehicle-history-card{min-height:104px}
+  .utilities-vehicle-history-card{grid-column:auto}
   .vehicle-utility-summary-card b{font-size:13px}
   .vehicle-utility-card-head strong{font-size:11px}
 
@@ -4457,6 +4457,8 @@ body.jcp-custom-theme .database-actions-list button{
 <option>PUBLICIDAD</option><option>PAPELERÍA</option><option>OTROS</option>
 </select>
 </label>
+<label class="sale-field" id="opExpenseFixedWrap" style="display:none"><b>¿Es un gasto fijo?</b><select id="opExpenseFixed"></select></label>
+<label class="sale-field" id="opExpenseCadenaWrap" style="display:none"><b>¿A qué cadena? *</b><span style="display:flex;gap:6px;align-items:stretch"><select id="opExpenseCadena" style="flex:1;min-width:0"></select><button type="button" onclick="openCadenaForm('',true)" style="white-space:nowrap;padding:0 10px">+ NUEVA</button></span></label>
 <label class="sale-field"><b>Concepto *</b><input id="opExpenseConcept" placeholder="CONCEPTO"/></label>
 <label class="sale-field"><b>Valor *</b><input data-money="1" id="opExpenseValue" inputmode="numeric" oninput="updatePaymentDistribution('opExpense')" placeholder="$ 0" type="text"/></label><div class="sale-field full"><div class="paydist" id="opExpensePayDist"><div class="paydist-title">FORMA DE PAGO DEL GASTO</div><div class="paydist-grid">
 <label class="paydist-row"><span>EFECTIVO</span><input data-money="1" id="opExpensePayCash" inputmode="numeric" oninput="payDistInput('opExpense',this)" placeholder="$ 0" type="text"/></label>
@@ -4814,6 +4816,7 @@ body.jcp-custom-theme .database-actions-list button{
 <button class="cf-action" onclick="show('carteraCaja')"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="receivable"></span><div><b>Cuentas por cobrar</b><small>Ventas a crédito y préstamos pendientes</small></div></button>
 <button class="cf-action" onclick="openObligationsModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="loans"></span><div><b>Cuentas por pagar</b><small>Préstamos, créditos, saldos y pagos pendientes</small></div></button>
 <button class="cf-action" onclick="openUtilitiesModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="capital"></span><div><b>Utilidades</b><small>Utilidad acumulada, retiros e historial</small></div></button>
+<button class="cf-action" onclick="openFixedExpenses()"><span class="jcp-app-icon jcp-fin-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="2"/><path d="M8 2v4M16 2v4M4 9h16M8 13l2 2 4-4"/></svg></span><div><b>Gastos fijos</b><small>Pagos del mes y su avance</small></div></button>
 
 <button class="cf-action" onclick="openAccountingModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="accounting"><svg aria-hidden="true" viewbox="0 0 48 48"><path d="M10 8h21a7 7 0 0 1 7 7v25H16a6 6 0 0 1-6-6V8Z" fill="none" stroke="currentColor" stroke-width="2"></path><path d="M16 8v32M21 16h11M21 22h11M21 28h7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span><div><b>Contabilidad</b><small>Libros y estados financieros</small></div></button>
 
@@ -4935,7 +4938,8 @@ body.jcp-custom-theme .database-actions-list button{
   <div class="utilities-kpi-card"><span>UTILIDAD ACUMULADA</span><b id="utilitiesAccumulated">$0</b></div>
   <div class="utilities-kpi-card"><span>UTILIDADES RETIRADAS</span><b id="utilitiesWithdrawn">$0</b></div>
   <div class="utilities-kpi-card"><span>PASADAS A CAPITAL</span><b id="utilitiesCapitalized">$0</b></div>
-  <div class="utilities-kpi-card"><span>UTILIDAD DISPONIBLE</span><b id="utilitiesAvailable">$0</b></div>
+  <div class="utilities-kpi-card"><span>UTILIDADES POR RETIRAR</span><b id="utilitiesAvailable">$0</b></div>
+  <div class="utilities-kpi-card"><span>GANANCIAS EN CADENAS</span><b id="utilitiesCadenas">$0</b></div>
 </div>
 
 <div class="utilities-menu-grid">
@@ -4943,17 +4947,13 @@ body.jcp-custom-theme .database-actions-list button{
     <span class="jcp-app-icon sales-menu-icon" data-jcp-icon="capital"></span>
     <b>Retirar ganancias</b>
   </div>
-  <div class="utilities-menu-card jcp-icon-card" onclick="show('pasarCapital')">
-    <span class="jcp-app-icon sales-menu-icon" data-jcp-icon="finance"></span>
-    <b>Pasar a capital</b>
-  </div>
   <div class="utilities-menu-card jcp-icon-card" onclick="show('resumenMensualUtil')">
     <span class="jcp-app-icon sales-menu-icon" data-jcp-icon="history"></span>
     <b>Resumen mensual</b>
   </div>
   <div class="utilities-menu-card jcp-icon-card" onclick="show('acumuladoCadenas')">
     <span class="jcp-app-icon sales-menu-icon" data-jcp-icon="receivable"></span>
-    <b>Acumulado cadenas</b>
+    <b>Cadenas</b>
   </div>
   <div class="utilities-menu-card jcp-icon-card" onclick="show('historialUtilidades')">
     <span class="jcp-app-icon sales-menu-icon" data-jcp-icon="history"></span>
@@ -5059,36 +5059,23 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="unified-module-header">
 <div class="unified-module-title-row"><div class="unified-module-brand">
 <img alt="COLOMBIAUTOS JP" class="unified-module-logo" id="acumuladoCadenasLogo" src="logo-3.jpg"/>
-<h2 class="unified-module-title"><span class="unified-module-icon">🔗</span> ACUMULADO CADENAS</h2>
+<h2 class="unified-module-title"><span class="unified-module-icon">🔗</span> CADENAS</h2>
 </div></div>
 <div class="unified-module-gold-line"></div>
-<div class="unified-module-note">💡 Dato informativo: suma los gastos de la categoría CADENA. Siguen contando como gasto operacional; aquí solo ves cuánto llevas pagado.</div>
+<div class="unified-module-note">💡 Cada cadena es ganancia guardada: la cuota sale de la caja pero no es gasto. Se registra desde Gastos operacionales con la categoría CADENA. Aquí ves el avance de cada una y registras cuando te toque el turno.</div>
 </div>
 <div id="cadContent"></div>
 </section>
-<section class="view" id="pasarCapital">
+<section class="view" id="gastosFijos">
 <div class="unified-module-header">
 <div class="unified-module-title-row"><div class="unified-module-brand">
-<img alt="COLOMBIAUTOS JP" class="unified-module-logo" id="pasarCapitalLogo" src="logo-3.jpg"/>
-<h2 class="unified-module-title"><span class="unified-module-icon">🏦</span> PASAR A CAPITAL</h2>
+<img alt="COLOMBIAUTOS JP" class="unified-module-logo" id="gastosFijosLogo" src="logo-3.jpg"/>
+<h2 class="unified-module-title"><span class="unified-module-icon">🗓️</span> GASTOS FIJOS</h2>
 </div></div>
 <div class="unified-module-gold-line"></div>
-<div class="unified-module-note">💡 Convierte ganancias en capital tuyo. No mueve plata de la caja: solo descuenta de "Utilidades por retirar" y suma a tu capital. Úsalo, por ejemplo, para cubrir con nuevas ganancias pagos de deudas que hiciste con capital.</div>
+<div class="unified-module-note">💡 Se marcan solos como pagados cuando registras el gasto operacional y escoges el gasto fijo. Cada mes empiezan de nuevo.</div>
 </div>
-<div class="card profit-withdraw-card">
-<div class="section" style="margin-top:0">PASAR A CAPITAL</div>
-<div class="profit-withdraw-grid">
-<div><label>UTILIDADES POR RETIRAR</label><b id="pcAvailable">$0</b></div>
-<div><label>CAPITAL PROPIO ACTUAL</label><b id="pcOwnCapital">$0</b></div>
-<input data-money="1" id="pcValue" inputmode="numeric" placeholder="$ VALOR A PASAR A CAPITAL" type="text"/>
-<input id="pcConcept" placeholder="CONCEPTO (EJ: CUBRIR PAGOS A HORACIO)"/>
-</div>
-<button class="profit-withdraw-btn" id="pcSubmit" onclick="saveProfitCapitalization()" type="button">PASAR A CAPITAL</button>
-</div>
-<div class="card" style="margin-top:12px">
-<div class="section" style="margin-top:0">HISTORIAL DE UTILIDADES PASADAS A CAPITAL</div>
-<div id="pcHistory"></div>
-</div>
+<div id="gfContent"></div>
 </section>
 <section class="view" id="cuentasEfectivo">
 <div class="unified-module-header">
@@ -5348,6 +5335,14 @@ body.jcp-custom-theme .database-actions-list button{
 <button class="debt-pay-type active" id="rcModeP" type="button">ABONO</button>
 <button class="debt-pay-type" id="rcModeT" type="button">PAGO TOTAL</button>
 </div>
+<div id="rcSrcBox" style="display:none">
+<label class="debt-pay-label">¿DE DÓNDE SALE LA PLATA?</label>
+<div class="debt-pay-type-grid">
+<button class="debt-pay-type" id="rcSrcP" type="button">ENTRA PLATA A LA CAJA</button>
+<button class="debt-pay-type" id="rcSrcU" type="button">DE LAS UTILIDADES</button>
+</div>
+<small class="debt-src-note bad" id="rcSrcNote">Obligatorio: escoge si entra plata a la caja o si se abona con las utilidades.</small>
+</div>
 <label class="debt-pay-label" for="rcValue">VALOR A COBRAR</label>
 <input data-money="1" id="rcValue" inputmode="numeric" placeholder="$ 0" type="text" autocomplete="off"/>
 <div class="debt-pay-secondary">
@@ -5569,7 +5564,6 @@ body.jcp-custom-theme .database-actions-list button{
 <option value="prestamo_otorgado">PRÉSTAMO OTORGADO</option>
 <option value="inversion">INVERSIÓN</option>
 <option value="ingreso">OTRO INGRESO</option>
-<option value="capitalizacion">UTILIDADES PASADAS A CAPITAL</option>
 </select>
 </label>
 <label>NÚMERO DE DOCUMENTO / RECIBO
@@ -5680,9 +5674,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.10.25.80"></script>
-<script src="./jcp-sync.js?v=2026.10.25.80"></script>
-<script src="./jcp-images.js?v=2026.10.25.80"></script>
+<script src="./jcp-accounting.js?v=2026.10.26.84"></script>
+<script src="./jcp-sync.js?v=2026.10.26.84"></script>
+<script src="./jcp-images.js?v=2026.10.26.84"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -5751,6 +5745,8 @@ function normalizeCloudData(obj){
     activityLog:Array.isArray(d.activityLog)?d.activityLog:[],
     settings:(d.settings&&typeof d.settings==='object'&&!Array.isArray(d.settings))?d.settings:{},
     tareas:Array.isArray(d.tareas)?d.tareas.filter(t=>t&&t.id):[],
+    cadenas:Array.isArray(d.cadenas)?d.cadenas.filter(t=>t&&t.id):[],
+    gastosFijos:Array.isArray(d.gastosFijos)?d.gastosFijos.filter(t=>t&&t.id):[],
     _sync:{
       rev:Number(sync.rev||0),
       updatedAt:String(sync.updatedAt||''),
@@ -6148,7 +6144,7 @@ function jcpWriteLocalSnapshot(snapshot){
 // FUSIÓN AUTOMÁTICA 2026-09-19: si otro dispositivo guardó primero y ambos
 // tocaron registros distintos, se combinan por id. Si tocaron el mismo
 // registro, o cualquier validación falla, se conserva el aviso manual.
-const JCP_MERGE_KEYS=['veh','sold','clientes','pres','inv','mov','permutas','capitalOps','cashClosures','receipts','treasuryAccounts','treasuryMovements','tareas'];
+const JCP_MERGE_KEYS=['veh','sold','clientes','pres','inv','mov','permutas','capitalOps','cashClosures','receipts','treasuryAccounts','treasuryMovements','tareas','cadenas','gastosFijos'];
 async function jcpMergeOnConflict({request,central}){
   try{
     const baseRaw=window.jcpMergeBase;
@@ -6878,7 +6874,7 @@ function jcpAuditState(source){
   // Las permutas trasladan inversión; no realizan utilidad contable.
   const permutaProfit=0;
   const operatingExpenses=mov.filter(x=>!x?.voided&&x?.t==='gasto'&&(x?.subtype==='gasto_operativo'||x?.subtype==='varios')).reduce((a,x)=>a+(jcpAuditNum(x?.v)||0),0);
-  const withdrawals=mov.filter(x=>(x?.t==='gasto'&&x?.subtype==='retiro_ganancias'&&!x?.voided)||(x&&!x.voided&&x.subtype==='capitalizacion_utilidades')).reduce((a,x)=>a+(jcpAuditNum(x?.v)||0),0);
+  const withdrawals=mov.filter(x=>(x?.t==='gasto'&&x?.subtype==='retiro_ganancias'&&!x?.voided)||(x&&!x.voided&&(x.subtype==='capitalizacion_utilidades'||x.subtype==='cadena_retirada'||x.subtype==='abono_prestamo_utilidades'))).reduce((a,x)=>a+(jcpAuditNum(x?.v)||0),0)+mov.filter(x=>x&&!x.voided&&x.t==='gasto'&&x.subtype==='ahorro_cadena').reduce((a,x)=>a+(jcpAuditNum(x?.v)||0),0)-mov.filter(x=>x&&!x.voided&&(x.subtype==='cadena_recibida'||x.subtype==='cadena_retirada')).reduce((a,x)=>a+(jcpAuditNum(x?.v)||0),0);
   const financing=mov.filter(x=>!x?.voided&&x?.t==='ingreso'&&(x?.subtype==='credito'||x?.subtype==='prestamo_recibido'||x?.subtype==='tarjeta_credito')).reduce((a,x)=>a+(jcpAuditNum(x?.v)||0),0);
   const debtPaid=mov.filter(x=>!x?.voided&&x?.t==='gasto'&&x?.subtype==='pago_deuda').reduce((a,x)=>a+(jcpAuditNum(x?.v)||0),0);
   const debt=Math.max(0,financing-debtPaid);
@@ -6968,7 +6964,7 @@ function jcpActivityDelta(before,after){
     veh:'vehículos',sold:'ventas',clientes:'clientes',pres:'préstamos',inv:'inversiones',
     mov:'movimientos',permutas:'permutas',capitalOps:'operaciones de capital',
     cashClosures:'cierres de caja',receipts:'soportes',treasuryAccounts:'cuentas de tesorería',
-    treasuryMovements:'movimientos de tesorería',tareas:'tareas'
+    treasuryMovements:'movimientos de tesorería',tareas:'tareas',cadenas:'cadenas',gastosFijos:'gastos fijos'
   };
   const areas=[];
   for(const key of Object.keys(labels)){
@@ -7210,6 +7206,7 @@ function renderUtilitiesModule(){
   setMoney('utilitiesWithdrawn',f.profitWithdrawals);
   setMoney('utilitiesCapitalized',f.profitCapitalized||0);
   setMoney('utilitiesAvailable',f.profitAvailable);
+  setMoney('utilitiesCadenas',f.profitInCadenas||0);
 }
 
 function openAvailableDetail(){
@@ -7262,35 +7259,261 @@ const JCP_MONTHS=['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOS
 function renderMonthlyUtilities(){
   const host=document.getElementById('rmuContent');if(!host)return;
   const M={};const key=t=>{if(!t)return '0000-00';const d=new Date(t);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');};
-  const get=k=>M[k]||(M[k]={sales:0,n:0,op:0,ret:0,cap:0});
+  const get=k=>M[k]||(M[k]={sales:0,n:0,op:0,ret:0,cap:0,cad:0});
   (data.sold||[]).forEach(x=>{if(!x||x.status==='permuta'||x.permuta||!x.sale||x.sale.voided||x.status==='venta_anulada')return;const r=get(key(jcpTsOf(x.sale)));r.sales+=(+x.sale.price||0)-((+x.c||0)+(+x.g||0));r.n++;});
   (data.mov||[]).forEach(m=>{if(!m||m.voided)return;const t=jcpTsOf(m);
     if(m.t==='gasto'&&(m.subtype==='gasto_operativo'||m.subtype==='varios'))get(key(t)).op+=(+m.v||0);
     else if(m.t==='gasto'&&m.subtype==='retiro_ganancias')get(key(t)).ret+=(+m.v||0);
-    else if(m.subtype==='capitalizacion_utilidades')get(key(t)).cap+=(+m.v||0);});
+    else if(m.subtype==='capitalizacion_utilidades')get(key(t)).cap+=(+m.v||0);
+    else if(m.t==='gasto'&&m.subtype==='ahorro_cadena')get(key(t)).cad+=(+m.v||0);
+    else if(m.subtype==='cadena_recibida')get(key(t)).cad-=(+m.v||0);
+    else if(m.subtype==='cadena_retirada'){get(key(t)).cad-=(+m.v||0);get(key(t)).ret+=(+m.v||0);}
+    else if(m.subtype==='abono_prestamo_utilidades')get(key(t)).ret+=(+m.v||0);});
   const keys=Object.keys(M).sort().reverse();
   if(!keys.length){host.innerHTML='<div class="empty">TODAVÍA NO HAY MOVIMIENTOS.</div>';return;}
   const label=k=>{if(k==='0000-00')return 'SIN FECHA';const [y,mm]=k.split('-');return JCP_MONTHS[+mm-1]+' '+y;};
   const row=(l,v,cls)=>'<div style="display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid #222;font-size:12px"><span style="color:#bbb">'+l+'</span><b style="white-space:nowrap;'+(cls||'')+'">'+money(v)+'</b></div>';
-  let acc=0;const order=keys.slice().reverse(),running={};order.forEach(k=>{const r=M[k];acc+=r.sales-r.op-r.ret-r.cap;running[k]=acc;});
-  host.innerHTML=keys.map(k=>{const r=M[k],net=r.sales-r.op,left=net-r.ret-r.cap;return '<div class="card" style="margin-top:12px"><div class="section" style="margin-top:0;display:flex;justify-content:space-between"><span>'+label(k)+'</span><small style="color:#999">'+r.n+(r.n===1?' venta':' ventas')+'</small></div>'
+  let acc=0;const order=keys.slice().reverse(),running={};order.forEach(k=>{const r=M[k];acc+=r.sales-r.op-r.ret-r.cap-r.cad;running[k]=acc;});
+  host.innerHTML=keys.map(k=>{const r=M[k],net=r.sales-r.op,left=net-r.ret-r.cap-r.cad;return '<div class="card" style="margin-top:12px"><div class="section" style="margin-top:0;display:flex;justify-content:space-between"><span>'+label(k)+'</span><small style="color:#999">'+r.n+(r.n===1?' venta':' ventas')+'</small></div>'
     +row('+ Ganancia de ventas',r.sales)+row('− Gastos operacionales',-r.op)
     +row('= Ganancia limpia del mes',net,'color:'+(net<0?'#ff6b6b':'#57d68d'))
-    +row('− Retiros de utilidades',-r.ret)+row('− Pagos de deudas pasados a capital',-r.cap)
+    +row('− Retiros de utilidades',-r.ret)+row('− Pagos de deudas pasados a capital',-r.cap)+row('− Guardado en cadenas',-r.cad,'color:#d4af37')
     +row('= Quedó del mes',left,'color:'+(left<0?'#ff6b6b':'#fff'))
     +row('Utilidades por retirar acumuladas al cierre del mes',running[k],'color:'+(running[k]<0?'#ff6b6b':'#d4af37'))+'</div>';}).join('');
 }
+function jcpCadenas(){return Array.isArray(data.cadenas)?data.cadenas:[];}
+function jcpIsCadenaCategory(cat){return /CADENA/.test(String(cat||'').toUpperCase());}
+function jcpCadenaFromCategory(category,selectId){
+  if(!jcpIsCadenaCategory(category))return {subtype:'gasto_operativo',id:''};
+  const active=jcpCadenas().filter(c=>c.status!=='finalizada');
+  if(!active.length)return {error:'PRIMERO CREA LA CADENA: TOCA "+ NUEVA" JUNTO A "¿A QUÉ CADENA?".'};
+  const id=document.getElementById(selectId)?.value||'';
+  if(!id||!active.some(c=>c.id===id))return {error:'ESCOGE A QUÉ CADENA VA ESTE PAGO.'};
+  return {subtype:'ahorro_cadena',id};
+}
+function jcpCadenaStats(c){
+  const m=data.mov||[];
+  const pays=m.filter(x=>x&&!x.voided&&x.t==='gasto'&&x.subtype==='ahorro_cadena'&&x.cadenaId===c.id);
+  const paid=pays.reduce((a,x)=>a+(+x.v||0),0);
+  const back=m.filter(x=>x&&!x.voided&&(x.subtype==='cadena_recibida'||x.subtype==='cadena_retirada')&&x.cadenaId===c.id);
+  const received=back.reduce((a,x)=>a+(+x.v||0),0);
+  const cuota=+c.cuota||0,puestos=+c.puestos||0,pot=cuota*puestos;
+  const cuotas=cuota>0?Math.round(paid/cuota*10)/10:pays.length;
+  return {pays,paid,received,saldo:paid-received,cuota,puestos,pot,cuotas,faltan:Math.max(0,puestos-cuotas),faltaValor:Math.max(0,pot-paid),back};
+}
+function refreshCadenaSelect(){
+  const wrap=document.getElementById('opExpenseCadenaWrap'),sel=document.getElementById('opExpenseCadena'),cat=document.getElementById('opExpenseCategory');
+  if(!wrap||!sel)return;
+  const show=jcpIsCadenaCategory(cat?.value);wrap.style.display=show?'':'none';
+  const cur=sel.value,act=jcpCadenas().filter(c=>c.status!=='finalizada');
+  sel.innerHTML='<option value="">'+(act.length?'ESCOGE LA CADENA':'NO HAY CADENAS: CREA UNA')+'</option>'+act.map(c=>'<option value="'+priceEsc(c.id)+'">'+priceEsc(c.name)+' · CUOTA '+money(+c.cuota||0)+'</option>').join('');
+  if(cur&&act.some(c=>c.id===cur))sel.value=cur;
+}
+window.refreshCadenaSelect=refreshCadenaSelect;
+document.addEventListener('change',function(e){if(e.target&&e.target.id==='opExpenseCategory'){refreshCadenaSelect();try{refreshFixedSelect(true);}catch(_e){}}});
+document.addEventListener('input',function(e){if(e.target&&e.target.id==='opExpenseConcept'){try{refreshFixedSelect(true);}catch(_e){}}});
+document.addEventListener('change',function(e){if(e.target&&e.target.id==='opExpenseFixed')e.target.dataset.manual='1';});
+let jcpCadenaReturnToExpense=false;
+function openCadenaForm(id,fromExpense){
+  jcpCadenaReturnToExpense=!!fromExpense;
+  const c=jcpCadenas().find(x=>x.id===id)||{};
+  window.__cadenaEditId=c.id||'';
+  show('acumuladoCadenas');renderChainSavings();
+  const f=document.getElementById('cadForm');if(!f)return;
+  f.style.display='';
+  const set=(k,v)=>{const el=document.getElementById(k);if(el)el.value=v==null?'':v;};
+  set('cadName',c.name||'');set('cadCuota',c.cuota?money(c.cuota).replace(/[^\d.]/g,''):'');set('cadPuestos',c.puestos||'');set('cadTurno',c.turno||'');set('cadStart',c.startDate||'');
+  const t=document.getElementById('cadFormTitle');if(t)t.textContent=c.id?'EDITAR CADENA':'NUEVA CADENA';
+  setTimeout(()=>{try{f.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('cadName')?.focus();}catch(e){}},60);
+}
+function saveCadenaForm(){
+  const g=k=>document.getElementById(k)?.value||'';
+  const name=g('cadName').trim().toUpperCase(),cuota=parseFormattedMoney(g('cadCuota')),puestos=parseInt(g('cadPuestos'),10)||0,turno=parseInt(g('cadTurno'),10)||0,startDate=g('cadStart');
+  if(!name)return alert('ESCRIBE EL NOMBRE DE LA CADENA.');
+  if(cuota<=0)return alert('ESCRIBE EL VALOR DE LA CUOTA.');
+  if(puestos<=0)return alert('ESCRIBE EL NÚMERO DE PUESTOS.');
+  if(turno<=0||turno>puestos)return alert('TU TURNO DEBE SER UN NÚMERO ENTRE 1 Y '+puestos+'.');
+  const before=cloneAppData(data);
+  try{
+    data.cadenas=Array.isArray(data.cadenas)?data.cadenas:[];
+    const id=window.__cadenaEditId;
+    if(id){const c=data.cadenas.find(x=>x.id===id);if(c)Object.assign(c,{name,cuota,puestos,turno,startDate,updatedAt:new Date().toISOString()});}
+    else{const nid='cad_'+Date.now();data.cadenas.push({id:nid,name,cuota,puestos,turno,startDate,status:'activa',createdAt:new Date().toISOString()});window.__cadenaLastCreated=nid;}
+    save();
+  }catch(e){data=before;return alert('NO FUE POSIBLE GUARDAR LA CADENA.');}
+  window.__cadenaEditId='';
+  const f=document.getElementById('cadForm');if(f)f.style.display='none';
+  if(jcpCadenaReturnToExpense){
+    jcpCadenaReturnToExpense=false;
+    try{openOperatingExpenseOperation();}catch(e){}
+    setTimeout(()=>{refreshCadenaSelect();const sel=document.getElementById('opExpenseCadena');if(sel&&window.__cadenaLastCreated)sel.value=window.__cadenaLastCreated;},120);
+    return;
+  }
+  renderChainSavings();
+}
+function cancelCadenaForm(){window.__cadenaEditId='';const f=document.getElementById('cadForm');if(f)f.style.display='none';if(jcpCadenaReturnToExpense){jcpCadenaReturnToExpense=false;try{openOperatingExpenseOperation();}catch(e){}}}
+function assignCadenaPayment(movId){
+  const sel=document.getElementById('cadAssign_'+movId),cid=sel?.value||'';
+  if(!cid)return alert('ESCOGE LA CADENA.');
+  const before=cloneAppData(data);
+  try{const m=(data.mov||[]).find(x=>x&&x.id===movId);if(!m)throw new Error('x');m.cadenaId=cid;save();}catch(e){data=before;return alert('NO FUE POSIBLE ASIGNARLO.');}
+  renderChainSavings();try{syncFinancialUiV76();}catch(e){}
+}
+function openCadenaReceive(id){
+  const box=document.getElementById('cadRecv_'+id);if(!box)return;
+  box.style.display=box.style.display==='none'?'':'none';
+}
+function saveCadenaReceive(id,mode){
+  const c=jcpCadenas().find(x=>x.id===id);if(!c)return;
+  const amount=parseFormattedMoney(document.getElementById('cadRecvVal_'+id)?.value||'');
+  if(amount<=0)return alert('ESCRIBE EL VALOR QUE RECIBISTE.');
+  const acc=document.getElementById('cadRecvAcc_'+id)?.value||'cash';
+  const msg=mode==='negocio'?'¿REGISTRAR QUE RECIBISTE '+money(amount)+' DE LA CADENA '+c.name+' Y ENTRÓ AL NEGOCIO?\n\nLa plata entra a la caja y pasa a tus utilidades por retirar.':'¿REGISTRAR QUE RECIBISTE '+money(amount)+' DE LA CADENA '+c.name+' Y TE LA LLEVASTE?\n\nNo entra plata a la caja: queda como retiro de utilidades.';
+  if(!confirm(msg))return;
+  const before=cloneAppData(data),next=cloneAppData(data),now=new Date(),id2='mov_cadrec_'+Date.now(),date=now.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),createdAt=now.toISOString();
+  try{
+    const title=(mode==='negocio'?'CADENA RECIBIDA (ENTRA AL NEGOCIO) — ':'CADENA RECIBIDA (PARA MÍ) — ')+c.name;
+    const receipt=addInternalReceipt(next,'general_movement',{entityId:id2,amount,title,concept:title,date,createdAt,snapshot:{operationType:mode==='negocio'?'CADENA RECIBIDA':'CADENA RETIRADA',cadenaId:c.id}});
+    if(mode==='negocio'){
+      addTreasuryMovement(next,{accountId:acc,direction:'in',amount,operationType:'CADENA RECIBIDA',operationId:id2,receiptNumber:receipt.number,concept:title,date,createdAt});
+      next.mov.unshift({id:id2,t:'ingreso',subtype:'cadena_recibida',cadenaId:c.id,c:title,v:amount,receiptNumber:receipt.number,paymentDistribution:{[acc]:amount},date,createdAt});
+    }else next.mov.unshift({id:id2,t:'traslado',subtype:'cadena_retirada',cadenaId:c.id,c:title,v:amount,receiptNumber:receipt.number,date,createdAt,nonCash:true});
+    const cc=(next.cadenas||[]).find(x=>x.id===c.id);if(cc){cc.receivedAt=createdAt;cc.receivedMode=mode;}
+    data=next;save();
+  }catch(e){data=before;return alert('NO FUE POSIBLE REGISTRARLO.\n\n'+(e?.message||e));}
+  renderChainSavings();try{render();syncFinancialUiV76();renderUtilitiesModule();}catch(e){}
+  alert('✅ REGISTRADO.');
+}
+function finishCadena(id){
+  const c=jcpCadenas().find(x=>x.id===id);if(!c)return;
+  if(!confirm('¿MARCAR LA CADENA '+c.name+' COMO FINALIZADA?\n\nPasa al historial y ya no aparece al registrar gastos.'))return;
+  const before=cloneAppData(data);
+  try{const cc=data.cadenas.find(x=>x.id===id);cc.status='finalizada';cc.finishedAt=new Date().toISOString();save();}catch(e){data=before;return;}
+  renderChainSavings();
+}
 function renderChainSavings(){
   const host=document.getElementById('cadContent');if(!host)return;
-  const rows=(data.mov||[]).filter(m=>m&&!m.voided&&m.t==='gasto'&&(m.subtype==='gasto_operativo'||m.subtype==='varios')&&(String(m.category||'').toUpperCase().includes('CADENA')||/^CADENA\b/.test(String(m.c||'').toUpperCase()))).sort((a,b)=>jcpTsOf(b)-jcpTsOf(a));
-  const total=rows.reduce((a,m)=>a+(+m.v||0),0);
-  host.innerHTML='<div class="card" style="margin-top:12px;text-align:center"><div style="font-size:11px;color:#aaa;font-weight:800;letter-spacing:.5px">ACUMULADO EN CADENAS</div><div style="font-size:26px;font-weight:900;color:#d4af37;margin:6px 0">'+money(total)+'</div><div style="font-size:11px;color:#999">'+rows.length+(rows.length===1?' pago':' pagos')+'</div></div>'
-    +'<div class="card" style="margin-top:12px"><div class="section" style="margin-top:0">PAGOS DE CADENA</div>'+(rows.length?rows.map(m=>'<div style="display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #222;font-size:11px;color:#ddd"><span style="flex:1;min-width:0;overflow-wrap:anywhere">'+priceEsc(String(m.c||'CADENA').toUpperCase())+'<br><small style="color:#999">'+priceEsc(m.date||(jcpTsOf(m)?new Date(jcpTsOf(m)).toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}):''))+(m.receiptNumber?' · '+priceEsc(m.receiptNumber):'')+'</small></span><strong style="white-space:nowrap;color:#fff">'+money(+m.v||0)+'</strong></div>').join(''):'<div class="empty">NO HAY GASTOS DE CADENA REGISTRADOS.</div>')+'</div>';
+  const f=getFinancialSnapshotV75(),all=jcpCadenas(),act=all.filter(c=>c.status!=='finalizada'),fin=all.filter(c=>c.status==='finalizada');
+  const unassigned=(data.mov||[]).filter(m=>m&&!m.voided&&m.t==='gasto'&&m.subtype==='ahorro_cadena'&&(!m.cadenaId||!all.some(c=>c.id===m.cadenaId))).sort((a,b)=>jcpTsOf(b)-jcpTsOf(a));
+  const row=(l,v,st)=>'<div style="display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid #222;font-size:12px"><span style="color:#bbb">'+l+'</span><b style="white-space:nowrap;'+(st||'')+'">'+v+'</b></div>';
+  const btn='style="flex:1;min-height:38px;border-radius:9px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37;font-weight:800;font-size:11px"';
+  const accOpts=[['cash','EFECTIVO'],['bancolombia','BANCOLOMBIA'],['nequi','NEQUI'],['davivienda','DAVIVIENDA'],['daviplata','DAVIPLATA']].map(a=>'<option value="'+a[0]+'">'+a[1]+'</option>').join('');
+  const card=c=>{const st=jcpCadenaStats(c);const rec=st.back.length?'<div style="margin:8px 0;padding:8px;border-radius:8px;background:#0f2a1a;color:#57d68d;font-size:11px;font-weight:700">TURNO RECIBIDO: '+money(st.received)+(c.receivedMode==='negocio'?' · ENTRÓ AL NEGOCIO':' · PARA TI')+'</div>':'';
+    return '<div class="card" style="margin-top:12px"><div class="section" style="margin-top:0;display:flex;justify-content:space-between;gap:8px"><span>'+priceEsc(c.name)+'</span><small style="color:#999">'+(c.status==='finalizada'?'FINALIZADA':'TU TURNO: PUESTO '+(+c.turno||'—'))+'</small></div>'+rec
+      +row('Cuota',money(st.cuota))+row('Cuotas pagadas',st.cuotas+' de '+st.puestos)+row('Acumulado pagado',money(st.paid),'color:#d4af37')
+      +row('Faltan',Math.max(0,Math.round((st.puestos-st.cuotas)*10)/10)+' cuotas · '+money(st.faltaValor))+row('Vas a recibir',money(st.pot))
+      +(c.status==='finalizada'?'':'<div style="display:flex;gap:8px;margin-top:10px"><button type="button" '+btn+' onclick="openCadenaForm(\''+c.id+'\')">EDITAR</button><button type="button" '+btn+' onclick="openCadenaReceive(\''+c.id+'\')">RECIBÍ MI TURNO</button><button type="button" '+btn+' onclick="finishCadena(\''+c.id+'\')">FINALIZAR</button></div>'
+      +'<div id="cadRecv_'+c.id+'" style="display:none;margin-top:10px;padding:10px;border:1px solid #333;border-radius:10px"><div style="font-size:11px;color:#aaa;font-weight:800;margin-bottom:6px">¿CUÁNTO RECIBISTE?</div><input data-money="1" id="cadRecvVal_'+c.id+'" inputmode="numeric" value="'+money(st.pot).replace(/[^\d.]/g,'')+'" style="width:100%;margin-bottom:8px"/><div style="font-size:11px;color:#aaa;font-weight:800;margin-bottom:6px">SI ENTRA AL NEGOCIO, ¿A QUÉ CUENTA?</div><select id="cadRecvAcc_'+c.id+'" style="width:100%;margin-bottom:8px">'+accOpts+'</select><div style="display:flex;gap:8px"><button type="button" '+btn+' onclick="saveCadenaReceive(\''+c.id+'\',\'negocio\')">LA METO AL NEGOCIO</button><button type="button" '+btn+' onclick="saveCadenaReceive(\''+c.id+'\',\'personal\')">ME LA LLEVO PARA MÍ</button></div></div>')+'</div>';};
+  const opts='<option value="">¿A QUÉ CADENA?</option>'+act.map(c=>'<option value="'+priceEsc(c.id)+'">'+priceEsc(c.name)+'</option>').join('');
+  host.innerHTML='<div class="card" style="margin-top:12px;text-align:center"><div style="font-size:11px;color:#aaa;font-weight:800;letter-spacing:.5px">GANANCIAS EN CADENAS</div><div style="font-size:26px;font-weight:900;color:#d4af37;margin:6px 0">'+money(f.profitInCadenas||0)+'</div><div style="font-size:11px;color:#999">Pagado '+money(f.cadenaPaid||0)+' · Recibido '+money(f.cadenaReturned||0)+'</div></div>'
+    +'<button type="button" onclick="openCadenaForm(\'\')" style="width:100%;margin-top:12px;min-height:44px;border-radius:12px;border:0;background:#d4af37;color:#111;font-weight:900">+ NUEVA CADENA</button>'
+    +'<div class="card" id="cadForm" style="display:none;margin-top:12px"><div class="section" style="margin-top:0" id="cadFormTitle">NUEVA CADENA</div>'
+    +'<label style="display:block;font-size:11px;color:#aaa;font-weight:800;margin:6px 0 4px">NOMBRE</label><input id="cadName" placeholder="EJ: CADENA JOSÉ" style="width:100%"/>'
+    +'<label style="display:block;font-size:11px;color:#aaa;font-weight:800;margin:10px 0 4px">VALOR DE LA CUOTA</label><input data-money="1" id="cadCuota" inputmode="numeric" placeholder="$ 0" style="width:100%"/>'
+    +'<div style="display:flex;gap:8px"><div style="flex:1"><label style="display:block;font-size:11px;color:#aaa;font-weight:800;margin:10px 0 4px">NÚMERO DE PUESTOS</label><input id="cadPuestos" inputmode="numeric" placeholder="15" style="width:100%"/></div><div style="flex:1"><label style="display:block;font-size:11px;color:#aaa;font-weight:800;margin:10px 0 4px">TU TURNO (PUESTO)</label><input id="cadTurno" inputmode="numeric" placeholder="11" style="width:100%"/></div></div>'
+    +'<label style="display:block;font-size:11px;color:#aaa;font-weight:800;margin:10px 0 4px">FECHA DE INICIO (OPCIONAL)</label><input id="cadStart" type="date" style="width:100%"/>'
+    +'<div style="display:flex;gap:8px;margin-top:12px"><button type="button" onclick="cancelCadenaForm()" '+btn+'>CANCELAR</button><button type="button" onclick="saveCadenaForm()" style="flex:1;min-height:38px;border-radius:9px;border:0;background:#d4af37;color:#111;font-weight:900">GUARDAR</button></div></div>'
+    +(unassigned.length?'<div class="card" style="margin-top:12px;border-color:#7a5b16"><div class="section" style="margin-top:0">PAGOS DE CADENA SIN ASIGNAR ('+unassigned.length+')</div><div style="font-size:11px;color:#aaa;margin-bottom:6px">'+(act.length?'Escoge a qué cadena pertenece cada pago.':'Primero crea tus cadenas con "+ NUEVA CADENA".')+'</div>'
+      +unassigned.map(m=>'<div style="padding:9px 0;border-bottom:1px solid #222;font-size:11px;color:#ddd"><div style="display:flex;justify-content:space-between;gap:10px"><span style="flex:1;min-width:0;overflow-wrap:anywhere">'+priceEsc(String(m.c||'CADENA').toUpperCase())+'<br><small style="color:#999">'+priceEsc(m.date||'')+(m.receiptNumber?' · '+priceEsc(m.receiptNumber):'')+'</small></span><strong style="white-space:nowrap">'+money(+m.v||0)+'</strong></div>'+(act.length?'<div style="display:flex;gap:6px;margin-top:6px"><select id="cadAssign_'+priceEsc(m.id)+'" style="flex:1;min-width:0">'+opts+'</select><button type="button" '+btn+' onclick="assignCadenaPayment(\''+priceEsc(m.id)+'\')">ASIGNAR</button></div>':'')+'</div>').join('')+'</div>':'')
+    +(act.length?act.map(card).join(''):'<div class="card" style="margin-top:12px"><div class="empty">NO TIENES CADENAS ACTIVAS. CREA UNA CON "+ NUEVA CADENA".</div></div>')
+    +(fin.length?'<div class="section" style="margin-top:18px">CADENAS FINALIZADAS</div>'+fin.map(card).join(''):'');
+  try{bindMoneyInputs();}catch(e){}
 }
+/* ===================== GASTOS FIJOS ===================== */
+function jcpMonthKey(t){const d=new Date(t||Date.now());return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+function jcpFixedList(){return (Array.isArray(data.gastosFijos)?data.gastosFijos:[]).filter(g=>g&&g.active!==false);}
+function jcpFixedStatus(month){
+  month=month||jcpMonthKey();
+  const list=jcpFixedList().slice().sort((a,b)=>(+a.day||99)-(+b.day||99));
+  const pays=(data.mov||[]).filter(m=>m&&!m.voided&&m.fixedExpenseId&&(m.fixedMonth||jcpMonthKey(jcpTsOf(m)))===month);
+  const rows=list.map(g=>{const p=pays.filter(m=>m.fixedExpenseId===g.id);const paid=p.reduce((a,m)=>a+(+m.v||0),0);return {g,pays:p,paid,done:p.length>0};});
+  const total=rows.reduce((a,r)=>a+(+r.g.amount||0),0),paidAmt=rows.reduce((a,r)=>a+(r.done?Math.max(+r.g.amount||0,0):0),0);
+  const n=rows.length,nd=rows.filter(r=>r.done).length;
+  const pct=total>0?paidAmt/total:(n?nd/n:0);
+  return {month,rows,total,paidAmt,realPaid:rows.reduce((a,r)=>a+r.paid,0),n,nd,pct};
+}
+function jcpFixedColor(p){p=Math.max(0,Math.min(1,p));if(p>=0.999)return '#1b6e34';const hue=Math.round(p*120),light=Math.round(48-p*10);return 'hsl('+hue+',72%,'+light+'%)';}
+function jcpFixedBarHtml(st,compact){
+  const pct=Math.round(st.pct*100),col=jcpFixedColor(st.pct);
+  const label=st.n?(st.nd===st.n?'¡TODOS LOS GASTOS FIJOS PAGADOS!':'PAGADO '+money(st.paidAmt)+' DE '+money(st.total)+' · '+st.nd+' DE '+st.n+' GASTOS'):'AÚN NO TIENES GASTOS FIJOS. CRÉALOS EN FINANZAS → GASTOS FIJOS.';
+  return '<div style="'+(compact?'margin:12px 0 4px;cursor:pointer;':'')+'background:#121212;border:1px solid #3a321f;border-radius:14px;padding:12px 14px" '+(compact?'onclick="openFixedExpenses()" role="button"':'')+'><div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:8px"><b style="font-size:11px;letter-spacing:.6px;color:#d4af37">GASTOS FIJOS · '+priceEsc(jcpMonthLabel(st.month))+'</b><b style="font-size:13px;color:'+col+'">'+pct+'%</b></div><div style="height:12px;background:#2a2a2a;border-radius:7px;overflow:hidden"><div style="height:100%;width:'+Math.max(st.n?4:0,pct)+'%;background:'+col+';border-radius:7px;transition:width .3s,background .3s"></div></div><div style="font-size:10.5px;color:#aaa;margin-top:7px">'+label+'</div></div>';
+}
+function jcpMonthLabel(k){const [y,m]=String(k).split('-');return (JCP_MONTHS[(+m||1)-1]||'')+' '+y;}
+window.jcpPaintFixedBar=function(){const h=document.getElementById('jcpFixedBarHome');if(!h)return;try{h.innerHTML=jcpFixedBarHtml(jcpFixedStatus(),true);}catch(e){}};
+let jcpFixedMonth='';
+function openFixedExpenses(){jcpFixedMonth=jcpMonthKey();show('gastosFijos');renderFixedExpenses();}
+function shiftFixedMonth(d){const [y,m]=jcpFixedMonth.split('-').map(Number);const dt=new Date(y,m-1+d,1);jcpFixedMonth=jcpMonthKey(dt.getTime());renderFixedExpenses();}
+function renderFixedExpenses(){
+  const host=document.getElementById('gfContent');if(!host)return;
+  if(!jcpFixedMonth)jcpFixedMonth=jcpMonthKey();
+  const st=jcpFixedStatus(jcpFixedMonth),isCur=jcpFixedMonth===jcpMonthKey(),today=new Date().getDate();
+  const btn='style="min-height:36px;border-radius:9px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37;font-weight:800;font-size:11px;padding:0 12px"';
+  const rowHtml=r=>{const g=r.g,late=isCur&&!r.done&&(+g.day||0)&&today>(+g.day);
+    return '<div style="display:flex;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #222">'
+      +'<div style="width:24px;height:24px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;'+(r.done?'background:#1b6e34;color:#fff':'border:2px solid '+(late?'#e74c3c':'#555')+';color:transparent')+'">✓</div>'
+      +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:800;color:'+(r.done?'#7d7d7d':'#fff')+';'+(r.done?'text-decoration:line-through':'')+';overflow-wrap:anywhere">'+priceEsc(g.name)+'</div>'
+      +'<div style="font-size:10.5px;color:'+(late?'#ff6b6b':'#999')+'">'+priceEsc(g.category||'')+(g.day?' · DÍA '+(+g.day):'')+(r.done?' · PAGADO '+r.pays.map(m=>priceEsc((m.receiptNumber||'')+' '+(m.date||''))).join(', '):(late?' · VENCIDO':' · PENDIENTE'))+'</div></div>'
+      +'<div style="text-align:right;white-space:nowrap"><b style="font-size:12px;color:'+(r.done?'#57d68d':'#fff')+'">'+money(r.done?r.paid:(+g.amount||0))+'</b><div style="margin-top:4px"><button type="button" onclick="openFixedForm(\''+g.id+'\')" style="background:none;border:0;color:#d4af37;font-size:10.5px;font-weight:800;padding:0">EDITAR</button></div></div></div>';};
+  host.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin:12px 0"><button type="button" '+btn+' onclick="shiftFixedMonth(-1)">‹ ANTERIOR</button><b style="color:#fff;font-size:14px">'+priceEsc(jcpMonthLabel(jcpFixedMonth))+'</b><button type="button" '+btn+' onclick="shiftFixedMonth(1)">SIGUIENTE ›</button></div>'
+    +jcpFixedBarHtml(st,false)
+    +'<button type="button" onclick="openFixedForm(\'\')" style="width:100%;margin-top:12px;min-height:44px;border-radius:12px;border:0;background:#d4af37;color:#111;font-weight:900">+ NUEVO GASTO FIJO</button>'
+    +'<div class="card" id="gfForm" style="display:none;margin-top:12px"><div class="section" style="margin-top:0" id="gfFormTitle">NUEVO GASTO FIJO</div>'
+    +'<label style="display:block;font-size:11px;color:#aaa;font-weight:800;margin:6px 0 4px">NOMBRE</label><input id="gfName" placeholder="EJ: ARRIENDO BODEGA" style="width:100%"/>'
+    +'<label style="display:block;font-size:11px;color:#aaa;font-weight:800;margin:10px 0 4px">CATEGORÍA DEL GASTO</label><select id="gfCat" style="width:100%"></select>'
+    +'<div style="display:flex;gap:8px"><div style="flex:1"><label style="display:block;font-size:11px;color:#aaa;font-weight:800;margin:10px 0 4px">VALOR MENSUAL</label><input data-money="1" id="gfAmount" inputmode="numeric" placeholder="$ 0" style="width:100%"/></div><div style="width:110px"><label style="display:block;font-size:11px;color:#aaa;font-weight:800;margin:10px 0 4px">DÍA DE PAGO</label><input id="gfDay" inputmode="numeric" placeholder="5" style="width:100%"/></div></div>'
+    +'<div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="gfDel" onclick="deleteFixedForm()" '+btn+'>QUITAR</button><button type="button" onclick="cancelFixedForm()" '+btn+'>CANCELAR</button><button type="button" onclick="saveFixedForm()" style="flex:1;min-height:36px;border-radius:9px;border:0;background:#d4af37;color:#111;font-weight:900">GUARDAR</button></div></div>'
+    +'<div class="card" style="margin-top:12px">'+(st.rows.length?st.rows.map(rowHtml).join(''):'<div class="empty">CREA TUS GASTOS FIJOS CON "+ NUEVO GASTO FIJO".</div>')+'</div>';
+  try{bindMoneyInputs();}catch(e){}
+}
+function jcpExpenseCats(){const s=document.getElementById('opExpenseCategory');let c=s?[...s.options].map(o=>o.value||o.textContent):[];try{const a=data.settings&&data.settings.operatingExpenseCategories;if(Array.isArray(a)&&a.length)c=a.slice();}catch(e){}return c.length?c:['ARRIENDO','SERVICIOS','NÓMINA','TRANSPORTE','IMPUESTOS','OTROS'];}
+function openFixedForm(id){
+  window.__fixedEditId=id||'';const g=jcpFixedList().find(x=>x.id===id)||{};
+  const f=document.getElementById('gfForm');if(!f)return;f.style.display='';
+  const cs=document.getElementById('gfCat');if(cs){const cats=jcpExpenseCats().filter(c=>!/CADENA/i.test(c));cs.innerHTML=cats.map(c=>'<option>'+priceEsc(c)+'</option>').join('');if(g.category)cs.value=g.category;}
+  document.getElementById('gfName').value=g.name||'';document.getElementById('gfAmount').value=g.amount?String(g.amount).replace(/\B(?=(\d{3})+(?!\d))/g,'.'):'';document.getElementById('gfDay').value=g.day||'';
+  document.getElementById('gfFormTitle').textContent=id?'EDITAR GASTO FIJO':'NUEVO GASTO FIJO';document.getElementById('gfDel').style.display=id?'':'none';
+  setTimeout(()=>{try{f.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}},50);
+}
+function cancelFixedForm(){window.__fixedEditId='';const f=document.getElementById('gfForm');if(f)f.style.display='none';}
+function saveFixedForm(){
+  const name=(document.getElementById('gfName').value||'').trim().toUpperCase(),category=document.getElementById('gfCat').value||'OTROS',amount=parseFormattedMoney(document.getElementById('gfAmount').value||''),day=parseInt(document.getElementById('gfDay').value,10)||0;
+  if(!name)return alert('ESCRIBE EL NOMBRE DEL GASTO FIJO.');if(amount<=0)return alert('ESCRIBE EL VALOR MENSUAL.');if(day<0||day>31)return alert('EL DÍA DE PAGO DEBE ESTAR ENTRE 1 Y 31.');
+  const before=cloneAppData(data);
+  try{data.gastosFijos=Array.isArray(data.gastosFijos)?data.gastosFijos:[];const id=window.__fixedEditId;
+    if(id){const g=data.gastosFijos.find(x=>x.id===id);if(g)Object.assign(g,{name,category,amount,day,updatedAt:new Date().toISOString()});}
+    else data.gastosFijos.push({id:'gf_'+Date.now(),name,category,amount,day,active:true,createdAt:new Date().toISOString()});
+    save();}catch(e){data=before;return alert('NO FUE POSIBLE GUARDARLO.');}
+  cancelFixedForm();renderFixedExpenses();try{jcpPaintFixedBar();}catch(e){}
+}
+function deleteFixedForm(){
+  const id=window.__fixedEditId;const g=jcpFixedList().find(x=>x.id===id);if(!g)return;
+  if(!confirm('¿QUITAR "'+g.name+'" DE TUS GASTOS FIJOS?\n\nLos pagos ya registrados no se borran.'))return;
+  const before=cloneAppData(data);try{const x=data.gastosFijos.find(y=>y.id===id);x.active=false;x.removedAt=new Date().toISOString();save();}catch(e){data=before;return;}
+  cancelFixedForm();renderFixedExpenses();try{jcpPaintFixedBar();}catch(e){}
+}
+function refreshFixedSelect(auto){
+  const wrap=document.getElementById('opExpenseFixedWrap'),sel=document.getElementById('opExpenseFixed');if(!wrap||!sel)return;
+  const list=jcpFixedList(),cat=String(document.getElementById('opExpenseCategory')?.value||'').toUpperCase();
+  if(!list.length||/CADENA/.test(cat)){wrap.style.display='none';sel.innerHTML='<option value=""></option>';sel.value='';return;}
+  wrap.style.display='';
+  const st=jcpFixedStatus(),cur=sel.value;
+  sel.innerHTML='<option value="">NO ES GASTO FIJO</option>'+st.rows.map(r=>'<option value="'+priceEsc(r.g.id)+'">'+priceEsc(r.g.name)+' · '+money(+r.g.amount||0)+(r.done?' (YA PAGADO)':'')+'</option>').join('');
+  if(sel.dataset.manual==='1'&&!auto){sel.value=cur;return;}
+  if(sel.dataset.manual==='1'){if([...sel.options].some(o=>o.value===cur))sel.value=cur;return;}
+  // Preselección: misma categoría y pendiente; si hay varios, el que coincida con palabras del concepto.
+  const concept=String(document.getElementById('opExpenseConcept')?.value||'').toUpperCase();
+  const cand=st.rows.filter(r=>!r.done&&String(r.g.category||'').toUpperCase()===cat);
+  let pick='';
+  if(cand.length===1)pick=cand[0].g.id;
+  else if(cand.length>1&&concept){const words=w=>String(w).toUpperCase().split(/[^A-ZÁÉÍÓÚÑ0-9]+/).filter(x=>x.length>=3&&x!==cat);let best=0;cand.forEach(r=>{const sc=words(r.g.name).filter(w=>concept.includes(w)).length;if(sc>best){best=sc;pick=r.g.id;}});}
+  sel.value=pick;
+}
+
 function renderProfitCapitalization(){
   const f=getFinancialSnapshotV75();
   const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
   set('pcAvailable',money(f.profitAvailable||0));
+  try{const pa=document.getElementById('pcAvailable');if(pa)pa.style.setProperty('color',(f.profitAvailable||0)<0?'#ff6b6b':'','important');}catch(e){}
   const m=(data.mov||[]);
   const own=m.filter(x=>x&&!x.voided&&x.t==='ingreso'&&(x.subtype==='capital_inicial'||x.subtype==='aporte_capital')).reduce((a,x)=>a+(+x.v||0),0)+m.filter(x=>x&&!x.voided&&x.subtype==='capitalizacion_utilidades').reduce((a,x)=>a+(+x.v||0),0);
   set('pcOwnCapital',money(own));
@@ -7522,7 +7745,7 @@ function show(id){
   try{
     const src=document.querySelector('#vehiculos .inventory-inline-logo');
     const logoMap={
-      cajaCapital:'cashCapitalLogo',resumenMensualUtil:'resumenMensualLogo',acumuladoCadenas:'acumuladoCadenasLogo',pasarCapital:'pasarCapitalLogo',contabilidadLibros:'accLibrosLogo',extractos:'extractosLogo',detalleCapital:'detalleCapitalLogo',
+      cajaCapital:'cashCapitalLogo',gastosFijos:'gastosFijosLogo',resumenMensualUtil:'resumenMensualLogo',acumuladoCadenas:'acumuladoCadenasLogo',pasarCapital:'pasarCapitalLogo',contabilidadLibros:'accLibrosLogo',extractos:'extractosLogo',detalleCapital:'detalleCapitalLogo',
       capitalFinanciacion:'capitalFinLogo',pagoObligaciones:'pagoObligLogo',nuevaFinanciacion:'nuevaFinLogo',
       obligacionesPendientes:'obligPendLogo',cierreCaja:'cierreCajaLogo',historialFinanciero:'histFinLogo',
       historialCapitalFinanciacion:'capitalFinHistLogo',carteraCaja:'carteraCajaLogo',carteraVehiculos:'carteraVehLogo',carteraPrestamos:'carteraPresLogo',
@@ -8169,7 +8392,7 @@ function markMovementVoided(m,number,reason){
 // tesorería. Algunas rutas (Registros / documentos contables y la reparación automática)
 // devolvían el dinero en tesorería sin crear el reverso del gasto, y el libro diario
 // quedaba descuadrado frente a tesorería. Esta rutina crea el reverso que falte.
-const JCP_REVERSAL_SUBTYPE={vehiculos:'reverso_gasto_vehiculo',gasto_operativo:'reverso_gasto_operativo',varios:'reverso_gasto_operativo',compra_vehiculo:'reverso_compra_vehiculo',pago_deuda:'reverso_pago_deuda',
+const JCP_REVERSAL_SUBTYPE={vehiculos:'reverso_gasto_vehiculo',gasto_operativo:'reverso_gasto_operativo',ahorro_cadena:'reverso_ahorro_cadena',varios:'reverso_gasto_operativo',compra_vehiculo:'reverso_compra_vehiculo',pago_deuda:'reverso_pago_deuda',
   credito:'reverso_financiacion',prestamo_recibido:'reverso_financiacion',tarjeta_credito:'reverso_financiacion',capital_inicial:'reverso_financiacion',aporte_capital:'reverso_financiacion'};
 // Una financiación anulada desde Registros marca solo su registro de capital; su movimiento también debe quedar anulado.
 function jcpSyncVoidedCapitalOps(state){
@@ -8998,7 +9221,7 @@ function voidOperatingExpenseReceipt(state,r,reason){
   if(!m)throw new Error('NO SE ENCONTRÓ EL GASTO OPERACIONAL RELACIONADO.');
   if(m.voided)throw new Error('EL GASTO YA ESTÁ ANULADO.');
   markMovementVoided(m,r.number,reason);
-  state.mov.unshift(reversalMovement(m,'ingreso','reverso_gasto_operativo','REVERSIÓN '+r.number+' — '+m.c,m.v,{receiptNumber:r.number,reversalOf:m.id}));
+  state.mov.unshift(reversalMovement(m,'ingreso',m.subtype==='ahorro_cadena'?'reverso_ahorro_cadena':'reverso_gasto_operativo','REVERSIÓN '+r.number+' — '+m.c,m.v,{receiptNumber:r.number,reversalOf:m.id,cadenaId:m.cadenaId||undefined}));
 }
 
 
@@ -12285,13 +12508,17 @@ function getFinancialSnapshotV75(){
     .filter(x=>!x.voided&&x.t==='gasto'&&(x.subtype==='gasto_operativo'||x.subtype==='varios'))
     .reduce((a,x)=>a+(+x.v||0),0);
 
-  // Los retiros de utilidad NO son gasto operacional.
+  // Los retiros de utilidad NO son gasto operacional. Lo que recibes de una cadena y te llevas para ti también es retiro.
   const profitWithdrawals=m
-    .filter(x=>!x.voided&&x.t==='gasto'&&x.subtype==='retiro_ganancias')
+    .filter(x=>!x.voided&&((x.t==='gasto'&&x.subtype==='retiro_ganancias')||x.subtype==='cadena_retirada'||x.subtype==='abono_prestamo_utilidades'))
     .reduce((a,x)=>a+(+x.v||0),0);
+  // Cadenas: ganancia guardada (no es gasto). Cuotas pagadas menos lo recibido de la cadena.
+  const cadenaPaid=m.filter(x=>!x.voided&&x.t==='gasto'&&x.subtype==='ahorro_cadena').reduce((a,x)=>a+(+x.v||0),0);
+  const cadenaReturned=m.filter(x=>!x.voided&&(x.subtype==='cadena_recibida'||x.subtype==='cadena_retirada')).reduce((a,x)=>a+(+x.v||0),0);
+  const profitInCadenas=cadenaPaid-cadenaReturned;
 
   const netProfit=grossProfit-operatingExpenses;
-  const profitAvailable=netProfit-profitWithdrawals-profitCapitalized;
+  const profitAvailable=netProfit-profitWithdrawals-profitCapitalized-profitInCadenas;
   const accumulatedProfit=netProfit-profitWithdrawals-profitCapitalized;
 
   const soldUnrecoveredCost=data.sold
@@ -12314,14 +12541,15 @@ function getFinancialSnapshotV75(){
     + grossProfit
     - operatingExpenses
     - profitWithdrawals
-    - profitCapitalized;
+    - profitCapitalized
+    - profitInCadenas;
   const available=treasuryIsReady(data)?treasuryTotal(data):availableLegacy;
   // El disponible separado: lo que es utilidad por retirar y lo que es capital de trabajo.
   const availableProfit=profitAvailable;
   const availableCapital=available-availableProfit;
 
-  const assets=available+invested+receivable;
-  const equity=assets-debt;
+  const assets=available+invested+receivable+Math.max(0,profitInCadenas);
+  const equity=assets-debt-Math.max(0,-profitInCadenas);
 
   return {
     initial,contributions,ownCapital,financing,netFinancing,debtSources,debtPaid,debt,
@@ -12330,6 +12558,7 @@ function getFinancialSnapshotV75(){
     loanReceivable,saleReceivable,receivable,soldUnrecoveredCost,
     saleProfit,permutaProfit,grossProfit,operatingExpenses,netProfit,
     profitWithdrawals,profitCapitalized,profitAvailable,accumulatedProfit,
+    cadenaPaid,cadenaReturned,profitInCadenas,
     available,availableLegacy,availableProfit,availableCapital,assets,equity
   };
 }
@@ -12482,7 +12711,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.25.80\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.26.84\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -13005,10 +13234,11 @@ window.renderObligationHistory=function(){
     const concept=(document.getElementById('ccExpenseConcept')?.value||'').trim().toUpperCase(),amount=val('ccExpenseValue');
     const method=document.getElementById('ccExpenseMethod')?.value||'transferencia',obs=(document.getElementById('ccExpenseObs')?.value||'').trim().toUpperCase();
     if(!concept||amount<=0){alert('COMPLETA EL CONCEPTO Y EL VALOR DEL GASTO.');return;}
+    const cad=jcpCadenaFromCategory(category,'ccExpenseCadena');if(cad.error){alert(cad.error);return;}
     const before=cloneAppData(data),next=cloneAppData(data),d=nowInfo(),id='mov_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
     try{
       const receipt=addInternalReceipt(next,'operating_expense',{entityId:id,amount,title:'GASTO OPERACIONAL — '+category,concept:category+' — '+concept,method,date:d.label,createdAt:d.iso,snapshot:{category,concept,amount,method,obs}});
-      next.mov.unshift({id,t:'gasto',subtype:'gasto_operativo',category,c:category+' — '+concept,v:amount,vehicleId:'',receiptNumber:receipt.number,method,obs,date:d.label,createdAt:d.iso});
+      next.mov.unshift({id,t:'gasto',subtype:cad.subtype,cadenaId:cad.id||undefined,category,c:category+' — '+concept,v:amount,vehicleId:'',receiptNumber:receipt.number,method,obs,date:d.label,createdAt:d.iso});
       treasuryRecordSingle(next,{method,accountSelectId:'ccExpenseAccount',direction:'out',amount,operationType:'GASTO OPERACIONAL',operationId:id,receiptNumber:receipt.number,concept:category+' — '+concept,date:d.label,createdAt:d.iso});
       assertInventoryUnchanged(inventoryBefore,next,'GASTO OPERACIONAL');data=next;save();
       ['ccExpenseConcept','ccExpenseValue','ccExpenseObs'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';});
@@ -13273,6 +13503,7 @@ h1{font-size:22px;margin:0}h2{font-size:14px;color:#555;margin:5px 0 18px}
       if(x.subtype==='venta'||(x.t==='ingreso'&&x.saleVehicleId))return 'VENTA';
       if(x.subtype==='compra_vehiculo')return 'COMPRA VEHÍCULO';
       if(x.subtype==='vehiculos')return 'GASTO VEHÍCULO';
+      if(x.subtype==='ahorro_cadena')return 'CUOTA DE CADENA';
       if(x.subtype==='gasto_operativo'||x.subtype==='varios')return 'GASTO OPERACIONAL';
       if(x.subtype==='permuta_diferencia')return 'PERMUTA';
       if(x.subtype==='capital_inicial')return 'CAPITAL INICIAL';
@@ -13682,6 +13913,7 @@ window.renderExtractos=function(){
       if(x.subtype==='venta'||(x.t==='ingreso'&&x.saleVehicleId))return 'VENTA';
       if(x.subtype==='compra_vehiculo')return 'COMPRA VEHÍCULO';
       if(x.subtype==='vehiculos')return 'GASTO VEHÍCULO';
+      if(x.subtype==='ahorro_cadena')return 'CUOTA DE CADENA';
       if(x.subtype==='gasto_operativo'||x.subtype==='varios')return 'GASTO OPERACIONAL';
       if(x.subtype==='permuta_diferencia')return 'PERMUTA';
       if(x.subtype==='capital_inicial')return 'CAPITAL INICIAL';
@@ -13964,6 +14196,8 @@ function openOperatingExpenseOperation(){
   const exp=document.getElementById('operationsExpenseMenu');if(exp)exp.style.display='none';
   const form=document.getElementById('operationsOperatingExpenseForm');if(form){form.style.display='block';form.scrollIntoView({behavior:'smooth',block:'start'});}
   if(typeof refreshOpExpenseCategorySelect==='function')refreshOpExpenseCategorySelect();
+  try{refreshCadenaSelect();}catch(e){}
+  try{refreshFixedSelect(true);}catch(e){}
   bindMoneyInputs();
 }
 function closeOperatingExpenseOperation(){
@@ -13971,7 +14205,7 @@ function closeOperatingExpenseOperation(){
   const exp=document.getElementById('operationsExpenseMenu');if(exp)exp.style.display='grid';
 }
 function saveOperationsOperatingExpense(){
- const inventoryBefore=inventoryIdentity(data),category=opExpenseCategory.value||'OTROS',concept=opExpenseConcept.value.trim().toUpperCase(),amount=parseFormattedMoney(opExpenseValue.value),obs=opExpenseObs.value.trim().toUpperCase();if(!concept||amount<=0){alert('COMPLETA CONCEPTO Y VALOR.');return;}if(!validatePaymentDistribution('opExpense',amount))return;const before=cloneAppData(data),next=cloneAppData(data),now=new Date();try{const id='mov_op_'+Date.now(),date=now.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),createdAt=now.toISOString(),receipt=addInternalReceipt(next,'operating_expense',{entityId:id,amount,title:'GASTO OPERACIONAL — '+category,concept:category+' — '+concept,date,createdAt}),dist=applyPaymentDistribution(next,{prefix:'opExpense',direction:'out',total:amount,operationType:'GASTO OPERACIONAL',operationId:id,receiptNumber:receipt.number,concept:category+' — '+concept,date,createdAt});next.mov.unshift({id,t:'gasto',subtype:'gasto_operativo',category,c:category+' — '+concept,v:amount,receiptNumber:receipt.number,paymentDistribution:dist,obs,date,createdAt,source:'operating_expense'});assertInventoryUnchanged(inventoryBefore,next,'GASTO OPERACIONAL');data=next;save();opExpenseConcept.value='';opExpenseValue.value='';opExpenseObs.value='';clearPaymentDistribution('opExpense');openOperationsHub();alert('✅ '+receipt.number+' REGISTRADO.');}catch(e){data=before;alert('NO FUE POSIBLE GUARDAR EL GASTO.\\n\\n'+e.message);}
+ const inventoryBefore=inventoryIdentity(data),category=opExpenseCategory.value||'OTROS',concept=opExpenseConcept.value.trim().toUpperCase(),amount=parseFormattedMoney(opExpenseValue.value),obs=opExpenseObs.value.trim().toUpperCase();if(!concept||amount<=0){alert('COMPLETA CONCEPTO Y VALOR.');return;}const cad=jcpCadenaFromCategory(category,'opExpenseCadena');if(cad.error){alert(cad.error);return;}const fixedId=document.getElementById('opExpenseFixed')?.value||'';if(!validatePaymentDistribution('opExpense',amount))return;const before=cloneAppData(data),next=cloneAppData(data),now=new Date();try{const id='mov_op_'+Date.now(),date=now.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),createdAt=now.toISOString(),receipt=addInternalReceipt(next,'operating_expense',{entityId:id,amount,title:'GASTO OPERACIONAL — '+category,concept:category+' — '+concept,date,createdAt}),dist=applyPaymentDistribution(next,{prefix:'opExpense',direction:'out',total:amount,operationType:'GASTO OPERACIONAL',operationId:id,receiptNumber:receipt.number,concept:category+' — '+concept,date,createdAt});next.mov.unshift({id,t:'gasto',subtype:cad.subtype,cadenaId:cad.id||undefined,fixedExpenseId:fixedId||undefined,fixedMonth:fixedId?jcpMonthKey(now.getTime()):undefined,category,c:category+' — '+concept,v:amount,receiptNumber:receipt.number,paymentDistribution:dist,obs,date,createdAt,source:'operating_expense'});assertInventoryUnchanged(inventoryBefore,next,'GASTO OPERACIONAL');data=next;save();opExpenseConcept.value='';opExpenseValue.value='';opExpenseObs.value='';try{const fs=document.getElementById('opExpenseFixed');if(fs){delete fs.dataset.manual;fs.value='';}jcpPaintFixedBar();}catch(_e){}clearPaymentDistribution('opExpense');openOperationsHub();alert('✅ '+receipt.number+' REGISTRADO.');}catch(e){data=before;alert('NO FUE POSIBLE GUARDAR EL GASTO.\\n\\n'+e.message);}
 }
 </script>
 <script id="v16-inventory-readonly-purchase">
@@ -15667,7 +15901,7 @@ function accountingDocumentCandidates(type){
   if(type==='compra')return mov.filter(x=>x&&x.subtype==='compra_vehiculo');
   if(type==='venta')return mov.filter(x=>x&&(x.subtype==='venta'||x.saleVehicleId));
   if(type==='gasto_vehiculo')return mov.filter(x=>x&&x.subtype==='vehiculos');
-  if(type==='gasto_operativo')return mov.filter(x=>x&&(x.subtype==='gasto_operativo'||x.subtype==='varios'));
+  if(type==='gasto_operativo')return mov.filter(x=>x&&(x.subtype==='gasto_operativo'||x.subtype==='varios'||x.subtype==='ahorro_cadena'));
   if(type==='pago_obligacion')return mov.filter(x=>x&&x.subtype==='pago_deuda');
   if(type==='financiacion')return (Array.isArray(data?.capitalOps)?data.capitalOps:[]).filter(x=>x&&String(x.type||'').trim().toLowerCase()!=='pago_deuda');
   if(type==='prestamo_otorgado')return Array.isArray(data?.pres)?data.pres:[];
@@ -16705,7 +16939,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.10.25.80',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.10.26.84',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -16903,6 +17137,7 @@ window.openRecordCopy=function(number){
     invertido: {label:'Total invertido',icon:'chart',   val:function(){return fmt(S('invested'))},       note:function(){var n=vehCount();return n+(n===1?' vehículo en inventario':' vehículos en inventario')}, go:function(){show('vehiculos')}},
     porCobrar: {label:'Por cobrar',     icon:'download',val:function(){return fmt(S('receivable'))},     note:function(){var n=pendingBalances();return n+(n===1?' saldo pendiente':' saldos pendientes')}, go:function(){openSalesReceivables()}},
     deudas:    {label:'Total de deudas',icon:'bank',    val:function(){return fmt(S('debt'))},           note:function(){return 'Préstamos y créditos por pagar'},  go:function(){openObligationsModule()}},
+    cadenas:   {label:'Ganancias en cadenas',icon:'coin',val:function(){return fmt(S('profitInCadenas'))},note:function(){return 'Ganancia guardada, aparte de lo disponible'},go:function(){show('acumuladoCadenas')}},
     resultado: {label:'Utilidades por retirar',icon:'trend',val:function(){return fmt(S('profitAvailable'))},note:function(){return 'Ganancia libre, aparte del capital'},        go:function(){openUtilitiesModule()}, neg:1},
     patrimonio:{label:'Patrimonio',     icon:'scale',   val:function(){return fmt(S('equity'))},         note:function(){return 'Activos menos deudas'},           go:null, neg:1},
     activos:   {label:'Activos',        icon:'layers',  val:function(){return fmt(S('assets'))},         note:function(){return 'Disponible + invertido + por cobrar'}, go:null},
@@ -16933,7 +17168,7 @@ window.openRecordCopy=function(number){
   };
 
   var DEFAULTS={
-    a:['capital','disponible','invertido','porCobrar','deudas','resultado'],
+    a:['capital','disponible','invertido','porCobrar','deudas','resultado','cadenas'],
     q:['comprar','gasto','vender','registros','clientes']
   };
   var TABS=[
@@ -16945,7 +17180,7 @@ window.openRecordCopy=function(number){
   function clone(o){return JSON.parse(JSON.stringify(o))}
   function clean(list,dict){var out=[];(Array.isArray(list)?list:[]).forEach(function(k){if(dict[k]&&out.indexOf(k)<0)out.push(k)});return out}
   function load(){
-    try{var s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object')return {a:clean(s.a,METRICS),q:clean(s.q,SHORTS)}}catch(e){}
+    try{var s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){var aa=clean(s.a,METRICS);try{if(aa.indexOf('cadenas')<0&&!localStorage.getItem('jcp_home_cadenas_v81')){var ix=aa.indexOf('resultado');aa.splice(ix>=0?ix+1:aa.length,0,'cadenas');localStorage.setItem('jcp_home_cadenas_v81','1');}}catch(_e){}return {a:aa,q:clean(s.q,SHORTS)}}}catch(e){}
     return clone(DEFAULTS);
   }
   function save(){try{localStorage.setItem(KEY,JSON.stringify(cfg))}catch(e){}}
@@ -16975,6 +17210,7 @@ window.openRecordCopy=function(number){
       v.classList.toggle('neg',t.charAt(0)==='−');
       if(n.textContent!==nt)n.textContent=nt;
     });
+    try{if(typeof window.jcpPaintFixedBar==='function')window.jcpPaintFixedBar();}catch(e){}
   }
   function renderHome(){
     if(!root)return;
@@ -17012,7 +17248,7 @@ window.openRecordCopy=function(number){
     var firstSection=[].slice.call(dash.children).filter(function(e){return e.classList.contains('section')})[0];
     if(!firstSection)return false;
     root=document.createElement('div');root.id='jcpHomeV2';
-    root.innerHTML='<div class="jcp-h2-h">Resumen financiero</div><div class="jcp-h2-grid"></div><div class="jcp-h2-h">Acciones rápidas</div><div class="jcp-h2-q"></div>';
+    root.innerHTML='<div class="jcp-h2-h">Resumen financiero</div><div class="jcp-h2-grid"></div><div id="jcpFixedBarHome"></div><div class="jcp-h2-h">Acciones rápidas</div><div class="jcp-h2-q"></div>';
     dash.insertBefore(root,firstSection);
     hideOriginals(dash);
     var inp=el('globalSearchInput');if(inp)inp.placeholder='Buscar…';
@@ -18230,7 +18466,9 @@ window.openRecordCopy=function(number){
 'use strict';
 if(window.__jcpRecaudo2)return;window.__jcpRecaudo2=true;
 
-var accs=[],cur=null,mode='partial',comp='capital',bound=false;
+var accs=[],cur=null,mode='partial',comp='capital',bound=false,src='';
+function srcNeeded(){return !!cur&&cur.kind==='loan'&&comp==='capital';}
+function profitSrc(){return srcNeeded()&&src==='utilidades';}
 var KIND={sale:'VENTA A CRÉDITO',trade:'PERMUTA',loan:'PRÉSTAMO'};
 var KSHORT={sale:'VENTA',trade:'PERMUTA',loan:'PRÉSTAMO'};
 function el(id){return document.getElementById(id)}
@@ -18436,6 +18674,10 @@ function resetForm(){
 function syncButtons(){
   el('rcModeP').classList.toggle('active',mode==='partial');el('rcModeT').classList.toggle('active',mode==='total');
   el('rcCompC').classList.toggle('active',comp==='capital');el('rcCompI').classList.toggle('active',comp==='interest');
+  var sb=el('rcSrcBox');if(sb)sb.style.display=srcNeeded()?'block':'none';
+  var sp=el('rcSrcP'),su=el('rcSrcU');if(sp)sp.classList.toggle('active',src==='bolsillo');if(su)su.classList.toggle('active',src==='utilidades');
+  var sn=el('rcSrcNote');if(sn){if(!src){sn.className='debt-src-note bad';sn.textContent='Obligatorio: escoge si entra plata a la caja o si se abona con las utilidades.';}else if(src==='bolsillo'){sn.className='debt-src-note';sn.textContent='Entra plata a la caja: escoges la cuenta y baja el saldo del préstamo.';}else{var fs=0;try{fs=Math.round(getFinancialSnapshotV75().profitAvailable||0);}catch(e){}sn.className='debt-src-note';sn.textContent='De las utilidades: no entra plata. Baja el saldo del préstamo y bajan tus utilidades por retirar ('+fm(fs)+').';}}
+  var pd=el('cobroPayDist');if(pd)pd.style.display=profitSrc()?'none':'';
   var box=el('rcCompBox'),h=el('rcHint'),loan=!!cur&&cur.kind==='loan';
   if(box)box.style.display=loan?'block':'none';
   if(h){
@@ -18469,10 +18711,12 @@ function refresh(){
   }
   updatePaymentDistribution('cobro');
   var b=el('cobroSubmit');if(b&&(!cur||t>lim+0.5))b.disabled=true;
+  if(b&&profitSrc()){b.disabled=!(t>0)||t>lim+0.5;b.classList.remove('paydist-locked');}
+  var pdx=el('cobroPayDist');if(pdx)pdx.style.setProperty('display',profitSrc()?'none':'','important');
 }
 function onSelect(){
   var i=el('rcSelect').value;
-  cur=(i===''?null:accs[+i]||null);mode='partial';comp='capital';
+  cur=(i===''?null:accs[+i]||null);mode='partial';comp='capital';src='';
   var v=el('rcValue');if(v){v.value='';v.readOnly=false}
   try{clearPaymentDistribution('cobro')}catch(e){}
   syncButtons();refresh();
@@ -18485,6 +18729,8 @@ function bind(){
   el('rcCompC').onclick=function(){comp='capital';mode='partial';var v=el('rcValue');v.readOnly=false;v.value='';try{clearPaymentDistribution('cobro')}catch(e){}syncButtons();refresh()};
   el('rcCompI').onclick=function(){comp='interest';mode='partial';var v=el('rcValue');v.readOnly=false;v.value='';try{clearPaymentDistribution('cobro')}catch(e){}syncButtons();refresh()};
   el('rcValue').addEventListener('input',function(){formatMoneyInput(this);refresh()});
+  el('rcSrcP').onclick=function(){if(!cur)return;src='bolsillo';syncButtons();refresh()};
+  el('rcSrcU').onclick=function(){if(!cur)return;src='utilidades';try{clearPaymentDistribution('cobro')}catch(e){}syncButtons();refresh()};
   el('cobroSubmit').onclick=doSave;
   el('rcHist').addEventListener('click',function(e){
     var t=e.target.closest?e.target.closest('button'):null;if(!t)return;
@@ -18519,7 +18765,10 @@ function doSave(){
   var acc=cur,interest=isInt(),amount=total();
   if(!(amount>0)){alert('INGRESA EL VALOR DEL COBRO.');return}
   if(amount>limit()+0.5){alert('EL COBRO SUPERA EL SALDO PENDIENTE.');return}
-  if(!validatePaymentDistribution('cobro',amount))return;
+  if(srcNeeded()&&!src){alert('ESCOGE DE DÓNDE SALE LA PLATA: ENTRA A LA CAJA O DE LAS UTILIDADES.');return}
+  var fromProfit=profitSrc();
+  if(fromProfit){var fsx=0;try{fsx=Math.round(getFinancialSnapshotV75().profitAvailable||0);}catch(e){}if(amount>fsx&&!confirm('TUS UTILIDADES POR RETIRAR SON '+fm(fsx)+' Y EL ABONO ES DE '+fm(amount)+'.\n\nSI CONTINÚAS QUEDARÁN EN '+fm(fsx-amount)+'.\n\n¿CONTINUAR?'))return;}
+  if(!fromProfit&&!validatePaymentDistribution('cobro',amount))return;
   var obs=String((el('rcObs')||{}).value||'').trim().toUpperCase();
   var before=cloneAppData(data),next=cloneAppData(data),p=nowParts(),id='cobro_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
   var invBefore=(typeof inventoryIdentity==='function')?inventoryIdentity(data):null;
@@ -18534,10 +18783,11 @@ function doSave(){
     var component=interest?'interest':'capital';
     var receipt=addInternalReceipt(next,'collection',{entityId:id,vehicleId:'',amount:amount,plate:acc.plate||'',party:acc.client,title:title,concept:title,date:p.date,createdAt:p.iso,
       snapshot:{operationType:(isTotal?'PAGO TOTAL':'ABONO')+(acc.kind==='loan'?' · '+(interest?'INTERESES':'CAPITAL'):''),previousBalance:prev,newBalance:np,kind:acc.kind,component:component,targetKey:acc.key,targetIdx:acc.idx===undefined?null:acc.idx,obs:obs,paymentDistribution:paymentDistribution('cobro')}});
-    var dist=applyPaymentDistribution(next,{prefix:'cobro',direction:'in',total:amount,operationType:interest?'COBRO DE INTERESES':'COBRO DE CARTERA',operationId:id,receiptNumber:receipt.number,concept:title,date:p.date,createdAt:p.iso});
+    if(fromProfit){title='ABONO CON UTILIDADES — PRÉSTAMO — '+acc.client;receipt.title=title;receipt.concept=title;receipt.snapshot.operationType=(isTotal?'PAGO TOTAL':'ABONO')+' CON UTILIDADES · CAPITAL';receipt.snapshot.fromProfit=true;}
+    var dist=fromProfit?{}:applyPaymentDistribution(next,{prefix:'cobro',direction:'in',total:amount,operationType:interest?'COBRO DE INTERESES':'COBRO DE CARTERA',operationId:id,receiptNumber:receipt.number,concept:title,date:p.date,createdAt:p.iso});
     receipt.snapshot.paymentDistribution=cloneAppData(dist);
-    target.apply(amount,{id:id,receiptNumber:receipt.number,amount:amount,component:component,date:p.date,createdAt:p.iso,obs:obs,paymentDistribution:cloneAppData(dist)});
-    var mv={id:'mov_'+id,t:'ingreso',subtype:interest?'ingreso_vario':'cobro_cuenta_por_cobrar',c:title,v:amount,receiptNumber:receipt.number,paymentDistribution:dist,collectionOf:{kind:acc.kind,key:acc.key,component:component},date:p.date,createdAt:p.iso,source:'recaudo'};
+    target.apply(amount,{id:id,receiptNumber:receipt.number,amount:amount,component:component,date:p.date,createdAt:p.iso,obs:obs,paymentDistribution:cloneAppData(dist),fromProfit:fromProfit||undefined});
+    var mv={id:'mov_'+id,t:fromProfit?'traslado':'ingreso',nonCash:fromProfit||undefined,subtype:fromProfit?'abono_prestamo_utilidades':(interest?'ingreso_vario':'cobro_cuenta_por_cobrar'),c:title,v:amount,receiptNumber:receipt.number,paymentDistribution:dist,collectionOf:{kind:acc.kind,key:acc.key,component:component},date:p.date,createdAt:p.iso,source:'recaudo'};
     if(interest)mv.interestOf=acc.key;
     next.mov.unshift(mv);
     if(invBefore&&typeof assertInventoryUnchanged==='function')assertInventoryUnchanged(invBefore,next,'COBRO DE CARTERA');
@@ -19324,6 +19574,7 @@ window.jcpExtractMov=function(){
     {id:'prestamos_otorgados',label:'Préstamos otorgados',core:true},
     {id:'inversiones',label:'Inversiones'},
     {id:'retiros',label:'Retiros de utilidades',core:true},
+    {id:'cadenas',label:'Cadenas (ganancia guardada)'},
     {id:'otros_egresos',label:'Otros egresos'},
     {id:'reversiones',label:'Reversiones por anulación'},
     {id:'ajustes',label:'Ajustes de cierre de caja'}
@@ -19371,7 +19622,8 @@ window.jcpExtractMov=function(){
     if(op.indexOf('PAGO OBLIGACION')===0)return 'pago_obligaciones';
     if(op.indexOf('COMPRA VEHICULO')===0)return 'compras';
     if(op.indexOf('GASTO VEHICULO')===0)return 'gastos_vehiculos';
-    if(op.indexOf('GASTO OPERACIONAL')===0)return 'gastos_operacionales';
+    if(op.indexOf('CADENA')===0)return 'cadenas';
+    if(op.indexOf('GASTO OPERACIONAL')===0){var gm=ctx.movById[String(t.operationId)]||ctx.movById['mov_'+t.operationId];return gm&&gm.subtype==='ahorro_cadena'?'cadenas':'gastos_operacionales';}
     if(op.indexOf('PRESTAMO OTORGADO')===0)return 'prestamos_otorgados';
     if(op.indexOf('INVERSION')===0)return 'inversiones';
     if(op.indexOf('RETIRO DE GANANCIA')===0)return 'retiros';
@@ -19468,17 +19720,21 @@ window.jcpExtractMov=function(){
         return {name:String(m.c||(m.subtype==='capital_inicial'?'CAPITAL INICIAL':'APORTE PROPIO')).toUpperCase(),date:t,receipt:m.receiptNumber||'',kind:m.subtype==='capital_inicial'?'CAPITAL INICIAL':(m.subtype==='capitalizacion_utilidades'?'PASADO DE UTILIDADES':'APORTE PROPIO'),start:isNew?0:v,plus:isNew?v:0,minus:0,end:v};
       });
     var profitAt=function(t){
-      var g=0,o=0,r=0,c=0;
+      var g=0,o=0,r=0,c=0,k=0;
       list(state.sold).forEach(function(x){if(!x||x.status==='permuta'||x.permuta||!x.sale||x.sale.voided||x.status==='venta_anulada')return;if(ts(x.sale)>t)return;g+=n(x.sale.price)-(n(x.c)+n(x.g));});
       list(state.mov).forEach(function(m){if(!m||ts(m)>t)return;
         if(!m.voided&&m.t==='gasto'&&(m.subtype==='gasto_operativo'||m.subtype==='varios'))o+=n(m.v);
         else if(!m.voided&&m.t==='gasto'&&m.subtype==='retiro_ganancias')r+=n(m.v);
-        else if(!m.voided&&m.subtype==='capitalizacion_utilidades')c+=n(m.v);});
-      return {gross:g,op:o,ret:r,cap:c,avail:g-o-r-c};
+        else if(!m.voided&&m.subtype==='capitalizacion_utilidades')c+=n(m.v);
+        else if(!m.voided&&m.t==='gasto'&&m.subtype==='ahorro_cadena')k+=n(m.v);
+        else if(!m.voided&&m.subtype==='cadena_recibida')k-=n(m.v);
+        else if(!m.voided&&m.subtype==='cadena_retirada'){k-=n(m.v);r+=n(m.v);}
+        else if(!m.voided&&m.subtype==='abono_prestamo_utilidades')r+=n(m.v);});
+      return {gross:g,op:o,ret:r,cap:c,cad:k,avail:g-o-r-c-k};
     };
-    var p0=from>0?profitAt(from-1):{gross:0,op:0,ret:0,cap:0,avail:0},p1=profitAt(to);
-    out.utilidades=[{name:'UTILIDADES POR RETIRAR',start:p0.avail,plus:(p1.gross-p0.gross)-(p1.op-p0.op),minus:(p1.ret-p0.ret)+(p1.cap-p0.cap),end:p1.avail,
-      parts:{gross:p1.gross-p0.gross,op:p1.op-p0.op,ret:p1.ret-p0.ret,cap:p1.cap-p0.cap}}];
+    var p0=from>0?profitAt(from-1):{gross:0,op:0,ret:0,cap:0,cad:0,avail:0},p1=profitAt(to);
+    out.utilidades=[{name:'UTILIDADES POR RETIRAR',start:p0.avail,plus:(p1.gross-p0.gross)-(p1.op-p0.op),minus:(p1.ret-p0.ret)+(p1.cap-p0.cap)+(p1.cad-p0.cad),end:p1.avail,
+      parts:{gross:p1.gross-p0.gross,op:p1.op-p0.op,ret:p1.ret-p0.ret,cap:p1.cap-p0.cap,cad:p1.cad-p0.cad}}];
     ['capital','financiaciones','prestamos','cxc','inventario'].forEach(function(k){out[k]=out[k].filter(function(r){return r.start||r.plus||(r.plus2||0)||r.minus||r.end;});});
     return out;
   }
@@ -19727,16 +19983,22 @@ window.jcpExtractMov=function(){
             .map(function(v){return [(String(v.pl||'S/PLACA').toUpperCase()+' · '+[v.marca||v.m,v.ref,v.modelo].filter(Boolean).join(' ').toUpperCase()),n(v.sale.price)-(n(v.c)+n(v.g)),fmtTs(ts(v.sale)),String(v.sale.buyer||'').toUpperCase()];});
           var cat={},catN={};list(data.mov).forEach(function(x){if(!x||x.voided||x.t!=='gasto'||(x.subtype!=='gasto_operativo'&&x.subtype!=='varios')||!inP(x))return;var k=String(x.category||'GENERAL').toUpperCase();cat[k]=(cat[k]||0)+n(x.v);catN[k]=(catN[k]||0)+1;});
           var uCat=Object.keys(cat).sort(function(a,b){return cat[b]-cat[a];}).map(function(k){return [k,cat[k],catN[k]+(catN[k]===1?' gasto':' gastos'),'Detalle en hoja G.O'];});
-          var uRet=list(data.mov).filter(function(x){return x&&!x.voided&&x.t==='gasto'&&x.subtype==='retiro_ganancias'&&inP(x);}).sort(function(a,b){return ts(a)-ts(b);}).map(function(x){return [String(x.c||'RETIRO').toUpperCase(),n(x.v),fmtTs(ts(x)),x.receiptNumber||''];});
+          var uRet=list(data.mov).filter(function(x){return x&&!x.voided&&((x.t==='gasto'&&x.subtype==='retiro_ganancias')||x.subtype==='abono_prestamo_utilidades'||x.subtype==='cadena_retirada')&&inP(x);}).sort(function(a,b){return ts(a)-ts(b);}).map(function(x){return [String(x.c||'RETIRO').toUpperCase(),n(x.v),fmtTs(ts(x)),x.receiptNumber||''];});
+          var cadName={};list(data.cadenas).forEach(function(c){if(c&&c.id)cadName[c.id]=c;});
+          var uCad=list(data.mov).filter(function(x){return x&&!x.voided&&x.t==='gasto'&&x.subtype==='ahorro_cadena'&&inP(x);}).sort(function(a,b){return ts(a)-ts(b);}).map(function(x){var c=cadName[x.cadenaId];return [(c?c.name:'SIN ASIGNAR')+' · '+String(x.c||'').toUpperCase(),n(x.v),fmtTs(ts(x)),x.receiptNumber||''];});
+          var cb={};list(data.mov).forEach(function(x){if(!x||x.voided||ts(x)>cutoff)return;var k=x.cadenaId||'_';if(x.t==='gasto'&&x.subtype==='ahorro_cadena'){(cb[k]=cb[k]||{s:0,p:0}).s+=n(x.v);cb[k].p+=n(x.v);}else if(x.subtype==='cadena_recibida'||x.subtype==='cadena_retirada'){(cb[k]=cb[k]||{s:0,p:0}).s-=n(x.v);}});
+          var uCadBal=Object.keys(cb).map(function(k){var c=cadName[k];var cu=c&&n(c.cuota)>0?Math.round(cb[k].p/n(c.cuota)*10)/10:'';return [c?c.name:'SIN ASIGNAR',cb[k].s,c?(cu+' de '+n(c.puestos)):'',c?(c.status==='finalizada'?'FINALIZADA':(c.receivedAt?'TURNO RECIBIDO':'ACTIVA')):''];});
           var uCap=list(data.mov).filter(function(x){return x&&!x.voided&&x.subtype==='capitalizacion_utilidades'&&inP(x);}).sort(function(a,b){return ts(a)-ts(b);}).map(function(x){return [String(x.c||'PASADO A CAPITAL').toUpperCase().replace(/^PASADO A CAPITAL — (PAGO CON UTILIDADES )?/,''),n(x.v),fmtTs(ts(x)),x.receiptNumber||''];});
           return {name:'UTILIDADES',title:'UTILIDADES POR RETIRAR',sub:'Ganancia que puedes retirar: va aparte del capital. Período: '+fmtTs(m.from)+' al '+fmtTs(cutoff),headers:['CONCEPTO','VALOR'],widths:[52,19,19,30],money:[1],
           extraTables:[
             {title:'DETALLE 1 · GANANCIA POR VENTA (+ Utilidad bruta)',headers:['VEHÍCULO','UTILIDAD','FECHA','CLIENTE'],money:[1],rows:uSales},
             {title:'DETALLE 2 · GASTOS OPERACIONALES POR CATEGORÍA (−)',headers:['CATEGORÍA','VALOR','CANTIDAD','NOTA'],money:[1],rows:uCat},
             {title:'DETALLE 3 · RETIROS DE UTILIDADES (−)',headers:['CONCEPTO','VALOR','FECHA','SOPORTE'],money:[1],rows:uRet},
-            {title:'DETALLE 4 · UTILIDADES PASADAS A CAPITAL (−)',headers:['CONCEPTO / DEUDA PAGADA','VALOR','FECHA','SOPORTE'],money:[1],rows:uCap}
+            {title:'DETALLE 4 · UTILIDADES PASADAS A CAPITAL (−)',headers:['CONCEPTO / DEUDA PAGADA','VALOR','FECHA','SOPORTE'],money:[1],rows:uCap},
+            {title:'DETALLE 5 · CUOTAS DE CADENA PAGADAS EN EL PERÍODO (ganancia guardada, no es gasto)',headers:['CADENA / CONCEPTO','VALOR','FECHA','SOPORTE'],money:[1],rows:uCad},
+            {title:'DETALLE 6 · SALDO DE CADA CADENA AL CORTE',headers:['CADENA','SALDO GUARDADO','CUOTAS PAGADAS','ESTADO'],money:[1],rows:uCadBal}
           ],
-          rows:[['Utilidades por retirar al inicio del período',u.start],['+ Utilidad bruta de ventas del período',pp.gross],['− Gastos operacionales del período',-pp.op],['− Retiros de utilidades del período',-pp.ret],['− Utilidades pasadas a capital',-pp.cap]],
+          rows:[['Utilidades por retirar al inicio del período',u.start],['+ Utilidad bruta de ventas del período',pp.gross],['− Gastos operacionales del período',-pp.op],['− Retiros de utilidades del período',-pp.ret],['− Utilidades pasadas a capital',-pp.cap],['− Guardado en cadenas (cuotas − lo recibido)',-(pp.cad||0)]],
           note:'El TOTAL es lo que queda por retirar al corte ('+fmtTs(cutoff)+'). Los retiros sacan plata; lo pasado a capital no mueve plata, solo cambia de utilidades a capital.'};})(),
         balSpec('CUENTAS POR PAGAR','CUENTAS POR PAGAR — LO QUE DEBES',['CUENTA POR PAGAR','SALDO AL INICIO','RECIBIDO','PAGADO','SALDO AL CORTE'],bal.financiaciones.map(function(r){return [r.name,r.start,r.plus,r.minus];}),'Recibido y Pagado cuadran con las líneas "Préstamos y créditos recibidos" y "Pago de cuentas por pagar" cuando se movió plata.'),
         balSpec('INVENTARIO','INVENTARIO — COSTO DE LOS VEHÍCULOS',['VEHÍCULO','COSTO AL INICIO','COMPRADO / RECIBIDO','GASTOS','VENDIDO (COSTO)','COSTO AL CORTE'],bal.inventario.map(function(r){return [r.name,r.start,r.plus,r.plus2||0,r.minus];}),'Es costo, no plata: una compra a crédito o por permuta suma aquí aunque no haya salido dinero.'),
@@ -19877,7 +20139,7 @@ window.jcpExtractMov=function(){
 .available-split-card small{color:#9a9a9a;font-size:11px;line-height:1.35}
 #pagoObligaciones .debt-src-note{display:block;color:#9a9a9a;font-size:11px;margin:6px 0 10px;line-height:1.4}
 #pagoObligaciones .debt-src-note.bad{color:#ff8a8a}
-.utilities-kpi-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.utilities-kpi-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important}
 @media(max-width:600px){.utilities-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.available-split-grid{grid-template-columns:1fr}}
 </style>
 <script id="jcp-utilidades-capital-v71">
@@ -20180,6 +20442,40 @@ window.jcpExtractMov=function(){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.10.25.80"></script>
+<script id="jcp-v81-script">
+(function(){
+  'use strict';
+  // Una sola vez: los gastos de categoría CADENA pasan a ser "cuota de cadena" (ganancia guardada, no gasto).
+  // Conservan su recibo, valor, fecha y cuenta; quedan "sin asignar" hasta que el usuario escoja su cadena.
+  var FIX_ID='v81-cadenas-ahorro';
+  function list(v){return Array.isArray(v)?v:[];}
+  function runFix(){
+    try{
+      if(typeof data==='undefined'||!data)return;
+      var settings=(data.settings&&typeof data.settings==='object')?data.settings:{};
+      if(settings.jcpFixes&&settings.jcpFixes[FIX_ID])return;
+      var before=cloneAppData(data),n=0,total=0;
+      try{
+        data.cadenas=Array.isArray(data.cadenas)?data.cadenas:[];
+        list(data.mov).forEach(function(m){
+          if(!m||m.voided||m.isReversal||m.t!=='gasto'||(m.subtype!=='gasto_operativo'&&m.subtype!=='varios'))return;
+          if(!/CADENA/.test(String(m.category||'').toUpperCase()))return;
+          m.subtype='ahorro_cadena';m.migratedFrom='gasto_operativo';n++;total+=Number(m.v)||0;
+        });
+        data.settings=Object.assign({},settings,{jcpFixes:Object.assign({},settings.jcpFixes||{})});
+        data.settings.jcpFixes[FIX_ID]={at:new Date().toISOString(),movidos:n,total:total};
+        save();
+      }catch(err){data=before;console.warn('Corrección v81 pendiente:',err);return;}
+      ['render','renderCashCapital','renderUtilitiesModule','syncFinancialUiV76','renderExtractos'].forEach(function(f){try{if(typeof window[f]==='function')window[f]();}catch(e){}});
+      if(!n)return;
+      var f={};try{f=getFinancialSnapshotV75();}catch(e){}
+      setTimeout(function(){alert('✅ CADENAS ORGANIZADAS\n\n'+n+' pagos de cadena por '+money(total)+' ya no cuentan como gasto: son ganancia guardada.\n\nUtilidades por retirar: '+money(f.profitAvailable||0)+'\nGanancias en cadenas: '+money(f.profitInCadenas||0)+'\n\nAhora entra a Finanzas → Utilidades → Cadenas, crea tus cadenas con "+ NUEVA CADENA" y asigna cada pago a su cadena.');},500);
+    }catch(err){console.error('Corrección v81:',err);}
+  }
+  function start(){setTimeout(runFix,2600);}
+  if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
+})();
+</script>
+<script src="./app-update.js?v=2026.10.26.84"></script>
 </body>
 </html>
