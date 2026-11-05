@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.05.96</title>
+<title>COLOMBIAUTOS JP - V2026.11.05.98</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -3870,7 +3870,7 @@ body.jcp-custom-theme .database-actions-list button{
 #formVeh input.veh-bad{border-color:#e74c3c!important;box-shadow:0 0 0 1px rgba(231,76,60,.45)}
 #formVeh .veh-opts{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
 #formVeh .veh-opts small{font-size:10px;color:#f1c40f;font-weight:800}
-#formVeh .veh-cancel-btn,.veh-cancel-btn{grid-column:1/-1!important;width:100%!important;margin-top:8px!important;min-height:46px!important;border-radius:12px!important;font-size:14px!important;border:1.5px solid rgba(220,90,80,.7)!important;background:transparent!important;color:#ff8a80!important;font-weight:900;letter-spacing:.4px;cursor:pointer}#formVeh .veh-opts button{min-height:28px;padding:0 9px;border-radius:999px;border:1px solid #6b5a14;background:#1d190c;color:#f1c40f;font-size:11px;font-weight:800}
+.sale-draft-btn{width:100%;min-height:48px;margin-bottom:8px;border-radius:12px;border:1.5px solid #d4af37!important;background:transparent!important;color:#d4af37!important;font-weight:900;letter-spacing:.4px;cursor:pointer}#formVeh .veh-cancel-btn,.veh-cancel-btn{grid-column:1/-1!important;width:100%!important;margin-top:8px!important;min-height:46px!important;border-radius:12px!important;font-size:14px!important;border:1.5px solid rgba(220,90,80,.7)!important;background:transparent!important;color:#ff8a80!important;font-weight:900;letter-spacing:.4px;cursor:pointer}#formVeh .veh-opts button{min-height:28px;padding:0 9px;border-radius:999px;border:1px solid #6b5a14;background:#1d190c;color:#f1c40f;font-size:11px;font-weight:800}
 #formVeh .veh-scan-preview{position:fixed;left:8px;right:8px;bottom:84px;z-index:900;background:#0d0d0d;border:2px solid #d4af37;border-radius:14px;padding:8px;box-shadow:0 -6px 24px rgba(0,0,0,.6);max-width:720px;margin:0 auto}
 #formVeh .veh-dock-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
 #formVeh .veh-dock-head b{font-size:10px;color:#d4af37;letter-spacing:.4px}
@@ -4704,6 +4704,7 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 <textarea class="sale-observations" id="saleObs" placeholder="OBSERVACIONES (OPCIONAL)"></textarea>
 </div>
 <div class="sale-invoice-actions">
+<button class="sale-draft-btn" type="button" onclick="openSaleContractDraft()">👁 VER CONTRATO (BORRADOR)</button>
 <button class="sale-save-btn paydist-locked" disabled="" id="saleSubmit" onclick="saveVehicleSale()">💾 GUARDAR VENTA</button>
 <button class="sale-cancel-btn" onclick="closeSaleForm()">CANCELAR</button>
 </div>
@@ -5815,9 +5816,9 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.05.96"></script>
-<script src="./jcp-sync.js?v=2026.11.05.96"></script>
-<script src="./jcp-images.js?v=2026.11.05.96"></script>
+<script src="./jcp-accounting.js?v=2026.11.05.98"></script>
+<script src="./jcp-sync.js?v=2026.11.05.98"></script>
+<script src="./jcp-images.js?v=2026.11.05.98"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -10220,7 +10221,7 @@ function openVehicleDetail(id){
     .vd2-doc small{font-size:13px;margin-top:3px}
     .vd2-ok{background:#12281a;border-color:#2f6b45}.vd2-ok strong{color:#8fd4a8}
     .vd2-missing{display:block;width:calc(100% - 24px);margin:0 12px 10px;min-height:40px;border-radius:10px;border:1px solid #a87a12;background:#33290d;color:#f0c35a;font-weight:800;font-size:11.5px}
-    .vd2-field.vd2-ok{border-color:rgba(70,190,120,.55)!important;background:rgba(40,120,70,.18)!important}.vd2-field.vd2-ok b{color:#5fd38d!important;font-size:14px!important}.vd2-more{display:block;width:calc(100% - 24px);margin:10px 12px 0;padding:11px;border-radius:12px;border:1px solid rgba(240,195,90,.45);background:transparent;color:#f0c35a;font-weight:800;font-size:12px;letter-spacing:.4px;cursor:pointer}.vd2-full{margin-top:10px}.vd2-full[hidden]{display:none!important}.vd2-missing-val{color:#f0c35a!important;font-weight:600!important;font-size:12px!important}
+    .vd2-field.vd2-ok{border-color:rgba(70,190,120,.55)!important;background:rgba(40,120,70,.18)!important}.vd2-field.vd2-ok b{color:#5fd38d!important;font-size:14px!important}.vd2-more{display:block;width:calc(100% - 24px);margin:10px 12px 12px;padding:11px;border-radius:12px;border:1px solid rgba(240,195,90,.45);background:transparent;color:#f0c35a;font-weight:800;font-size:12px;letter-spacing:.4px;cursor:pointer}.vd2-full{margin-top:10px}.vd2-full[hidden]{display:none!important}.vd2-full .vd2-subhead{margin:6px 12px 10px}.vd2-full .vd2-docgrid{padding:0 12px 12px}.vd2-missing-val{color:#f0c35a!important;font-weight:600!important;font-size:12px!important}
     .vd2-warn{background:#33290d;border-color:#a87a12}.vd2-warn strong,.vd2-warn small{color:#f0c35a}
     .vd2-bad{background:#341616;border-color:#a33a3a}.vd2-bad strong,.vd2-bad small{color:#f09595}
     .vd2-list{display:grid}
@@ -10250,13 +10251,11 @@ function openVehicleDetail(id){
         ${[['Marca',commercial.marca||veh.marca||veh.m],['Línea',commercial.referencia||veh.ref],['Modelo',commercial.modelo||veh.modelo],['Placa',commercial.placa||veh.pl],['Cilindraje',commercial.cilindraje||veh.cilindraje],['Matrícula de',read('matricula','')]].map(([l,v])=>`<div class="vd2-field"><small>${l}</small><b${String(v||'').trim()?'':' class="vd2-missing-val"'}>${esc(String(v||'').trim()||'SIN REGISTRAR')}</b></div>`).join('')}
       </div>
       <button type="button" class="vd2-more" onclick="const b=this.nextElementSibling;const o=b.hidden;b.hidden=!o;this.textContent=o?'▲ OCULTAR INFORMACIÓN COMPLETA':'▼ VER INFORMACIÓN COMPLETA'">▼ VER INFORMACIÓN COMPLETA</button>
-      <div class="vd2-fields vd2-full" hidden>
+      <div class="vd2-full" hidden>
+      <div class="vd2-fields">
         ${[['Clase',veh.clase],['Color',veh.color],['Servicio',veh.servicio],['Capacidad',veh.capacidad],['N.º chasis',veh.chasis],['N.º motor',veh.motor]].map(([l,v])=>`<div class="vd2-field"><small>${l}</small><b${String(v||'').trim()?'':' class="vd2-missing-val"'}>${esc(String(v||'').trim()||'SIN REGISTRAR')}</b></div>`).join('')}
       </div>
-    </div>
-
-    <div class="vd2-card">
-      <div class="vd2-head">Documentación y estado</div>
+      <div class="vd2-head vd2-subhead">Documentación y estado</div>
       <div class="vd2-docgrid">
         ${(()=>{const m=jcpDocMonth(veh.soatVence||read('soat',''));return m?doc('SOAT',m.text,m.tone,m.extra):doc('SOAT',read('soat'),docTone(read('soat')));})()}
         ${(()=>{const m=jcpDocMonth(veh.tecnoVence||read('tecnomecanica',''));return m?doc('Tecnomecánica',m.text,m.tone,m.extra):doc('Tecnomecánica',read('tecnomecanica'),docTone(read('tecnomecanica')));})()}
@@ -10266,6 +10265,7 @@ function openVehicleDetail(id){
         ${doc('Embargos',read('embargos','SIN REGISTRAR'),yesNoTone(read('embargos','SIN REGISTRAR')))}
         ${doc('Reportes',read('reportes','SIN REGISTRAR'),yesNoTone(read('reportes','SIN REGISTRAR')),reportExtra)}
         ${doc('Kilometraje',kmText,'neutral')}
+      </div>
       </div>
     </div>
 
@@ -12918,7 +12918,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.05.96\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.05.98\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -16839,7 +16839,7 @@ function voidAccountingDocument(){
       if(typeof html2canvas!=='function')throw new Error('No se pudo cargar el generador de imagen.');
       const tools=document.getElementById('jcpSupportTools'),old=tools.style.display;tools.style.display='none';
       try{
-        const pages=Array.from(document.querySelectorAll('.sale-page,.tp'));
+        const pages=Array.from(document.querySelectorAll('.sale-page,.tp,.pg'));
         const targets=pages.length?pages:[document.body],blobs=[];
         for(const target of targets){
           const canvas=await html2canvas(target,{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false,ignoreElements:el=>el.id==='jcpSupportTools'});
@@ -17162,7 +17162,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.05.96',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.05.98',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -20841,6 +20841,28 @@ function jcpParseLicencia(raw){
       impAnio:prev.impAnio||String(new Date().getFullYear()),impQuien:prev.impQuien||'EL VENDEDOR',adicionales:prev.adicionales||(+s.pending>0?'EL VENDEDOR SE RESERVA EL DOMINIO DEL VEHÍCULO HASTA EL PAGO TOTAL DEL SALDO DE '+fm(s.pending)+'.':'')};
     show('contratoVenta');render();window.scrollTo({top:0,behavior:'auto'});
   };
+  window.openSaleContractDraft=function(){
+    var vid=null;try{vid=selectedSaleVehicleId;}catch(e){}
+    var v=(data.veh||[]).find(function(x){return x&&String(x.id)===String(vid);});
+    if(!v){alert('SELECCIONA PRIMERO EL VEHÍCULO QUE VAS A VENDER.');return;}
+    var gv=function(id){return (document.getElementById(id)||{}).value||'';};
+    var price=parseFormattedMoney(gv('salePrice'))||0,method=gv('saleMethod')||'contado';
+    var received=method==='credito'?(parseFormattedMoney(gv('saleReceived'))||0):price,pending=Math.max(0,price-received);
+    var dist={};try{dist=paymentDistribution('sale')||{};}catch(e){}
+    var buyer=up(gv('saleBuyer')),doc=up(gv('saleDoc')),st=data.settings||{};
+    var cl=(data.clientes||[]).find(function(c){return (doc&&up(c.cedula)===doc)||(buyer&&up(c.nombre)===buyer);})||{};
+    var info=(typeof getVehicleCommercialSnapshot==='function'?(function(){try{return getVehicleCommercialSnapshot(v)||{};}catch(e){return {};}})():{});
+    var today=iso(new Date());
+    cur={draft:true,vehId:v.id,price:price,city:st.contractCity||'BOGOTÁ',date:today,
+      sellerId:st.contractLastSeller||((sellers()[0]||{}).id||''),
+      buyer:{nombre:buyer,cedula:doc||up(cl.cedula),direccion:up(cl.direccion),telefono:String(gv('salePhone')||cl.telefono||'').trim()},
+      veh:{marca:up(v.marca||v.m),clase:up(v.clase),linea:up(v.ref),modelo:up(v.modelo),placa:up(v.pl),color:up(v.color),servicio:up(v.servicio),capacidad:up(v.capacidad),chasis:up(v.chasis),motor:up(v.motor),soat:v.soatVence||v.soat||info.soat||'',tecno:v.tecnoVence||v.tecnomecanica||info.tecnomecanica||''},
+      pago:payText({paymentDistribution:dist,received:received,pending:pending}),entrega:today,
+      traspaso:'30',penal:Math.round(price*0.10),gastos:'50% POR EL COMPRADOR Y 50% POR EL VENDEDOR',
+      impAnio:String(new Date().getFullYear()),impQuien:'EL VENDEDOR',adicionales:(pending>0?'EL VENDEDOR SE RESERVA EL DOMINIO DEL VEHÍCULO HASTA EL PAGO TOTAL DEL SALDO DE '+fm(pending)+'.':'')};
+    show('contratoVenta');render();window.scrollTo({top:0,behavior:'auto'});
+  };
+  window.ctBackToSale=function(){try{if(typeof jcpGoBack==='function'){jcpGoBack();}else{show('ventas');}}catch(e){show('ventas');}setTimeout(function(){var f=document.getElementById('saleForm');if(f&&f.style.display!=='none')f.scrollIntoView({behavior:'auto',block:'start'});},60);};
   function toMonth(v){v=String(v||'');return /^\d{4}-\d{2}/.test(v)?v.slice(0,7):v;}
   function f(lbl,id,val,type,extra){return '<label class="ct-f"><span>'+lbl+'</span><input id="'+id+'" '+(type?'type="'+type+'" ':'')+'value="'+esc(val==null?'':val)+'" '+(extra||'')+'/></label>';}
   function chips(target,list){return '<div class="ct-chips">'+list.map(function(c){return '<button type="button" onclick="ctChip(\''+target+'\',\''+String(c[1]).replace(/'/g,"\\'")+'\')">'+c[0]+'</button>';}).join('')+'</div>';}
@@ -20849,6 +20871,7 @@ function jcpParseLicencia(raw){
     var h=el('ctContent');if(!h||!cur)return;var c=cur,sl=sellers();
     var price=c.price;
     h.innerHTML='<style>#contratoVenta .ct-card{background:#121212;border:1px solid #3a321f;border-radius:14px;padding:14px;margin-top:12px}#contratoVenta .ct-t{font-size:11px;font-weight:900;color:#d4af37;letter-spacing:.5px;margin-bottom:10px}#contratoVenta .ct-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#contratoVenta .ct-f{display:flex;flex-direction:column;gap:3px;min-width:0}#contratoVenta .ct-f span{font-size:10px;color:#aaa;font-weight:800}#contratoVenta .ct-f input,#contratoVenta select,#contratoVenta textarea{width:100%;max-width:100%;min-width:0;box-sizing:border-box;margin:0;text-transform:uppercase}#contratoVenta .ct-f input[type=date],#contratoVenta .ct-f input[type=month]{-webkit-appearance:none;appearance:none;display:block;min-height:42px}#contratoVenta .ct-chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}#contratoVenta .ct-chips button{min-height:32px;padding:0 12px;border-radius:999px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37;font-weight:800;font-size:11px}#contratoVenta .ct-full{grid-column:1/-1}@media(max-width:520px){#contratoVenta .ct-g{grid-template-columns:1fr}}</style>'
+      +(c.draft?'<div class="ct-card" style="border-color:#c0392b;background:#1c0f0e"><div class="ct-t" style="color:#ff8a80">📝 BORRADOR — NO SE GUARDA NADA</div><div style="font-size:12px;color:#ddd;line-height:1.45">Es solo para revisar con el cliente. Sale con la marca BORRADOR. El contrato definitivo se genera al guardar la venta.</div><button type="button" onclick="ctBackToSale()" style="width:100%;margin-top:10px;min-height:42px;border-radius:10px;border:1px solid #d4af37;background:transparent;color:#d4af37;font-weight:900">← VOLVER A LA VENTA</button></div>':'')
       +'<div class="ct-card"><div class="ct-t">LUGAR Y FECHA</div><div class="ct-g">'+f('Ciudad','ctCity',c.city)+f('Fecha','ctDate',c.date,'date')+'</div></div>'
       +'<div class="ct-card"><div class="ct-t">VENDEDOR</div><select id="ctSeller"><option value="">ESCOGE EL VENDEDOR</option>'+sl.map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===c.sellerId?' selected':'')+'>'+esc(x.nombre)+' · '+esc(x.cedula)+'</option>';}).join('')+'</select>'
         +'<div class="ct-chips"><button type="button" onclick="ctNewSeller()">+ NUEVO VENDEDOR</button>'+(c.sellerId?'<button type="button" onclick="ctNewSeller(true)">EDITAR</button>':'')+'</div>'
@@ -20868,7 +20891,7 @@ function jcpParseLicencia(raw){
         +'<div>'+f('Será asumido por','ctImpQuien',c.impQuien)+chips('ctImpQuien',[['Vendedor','EL VENDEDOR'],['Comprador','EL COMPRADOR'],['50 / 50','50% COMPRADOR Y 50% VENDEDOR']])+'</div>'
         +'<label class="ct-f ct-full"><span>Cláusulas adicionales</span><textarea id="ctAdic" rows="3">'+esc(c.adicionales)+'</textarea></label>'
       +'</div></div>'
-      +'<button type="button" onclick="ctPrint()" style="width:100%;margin-top:12px;min-height:48px;border-radius:12px;border:0;background:#d4af37;color:#111;font-weight:900">🖨️ GENERAR CONTRATO (IMPRIMIR / PDF)</button>';
+      +'<button type="button" onclick="ctPrint()" style="width:100%;margin-top:12px;min-height:48px;border-radius:12px;border:0;background:#d4af37;color:#111;font-weight:900">'+(c.draft?'👁 GENERAR BORRADOR (COMPARTIR / IMPRIMIR)':'🖨️ GENERAR CONTRATO (IMPRIMIR / PDF)')+'</button>';
     try{bindMoneyInputs();}catch(e){}
   }
   window.ctNewSeller=function(edit){var fbox=el('ctSellerForm');if(!fbox)return;fbox.style.display='';window.__ctEditSeller=edit?el('ctSeller').value:'';var x=edit?sellers().find(function(s){return s.id===window.__ctEditSeller;}):null;
@@ -20887,13 +20910,13 @@ function jcpParseLicencia(raw){
     if(!sel){alert('ESCOGE O CREA EL VENDEDOR.');return;}
     if(!c.buyer.nombre){alert('FALTA EL NOMBRE DEL COMPRADOR.');return;}
     // guardar en la venta para reimprimir y recordar ciudad / vendedor
-    var before=cloneAppData(data);
+    if(!c.draft){var before=cloneAppData(data);
     try{var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(c.vehId);});if(v&&v.sale){v.sale.contract=cloneAppData(c);v.sale.contract.generatedAt=new Date().toISOString();['clase','color','servicio','capacidad','chasis','motor'].forEach(function(k){if(c.veh[k]&&!v[k])v[k]=c.veh[k];});}
-      data.settings=(data.settings&&typeof data.settings==='object')?data.settings:{};data.settings.contractCity=c.city;data.settings.contractLastSeller=c.sellerId;save();}catch(e){data=before;}
+      data.settings=(data.settings&&typeof data.settings==='object')?data.settings:{};data.settings.contractCity=c.city;data.settings.contractLastSeller=c.sellerId;save();}catch(e){data=before;}}
     var logo=typeof supportLogoSrc==='function'?supportLogoSrc():'';
-    var w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}
+    var w=null;if(!c.draft){w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}}
     var V=c.veh,cell=function(t){return '<td class="v">'+esc(t||'')+'</td>';};
-    var html='<!doctype html><html><head><meta charset="utf-8"><title>Contrato '+esc(V.placa)+'</title><style>@page{size:letter;margin:10mm}*{box-sizing:border-box}body{margin:0;background:#eee;font-family:Calibri,Arial,sans-serif;color:#000}.pg{width:205mm;min-height:265mm;margin:8px auto;background:#fff;border:2px solid #000;padding:6mm;position:relative;page-break-after:always}.pg:last-child{page-break-after:auto}.top{display:flex;gap:8px}.logo{width:48mm;height:42mm;border:1px solid #666;display:flex;align-items:center;justify-content:center}.logo img{max-width:44mm;max-height:38mm}.hd{flex:1}.ttl{font-family:"Algerian","Copperplate","Georgia",serif;font-weight:900;font-size:21px;text-align:center;letter-spacing:.5px;margin:0 0 6px}.hr{display:flex;border-bottom:2px solid #000;font-size:12.5px;min-height:7.2mm;align-items:center}.hr b{width:31mm;padding-left:2px}.hr span{flex:1;background:#e3e3e3;align-self:stretch;display:flex;align-items:center;padding-left:6px;font-weight:700}p{margin:3px 0;font-size:12.5px;line-height:1.35}table.c{width:100%;border-collapse:collapse;margin:3px 0 4px;font-size:12px}table.c td{border:1px solid #000;padding:2px 4px;height:5.6mm}table.c td.l{font-weight:700;text-align:center;width:24%}table.c td.v{background:#e3e3e3;width:26%;font-weight:700}.f{background:#e3e3e3;font-weight:700;padding:0 6px;display:inline-block;min-width:30mm}.blk{background:#e3e3e3;font-weight:700;padding:2px 6px;min-height:6mm;margin:2px 0}.sig{display:flex;justify-content:space-between;margin-top:6mm;font-size:12.5px}.sig>div{width:47%;position:relative;padding-right:25mm}.sig .n{font-weight:700;text-align:center;margin-bottom:20mm}.sig .line{border-top:1px solid #000;margin-bottom:2px}.huella{position:absolute;right:0;top:0;width:21mm;height:30mm;border:1px solid #3a6fb0;border-radius:6px}.imp{font-family:"Algerian","Copperplate","Georgia",serif;font-size:24px;font-weight:900;text-align:center;margin-top:2mm}.foot{position:absolute;bottom:3mm;left:0;right:0;text-align:center;font-size:9px;font-weight:700}.act{text-align:center;margin:10px}.act button{padding:10px 18px;border:0;border-radius:7px;background:#111;color:#fff;font-weight:800}@media print{body{background:#fff}.pg{margin:0;border:2px solid #000}.act{display:none}}</style></head><body>'
+    var html='<!doctype html><html><head><meta charset="utf-8"><title>Contrato '+esc(V.placa)+'</title><style>@page{size:letter;margin:10mm}html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%}*{box-sizing:border-box}body{margin:0;background:#eee;font-family:Calibri,Arial,sans-serif;color:#000}.pg{width:205mm;min-height:265mm;margin:8px auto;background:#fff;border:2px solid #000;padding:6mm;position:relative;page-break-after:always}.pg:last-child{page-break-after:auto}.top{display:flex;gap:8px}.logo{width:48mm;height:42mm;border:1px solid #666;display:flex;align-items:center;justify-content:center}.logo img{max-width:44mm;max-height:38mm}.hd{flex:1}.ttl{font-family:"Algerian","Copperplate","Georgia",serif;font-weight:900;font-size:21px;text-align:center;letter-spacing:.5px;margin:0 0 6px}.hr{display:flex;border-bottom:2px solid #000;font-size:12.5px;min-height:7.2mm;align-items:center}.hr b{width:31mm;padding-left:2px}.hr span{flex:1;background:#e3e3e3;align-self:stretch;display:flex;align-items:center;padding-left:6px;font-weight:700}p{margin:3px 0;font-size:12.5px;line-height:1.35}table.c{width:100%;border-collapse:collapse;margin:3px 0 4px;font-size:12px}table.c td{border:1px solid #000;padding:2px 4px;height:5.6mm}table.c td.l{font-weight:700;text-align:center;width:24%}table.c td.v{background:#e3e3e3;width:26%;font-weight:700}.f{background:#e3e3e3;font-weight:700;padding:0 6px;display:inline-block;min-width:30mm}.blk{background:#e3e3e3;font-weight:700;padding:2px 6px;min-height:6mm;margin:2px 0}.sig{display:flex;justify-content:space-between;margin-top:6mm;font-size:12.5px}.sig>div{width:47%;position:relative;padding-right:25mm}.sig .n{font-weight:700;text-align:center;margin-bottom:20mm}.sig .line{border-top:1px solid #000;margin-bottom:2px}.huella{position:absolute;right:0;top:0;width:21mm;height:30mm;border:1px solid #3a6fb0;border-radius:6px}.imp{font-family:"Algerian","Copperplate","Georgia",serif;font-size:24px;font-weight:900;text-align:center;margin-top:2mm}.foot{position:absolute;bottom:3mm;left:0;right:0;text-align:center;font-size:9px;font-weight:700}.act{text-align:center;margin:10px}.act button{padding:10px 18px;border:0;border-radius:7px;background:#111;color:#fff;font-weight:800}@media print{body{background:#fff}.pg{margin:0;border:2px solid #000}.act{display:none}}</style></head><body>'
       +'<div class="act"><button onclick="window.print()">IMPRIMIR / GUARDAR PDF</button></div>'
       +'<div class="pg"><div class="top"><div class="logo">'+(logo?'<img src="'+esc(logo)+'">':'')+'</div><div class="hd"><div class="ttl">CONTRATO DE COMPRAVENTA VEHICULOS</div>'
       +'<div class="hr"><b>LUGAR Y FECHA:</b><span>'+esc(c.city+', '+longDate(c.date))+'</span></div><div class="hr"><b>VENDEDOR:</b><span>'+esc(sel.nombre)+'</span></div><div class="hr"><b>IDENTIFICACION:</b><span>'+esc(sel.cedula)+'</span></div><div class="hr"><b>COMPRADOR:</b><span>'+esc(c.buyer.nombre)+'</span></div><div class="hr"><b>IDENTIFICACION:</b><span>'+esc(c.buyer.cedula)+'</span></div></div></div>'
@@ -20914,6 +20937,12 @@ function jcpParseLicencia(raw){
       +'</div>'
       +'<div class="pg"><div class="top"><div class="logo">'+(logo?'<img src="'+esc(logo)+'">':'')+'</div><div class="hd"><div class="imp">ESPACIO PARA IMPRONTAS</div></div></div><div class="foot">DOCUMENTO VALIDO A NIVEL NACIONAL- COLOMBIA</div></div>'
       +'</body></html>';
+    if(c.draft){
+      var wm='<style>html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%}.pg{overflow:hidden}.wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:50}.wm span{transform:rotate(-38deg);font-size:118px;font-weight:900;letter-spacing:10px;color:rgba(200,30,30,.22);border:9px solid rgba(200,30,30,.22);border-radius:18px;padding:6px 34px;font-family:Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}</style>';
+      html=html.replace('</head>',wm+'</head>').replace(/<div class="pg">/g,'<div class="pg"><div class="wm"><span>BORRADOR</span></div>').replace(/<title>Contrato /,'<title>BORRADOR Contrato ');
+      if(typeof window.openSupportDocument==='function'){window.openSupportDocument(html,'CONTRATO_BORRADOR_'+(V.placa||''),'Contrato borrador '+(V.placa||''));return;}
+      w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}
+    }
     w.document.open();w.document.write(html);w.document.close();
   };
 })();
@@ -21115,6 +21144,6 @@ function jcpParseLicencia(raw){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.05.96"></script>
+<script src="./app-update.js?v=2026.11.05.98"></script>
 </body>
 </html>
