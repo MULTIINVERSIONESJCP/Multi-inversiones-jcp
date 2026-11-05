@@ -1,4 +1,4 @@
-const APP_VERSION='2026.11.05.98';
+const APP_VERSION='2026.11.05.99';
 const CACHE_NAME='multi-jcp-'+APP_VERSION;
 const APP_BASE=self.registration.scope;
 const INDEX_URL=new URL('index.html',APP_BASE).href;
