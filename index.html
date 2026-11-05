@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.04.89</title>
+<title>COLOMBIAUTOS JP - V2026.11.04.92</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -3856,13 +3856,29 @@ body.jcp-custom-theme .database-actions-list button{
 #formVeh .veh-mode-btn small{display:block;font-weight:600;color:#aaa;font-size:10px;margin-top:3px}
 #formVeh .veh-scan-status{font-size:12px;color:#ccc;margin-top:10px;min-height:0}
 #formVeh .veh-scan-status.busy{color:#d4af37}
+#formVeh .veh-rescan{margin-top:8px;width:100%;min-height:36px;border-radius:10px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37;font-size:11px;font-weight:800}
 #formVeh .veh-scan-status.ok{color:#57d68d}
 #formVeh .veh-scan-status.bad{color:#ff6b6b}
 #formVeh .veh-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 #formVeh .veh-f{display:flex;flex-direction:column;gap:3px;min-width:0}
 #formVeh .veh-f span{font-size:10px;color:#aaa;font-weight:800}
-#formVeh .veh-f input{width:100%;box-sizing:border-box;margin:0;text-transform:uppercase}
+#formVeh .veh-f input{width:100%;max-width:100%;min-width:0;box-sizing:border-box;margin:0;text-transform:uppercase}
+#formVeh .veh-f input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-height:46px;line-height:1.2}
 #formVeh #purchaseSubmit{width:100%;margin-top:12px;min-height:46px}
+#formVeh input.veh-ok{border-color:#2ecc71!important;box-shadow:0 0 0 1px rgba(46,204,113,.45)}
+#formVeh input.veh-warn{border-color:#f1c40f!important;box-shadow:0 0 0 1px rgba(241,196,15,.5);background:rgba(241,196,15,.06)!important}
+#formVeh input.veh-bad{border-color:#e74c3c!important;box-shadow:0 0 0 1px rgba(231,76,60,.45)}
+#formVeh .veh-opts{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+#formVeh .veh-opts small{font-size:10px;color:#f1c40f;font-weight:800}
+#formVeh .veh-opts button{min-height:28px;padding:0 9px;border-radius:999px;border:1px solid #6b5a14;background:#1d190c;color:#f1c40f;font-size:11px;font-weight:800}
+#formVeh .veh-scan-preview{position:fixed;left:8px;right:8px;bottom:84px;z-index:900;background:#0d0d0d;border:2px solid #d4af37;border-radius:14px;padding:8px;box-shadow:0 -6px 24px rgba(0,0,0,.6);max-width:720px;margin:0 auto}
+#formVeh .veh-dock-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+#formVeh .veh-dock-head b{font-size:10px;color:#d4af37;letter-spacing:.4px}
+#formVeh .veh-dock-head button{min-height:28px;padding:0 10px;border-radius:999px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37;font-size:10px;font-weight:800;white-space:nowrap}
+#formVeh .veh-dock-img{max-height:28vh;overflow:auto;border-radius:10px;background:#000}
+#formVeh .veh-dock-img img{display:block;width:100%;max-height:28vh;object-fit:contain;cursor:zoom-in}
+#formVeh .veh-dock-img img.zoom{width:220%;max-width:none;max-height:none;cursor:zoom-out}
+body.veh-dock-open #formVeh{padding-bottom:40vh}
 #formVeh input.veh-filled{border-color:#57d68d!important;box-shadow:0 0 0 1px rgba(87,214,141,.35)}
 @media(max-width:520px){#formVeh .veh-mode-grid{grid-template-columns:1fr}#formVeh .veh-mode-btn{min-height:56px}}
 </style>
@@ -4284,6 +4300,7 @@ body.jcp-custom-theme .database-actions-list button{
 <input accept="image/*" capture="environment" id="vehScanCamera" style="display:none" type="file" onchange="vehScanFile(this)"/>
 <input accept="image/*" id="vehScanGallery" style="display:none" type="file" onchange="vehScanFile(this)"/>
 <div class="veh-scan-status" id="vehScanStatus"></div>
+<button type="button" class="veh-rescan" id="vehRescanBtn" style="display:none" onclick="vehShowChooser()">↻ VOLVER A ESCANEAR O CAMBIAR A MANUAL</button>
 </div>
 <div class="full veh-fields" id="vehFieldsBox" style="display:none">
 <div class="veh-section-title">DATOS DEL VEHÍCULO (TARJETA DE PROPIEDAD)</div>
@@ -4295,7 +4312,7 @@ body.jcp-custom-theme .database-actions-list button{
 <label class="veh-f"><span>Placa *</span><input id="vplaca" placeholder="PLACA"/></label>
 <label class="veh-f"><span>Color</span><input id="vcolor" placeholder="COLOR"/></label>
 <label class="veh-f"><span>Servicio</span><input id="vservicio" placeholder="PARTICULAR / PÚBLICO"/></label>
-<label class="veh-f"><span>Capacidad</span><input id="vcapacidad" placeholder="EJ: 5 PASAJEROS"/></label>
+<label class="veh-f"><span>Capacidad</span><input id="vcapacidad" placeholder="EJ: 5"/></label>
 <label class="veh-f"><span>N.º chasis</span><input id="vchasis" placeholder="CHASIS / VIN"/></label>
 <label class="veh-f"><span>N.º motor</span><input id="vmotor" placeholder="MOTOR"/></label>
 <label class="veh-f"><span>Cilindraje</span><input id="vcilindraje" placeholder="EJ: 1600" type="text"/></label>
@@ -4303,6 +4320,7 @@ body.jcp-custom-theme .database-actions-list button{
 <label class="veh-f"><span>SOAT – vence</span><input id="vsoatVence" type="date"/></label>
 <label class="veh-f"><span>Tecno – vence</span><input id="vtecnoVence" type="date"/></label>
 </div>
+<div id="vehScanPreview" class="veh-scan-preview" style="display:none"></div>
 <div class="veh-section-title" style="margin-top:12px">PROVEEDOR Y FOTO</div>
 <label class="full" style="position:relative;display:block">
   <input id="vVendedor" placeholder="🔍 Buscar proveedor" autocomplete="off" oninput="purchaseSellerInput()" onfocus="purchaseSellerSuggestions()" onblur="setTimeout(hidePurchaseSellerSuggestions,200)" style="width:100%"/>
@@ -5747,9 +5765,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.04.89"></script>
-<script src="./jcp-sync.js?v=2026.11.04.89"></script>
-<script src="./jcp-images.js?v=2026.11.04.89"></script>
+<script src="./jcp-accounting.js?v=2026.11.04.92"></script>
+<script src="./jcp-sync.js?v=2026.11.04.92"></script>
+<script src="./jcp-images.js?v=2026.11.04.92"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -12794,7 +12812,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.04.89\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.04.92\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -17025,7 +17043,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.04.89',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.04.92',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -20505,6 +20523,14 @@ function jcpParseLicencia(raw){
   var pa=after(/PLACA/);
   if(pa){var c=(pa.same+' '+pa.next).match(/\b([A-Z]{3})\s?-?\s?(\d{2}[\dA-Z])\b/);if(c)pm=c;}
   if(pm)out.placa=pm[1]+pm[2];
+  // Placa con letras/números confundidos por el lector (ej: HTL8S5, HT1855): se corrige por posición.
+  if(!out.placa){
+    var toL={'0':'O','1':'I','2':'Z','4':'A','5':'S','6':'G','7':'T','8':'B'},toD={'O':'0','Q':'0','D':'0','U':'0','I':'1','L':'1','T':'7','Z':'2','S':'5','B':'8','G':'6','A':'4'};
+    var fix=function(tok){tok=String(tok||'').replace(/[^A-Z0-9]/g,'');if(tok.length!==6)return '';var a=tok.slice(0,3).split('').map(function(ch){return /\d/.test(ch)?(toL[ch]||ch):ch;}).join(''),b=tok.slice(3);
+      var bd=b.split('').map(function(ch){return /[A-Z]/.test(ch)?(toD[ch]||ch):ch;}).join('');var moto=/^\d\d[A-Z]$/.test(b);var r=a+(moto?b:bd);return /^[A-Z]{3}(\d{3}|\d{2}[A-Z])$/.test(r)?r:'';};
+    var cands=[];if(pa){cands=cands.concat((pa.next+' '+pa.same).split(' '));cands.push(pa.next.replace(/\s+/g,'').slice(0,6));}cands=cands.concat(T.split(/\s+/));
+    for(var q=0;q<cands.length&&!out.placa;q++){if(/^(PLACA|MARCA|LINEA|MODELO|REPUBLICA|COLOMBIA|CILINDRADA)$/.test(cands[q]))continue;var fx=fix(cands[q]);if(fx&&!/^(SUZ|KIA)/.test(fx))out.placa=fx;}
+  }
   // MARCA
   var brand='';BR.slice().sort(function(a,b){return b.length-a.length;}).some(function(b){var re=new RegExp('(^|[^A-Z])'+b.replace(/[-]/g,'[- ]')+'([^A-Z]|$)');if(re.test(T)){brand=b.replace('MERCEDES-BENZ','MERCEDES BENZ');return true;}return false;});
   if(brand)out.marca=brand;
@@ -20523,6 +20549,8 @@ function jcpParseLicencia(raw){
   var ca=after(/CILINDRA(JE|DA)/);var cc=null;
   if(ca)cc=(ca.same+' '+ca.next).match(/\b(\d{2,5})\b/);
   if(!cc)cc=T.match(/\b(\d{3,4})\s*C\.?C\b/);
+  if(!cc){for(var w=0;w<lines.length&&!cc;w++){if(/\b(PARTICULAR|PUBLICO|OFICIAL)\b/.test(lines[w]))cc=lines[w].match(/^\D{0,3}(\d{2,4})\b/);}}
+  if(cc&&(+cc[1]<49||+cc[1]>16000))cc=null;
   if(cc)out.cilindraje=cc[1];
   // COLOR
   var co=after(/COLOR/),colorTxt=co?(co.same||co.next):T;
@@ -20538,7 +20566,7 @@ function jcpParseLicencia(raw){
   var cp=after(/CAPACIDAD/);var cap=null;
   if(cp)cap=(cp.same+' '+cp.next).match(/\b(\d{1,3})\s*(PSJ|PAS|PASAJEROS|SILLAS)?\b/);
   if(!cap)cap=T.match(/\b(\d{1,2})\s*(PSJ|PASAJEROS)\b/);
-  if(cap)out.capacidad=cap[1]+(cap[2]||/PSJ|PASAJ/.test(cp?cp.same+cp.next:'')?' PASAJEROS':'');
+  if(cap)out.capacidad=cap[1];
   // VIN / CHASIS / MOTOR
   var vin=T.match(/\b([A-HJ-NPR-Z0-9]{17})\b/);
   var ch=after(/CHASIS|CHASIS N|N.? DE CHASIS/);var chv=null;
@@ -20553,7 +20581,9 @@ function jcpParseLicencia(raw){
 
   window.jcpParseLicencia=jcpParseLicencia;
   function status(t,cls){var s=el('vehScanStatus');if(s){s.textContent=t||'';s.className='veh-scan-status'+(cls?' '+cls:'');}}
-  window.vehResetMode=function(){var b=el('vehFieldsBox');if(b)b.style.display='none';var m=el('vehModeBox');if(m)m.style.display='';status('');};
+  window.vehDockToggle=function(){var i=el('vehDockImg'),b=el('vehDockBtn');if(!i)return;var hid=i.style.display==='none';i.style.display=hid?'':'none';if(b)b.textContent=hid?'▼ OCULTAR':'▲ VER TARJETA';};
+  window.vehShowChooser=function(){var mg=document.querySelector('#vehModeBox .veh-mode-grid'),mt=document.querySelector('#vehModeBox .veh-mode-title'),rb=el('vehRescanBtn');if(mg)mg.style.display='';if(mt)mt.style.display='';if(rb)rb.style.display='none';};
+  window.vehResetMode=function(){try{vehShowChooser();}catch(_e){}var b=el('vehFieldsBox');if(b)b.style.display='none';var pv=el('vehScanPreview');if(pv){pv.innerHTML='';pv.style.display='none';}document.body.classList.remove('veh-dock-open');Object.keys(MAP).forEach(function(k){try{setState(MAP[k],'',null);}catch(_e){}});var m=el('vehModeBox');if(m)m.style.display='';status('');};
   window.vehManualMode=function(){var b=el('vehFieldsBox');if(b)b.style.display='';status('');setTimeout(function(){try{el('vmarca').focus();}catch(e){}},50);};
   window.vehScanPick=function(kind){var i=el(kind==='camera'?'vehScanCamera':'vehScanGallery');if(i){i.value='';i.click();}};
   var tessPromise=null;
@@ -20563,29 +20593,68 @@ function jcpParseLicencia(raw){
     tessPromise=new Promise(function(res,rej){var sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';sc.onload=function(){window.Tesseract?res(window.Tesseract):rej(new Error('no cargó'));};sc.onerror=function(){tessPromise=null;rej(new Error('Sin conexión para descargar el lector.'));};document.head.appendChild(sc);});
     return tessPromise;
   }
-  function prep(file){
+  function prep(file,mode){
     return new Promise(function(res){
       var img=new Image(),url=URL.createObjectURL(file);
-      img.onload=function(){try{var max=2200,sc=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);var x=c.getContext('2d');x.drawImage(img,0,0,c.width,c.height);var d=x.getImageData(0,0,c.width,c.height),p=d.data;for(var i=0;i<p.length;i+=4){var g=0.299*p[i]+0.587*p[i+1]+0.114*p[i+2];g=g>170?255:(g<90?0:g);p[i]=p[i+1]=p[i+2]=g;}x.putImageData(d,0,0);URL.revokeObjectURL(url);res(c);}catch(e){res(file);}};
+      img.onload=function(){try{var max=mode==='b'?2600:2200,sc=Math.min(mode==='b'?1.6:1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);var x=c.getContext('2d');x.drawImage(img,0,0,c.width,c.height);var d=x.getImageData(0,0,c.width,c.height),p=d.data,sum=0,n=p.length/4;
+        for(var i=0;i<p.length;i+=4){var g=0.299*p[i]+0.587*p[i+1]+0.114*p[i+2];p[i]=g;sum+=g;}
+        var avg=sum/n;
+        for(var k=0;k<p.length;k+=4){var v=p[k];if(mode==='b'){v=v<avg*0.78?0:255;}else{v=Math.max(0,Math.min(255,(v-128)*1.35+128));}p[k]=p[k+1]=p[k+2]=v;}
+        x.putImageData(d,0,0);URL.revokeObjectURL(url);res(c);}catch(e){res(file);}};
       img.onerror=function(){res(file);};img.src=url;
     });
   }
   var MAP={marca:'vmarca',clase:'vclase',linea:'vref',modelo:'vmodelo',placa:'vplaca',color:'vcolor',servicio:'vservicio',capacidad:'vcapacidad',chasis:'vchasis',motor:'vmotor',cilindraje:'vcilindraje'};
+  function normTok(t){return String(t||'').toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Z0-9]/g,'');}
+  // Confianza de un valor: la menor confianza de las palabras de la foto que lo forman.
+  function confOf(value,words){
+    var parts=String(value||'').toUpperCase().split(/\s+/).map(normTok).filter(Boolean);if(!parts.length)return 0;
+    var min=100,found=0;
+    parts.forEach(function(pt){var best=-1;(words||[]).forEach(function(w){var wt=normTok(w.text);if(!wt)return;if(wt===pt||(pt.length>=4&&(wt.indexOf(pt)>=0||pt.indexOf(wt)>=0)&&Math.min(wt.length,pt.length)>=4))best=Math.max(best,+w.confidence||0);});if(best>=0){found++;min=Math.min(min,best);}});
+    return found?min:40;
+  }
+  function vins(text){var m=String(text||'').toUpperCase().match(/\b[A-HJ-NPR-Z0-9]{17}\b/g);return m||[];}
+  function setState(id,cls,opts){
+    var e=el(id);if(!e)return;e.classList.remove('veh-filled','veh-ok','veh-warn','veh-bad');if(cls)e.classList.add(cls);
+    var box=el('opt_'+id);if(!box){box=document.createElement('div');box.id='opt_'+id;box.className='veh-opts';e.parentNode.appendChild(box);}
+    box.innerHTML=opts&&opts.length>1?'<small>¿Cuál es?</small>'+opts.map(function(o){return '<button type="button" data-veh-opt="'+id+'" data-v="'+esc(o)+'">'+esc(o)+'</button>';}).join(''):'';
+  }
+  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-veh-opt]');if(!b)return;var id=b.getAttribute('data-veh-opt'),inp=el(id);if(inp){inp.value=b.getAttribute('data-v');setState(id,'veh-ok',null);}});
+  document.addEventListener('input',function(e){var t=e.target;if(t&&t.closest&&t.closest('#vehFieldsBox')&&(t.classList.contains('veh-warn')||t.classList.contains('veh-bad'))){t.classList.remove('veh-warn','veh-bad');t.classList.add('veh-ok');var bx=el('opt_'+t.id);if(bx)bx.innerHTML='';}});
   window.vehScanFile=function(input){
     var file=input&&input.files&&input.files[0];if(!file)return;
     window.vehManualMode();
+    // foto al lado de los datos
+    var pv=el('vehScanPreview');if(pv){var u=URL.createObjectURL(file);pv.innerHTML='<div class="veh-dock-head"><b>TARJETA DE PROPIEDAD · COMPARA ANTES DE GUARDAR</b><button type="button" onclick="vehDockToggle()" id="vehDockBtn">▼ OCULTAR</button></div><div class="veh-dock-img" id="vehDockImg"><img src="'+u+'" alt="Tarjeta de propiedad" onclick="this.classList.toggle(\'zoom\')"/></div>';pv.style.display='';document.body.classList.add('veh-dock-open');}
+    Object.keys(MAP).forEach(function(k){setState(MAP[k],'',null);});
+    var mg=document.querySelector('#vehModeBox .veh-mode-grid'),mt=document.querySelector('#vehModeBox .veh-mode-title'),rb=el('vehRescanBtn');if(mg)mg.style.display='none';if(mt)mt.style.display='none';if(rb)rb.style.display='';
     status('⏳ Preparando el lector… (la primera vez descarga unos segundos)','busy');
-    loadTesseract().then(function(T){
-      return prep(file).then(function(img){
-        status('🔎 Leyendo la tarjeta… 0%','busy');
-        return T.recognize(img,'spa',{logger:function(m){if(m&&m.status==='recognizing text')status('🔎 Leyendo la tarjeta… '+Math.round((m.progress||0)*100)+'%','busy');}});
+    var worker=null,results=[];
+    loadTesseract().then(function(T){return T.createWorker('spa');}).then(function(w){
+      worker=w;status('🔎 Lectura 1 de 2…','busy');
+      return prep(file,'a').then(function(img){return worker.recognize(img);});
+    }).then(function(r1){results.push(r1&&r1.data||{});status('🔎 Lectura 2 de 2 (comprobando)…','busy');
+      return prep(file,'b').then(function(img){return worker.recognize(img);});
+    }).then(function(r2){results.push(r2&&r2.data||{});try{worker.terminate();}catch(_e){}
+      var A=jcpParseLicencia(results[0].text||''),B=jcpParseLicencia(results[1].text||'');
+      var g=0,y=0,r=0;
+      Object.keys(MAP).forEach(function(k){
+        var id=MAP[k],a=A[k]||'',b=B[k]||'',e=el(id);if(!e)return;
+        var val='',cls='veh-bad',opts=null;
+        if(k==='chasis'){
+          var all=vins(results[0].text).concat(vins(results[1].text));if(a)all.push(a);if(b)all.push(b);
+          var cnt={};all.forEach(function(v){cnt[v]=(cnt[v]||0)+1;});var keys=Object.keys(cnt).sort(function(x,z){return cnt[z]-cnt[x];});
+          if(keys.length){val=keys[0];cls=keys.length===1?'veh-ok':'veh-warn';if(keys.length>1)opts=keys.slice(0,3);}
+        }else if(a&&b&&a===b){val=a;var c=Math.max(confOf(a,results[0].words),confOf(b,results[1].words));cls=c>=60?'veh-ok':'veh-warn';}
+        else if(a&&b){var ca=confOf(a,results[0].words),cb=confOf(b,results[1].words);val=ca>=cb?a:b;cls='veh-warn';opts=ca>=cb?[a,b]:[b,a];}
+        else if(a||b){val=a||b;var c1=a?confOf(a,results[0].words):confOf(b,results[1].words);cls=c1>=85?'veh-ok':'veh-warn';}
+        if(val)e.value=val;
+        setState(id,val?cls:'veh-bad',opts);
+        if(!val)g+=0;if(cls==='veh-ok'&&val)g++;else if(cls==='veh-warn'&&val)y++;else r++;
       });
-    }).then(function(r){
-      var text=(r&&r.data&&r.data.text)||'';var f=jcpParseLicencia(text),n=0;
-      Object.keys(MAP).forEach(function(k){var e=el(MAP[k]);if(!e)return;e.classList.remove('veh-filled');if(f[k]){e.value=f[k];e.classList.add('veh-filled');n++;}});
-      if(n)status('✅ Se llenaron '+n+' de 11 campos (en verde). Revísalos, completa los que falten, el SOAT, la Tecno y el precio.','ok');
-      else status('⚠️ No se pudo leer la tarjeta. Intenta con una foto más clara, de frente y sin reflejos, o llena los datos a mano.','bad');
-    }).catch(function(e){status('⚠️ No fue posible escanear: '+(e&&e.message||e)+' Puedes llenar los datos a mano.','bad');});
+      setTimeout(function(){try{el('vehModeBox').scrollIntoView({behavior:'smooth',block:'start'});}catch(_e){}},80);
+      status('🟢 '+g+' seguros · 🟡 '+y+' para revisar · 🔴 '+r+' sin leer. Revisa los amarillos (si hay dos opciones, toca la correcta), completa los rojos, el SOAT, la Tecno y el precio.',r+y?'busy':'ok');
+    }).catch(function(e){try{worker&&worker.terminate();}catch(_e){}status('⚠️ No fue posible escanear: '+(e&&e.message||e)+' Puedes llenar los datos a mano.','bad');});
   };
   /* ================= CONTRATO DE COMPRAVENTA ================= */
   var UN=['','UNO','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE','QUINCE','DIECISÉIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VEINTIUNO','VEINTIDÓS','VEINTITRÉS','VEINTICUATRO','VEINTICINCO','VEINTISÉIS','VEINTISIETE','VEINTIOCHO','VEINTINUEVE'];
@@ -20633,7 +20702,7 @@ function jcpParseLicencia(raw){
   function render(){
     var h=el('ctContent');if(!h||!cur)return;var c=cur,sl=sellers();
     var price=c.price;
-    h.innerHTML='<style>#contratoVenta .ct-card{background:#121212;border:1px solid #3a321f;border-radius:14px;padding:14px;margin-top:12px}#contratoVenta .ct-t{font-size:11px;font-weight:900;color:#d4af37;letter-spacing:.5px;margin-bottom:10px}#contratoVenta .ct-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#contratoVenta .ct-f{display:flex;flex-direction:column;gap:3px;min-width:0}#contratoVenta .ct-f span{font-size:10px;color:#aaa;font-weight:800}#contratoVenta .ct-f input,#contratoVenta select,#contratoVenta textarea{width:100%;box-sizing:border-box;margin:0;text-transform:uppercase}#contratoVenta .ct-chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}#contratoVenta .ct-chips button{min-height:32px;padding:0 12px;border-radius:999px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37;font-weight:800;font-size:11px}#contratoVenta .ct-full{grid-column:1/-1}@media(max-width:520px){#contratoVenta .ct-g{grid-template-columns:1fr}}</style>'
+    h.innerHTML='<style>#contratoVenta .ct-card{background:#121212;border:1px solid #3a321f;border-radius:14px;padding:14px;margin-top:12px}#contratoVenta .ct-t{font-size:11px;font-weight:900;color:#d4af37;letter-spacing:.5px;margin-bottom:10px}#contratoVenta .ct-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#contratoVenta .ct-f{display:flex;flex-direction:column;gap:3px;min-width:0}#contratoVenta .ct-f span{font-size:10px;color:#aaa;font-weight:800}#contratoVenta .ct-f input,#contratoVenta select,#contratoVenta textarea{width:100%;max-width:100%;min-width:0;box-sizing:border-box;margin:0;text-transform:uppercase}#contratoVenta .ct-f input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-height:42px}#contratoVenta .ct-chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}#contratoVenta .ct-chips button{min-height:32px;padding:0 12px;border-radius:999px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37;font-weight:800;font-size:11px}#contratoVenta .ct-full{grid-column:1/-1}@media(max-width:520px){#contratoVenta .ct-g{grid-template-columns:1fr}}</style>'
       +'<div class="ct-card"><div class="ct-t">LUGAR Y FECHA</div><div class="ct-g">'+f('Ciudad','ctCity',c.city)+f('Fecha','ctDate',c.date,'date')+'</div></div>'
       +'<div class="ct-card"><div class="ct-t">VENDEDOR</div><select id="ctSeller"><option value="">ESCOGE EL VENDEDOR</option>'+sl.map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===c.sellerId?' selected':'')+'>'+esc(x.nombre)+' · '+esc(x.cedula)+'</option>';}).join('')+'</select>'
         +'<div class="ct-chips"><button type="button" onclick="ctNewSeller()">+ NUEVO VENDEDOR</button>'+(c.sellerId?'<button type="button" onclick="ctNewSeller(true)">EDITAR</button>':'')+'</div>'
@@ -20900,6 +20969,6 @@ function jcpParseLicencia(raw){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.04.89"></script>
+<script src="./app-update.js?v=2026.11.04.92"></script>
 </body>
 </html>
