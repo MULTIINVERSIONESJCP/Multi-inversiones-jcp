@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.05.109</title>
+<title>COLOMBIAUTOS JP - V2026.11.05.110</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5817,9 +5817,9 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.05.109"></script>
-<script src="./jcp-sync.js?v=2026.11.05.109"></script>
-<script src="./jcp-images.js?v=2026.11.05.109"></script>
+<script src="./jcp-accounting.js?v=2026.11.05.110"></script>
+<script src="./jcp-sync.js?v=2026.11.05.110"></script>
+<script src="./jcp-images.js?v=2026.11.05.110"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -12945,7 +12945,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.05.109\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.05.110\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -17189,7 +17189,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.05.109',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.05.110',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -20847,8 +20847,39 @@ function jcpParseLicencia(raw){
   var cur=null;
   var ctPh={};var CT_PH=[['cedF','CÉDULA COMPRADOR · FRENTE'],['cedR','CÉDULA COMPRADOR · RESPALDO'],['tarF','TARJETA DE PROPIEDAD · FRENTE'],['tarR','TARJETA DE PROPIEDAD · RESPALDO']];
   window.ctPhotoPick=function(key,inp){var f=inp&&inp.files&&inp.files[0];if(!f)return;var url=URL.createObjectURL(f),img=new Image();
-    img.onload=function(){try{var max=1400,sc=Math.min(1,max/Math.max(img.width,img.height)),cv=document.createElement('canvas');cv.width=Math.round(img.width*sc);cv.height=Math.round(img.height*sc);cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);ctPh[key]=cv.toDataURL('image/jpeg',0.85);}catch(e){alert('NO SE PUDO LEER LA FOTO.');}URL.revokeObjectURL(url);ctPhotoPaint();};
+    img.onload=function(){try{var max=2200,sc=Math.min(1,max/Math.max(img.width,img.height)),cv=document.createElement('canvas');cv.width=Math.round(img.width*sc);cv.height=Math.round(img.height*sc);cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);URL.revokeObjectURL(url);ctCropOpen(key,cv);}catch(e){URL.revokeObjectURL(url);alert('NO SE PUDO LEER LA FOTO.');}};
     img.onerror=function(){URL.revokeObjectURL(url);alert('NO SE PUDO LEER LA FOTO.');};img.src=url;inp.value='';};
+  /* ---- Recortador con proporción de cédula (85.6 x 54) ---- */
+  var CR_RATIO=85.6/54;
+  function ctCropOpen(key,srcCv){
+    var old=document.getElementById('ctCropModal');if(old)old.remove();
+    var m=document.createElement('div');m.id='ctCropModal';
+    m.innerHTML='<style>#ctCropModal{position:fixed;inset:0;z-index:99999;background:#050505;display:flex;flex-direction:column;font-family:Arial,sans-serif;color:#fff;touch-action:none}#ctCropModal .ch{padding:12px 14px 6px;font-weight:900;font-size:13px;color:#d4af37;text-align:center}#ctCropModal .cs{font-size:11px;color:#aaa;text-align:center;padding:0 14px 8px}#ctCropModal .stage{position:relative;flex:1;margin:0;overflow:hidden}#ctCropModal .stage img{position:absolute;user-select:none;-webkit-user-drag:none;pointer-events:none}#ctCropModal .shade{position:absolute;inset:0;pointer-events:none}#ctCropModal .box{position:absolute;border:2px solid #d4af37;box-shadow:0 0 0 9999px rgba(0,0,0,.6);border-radius:10px;cursor:move;touch-action:none}#ctCropModal .box:after{content:"";position:absolute;inset:0;border-radius:8px;background-image:linear-gradient(#ffffff33 1px,transparent 1px),linear-gradient(90deg,#ffffff33 1px,transparent 1px);background-size:33.33% 33.33%;pointer-events:none}#ctCropModal .hd{position:absolute;width:34px;height:34px;right:-17px;bottom:-17px;border-radius:50%;background:#d4af37;border:3px solid #111;touch-action:none;cursor:nwse-resize}#ctCropModal .hd.tl{left:-17px;top:-17px;right:auto;bottom:auto}#ctCropModal .bar{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom))}#ctCropModal .bar button{min-height:48px;border-radius:12px;font-weight:900;font-size:13px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#ctCropModal .bar .ok{background:#d4af37;color:#111;border:0}</style>'
+      +'<div class="ch">✂️ AJUSTA EL RECUADRO A LA CÉDULA / TARJETA</div><div class="cs">Arrastra el recuadro para moverlo y usa los círculos dorados para agrandarlo o achicarlo.</div>'
+      +'<div class="stage"><img alt=""><div class="box"><div class="hd tl"></div><div class="hd"></div></div></div>'
+      +'<div class="bar"><button type="button" class="cn">CANCELAR</button><button type="button" class="rt">↻ GIRAR</button><button type="button" class="ok">✔ USAR FOTO</button></div>';
+    document.body.appendChild(m);
+    var stage=m.querySelector('.stage'),im=m.querySelector('img'),box=m.querySelector('.box'),src=srcCv,R={},B={};
+    function layout(){var P=22,sw=stage.clientWidth,sh=stage.clientHeight,k=Math.min((sw-2*P)/src.width,(sh-2*P)/src.height);R={w:src.width*k,h:src.height*k};R.x=(sw-R.w)/2;R.y=(sh-R.h)/2;
+      im.src=src.toDataURL('image/jpeg',0.9);im.style.left=R.x+'px';im.style.top=R.y+'px';im.style.width=R.w+'px';im.style.height=R.h+'px';
+      var w=R.w*0.9,h=w/CR_RATIO;if(h>R.h*0.9){h=R.h*0.9;w=h*CR_RATIO;}B={w:w,h:h,x:R.x+(R.w-w)/2,y:R.y+(R.h-h)/2};paint();}
+    function clamp(){B.w=Math.max(70,Math.min(B.w,R.w));B.h=B.w/CR_RATIO;if(B.h>R.h){B.h=R.h;B.w=B.h*CR_RATIO;}B.x=Math.max(R.x,Math.min(B.x,R.x+R.w-B.w));B.y=Math.max(R.y,Math.min(B.y,R.y+R.h-B.h));}
+    function paint(){clamp();box.style.left=B.x+'px';box.style.top=B.y+'px';box.style.width=B.w+'px';box.style.height=B.h+'px';}
+    var drag=null;
+    function down(e,mode){e.preventDefault();e.stopPropagation();drag={mode:mode,px:e.clientX,py:e.clientY,b:{x:B.x,y:B.y,w:B.w,h:B.h}};try{stage.setPointerCapture(e.pointerId);}catch(_){}}
+    stage.addEventListener('pointerdown',function(e){var r=stage.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,near=function(px,py){return Math.hypot(x-px,y-py)<40;};
+      var mode=near(B.x+B.w,B.y+B.h)?'br':(near(B.x,B.y)?'tl':'mv');down(e,mode);});
+    m.addEventListener('pointermove',function(e){if(!drag)return;var dx=e.clientX-drag.px,dy=e.clientY-drag.py,o=drag.b;
+      if(drag.mode==='mv'){B.x=o.x+dx;B.y=o.y+dy;}
+      else if(drag.mode==='br'){var d=Math.max(dx,dy*CR_RATIO);B.w=o.w+d;B.x=o.x;B.y=o.y;clamp();if(B.x+B.w>R.x+R.w){B.w=R.x+R.w-B.x;}B.h=B.w/CR_RATIO;if(B.y+B.h>R.y+R.h){B.h=R.y+R.h-B.y;B.w=B.h*CR_RATIO;}}
+      else{var d2=Math.max(-dx,-dy*CR_RATIO),nw=Math.max(70,o.w+d2);nw=Math.min(nw,o.x+o.w-R.x,(o.y+o.h-R.y)*CR_RATIO);B.w=nw;B.h=nw/CR_RATIO;B.x=o.x+o.w-nw;B.y=o.y+o.h-B.h;}
+      paint();});
+    var up=function(){drag=null;};m.addEventListener('pointerup',up);m.addEventListener('pointercancel',up);
+    m.querySelector('.cn').onclick=function(){m.remove();};
+    m.querySelector('.rt').onclick=function(){var c=document.createElement('canvas');c.width=src.height;c.height=src.width;var x=c.getContext('2d');x.translate(c.width,0);x.rotate(Math.PI/2);x.drawImage(src,0,0);src=c;layout();};
+    m.querySelector('.ok').onclick=function(){var k=src.width/R.w,sx=(B.x-R.x)*k,sy=(B.y-R.y)*k,sw=B.w*k,sh=B.h*k,ow=1100,oh=Math.round(ow/CR_RATIO),o=document.createElement('canvas');o.width=ow;o.height=oh;var x=o.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,ow,oh);x.drawImage(src,sx,sy,sw,sh,0,0,ow,oh);ctPh[key]=o.toDataURL('image/jpeg',0.86);m.remove();ctPhotoPaint();};
+    requestAnimationFrame(layout);
+  }
   window.ctPhotoClear=function(key){delete ctPh[key];ctPhotoPaint();};
   function ctPhotoPaint(){CT_PH.forEach(function(x){var b=document.getElementById('ctPh_'+x[0]);if(!b)return;var d=ctPh[x[0]];b.querySelector('.ctph-prev').innerHTML=d?'<img src="'+d+'">':'<span>📷</span>';b.querySelector('.ctph-x').style.display=d?'':'none';b.classList.toggle('ok',!!d);});}
 
@@ -21213,6 +21244,6 @@ function jcpParseLicencia(raw){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.05.109"></script>
+<script src="./app-update.js?v=2026.11.05.110"></script>
 </body>
 </html>
