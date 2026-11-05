@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.05.105</title>
+<title>COLOMBIAUTOS JP - V2026.11.05.108</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5817,9 +5817,9 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.05.105"></script>
-<script src="./jcp-sync.js?v=2026.11.05.105"></script>
-<script src="./jcp-images.js?v=2026.11.05.105"></script>
+<script src="./jcp-accounting.js?v=2026.11.05.108"></script>
+<script src="./jcp-sync.js?v=2026.11.05.108"></script>
+<script src="./jcp-images.js?v=2026.11.05.108"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -12945,7 +12945,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.05.105\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.05.108\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -17189,7 +17189,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.05.105',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.05.108',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -20863,7 +20863,7 @@ function jcpParseLicencia(raw){
       sellerId:prev.sellerId||st.contractLastSeller||((sellers()[0]||{}).id||''),
       buyer:{nombre:up(s.buyer)||up((prev.buyer||{}).nombre),cedula:up(s.doc||cl.cedula)||up((prev.buyer||{}).cedula),direccion:up(s.address||cl.direccion)||up((prev.buyer||{}).direccion),telefono:String(s.phone||cl.telefono||(prev.buyer||{}).telefono||'').trim()},
       veh:(function(){var pv=prev.veh||{},o={marca:up(v.marca||v.m),clase:up(v.clase),linea:up(v.ref),modelo:up(v.modelo),placa:up(v.pl),color:up(v.color),servicio:up(v.servicio),capacidad:up(v.capacidad),chasis:up(v.chasis),motor:up(v.motor),soat:v.soatVence||v.soat||info.soat||'',tecno:v.tecnoVence||v.tecnomecanica||info.tecnomecanica||''};Object.keys(o).forEach(function(k){if(/^SIN REGISTRAR$/i.test(String(o[k]||'')))o[k]='';if(!String(o[k]||'').trim()&&pv[k])o[k]=pv[k];});return o;})(),
-      pago:payText(s)||prev.pago||'',noT:!!(v.additionalInfo&&v.additionalInfo.publicacion&&v.additionalInfo.publicacion.noTraspaso),entrega:prev.entrega||iso(isFinite(sDate)?new Date(sDate):new Date()),
+      pago:prev.pago||((+s.pending>0)?payText(s):'EN EFECTIVO'),noT:!!(v.additionalInfo&&v.additionalInfo.publicacion&&v.additionalInfo.publicacion.noTraspaso),entrega:prev.entrega||iso(isFinite(sDate)?new Date(sDate):new Date()),
       traspaso:prev.traspaso||'30',penal:prev.penal!=null?prev.penal:Math.round((+s.price||0)*0.10),gastos:prev.gastos||'50% POR EL COMPRADOR Y 50% POR EL VENDEDOR',
       impAnio:prev.impAnio||String(new Date().getFullYear()),impQuien:prev.impQuien||'EL VENDEDOR',adicionales:prev.adicionales||(+s.pending>0?'EL VENDEDOR SE RESERVA EL DOMINIO DEL VEHÍCULO HASTA EL PAGO TOTAL DEL SALDO DE '+fm(s.pending)+'.':'')};
     show('contratoVenta');render();window.scrollTo({top:0,behavior:'auto'});
@@ -20884,7 +20884,7 @@ function jcpParseLicencia(raw){
       sellerId:st.contractLastSeller||((sellers()[0]||{}).id||''),
       buyer:{nombre:buyer,cedula:doc||up(cl.cedula),direccion:up(gv('saleAddress')||cl.direccion),telefono:String(gv('salePhone')||cl.telefono||'').trim()},
       veh:{marca:up(v.marca||v.m),clase:up(v.clase),linea:up(v.ref),modelo:up(v.modelo),placa:up(v.pl),color:up(v.color),servicio:up(v.servicio),capacidad:up(v.capacidad),chasis:up(v.chasis),motor:up(v.motor),soat:v.soatVence||v.soat||info.soat||'',tecno:v.tecnoVence||v.tecnomecanica||info.tecnomecanica||''},
-      pago:payText({paymentDistribution:dist,received:received,pending:pending}),noT:!!(v.additionalInfo&&v.additionalInfo.publicacion&&v.additionalInfo.publicacion.noTraspaso),entrega:today,
+      pago:(pending>0?payText({paymentDistribution:dist,received:received,pending:pending}):'EN EFECTIVO'),noT:!!(v.additionalInfo&&v.additionalInfo.publicacion&&v.additionalInfo.publicacion.noTraspaso),entrega:today,
       traspaso:'30',penal:Math.round(price*0.10),gastos:'50% POR EL COMPRADOR Y 50% POR EL VENDEDOR',
       impAnio:String(new Date().getFullYear()),impQuien:'EL VENDEDOR',adicionales:(pending>0?'EL VENDEDOR SE RESERVA EL DOMINIO DEL VEHÍCULO HASTA EL PAGO TOTAL DEL SALDO DE '+fm(pending)+'.':'')};
     Object.keys(cur.veh).forEach(function(k){if(/^SIN REGISTRAR$/i.test(String(cur.veh[k]||'')))cur.veh[k]='';});
@@ -20911,7 +20911,7 @@ function jcpParseLicencia(raw){
         +ro('Marca','ctVmarca',c.veh.marca)+ro('Servicio','ctVservicio',c.veh.servicio)+ro('Clase','ctVclase',c.veh.clase)+ro('Capacidad','ctVcapacidad',c.veh.capacidad)
         +ro('Línea','ctVlinea',c.veh.linea)+ro('N.º chasis','ctVchasis',c.veh.chasis)+ro('Modelo','ctVmodelo',c.veh.modelo)+ro('N.º motor','ctVmotor',c.veh.motor)
         +ro('Placa','ctVplaca',c.veh.placa)+ro('SOAT – vence','ctVsoat',toMonth(c.veh.soat),'month',dshow(c.veh.soat))+ro('Color','ctVcolor',c.veh.color)+ro('Tecno – vence','ctVtecno',toMonth(c.veh.tecno),'month',dshow(c.veh.tecno))+'</div></div>'
-      +'<div class="ct-card"><div class="ct-t">PRECIO Y FORMA DE PAGO (SEGUNDA) <small class="ct-lock">🔒 VIENE DE LA VENTA</small></div><div style="font-size:18px;font-weight:900;color:#fff">'+fm(price)+'</div><div style="font-size:11px;color:#aaa;margin:2px 0 8px">'+esc(pesosLetras(price))+'</div>'+(String(c.pago||'').trim()?'<div class="ct-ro ct-full"><span>Forma de pago</span><b>'+esc(c.pago)+'</b></div>':'<label class="ct-f ct-miss"><span>Forma de pago · FALTA</span><textarea id="ctPago" rows="2"></textarea></label>')+'</div>'
+      +'<div class="ct-card"><div class="ct-t">PRECIO Y FORMA DE PAGO (SEGUNDA) <small class="ct-lock">🔒 PRECIO DE LA VENTA</small></div><div style="font-size:18px;font-weight:900;color:#fff">'+fm(price)+'</div><div style="font-size:11px;color:#aaa;margin:2px 0 8px">'+esc(pesosLetras(price))+'</div>'+'<label class="ct-f"><span>Forma de pago ✏️</span><textarea id="ctPago" rows="2">'+esc(c.pago)+'</textarea></label>'+chips('ctPago',[['Efectivo','EN EFECTIVO'],['Transferencia','POR TRANSFERENCIA BANCARIA']])+'<div class="ct-chips" style="margin-top:0"><button type="button" onclick="var t=document.getElementById(\'ctPago\');t.value=\'\';t.focus();">✕ BORRAR Y ESCRIBIR OTRO</button></div>'+'</div>'
       +'<div class="ct-card"><div class="ct-t">CLÁUSULAS ✏️ (ESTO SÍ SE PUEDE AJUSTAR)</div>'+(c.noT?'<div class="ct-not">🚫 CARRO SIN TRASPASO: SE TACHAN TRASPASO, VALOR DEL TRÁMITE E IMPUESTOS.</div>':'')+'<div class="ct-g">'
         +'<div class="ct-full">'+f('Tercera: entrega libre de gravamen hasta el día','ctEntrega',c.entrega,'date')+'</div>'
         +(c.noT?na('Cuarta: traspaso'):'<div>'+f('Cuarta: traspaso en (días hábiles)','ctTraspaso',c.traspaso,'','inputmode="numeric"')+chips('ctTraspaso',[['15','15'],['30','30'],['45','45'],['60','60']])+'</div>')
@@ -20933,7 +20933,7 @@ function jcpParseLicencia(raw){
     c.city=up(g('ctCity'));c.date=gv('ctDate',c.date);c.sellerId=g('ctSeller');
     var b=c.buyer||{};c.buyer={nombre:gv('ctBNombre',b.nombre,up),cedula:gv('ctBCedula',b.cedula,up),direccion:gv('ctBDir',b.direccion,up),telefono:gv('ctBTel',b.telefono,function(x){return x.trim();})};
     var v=c.veh||{};c.veh={marca:gv('ctVmarca',v.marca,up),clase:gv('ctVclase',v.clase,up),linea:gv('ctVlinea',v.linea,up),modelo:gv('ctVmodelo',v.modelo,up),placa:gv('ctVplaca',v.placa,up),color:gv('ctVcolor',v.color,up),servicio:gv('ctVservicio',v.servicio,up),capacidad:gv('ctVcapacidad',v.capacidad,up),chasis:gv('ctVchasis',v.chasis,up),motor:gv('ctVmotor',v.motor,up),soat:gv('ctVsoat',v.soat),tecno:gv('ctVtecno',v.tecno)};
-    c.pago=gv('ctPago',c.pago,up);c.entrega=g('ctEntrega');
+    c.pago=up(g('ctPago')).trim();c.entrega=g('ctEntrega');
     if(!c.noT){c.traspaso=g('ctTraspaso').replace(/\D/g,'');c.gastos=up(g('ctGastos'));c.impAnio=g('ctImpAnio').replace(/\D/g,'');c.impQuien=up(g('ctImpQuien'));}
     c.penal=parseFormattedMoney(g('ctPenal'));c.adicionales=up(g('ctAdic'));}
   function dshow(v){v=String(v||'');if(/^\d{4}-\d{2}-\d{2}$/.test(v))v=v.slice(0,7);if(/^\d{4}-\d{2}$/.test(v)){var mm=['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];return mm[+v.slice(5,7)-1]+' '+v.slice(0,4);}return v;}
@@ -21202,6 +21202,6 @@ function jcpParseLicencia(raw){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.05.105"></script>
+<script src="./app-update.js?v=2026.11.05.108"></script>
 </body>
 </html>
