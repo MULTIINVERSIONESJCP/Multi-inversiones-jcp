@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.10.26.87</title>
+<title>COLOMBIAUTOS JP - V2026.11.04.89</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -3847,6 +3847,24 @@ body.jcp-custom-theme .database-actions-list button{
 @media(min-width:760px){:is(#contabilidad,#contabilidadLibros) .acc-hub .cf-action-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}:is(#contabilidad,#contabilidadLibros) .acc-hub .cf-action small{display:block!important;font-size:9px!important;color:#9a9a9a!important}}
 @media(min-width:760px){:is(#contabilidad,#contabilidadLibros) .acc-hub .cf-action{min-height:120px!important}}
 #contabilidadDetalle .acc-kpis{margin:0 0 12px}
+
+/* v89: compra con escáner de tarjeta de propiedad */
+#formVeh .veh-mode{background:#121212;border:1px solid #3a321f;border-radius:14px;padding:14px}
+#formVeh .veh-mode-title,#formVeh .veh-section-title{font-size:11px;font-weight:900;letter-spacing:.5px;color:#d4af37;margin-bottom:10px}
+#formVeh .veh-mode-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#formVeh .veh-mode-btn{min-height:74px;border-radius:12px;border:1px solid #4a3d1c;background:#17130b;color:#fff;font-weight:900;font-size:12px;line-height:1.3}
+#formVeh .veh-mode-btn small{display:block;font-weight:600;color:#aaa;font-size:10px;margin-top:3px}
+#formVeh .veh-scan-status{font-size:12px;color:#ccc;margin-top:10px;min-height:0}
+#formVeh .veh-scan-status.busy{color:#d4af37}
+#formVeh .veh-scan-status.ok{color:#57d68d}
+#formVeh .veh-scan-status.bad{color:#ff6b6b}
+#formVeh .veh-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#formVeh .veh-f{display:flex;flex-direction:column;gap:3px;min-width:0}
+#formVeh .veh-f span{font-size:10px;color:#aaa;font-weight:800}
+#formVeh .veh-f input{width:100%;box-sizing:border-box;margin:0;text-transform:uppercase}
+#formVeh #purchaseSubmit{width:100%;margin-top:12px;min-height:46px}
+#formVeh input.veh-filled{border-color:#57d68d!important;box-shadow:0 0 0 1px rgba(87,214,141,.35)}
+@media(max-width:520px){#formVeh .veh-mode-grid{grid-template-columns:1fr}#formVeh .veh-mode-btn{min-height:56px}}
 </style>
 
 
@@ -4256,19 +4274,36 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </div>
 <div class="form" id="formVeh" style="display:none">
-<input id="vmarca" placeholder="Marca" required=""/>
-<input id="vref" placeholder="Referencia" required=""/>
-<input id="vmodelo" placeholder="Modelo" required="" type="text"/>
-<input id="vcilindraje" placeholder="Cilindraje (ej. 1600 / 1.6)" type="text"/>
-<input data-money="1" id="vcompra" inputmode="numeric" oninput="updatePaymentDistribution('purchase')" placeholder="Precio de compra" required="" type="text"/><div class="paydist" id="purchasePayDist"><div class="paydist-title">FORMA DE PAGO DE LA COMPRA</div><div class="paydist-grid">
-<label class="paydist-row"><span>EFECTIVO</span><input data-money="1" id="purchasePayCash" inputmode="numeric" oninput="payDistInput('purchase',this)" placeholder="$ 0" type="text"/></label>
-<label class="paydist-row"><span>BANCOLOMBIA</span><input data-money="1" id="purchasePayBancolombia" inputmode="numeric" oninput="payDistInput('purchase',this)" placeholder="$ 0" type="text"/></label>
-<label class="paydist-row"><span>DAVIVIENDA</span><input data-money="1" id="purchasePayDavivienda" inputmode="numeric" oninput="payDistInput('purchase',this)" placeholder="$ 0" type="text"/></label>
-<label class="paydist-row"><span>NEQUI</span><input data-money="1" id="purchasePayNequi" inputmode="numeric" oninput="payDistInput('purchase',this)" placeholder="$ 0" type="text"/></label>
-<label class="paydist-row"><span>DAVIPLATA</span><input data-money="1" id="purchasePayDaviplata" inputmode="numeric" oninput="payDistInput('purchase',this)" placeholder="$ 0" type="text"/></label>
-</div><div class="paydist-summary"><div><span>VALOR TOTAL</span><b id="purchasePayTotal">$0</b></div><div><span>DISTRIBUIDO</span><b id="purchasePayDistributed">$0</b></div><div class="bad" id="purchasePayPendingBox"><span>FALTA</span><b id="purchasePayPending">$0</b></div></div><div class="paydist-hint">La operación se habilita únicamente cuando la distribución coincide exactamente con el valor total.</div></div>
-<input id="vplaca" placeholder="Placa"/>
-<input id="vmatricula" placeholder="Matrícula de (ej. Bogotá)" type="text"/>
+<div class="full veh-mode" id="vehModeBox">
+<div class="veh-mode-title">¿CÓMO QUIERES INGRESAR LOS DATOS DEL VEHÍCULO?</div>
+<div class="veh-mode-grid">
+<button type="button" class="veh-mode-btn" onclick="vehScanPick('camera')">📷 TOMAR FOTO<br><small>Escanear tarjeta de propiedad</small></button>
+<button type="button" class="veh-mode-btn" onclick="vehScanPick('gallery')">🖼️ CARGAR DE GALERÍA<br><small>Foto de la tarjeta de propiedad</small></button>
+<button type="button" class="veh-mode-btn" onclick="vehManualMode()">✍️ INGRESAR MANUAL<br><small>Escribir los datos</small></button>
+</div>
+<input accept="image/*" capture="environment" id="vehScanCamera" style="display:none" type="file" onchange="vehScanFile(this)"/>
+<input accept="image/*" id="vehScanGallery" style="display:none" type="file" onchange="vehScanFile(this)"/>
+<div class="veh-scan-status" id="vehScanStatus"></div>
+</div>
+<div class="full veh-fields" id="vehFieldsBox" style="display:none">
+<div class="veh-section-title">DATOS DEL VEHÍCULO (TARJETA DE PROPIEDAD)</div>
+<div class="veh-grid">
+<label class="veh-f"><span>Marca *</span><input id="vmarca" placeholder="MARCA" required=""/></label>
+<label class="veh-f"><span>Clase</span><input id="vclase" placeholder="AUTOMÓVIL, CAMIONETA…"/></label>
+<label class="veh-f"><span>Línea *</span><input id="vref" placeholder="LÍNEA" required=""/></label>
+<label class="veh-f"><span>Modelo *</span><input id="vmodelo" placeholder="AÑO" required="" type="text" inputmode="numeric"/></label>
+<label class="veh-f"><span>Placa *</span><input id="vplaca" placeholder="PLACA"/></label>
+<label class="veh-f"><span>Color</span><input id="vcolor" placeholder="COLOR"/></label>
+<label class="veh-f"><span>Servicio</span><input id="vservicio" placeholder="PARTICULAR / PÚBLICO"/></label>
+<label class="veh-f"><span>Capacidad</span><input id="vcapacidad" placeholder="EJ: 5 PASAJEROS"/></label>
+<label class="veh-f"><span>N.º chasis</span><input id="vchasis" placeholder="CHASIS / VIN"/></label>
+<label class="veh-f"><span>N.º motor</span><input id="vmotor" placeholder="MOTOR"/></label>
+<label class="veh-f"><span>Cilindraje</span><input id="vcilindraje" placeholder="EJ: 1600" type="text"/></label>
+<label class="veh-f"><span>Matrícula de</span><input id="vmatricula" placeholder="EJ: BOGOTÁ" type="text"/></label>
+<label class="veh-f"><span>SOAT – vence</span><input id="vsoatVence" type="date"/></label>
+<label class="veh-f"><span>Tecno – vence</span><input id="vtecnoVence" type="date"/></label>
+</div>
+<div class="veh-section-title" style="margin-top:12px">PROVEEDOR Y FOTO</div>
 <label class="full" style="position:relative;display:block">
   <input id="vVendedor" placeholder="🔍 Buscar proveedor" autocomplete="off" oninput="purchaseSellerInput()" onfocus="purchaseSellerSuggestions()" onblur="setTimeout(hidePurchaseSellerSuggestions,200)" style="width:100%"/>
   <div class="client-suggestions" id="purchaseSellerSuggestions" style="display:none"></div>
@@ -4277,7 +4312,16 @@ body.jcp-custom-theme .database-actions-list button{
 <label class="full" style="color:#a8a8a8;font-size:13px">📷 Foto del vehículo
   <input accept="image/*" id="vfoto" style="margin-top:6px" type="file"/>
 </label>
+<div class="veh-section-title" style="margin-top:12px">PRECIO DE COMPRA</div>
+<input data-money="1" id="vcompra" inputmode="numeric" oninput="updatePaymentDistribution('purchase')" placeholder="$ PRECIO DE COMPRA" required="" type="text"/><div class="paydist" id="purchasePayDist"><div class="paydist-title">FORMA DE PAGO DE LA COMPRA</div><div class="paydist-grid">
+<label class="paydist-row"><span>EFECTIVO</span><input data-money="1" id="purchasePayCash" inputmode="numeric" oninput="payDistInput('purchase',this)" placeholder="$ 0" type="text"/></label>
+<label class="paydist-row"><span>BANCOLOMBIA</span><input data-money="1" id="purchasePayBancolombia" inputmode="numeric" oninput="payDistInput('purchase',this)" placeholder="$ 0" type="text"/></label>
+<label class="paydist-row"><span>DAVIVIENDA</span><input data-money="1" id="purchasePayDavivienda" inputmode="numeric" oninput="payDistInput('purchase',this)" placeholder="$ 0" type="text"/></label>
+<label class="paydist-row"><span>NEQUI</span><input data-money="1" id="purchasePayNequi" inputmode="numeric" oninput="payDistInput('purchase',this)" placeholder="$ 0" type="text"/></label>
+<label class="paydist-row"><span>DAVIPLATA</span><input data-money="1" id="purchasePayDaviplata" inputmode="numeric" oninput="payDistInput('purchase',this)" placeholder="$ 0" type="text"/></label>
+</div><div class="paydist-summary"><div><span>VALOR TOTAL</span><b id="purchasePayTotal">$0</b></div><div><span>DISTRIBUIDO</span><b id="purchasePayDistributed">$0</b></div><div class="bad" id="purchasePayPendingBox"><span>FALTA</span><b id="purchasePayPending">$0</b></div></div><div class="paydist-hint">La operación se habilita únicamente cuando la distribución coincide exactamente con el valor total.</div></div>
 <button class="full paydist-locked" disabled="" id="purchaseSubmit" onclick="addVeh()">Guardar vehículo</button>
+</div>
 </div>
 <div class="inventory-gold-line"></div>
 <div aria-label="Resumen del inventario" class="inventory-mini-summary">
@@ -4816,7 +4860,6 @@ body.jcp-custom-theme .database-actions-list button{
 <button class="cf-action" onclick="show('carteraCaja')"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="receivable"></span><div><b>Cuentas por cobrar</b><small>Ventas a crédito y préstamos pendientes</small></div></button>
 <button class="cf-action" onclick="openObligationsModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="loans"></span><div><b>Cuentas por pagar</b><small>Préstamos, créditos, saldos y pagos pendientes</small></div></button>
 <button class="cf-action" onclick="openUtilitiesModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="capital"></span><div><b>Utilidades</b><small>Utilidad acumulada, retiros e historial</small></div></button>
-<button class="cf-action" onclick="openFixedExpenses()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="fixed"><svg aria-hidden="true" viewbox="0 0 48 48"><rect x="9" y="10" width="30" height="30" rx="4" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M17 6v8M31 6v8M9 19h30M18 29l4 4 8-8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></span><div><b>Gastos fijos</b><small>Pagos del mes y su avance</small></div></button>
 
 <button class="cf-action" onclick="openAccountingModule()"><span class="jcp-app-icon jcp-fin-icon" data-jcp-icon="accounting"><svg aria-hidden="true" viewbox="0 0 48 48"><path d="M10 8h21a7 7 0 0 1 7 7v25H16a6 6 0 0 1-6-6V8Z" fill="none" stroke="currentColor" stroke-width="2"></path><path d="M16 8v32M21 16h11M21 22h11M21 28h7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span><div><b>Contabilidad</b><small>Libros y estados financieros</small></div></button>
 
@@ -4896,6 +4939,10 @@ body.jcp-custom-theme .database-actions-list button{
   <div class="sales-menu-card jcp-icon-card" onclick="show('historialObligaciones')">
     <span class="jcp-app-icon sales-menu-icon" data-jcp-icon="history"></span>
     <b>Historial de cuentas por pagar</b>
+  </div>
+  <div class="sales-menu-card jcp-icon-card" onclick="openFixedExpenses()">
+    <span class="jcp-app-icon sales-menu-icon"><svg aria-hidden="true" viewbox="0 0 48 48"><rect x="9" y="10" width="30" height="30" rx="4" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M17 6v8M31 6v8M9 19h30M18 29l4 4 8-8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></span>
+    <b>Gastos fijos</b>
   </div>
 </div>
 </section>
@@ -5065,6 +5112,17 @@ body.jcp-custom-theme .database-actions-list button{
 <div class="unified-module-note">💡 Cada cadena es ganancia guardada: la cuota sale de la caja pero no es gasto. Se registra desde Gastos operacionales con la categoría CADENA. Aquí ves el avance de cada una y registras cuando te toque el turno.</div>
 </div>
 <div id="cadContent"></div>
+</section>
+<section class="view" id="contratoVenta">
+<div class="unified-module-header">
+<div class="unified-module-title-row"><div class="unified-module-brand">
+<img alt="COLOMBIAUTOS JP" class="unified-module-logo" id="contratoVentaLogo" src="logo-3.jpg"/>
+<h2 class="unified-module-title"><span class="unified-module-icon">📄</span> CONTRATO DE COMPRAVENTA</h2>
+</div></div>
+<div class="unified-module-gold-line"></div>
+<div class="unified-module-note">💡 Revisa los datos, ajusta las cláusulas y genera el contrato para imprimir o guardar en PDF.</div>
+</div>
+<div id="ctContent"></div>
 </section>
 <section class="view" id="estadoCuenta">
 <div class="unified-module-header">
@@ -5689,9 +5747,9 @@ body.jcp-custom-theme .database-actions-list button{
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.10.26.87"></script>
-<script src="./jcp-sync.js?v=2026.10.26.87"></script>
-<script src="./jcp-images.js?v=2026.10.26.87"></script>
+<script src="./jcp-accounting.js?v=2026.11.04.89"></script>
+<script src="./jcp-sync.js?v=2026.11.04.89"></script>
+<script src="./jcp-images.js?v=2026.11.04.89"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -7221,6 +7279,7 @@ function renderUtilitiesModule(){
   setMoney('utilitiesWithdrawn',f.profitWithdrawals);
   setMoney('utilitiesCapitalized',f.profitCapitalized||0);
   setMoney('utilitiesAvailable',f.profitAvailable);
+  try{const ua=document.getElementById('utilitiesAvailable');if(ua)ua.style.setProperty('color',(f.profitAvailable||0)<0?'#ff6b6b':'','important');}catch(e){}
   setMoney('utilitiesCadenas',f.profitInCadenas||0);
   setMoney('utilitiesGross',f.grossProfit||0);
 }
@@ -7451,7 +7510,7 @@ function jcpFixedStatus(month){
 function jcpFixedColor(p){p=Math.max(0,Math.min(1,p));if(p>=0.999)return '#1b6e34';const hue=Math.round(p*120),light=Math.round(48-p*10);return 'hsl('+hue+',72%,'+light+'%)';}
 function jcpFixedBarHtml(st,compact){
   const pct=Math.round(st.pct*100),col=jcpFixedColor(st.pct);
-  const label=st.n?(st.nd===st.n?'¡TODOS LOS GASTOS FIJOS PAGADOS!':'PAGADO '+money(st.paidAmt)+' DE '+money(st.total)+' · '+st.nd+' DE '+st.n+' GASTOS'):'AÚN NO TIENES GASTOS FIJOS. CRÉALOS EN FINANZAS → GASTOS FIJOS.';
+  const label=st.n?(st.nd===st.n?'¡TODOS LOS GASTOS FIJOS PAGADOS!':'PAGADO '+money(st.paidAmt)+' DE '+money(st.total)+' · '+st.nd+' DE '+st.n+' GASTOS'):'AÚN NO TIENES GASTOS FIJOS. CRÉALOS EN FINANZAS → CUENTAS POR PAGAR → GASTOS FIJOS.';
   return '<div style="'+(compact?'margin:12px 0 4px;cursor:pointer;':'')+'background:#121212;border:1px solid #3a321f;border-radius:14px;padding:12px 14px" '+(compact?'onclick="openFixedExpenses()" role="button"':'')+'><div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:8px"><b style="font-size:11px;letter-spacing:.6px;color:#d4af37">GASTOS FIJOS · '+priceEsc(jcpMonthLabel(st.month))+'</b><b style="font-size:13px;color:'+col+'">'+pct+'%</b></div><div style="height:12px;background:#2a2a2a;border-radius:7px;overflow:hidden"><div style="height:100%;width:'+Math.max(st.n?4:0,pct)+'%;background:'+col+';border-radius:7px;transition:width .3s,background .3s"></div></div><div style="font-size:10.5px;color:#aaa;margin-top:7px">'+label+'</div></div>';
 }
 function jcpMonthLabel(k){const [y,m]=String(k).split('-');return (JCP_MONTHS[(+m||1)-1]||'')+' '+y;}
@@ -7510,9 +7569,11 @@ function deleteFixedForm(){
 function refreshFixedSelect(auto){
   const wrap=document.getElementById('opExpenseFixedWrap'),sel=document.getElementById('opExpenseFixed');if(!wrap||!sel)return;
   const list=jcpFixedList(),cat=String(document.getElementById('opExpenseCategory')?.value||'').toUpperCase();
-  if(!list.length||/CADENA/.test(cat)){wrap.style.display='none';sel.innerHTML='<option value=""></option>';sel.value='';return;}
+  // Solo aparece cuando la categoría escogida tiene gastos fijos; en las demás queda oculto.
+  const same=list.filter(g=>String(g.category||'').toUpperCase()===cat);
+  if(!same.length||/CADENA/.test(cat)){wrap.style.display='none';sel.innerHTML='<option value=""></option>';sel.value='';delete sel.dataset.manual;return;}
   wrap.style.display='';
-  const st=jcpFixedStatus(),cur=sel.value;
+  const st=jcpFixedStatus(),cur=sel.value;st.rows=st.rows.filter(r=>String(r.g.category||'').toUpperCase()===cat);
   sel.innerHTML='<option value="">NO ES GASTO FIJO</option>'+st.rows.map(r=>'<option value="'+priceEsc(r.g.id)+'">'+priceEsc(r.g.name)+' · '+money(+r.g.amount||0)+(r.done?' (YA PAGADO)':'')+'</option>').join('');
   if(sel.dataset.manual==='1'&&!auto){sel.value=cur;return;}
   if(sel.dataset.manual==='1'){if([...sel.options].some(o=>o.value===cur))sel.value=cur;return;}
@@ -7568,7 +7629,7 @@ function renderUnifiedProfitAvailable(){
     '#retiroGanancias [data-profit-available]'
   ];
   selectors.forEach(sel=>{
-    document.querySelectorAll(sel).forEach(el=>{el.textContent=money(f.profitAvailable);});
+    document.querySelectorAll(sel).forEach(el=>{el.textContent=money(f.profitAvailable);el.style.setProperty('color',(f.profitAvailable||0)<0?'#ff6b6b':'','important');});
   });
 }
 
@@ -7761,7 +7822,7 @@ function show(id){
   try{
     const src=document.querySelector('#vehiculos .inventory-inline-logo');
     const logoMap={
-      cajaCapital:'cashCapitalLogo',estadoCuenta:'estadoCuentaLogo',gastosFijos:'gastosFijosLogo',resumenMensualUtil:'resumenMensualLogo',acumuladoCadenas:'acumuladoCadenasLogo',pasarCapital:'pasarCapitalLogo',contabilidadLibros:'accLibrosLogo',extractos:'extractosLogo',detalleCapital:'detalleCapitalLogo',
+      cajaCapital:'cashCapitalLogo',contratoVenta:'contratoVentaLogo',estadoCuenta:'estadoCuentaLogo',gastosFijos:'gastosFijosLogo',resumenMensualUtil:'resumenMensualLogo',acumuladoCadenas:'acumuladoCadenasLogo',pasarCapital:'pasarCapitalLogo',contabilidadLibros:'accLibrosLogo',extractos:'extractosLogo',detalleCapital:'detalleCapitalLogo',
       capitalFinanciacion:'capitalFinLogo',pagoObligaciones:'pagoObligLogo',nuevaFinanciacion:'nuevaFinLogo',
       obligacionesPendientes:'obligPendLogo',cierreCaja:'cierreCajaLogo',historialFinanciero:'histFinLogo',
       historialCapitalFinanciacion:'capitalFinHistLogo',carteraCaja:'carteraCajaLogo',carteraVehiculos:'carteraVehLogo',carteraPrestamos:'carteraPresLogo',
@@ -9256,7 +9317,9 @@ async function addVeh(){
  if(vendedorTyped&&!vendedorRec){alert('SELECCIONA EL PROVEEDOR DE LA LISTA DE LA BASE DE DATOS. SI NO EXISTE, CRÉALO PRIMERO EN BASE DE DATOS.');vendedorInput?.focus();return;}
  const vendedor=vendedorRec?String(vendedorRec.nombre||'').trim().toUpperCase():'';
  const compra=numericValue('vcompra');
- if(!marca||!referencia||!modelo||!placa||compra<=0){alert('COMPLETA LOS DATOS DE LA COMPRA.');return;}
+ const gv=id=>(document.getElementById(id)?.value||'').trim().toUpperCase();
+ const extra={clase:gv('vclase'),color:gv('vcolor'),servicio:gv('vservicio'),capacidad:gv('vcapacidad'),chasis:gv('vchasis').replace(/\s+/g,''),motor:gv('vmotor').replace(/\s+/g,''),soatVence:document.getElementById('vsoatVence')?.value||'',tecnoVence:document.getElementById('vtecnoVence')?.value||''};
+ if(!marca||!referencia||!modelo||!placa||compra<=0){alert('COMPLETA LOS DATOS DE LA COMPRA: MARCA, LÍNEA, MODELO, PLACA Y PRECIO.');return;}
  if(!validatePaymentDistribution('purchase',compra))return;
  if((data.veh||[]).some(v=>String(v.pl||'').trim().toUpperCase().replace(/\s+/g,'')===placa)){alert('YA EXISTE UN VEHÍCULO CON ESA PLACA.');return;}
  const file=vfoto.files[0];let photo='';
@@ -9268,7 +9331,7 @@ async function addVeh(){
   const moveId='mov_compra_'+Date.now();
   const dist=applyPaymentDistribution(next,{prefix:'purchase',direction:'out',total:compra,operationType:'COMPRA VEHÍCULO',operationId:moveId,receiptNumber:receipt.number,concept:'COMPRA '+placa,date:receipt.date,createdAt:receipt.createdAt});
   receipt.snapshot.paymentDistribution=cloneAppData(dist);
-  next.veh.push({id,marca,m:marca,ref:referencia,modelo,cilindraje,pl:placa,matricula,vendedor,vendedorId:vendedorRec?vendedorId:'',c:compra,g:0,v:0,photo,purchaseDate:now.toISOString().slice(0,10),purchaseReceiptNumber:receipt.number});
+  next.veh.push({id,marca,m:marca,ref:referencia,modelo,cilindraje,pl:placa,matricula,...extra,soat:extra.soatVence||undefined,tecnomecanica:extra.tecnoVence||undefined,vendedor,vendedorId:vendedorRec?vendedorId:'',c:compra,g:0,v:0,photo,purchaseDate:now.toISOString().slice(0,10),purchaseReceiptNumber:receipt.number});
   next.mov.unshift({id:moveId,t:'gasto',subtype:'compra_vehiculo',c:'COMPRA VEHÍCULO — '+placa+' — '+marca+' '+referencia,v:compra,vehicleId:id,receiptNumber:receipt.number,paymentDistribution:dist,date:receipt.date,createdAt:receipt.createdAt,source:'vehicle_purchase',investmentMovement:true});
   data=next;save();clearVehicleForm();clearPaymentDistribution('purchase');populateVehicleSelect();document.getElementById('formVeh').style.display='none';openOperationsHub();alert('✅ '+receipt.number+' REGISTRADO.');
  }catch(e){data=before;alert('NO FUE POSIBLE REGISTRAR LA COMPRA.\n\n'+e.message);}
@@ -9282,6 +9345,8 @@ document.getElementById('vmatricula').value="";
 document.getElementById('vVendedor').value="";document.getElementById('vVendedor').dataset.sellerId="";document.getElementById('vVendedor').style.borderColor="";
 document.getElementById('vplaca').value="";
 document.getElementById('vcompra').value="";
+['vclase','vcolor','vservicio','vcapacidad','vchasis','vmotor','vsoatVence','vtecnoVence'].forEach(id=>{const e=document.getElementById(id);if(e){e.value='';e.classList.remove('veh-filled');}});
+try{vehResetMode();}catch(_e){}
 document.getElementById('vfoto').value="";
 const pv=document.getElementById('vfotoPreview');if(pv){pv.src='';pv.style.display='none';}
 }
@@ -11988,6 +12053,7 @@ function saveVehicleSale(){
   }
 
   alert('✅ '+receipt.number+' REGISTRADO.');
+  try{if(confirm('¿GENERAR AHORA EL CONTRATO DE COMPRAVENTA DE ESTE VEHÍCULO?'))openSaleContract(soldVehicle.id);}catch(_e){}
   return true;
 }
 function closeBatchExpense(){
@@ -12402,9 +12468,9 @@ function renderSalesHistory(){
     sold.map(x=>{
       const s=x.sale||{},voided=!!s.voided||x.status==='venta_anulada';
       const number=s.receiptNumber||'LEGADO',receipt=number!=='LEGADO'?findInternalReceipt(number):null;
-      const action=receipt&&!voided
+      const action=(!voided?`<button type="button" onclick="openSaleContract('${jcpInlineJsArg(String(x.id||''))}')" style="padding:7px 9px;font-size:10px;background:#17130b;color:#d4af37;border:1px solid #4a3d1c;margin-right:4px">📄 CONTRATO</button>`:'')+(receipt&&!voided
         ? `<button type="button" onclick="voidInternalReceipt('${jcpInlineJsArg(number)}')" style="padding:7px 9px;font-size:10px;background:#1a0b0b;color:#ff7777;border:1px solid #633">🔒 ANULAR</button>`
-        : '—';
+        : (voided?'—':''));
       return `<tr>
         <td>${priceEsc(number)}</td>
         <td>${priceEsc(saleDisplayDate(x))}</td>
@@ -12728,7 +12794,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.10.26.87\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.04.89\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -14160,6 +14226,7 @@ function openOperationsPurchase(){
     if(!form.dataset.originalParent) form.dataset.originalParent='vehiculos';
     host.appendChild(form);
     form.style.display='grid';
+    try{vehResetMode();}catch(_e){}
     host.style.display='block';
     host.scrollIntoView({behavior:'smooth',block:'start'});
   }
@@ -16958,7 +17025,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.10.26.87',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.04.89',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -19882,7 +19949,8 @@ window.jcpExtractMov=function(){
   document.addEventListener('input',function(e){
     var el=root();if(!el||!el.contains(e.target))return;
     var r=e.target.closest('[data-cc2-real]');
-    if(r){st.real[r.dataset.cc2Real]=r.value.trim()===''?null:parseMoney(r.value);refreshLive();return;}
+    if(r){var neg=/^\s*-/.test(r.value),dg=r.value.replace(/\D/g,'');var fv=dg?(neg?'-':'')+Number(dg).toLocaleString('es-CO'):(neg?'-':'');if(r.value!==fv){var fromEnd=r.value.length-(r.selectionEnd==null?r.value.length:r.selectionEnd);r.value=fv;try{var pos=Math.max(0,fv.length-fromEnd);r.setSelectionRange(pos,pos);}catch(_e){}}
+      st.real[r.dataset.cc2Real]=dg===''?null:(neg?-1:1)*Number(dg);refreshLive();return;}
     if(e.target.id==='cc2Obs')st.obs=e.target.value;
     if(e.target.id==='cc2Reason')st.reason=e.target.value;
   });
@@ -20191,7 +20259,7 @@ window.jcpExtractMov=function(){
   document.addEventListener('change',function(e){if(e.target&&e.target.id==='ccDebtSelect')setTimeout(refreshDebtSourceNote,0);});
   function paintSplit(){
     var f=snap();if(!f)return;
-    var put=function(id,v){var x=el(id);if(x)x.textContent=money(v);};
+    var put=function(id,v){var x=el(id);if(x){x.textContent=money(v);x.style.setProperty('color',(+v||0)<0?'#ff6b6b':'','important');}};
     put('ccAvailableCapital',f.availableCapital);put('ccAvailableProfit',f.availableProfit);
     put('availableDetailCapital',f.availableCapital);put('availableDetailProfit',f.availableProfit);
   }
@@ -20406,6 +20474,235 @@ window.jcpExtractMov=function(){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
+<script id="jcp-compra-contrato">
+(function(){
+  'use strict';
+  function el(id){return document.getElementById(id);}
+  function esc(v){return typeof priceEsc==='function'?priceEsc(v):String(v==null?'':v);}
+  function up(v){return String(v==null?'':v).trim().toUpperCase();}
+  function fm(v){return money(Math.round(+v||0));}
+  /* ================= ESCÁNER DE TARJETA DE PROPIEDAD ================= */
+  // Lector de licencia de tránsito (tarjeta de propiedad) colombiana: texto OCR -> campos.
+function jcpParseLicencia(raw){
+  var BR=['CHEVROLET','RENAULT','MAZDA','KIA','HYUNDAI','NISSAN','TOYOTA','FORD','VOLKSWAGEN','SUZUKI','FIAT','PEUGEOT','CHERY','DFSK','JAC','HONDA','MITSUBISHI','BMW','MERCEDES BENZ','MERCEDES-BENZ','AUDI','SKODA','SEAT','CITROEN','JEEP','DODGE','SUBARU','YAMAHA','BAJAJ','AKT','VOLVO','GREAT WALL','BYD','DAEWOO','ISUZU','HINO','FOTON','SSANGYONG','LAND ROVER','MINI','PORSCHE','CHRYSLER','RAM','GMC','CHANGAN','DAIHATSU','LIFAN','ZOTYE','GEELY','MG','JMC','JETOUR','HAVAL','DONGFENG','TVS','VICTORY','KAWASAKI','KTM','HERO','ROYAL ENFIELD','SUZUKI MOTOR','RENAULT TRUCKS','INTERNATIONAL','KENWORTH','FREIGHTLINER','CHANA','SAIC WULING','WULING'];
+  var COL=['BLANCO','NEGRO','GRIS','PLATA','PLATEADO','ROJO','AZUL','VERDE','AMARILLO','BEIGE','DORADO','CAFE','CAFÉ','VINOTINTO','NARANJA','MORADO','BRONCE','MARRON','MARRÓN','CHAMPAGNE','TITANIO','PERLA','GRAFITO','CELESTE','TURQUESA','OCRE','ARENA','HUMO','LILA','ROSADO','UVA','MOSTAZA','GRANATE','VINO','COBRE','ACERO'];
+  var CLS=['AUTOMOVIL','AUTOMÓVIL','CAMIONETA','CAMPERO','MOTOCICLETA','CAMION','CAMIÓN','BUS','BUSETA','MICROBUS','MICROBÚS','VOLQUETA','TRACTOCAMION','TRACTOCAMIÓN','CUATRIMOTO','MOTOCARRO','MOTOCICLO','FURGON','FURGÓN'];
+  var txt=String(raw||'').toUpperCase().replace(/[|¦]/g,' ').replace(/[“”"']/g,' ');
+  var noacc=function(x){return x.normalize('NFD').replace(/[̀-ͯ]/g,'');};
+  var T=noacc(txt);
+  var lines=T.split(/\n+/).map(function(l){return l.replace(/\s+/g,' ').trim();}).filter(Boolean);
+  var out={};
+  // valor en la línea siguiente a la etiqueta, o después de la etiqueta en la misma línea
+  function after(labelRe){
+    for(var i=0;i<lines.length;i++){var m=lines[i].match(labelRe);if(!m)continue;
+      var rest=lines[i].slice(m.index+m[0].length).replace(/^[\s:.\-]+/,'').trim();
+      if(rest)return {same:rest,next:lines[i+1]||'',idx:i};
+      return {same:'',next:lines[i+1]||'',idx:i};}
+    return null;
+  }
+  // PLACA
+  var pm=T.match(/\b([A-Z]{3})\s?-?\s?(\d{3})\b/)||T.match(/\b([A-Z]{3})\s?(\d{2}[A-Z])\b/);
+  var pa=after(/PLACA/);
+  if(pa){var c=(pa.same+' '+pa.next).match(/\b([A-Z]{3})\s?-?\s?(\d{2}[\dA-Z])\b/);if(c)pm=c;}
+  if(pm)out.placa=pm[1]+pm[2];
+  // MARCA
+  var brand='';BR.slice().sort(function(a,b){return b.length-a.length;}).some(function(b){var re=new RegExp('(^|[^A-Z])'+b.replace(/[-]/g,'[- ]')+'([^A-Z]|$)');if(re.test(T)){brand=b.replace('MERCEDES-BENZ','MERCEDES BENZ');return true;}return false;});
+  if(brand)out.marca=brand;
+  // MODELO (año)
+  var ma=after(/MODELO/);var yr=null;
+  if(ma){yr=(ma.same+' '+ma.next).match(/\b(19[5-9]\d|20[0-3]\d)\b/);}
+  if(!yr)yr=T.match(/\b(19[7-9]\d|20[0-3]\d)\b/);
+  if(yr)out.modelo=yr[1];
+  // LINEA: lo que sigue a la marca en la misma línea, o bajo la etiqueta LINEA
+  var la=after(/LINEA/);
+  var lineaVal='';
+  if(brand){for(var i=0;i<lines.length;i++){var k=lines[i].indexOf(brand.split(' ')[0]);if(k<0||/MARCA/.test(lines[i])&&lines[i].replace(/MARCA/,'').trim().length<brand.length)continue;var rest=lines[i].slice(k+brand.length).trim();rest=rest.replace(/\b(19|20)\d{2}\b.*$/,'').trim();if(rest&&!/LINEA|MODELO/.test(rest)){lineaVal=rest;break;}}}
+  if(!lineaVal&&la){lineaVal=(la.same&&!/MODELO|CILIND/.test(la.same)?la.same:la.next).replace(/\b(19|20)\d{2}\b.*$/,'').trim();if(brand)lineaVal=lineaVal.replace(brand,'').trim();}
+  if(lineaVal)out.linea=lineaVal.split(' ').slice(0,4).join(' ');
+  // CILINDRAJE
+  var ca=after(/CILINDRA(JE|DA)/);var cc=null;
+  if(ca)cc=(ca.same+' '+ca.next).match(/\b(\d{2,5})\b/);
+  if(!cc)cc=T.match(/\b(\d{3,4})\s*C\.?C\b/);
+  if(cc)out.cilindraje=cc[1];
+  // COLOR
+  var co=after(/COLOR/),colorTxt=co?(co.same||co.next):T;
+  var cfound='';COL.some(function(c){var cn=noacc(c);var m=colorTxt.match(new RegExp('\\b'+cn+'(\\s+[A-Z]{3,}){0,2}'));if(m){cfound=m[0];return true;}return false;});
+  if(!cfound)COL.some(function(c){var cn=noacc(c);var m=T.match(new RegExp('\\b'+cn+'(\\s+[A-Z]{3,})?\\b'));if(m){cfound=m[0];return true;}return false;});
+  if(cfound)out.color=cfound.replace(/\s+(SERVICIO|CLASE|PARTICULAR|PUBLICO|AUTOMOVIL|CAMIONETA)\b.*$/,'').trim();
+  // SERVICIO
+  var sv=T.match(/\b(PARTICULAR|PUBLICO|OFICIAL|DIPLOMATICO|ESPECIAL)\b/);if(sv)out.servicio=sv[1]==='PUBLICO'?'PÚBLICO':sv[1];
+  // CLASE
+  var cl='';CLS.some(function(c){var cn=noacc(c);if(new RegExp('\\b'+cn+'\\b').test(T)){cl=cn;return true;}return false;});
+  if(cl)out.clase=cl.replace('AUTOMOVIL','AUTOMÓVIL').replace('CAMION','CAMIÓN').replace('MICROBUS','MICROBÚS');
+  // CAPACIDAD
+  var cp=after(/CAPACIDAD/);var cap=null;
+  if(cp)cap=(cp.same+' '+cp.next).match(/\b(\d{1,3})\s*(PSJ|PAS|PASAJEROS|SILLAS)?\b/);
+  if(!cap)cap=T.match(/\b(\d{1,2})\s*(PSJ|PASAJEROS)\b/);
+  if(cap)out.capacidad=cap[1]+(cap[2]||/PSJ|PASAJ/.test(cp?cp.same+cp.next:'')?' PASAJEROS':'');
+  // VIN / CHASIS / MOTOR
+  var vin=T.match(/\b([A-HJ-NPR-Z0-9]{17})\b/);
+  var ch=after(/CHASIS|CHASIS N|N.? DE CHASIS/);var chv=null;
+  if(ch)chv=(ch.same+' '+ch.next).match(/\b([A-Z0-9]{8,20})\b/);
+  if(chv&&!/^(NUMERO|CHASIS|MOTOR|SERIE)/.test(chv[1]))out.chasis=chv[1];else if(vin)out.chasis=vin[1];
+  var mo=after(/MOTOR/);var mov=null;
+  if(mo){var cand=(mo.same+' '+mo.next).split(' ').filter(function(w){return /^[A-Z0-9*\-]{6,20}$/.test(w)&&/\d/.test(w)&&w!==out.chasis;});if(cand.length)mov=cand[0];}
+  if(mov)out.motor=mov.replace(/[*]/g,'');
+  return out;
+}
+
+
+  window.jcpParseLicencia=jcpParseLicencia;
+  function status(t,cls){var s=el('vehScanStatus');if(s){s.textContent=t||'';s.className='veh-scan-status'+(cls?' '+cls:'');}}
+  window.vehResetMode=function(){var b=el('vehFieldsBox');if(b)b.style.display='none';var m=el('vehModeBox');if(m)m.style.display='';status('');};
+  window.vehManualMode=function(){var b=el('vehFieldsBox');if(b)b.style.display='';status('');setTimeout(function(){try{el('vmarca').focus();}catch(e){}},50);};
+  window.vehScanPick=function(kind){var i=el(kind==='camera'?'vehScanCamera':'vehScanGallery');if(i){i.value='';i.click();}};
+  var tessPromise=null;
+  function loadTesseract(){
+    if(window.Tesseract)return Promise.resolve(window.Tesseract);
+    if(tessPromise)return tessPromise;
+    tessPromise=new Promise(function(res,rej){var sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';sc.onload=function(){window.Tesseract?res(window.Tesseract):rej(new Error('no cargó'));};sc.onerror=function(){tessPromise=null;rej(new Error('Sin conexión para descargar el lector.'));};document.head.appendChild(sc);});
+    return tessPromise;
+  }
+  function prep(file){
+    return new Promise(function(res){
+      var img=new Image(),url=URL.createObjectURL(file);
+      img.onload=function(){try{var max=2200,sc=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);var x=c.getContext('2d');x.drawImage(img,0,0,c.width,c.height);var d=x.getImageData(0,0,c.width,c.height),p=d.data;for(var i=0;i<p.length;i+=4){var g=0.299*p[i]+0.587*p[i+1]+0.114*p[i+2];g=g>170?255:(g<90?0:g);p[i]=p[i+1]=p[i+2]=g;}x.putImageData(d,0,0);URL.revokeObjectURL(url);res(c);}catch(e){res(file);}};
+      img.onerror=function(){res(file);};img.src=url;
+    });
+  }
+  var MAP={marca:'vmarca',clase:'vclase',linea:'vref',modelo:'vmodelo',placa:'vplaca',color:'vcolor',servicio:'vservicio',capacidad:'vcapacidad',chasis:'vchasis',motor:'vmotor',cilindraje:'vcilindraje'};
+  window.vehScanFile=function(input){
+    var file=input&&input.files&&input.files[0];if(!file)return;
+    window.vehManualMode();
+    status('⏳ Preparando el lector… (la primera vez descarga unos segundos)','busy');
+    loadTesseract().then(function(T){
+      return prep(file).then(function(img){
+        status('🔎 Leyendo la tarjeta… 0%','busy');
+        return T.recognize(img,'spa',{logger:function(m){if(m&&m.status==='recognizing text')status('🔎 Leyendo la tarjeta… '+Math.round((m.progress||0)*100)+'%','busy');}});
+      });
+    }).then(function(r){
+      var text=(r&&r.data&&r.data.text)||'';var f=jcpParseLicencia(text),n=0;
+      Object.keys(MAP).forEach(function(k){var e=el(MAP[k]);if(!e)return;e.classList.remove('veh-filled');if(f[k]){e.value=f[k];e.classList.add('veh-filled');n++;}});
+      if(n)status('✅ Se llenaron '+n+' de 11 campos (en verde). Revísalos, completa los que falten, el SOAT, la Tecno y el precio.','ok');
+      else status('⚠️ No se pudo leer la tarjeta. Intenta con una foto más clara, de frente y sin reflejos, o llena los datos a mano.','bad');
+    }).catch(function(e){status('⚠️ No fue posible escanear: '+(e&&e.message||e)+' Puedes llenar los datos a mano.','bad');});
+  };
+  /* ================= CONTRATO DE COMPRAVENTA ================= */
+  var UN=['','UNO','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE','QUINCE','DIECISÉIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VEINTIUNO','VEINTIDÓS','VEINTITRÉS','VEINTICUATRO','VEINTICINCO','VEINTISÉIS','VEINTISIETE','VEINTIOCHO','VEINTINUEVE'];
+  var DE=['','','','TREINTA','CUARENTA','CINCUENTA','SESENTA','SETENTA','OCHENTA','NOVENTA'];
+  var CE=['','CIENTO','DOSCIENTOS','TRESCIENTOS','CUATROCIENTOS','QUINIENTOS','SEISCIENTOS','SETECIENTOS','OCHOCIENTOS','NOVECIENTOS'];
+  function c999(n){if(n===0)return '';if(n===100)return 'CIEN';var c=Math.floor(n/100),r=n%100,t='';if(c)t=CE[c];if(r){t+=(t?' ':'')+(r<30?UN[r]:DE[Math.floor(r/10)]+(r%10?' Y '+UN[r%10]:''));}return t;}
+  function letras(n){n=Math.floor(Math.abs(+n||0));if(n===0)return 'CERO';var mm=Math.floor(n/1000000),th=Math.floor((n%1000000)/1000),r=n%1000,parts=[];
+    if(mm){parts.push(mm===1?'UN MILLÓN':(c999Mil(mm)+' MILLONES'));}
+    if(th){parts.push(th===1?'MIL':c999(th).replace(/UNO$/,'UN')+' MIL');}
+    if(r)parts.push(c999(r));
+    return parts.join(' ');}
+  function c999Mil(n){if(n<1000)return c999(n).replace(/UNO$/,'UN');var th=Math.floor(n/1000),r=n%1000;return (th===1?'MIL':c999(th).replace(/UNO$/,'UN')+' MIL')+(r?' '+c999(r).replace(/UNO$/,'UN'):'');}
+  function pesosLetras(n){var t=letras(n);var de=/MILL(ÓN|ONES)$/.test(t)?' DE':'';return t.replace(/^VEINTIUN /,'VEINTIÚN ')+de+' PESOS M/CTE';}
+  window.jcpPesosLetras=pesosLetras;
+  var ACCN={cash:'EFECTIVO',bancolombia:'TRANSFERENCIA BANCOLOMBIA',davivienda:'TRANSFERENCIA DAVIVIENDA',nequi:'NEQUI',daviplata:'DAVIPLATA'};
+  function sellers(){var st=data.settings||{};return Array.isArray(st.contractSellers)?st.contractSellers:[];}
+  function saveSettings(mut){var before=cloneAppData(data);try{data.settings=(data.settings&&typeof data.settings==='object')?data.settings:{};mut(data.settings);save();return true;}catch(e){data=before;alert('NO FUE POSIBLE GUARDAR.');return false;}}
+  var cur=null;
+  function iso(d){d=d instanceof Date?d:new Date(d);if(isNaN(d.getTime()))d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function longDate(v){if(!v)return '';var p=String(v).split('-');var d=new Date(+p[0],+p[1]-1,+p[2]);return isNaN(d.getTime())?String(v):d.toLocaleDateString('es-CO',{day:'numeric',month:'long',year:'numeric'}).toUpperCase();}
+  function payText(s){var d=s.paymentDistribution||{},parts=Object.keys(d).filter(function(k){return +d[k]>0;}).map(function(k){return fm(d[k])+' EN '+(ACCN[k]||up(k));});
+    var t=(parts.length?parts.join(', '):(+s.received>0?fm(s.received)+' DE CONTADO':''));
+    if(+s.pending>0)t+=(t?'; ':'')+'Y EL SALDO DE '+fm(s.pending)+' QUEDA PENDIENTE POR PAGAR';
+    return t.toUpperCase();}
+  window.openSaleContract=function(vehId){
+    var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(vehId);});
+    if(!v||!v.sale){alert('NO SE ENCONTRÓ LA VENTA.');return;}
+    var s=v.sale,prev=s.contract||{},st=data.settings||{};
+    var cl=(data.clientes||[]).find(function(c){return (s.doc&&up(c.cedula)===up(s.doc))||up(c.nombre)===up(s.buyer);})||{};
+    var info=(typeof getVehicleCommercialSnapshot==='function'?(function(){try{return getVehicleCommercialSnapshot(v)||{};}catch(e){return {};}})():{});
+    var sDate=Date.parse(s.createdAt||'');
+    cur={vehId:v.id,price:+s.price||0,
+      city:prev.city||st.contractCity||'BOGOTÁ',date:prev.date||iso(isFinite(sDate)?new Date(sDate):new Date()),
+      sellerId:prev.sellerId||st.contractLastSeller||((sellers()[0]||{}).id||''),
+      buyer:prev.buyer||{nombre:up(s.buyer),cedula:up(s.doc||cl.cedula),direccion:up(cl.direccion),telefono:String(s.phone||cl.telefono||'')},
+      veh:prev.veh||{marca:up(v.marca||v.m),clase:up(v.clase),linea:up(v.ref),modelo:up(v.modelo),placa:up(v.pl),color:up(v.color),servicio:up(v.servicio),capacidad:up(v.capacidad),chasis:up(v.chasis),motor:up(v.motor),soat:v.soatVence||v.soat||info.soat||'',tecno:v.tecnoVence||v.tecnomecanica||info.tecnomecanica||''},
+      pago:prev.pago||payText(s),entrega:prev.entrega||iso(isFinite(sDate)?new Date(sDate):new Date()),
+      traspaso:prev.traspaso||'30',penal:prev.penal!=null?prev.penal:Math.round((+s.price||0)*0.10),gastos:prev.gastos||'50% POR EL COMPRADOR Y 50% POR EL VENDEDOR',
+      impAnio:prev.impAnio||String(new Date().getFullYear()),impQuien:prev.impQuien||'EL VENDEDOR',adicionales:prev.adicionales||(+s.pending>0?'EL VENDEDOR SE RESERVA EL DOMINIO DEL VEHÍCULO HASTA EL PAGO TOTAL DEL SALDO DE '+fm(s.pending)+'.':'')};
+    show('contratoVenta');render();window.scrollTo({top:0,behavior:'auto'});
+  };
+  function f(lbl,id,val,type,extra){return '<label class="ct-f"><span>'+lbl+'</span><input id="'+id+'" '+(type?'type="'+type+'" ':'')+'value="'+esc(val==null?'':val)+'" '+(extra||'')+'/></label>';}
+  function chips(target,list){return '<div class="ct-chips">'+list.map(function(c){return '<button type="button" onclick="ctChip(\''+target+'\',\''+String(c[1]).replace(/'/g,"\\'")+'\')">'+c[0]+'</button>';}).join('')+'</div>';}
+  window.ctChip=function(id,v){var e=el(id);if(!e)return;e.value=v;try{e.dispatchEvent(new Event('input',{bubbles:true}));}catch(_e){}};
+  function render(){
+    var h=el('ctContent');if(!h||!cur)return;var c=cur,sl=sellers();
+    var price=c.price;
+    h.innerHTML='<style>#contratoVenta .ct-card{background:#121212;border:1px solid #3a321f;border-radius:14px;padding:14px;margin-top:12px}#contratoVenta .ct-t{font-size:11px;font-weight:900;color:#d4af37;letter-spacing:.5px;margin-bottom:10px}#contratoVenta .ct-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#contratoVenta .ct-f{display:flex;flex-direction:column;gap:3px;min-width:0}#contratoVenta .ct-f span{font-size:10px;color:#aaa;font-weight:800}#contratoVenta .ct-f input,#contratoVenta select,#contratoVenta textarea{width:100%;box-sizing:border-box;margin:0;text-transform:uppercase}#contratoVenta .ct-chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}#contratoVenta .ct-chips button{min-height:32px;padding:0 12px;border-radius:999px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37;font-weight:800;font-size:11px}#contratoVenta .ct-full{grid-column:1/-1}@media(max-width:520px){#contratoVenta .ct-g{grid-template-columns:1fr}}</style>'
+      +'<div class="ct-card"><div class="ct-t">LUGAR Y FECHA</div><div class="ct-g">'+f('Ciudad','ctCity',c.city)+f('Fecha','ctDate',c.date,'date')+'</div></div>'
+      +'<div class="ct-card"><div class="ct-t">VENDEDOR</div><select id="ctSeller"><option value="">ESCOGE EL VENDEDOR</option>'+sl.map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===c.sellerId?' selected':'')+'>'+esc(x.nombre)+' · '+esc(x.cedula)+'</option>';}).join('')+'</select>'
+        +'<div class="ct-chips"><button type="button" onclick="ctNewSeller()">+ NUEVO VENDEDOR</button>'+(c.sellerId?'<button type="button" onclick="ctNewSeller(true)">EDITAR</button>':'')+'</div>'
+        +'<div id="ctSellerForm" style="display:none;margin-top:8px"><div class="ct-g">'+f('Nombre','ctSNombre','')+f('Cédula / NIT','ctSCedula','')+f('Dirección','ctSDir','')+f('Teléfono','ctSTel','')+'</div><div class="ct-chips"><button type="button" onclick="ctSaveSeller()">GUARDAR VENDEDOR</button><button type="button" onclick="document.getElementById(\'ctSellerForm\').style.display=\'none\'">CANCELAR</button></div></div></div>'
+      +'<div class="ct-card"><div class="ct-t">COMPRADOR</div><div class="ct-g">'+f('Nombre','ctBNombre',c.buyer.nombre)+f('Cédula','ctBCedula',c.buyer.cedula)+f('Dirección','ctBDir',c.buyer.direccion)+f('Teléfono','ctBTel',c.buyer.telefono)+'</div></div>'
+      +'<div class="ct-card"><div class="ct-t">VEHÍCULO (PRIMERA)</div><div class="ct-g">'
+        +f('Marca','ctVmarca',c.veh.marca)+f('Servicio','ctVservicio',c.veh.servicio)+f('Clase','ctVclase',c.veh.clase)+f('Capacidad','ctVcapacidad',c.veh.capacidad)
+        +f('Línea','ctVlinea',c.veh.linea)+f('N.º chasis','ctVchasis',c.veh.chasis)+f('Modelo','ctVmodelo',c.veh.modelo)+f('N.º motor','ctVmotor',c.veh.motor)
+        +f('Placa','ctVplaca',c.veh.placa)+f('SOAT – vence','ctVsoat',c.veh.soat,/^\d{4}-\d{2}-\d{2}$/.test(c.veh.soat)||!c.veh.soat?'date':'')+f('Color','ctVcolor',c.veh.color)+f('Tecno – vence','ctVtecno',c.veh.tecno,/^\d{4}-\d{2}-\d{2}$/.test(c.veh.tecno)||!c.veh.tecno?'date':'')+'</div></div>'
+      +'<div class="ct-card"><div class="ct-t">PRECIO Y FORMA DE PAGO (SEGUNDA)</div><div style="font-size:18px;font-weight:900;color:#fff">'+fm(price)+'</div><div style="font-size:11px;color:#aaa;margin:2px 0 8px">'+esc(pesosLetras(price))+'</div><label class="ct-f"><span>Forma de pago</span><textarea id="ctPago" rows="2">'+esc(c.pago)+'</textarea></label></div>'
+      +'<div class="ct-card"><div class="ct-t">CLÁUSULAS</div><div class="ct-g">'
+        +'<div class="ct-full">'+f('Tercera: entrega libre de gravamen hasta el día','ctEntrega',c.entrega,'date')+'</div>'
+        +'<div>'+f('Cuarta: traspaso en (días hábiles)','ctTraspaso',c.traspaso,'','inputmode="numeric"')+chips('ctTraspaso',[['15','15'],['30','30'],['45','45'],['60','60']])+'</div>'
+        +'<div>'+f('Sexta: cláusula penal ($)','ctPenal',Number(c.penal||0).toLocaleString('es-CO'),'','inputmode="numeric" data-money="1"')+chips('ctPenal',[['5 %',Math.round(price*0.05).toLocaleString('es-CO')],['10 %',Math.round(price*0.10).toLocaleString('es-CO')],['20 %',Math.round(price*0.20).toLocaleString('es-CO')]])+'</div>'
+        +'<div class="ct-full">'+f('Séptima: gastos de legalización asumidos así','ctGastos',c.gastos)+chips('ctGastos',[['50 / 50','50% POR EL COMPRADOR Y 50% POR EL VENDEDOR'],['Comprador','100% POR EL COMPRADOR'],['Vendedor','100% POR EL VENDEDOR']])+'</div>'
+        +'<div>'+f('Octava: impuesto del año','ctImpAnio',c.impAnio,'','inputmode="numeric"')+'</div>'
+        +'<div>'+f('Será asumido por','ctImpQuien',c.impQuien)+chips('ctImpQuien',[['Vendedor','EL VENDEDOR'],['Comprador','EL COMPRADOR'],['50 / 50','50% COMPRADOR Y 50% VENDEDOR']])+'</div>'
+        +'<label class="ct-f ct-full"><span>Cláusulas adicionales</span><textarea id="ctAdic" rows="3">'+esc(c.adicionales)+'</textarea></label>'
+      +'</div></div>'
+      +'<button type="button" onclick="ctPrint()" style="width:100%;margin-top:12px;min-height:48px;border-radius:12px;border:0;background:#d4af37;color:#111;font-weight:900">🖨️ GENERAR CONTRATO (IMPRIMIR / PDF)</button>';
+    try{bindMoneyInputs();}catch(e){}
+  }
+  window.ctNewSeller=function(edit){var fbox=el('ctSellerForm');if(!fbox)return;fbox.style.display='';window.__ctEditSeller=edit?el('ctSeller').value:'';var x=edit?sellers().find(function(s){return s.id===window.__ctEditSeller;}):null;
+    el('ctSNombre').value=x?x.nombre:'';el('ctSCedula').value=x?x.cedula:'';el('ctSDir').value=x?x.direccion:'';el('ctSTel').value=x?x.telefono:'';};
+  window.ctSaveSeller=function(){var n=up(el('ctSNombre').value),cc=up(el('ctSCedula').value);if(!n||!cc){alert('ESCRIBE NOMBRE Y CÉDULA / NIT DEL VENDEDOR.');return;}
+    collect();var id=window.__ctEditSeller||('sel_'+Date.now());
+    if(saveSettings(function(st){st.contractSellers=Array.isArray(st.contractSellers)?st.contractSellers:[];var x=st.contractSellers.find(function(s){return s.id===id;});var rec={id:id,nombre:n,cedula:cc,direccion:up(el('ctSDir').value),telefono:String(el('ctSTel').value||'').trim()};if(x)Object.assign(x,rec);else st.contractSellers.push(rec);})){cur.sellerId=id;render();}};
+  function g(id){return (el(id)||{}).value||'';}
+  function collect(){var c=cur;c.city=up(g('ctCity'));c.date=g('ctDate');c.sellerId=g('ctSeller');
+    c.buyer={nombre:up(g('ctBNombre')),cedula:up(g('ctBCedula')),direccion:up(g('ctBDir')),telefono:g('ctBTel').trim()};
+    c.veh={marca:up(g('ctVmarca')),clase:up(g('ctVclase')),linea:up(g('ctVlinea')),modelo:up(g('ctVmodelo')),placa:up(g('ctVplaca')),color:up(g('ctVcolor')),servicio:up(g('ctVservicio')),capacidad:up(g('ctVcapacidad')),chasis:up(g('ctVchasis')),motor:up(g('ctVmotor')),soat:g('ctVsoat'),tecno:g('ctVtecno')};
+    c.pago=up(g('ctPago'));c.entrega=g('ctEntrega');c.traspaso=g('ctTraspaso').replace(/\D/g,'');c.penal=parseFormattedMoney(g('ctPenal'));c.gastos=up(g('ctGastos'));c.impAnio=g('ctImpAnio').replace(/\D/g,'');c.impQuien=up(g('ctImpQuien'));c.adicionales=up(g('ctAdic'));}
+  function dshow(v){return /^\d{4}-\d{2}-\d{2}$/.test(v||'')?v.split('-').reverse().join('/'):(v||'');}
+  window.ctPrint=function(){
+    collect();var c=cur,sel=sellers().find(function(s){return s.id===c.sellerId;});
+    if(!sel){alert('ESCOGE O CREA EL VENDEDOR.');return;}
+    if(!c.buyer.nombre){alert('FALTA EL NOMBRE DEL COMPRADOR.');return;}
+    // guardar en la venta para reimprimir y recordar ciudad / vendedor
+    var before=cloneAppData(data);
+    try{var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(c.vehId);});if(v&&v.sale){v.sale.contract=cloneAppData(c);v.sale.contract.generatedAt=new Date().toISOString();['clase','color','servicio','capacidad','chasis','motor'].forEach(function(k){if(c.veh[k]&&!v[k])v[k]=c.veh[k];});}
+      data.settings=(data.settings&&typeof data.settings==='object')?data.settings:{};data.settings.contractCity=c.city;data.settings.contractLastSeller=c.sellerId;save();}catch(e){data=before;}
+    var logo=typeof supportLogoSrc==='function'?supportLogoSrc():'';
+    var w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}
+    var V=c.veh,cell=function(t){return '<td class="v">'+esc(t||'')+'</td>';};
+    var html='<!doctype html><html><head><meta charset="utf-8"><title>Contrato '+esc(V.placa)+'</title><style>@page{size:letter;margin:10mm}*{box-sizing:border-box}body{margin:0;background:#eee;font-family:Calibri,Arial,sans-serif;color:#000}.pg{width:205mm;min-height:265mm;margin:8px auto;background:#fff;border:2px solid #000;padding:6mm;position:relative;page-break-after:always}.pg:last-child{page-break-after:auto}.top{display:flex;gap:8px}.logo{width:48mm;height:42mm;border:1px solid #666;display:flex;align-items:center;justify-content:center}.logo img{max-width:44mm;max-height:38mm}.hd{flex:1}.ttl{font-family:"Algerian","Copperplate","Georgia",serif;font-weight:900;font-size:21px;text-align:center;letter-spacing:.5px;margin:0 0 6px}.hr{display:flex;border-bottom:2px solid #000;font-size:12.5px;min-height:7.2mm;align-items:center}.hr b{width:31mm;padding-left:2px}.hr span{flex:1;background:#e3e3e3;align-self:stretch;display:flex;align-items:center;padding-left:6px;font-weight:700}p{margin:3px 0;font-size:12.5px;line-height:1.35}table.c{width:100%;border-collapse:collapse;margin:3px 0 4px;font-size:12px}table.c td{border:1px solid #000;padding:2px 4px;height:5.6mm}table.c td.l{font-weight:700;text-align:center;width:24%}table.c td.v{background:#e3e3e3;width:26%;font-weight:700}.f{background:#e3e3e3;font-weight:700;padding:0 6px;display:inline-block;min-width:30mm}.blk{background:#e3e3e3;font-weight:700;padding:2px 6px;min-height:6mm;margin:2px 0}.sig{display:flex;justify-content:space-between;margin-top:6mm;font-size:12.5px}.sig>div{width:47%;position:relative;padding-right:25mm}.sig .n{font-weight:700;text-align:center;margin-bottom:20mm}.sig .line{border-top:1px solid #000;margin-bottom:2px}.huella{position:absolute;right:0;top:0;width:21mm;height:30mm;border:1px solid #3a6fb0;border-radius:6px}.imp{font-family:"Algerian","Copperplate","Georgia",serif;font-size:24px;font-weight:900;text-align:center;margin-top:2mm}.foot{position:absolute;bottom:3mm;left:0;right:0;text-align:center;font-size:9px;font-weight:700}.act{text-align:center;margin:10px}.act button{padding:10px 18px;border:0;border-radius:7px;background:#111;color:#fff;font-weight:800}@media print{body{background:#fff}.pg{margin:0;border:2px solid #000}.act{display:none}}</style></head><body>'
+      +'<div class="act"><button onclick="window.print()">IMPRIMIR / GUARDAR PDF</button></div>'
+      +'<div class="pg"><div class="top"><div class="logo">'+(logo?'<img src="'+esc(logo)+'">':'')+'</div><div class="hd"><div class="ttl">CONTRATO DE COMPRAVENTA VEHICULOS</div>'
+      +'<div class="hr"><b>LUGAR Y FECHA:</b><span>'+esc(c.city+', '+longDate(c.date))+'</span></div><div class="hr"><b>VENDEDOR:</b><span>'+esc(sel.nombre)+'</span></div><div class="hr"><b>IDENTIFICACION:</b><span>'+esc(sel.cedula)+'</span></div><div class="hr"><b>COMPRADOR:</b><span>'+esc(c.buyer.nombre)+'</span></div><div class="hr"><b>IDENTIFICACION:</b><span>'+esc(c.buyer.cedula)+'</span></div></div></div>'
+      +'<p>Ambos mayores de edad hemos celebrado el presente CONTRATO DE COMPRAVENTA regido por las siguientes clausulas:</p>'
+      +'<p><b>PRIMERA:</b> EL VENDEDOR da en VENTA REAL Y MATERIAL AL COMPRADOR un vehiculo de su propiedad distinguida con las siguientes CARACTERISTICAS:</p>'
+      +'<table class="c"><tr><td class="l">MARCA</td>'+cell(V.marca)+'<td class="l">SERVICIO</td>'+cell(V.servicio)+'</tr><tr><td class="l">CLASE</td>'+cell(V.clase)+'<td class="l">CAPACIDAD</td>'+cell(V.capacidad)+'</tr><tr><td class="l">LINEA</td>'+cell(V.linea)+'<td class="l">Nº CHASIS</td>'+cell(V.chasis)+'</tr><tr><td class="l">MODELO</td>'+cell(V.modelo)+'<td class="l">Nº MOTOR</td>'+cell(V.motor)+'</tr><tr><td class="l">PLACA</td>'+cell(V.placa)+'<td class="l">SOAT - VENCE</td>'+cell(dshow(V.soat))+'</tr><tr><td class="l">COLOR</td>'+cell(V.color)+'<td class="l">TECNO - VENCE</td>'+cell(dshow(V.tecno))+'</tr></table>'
+      +'<p><b>SEGUNDA:</b> EL PRECIO de esta venta ha sido acordado por la suma de <b>'+esc(fm(c.price))+'</b></p><div class="blk">'+esc(pesosLetras(c.price))+'</div>'
+      +'<p>valor que El COMPRADOR pagara al VENDEDOR, en la siguiente forma hoy a la firma de este CONTRATO, representado en</p><div class="blk">'+esc(c.pago)+'</div>'
+      +'<p><b>TERCERA:</b> EL VENDEDOR se compromete a hacer entrega del vehiculo libre de todo gravamen que pudiese impedir su libre comercio hasta el dia <span class="f">'+esc(longDate(c.entrega))+'</span> y de esta fecha en adelante corre por cuenta y riesgo DEL COMPRADOR ya que este recibe el vehiculo a entera satisfaccion del estado fisico y con previa revision efectuada renunciando a cualquier tipo de reclamacion posterior a la firma de este contrato por tratarse de un vehiculo usado, asumiendo cualquier daño o averia que se presente en el mismo.</p>'
+      +'<p><b>CUARTA:</b> EL VENDEDOR se compromete a entregar la documentacion para el transpaso del vehiculo a nombre de el comprador o a quien este designe en un plazo maximo de <span class="f">'+esc(c.traspaso)+'</span> dias habiles a partir de la fecha de este documento.</p>'
+      +'<p><b>QUINTA:</b> EL VENDEDOR se reserva el derecho de dominio del vehiculo hasta el momento en que se cancele en su totalidad.</p>'
+      +'<p><b>SEXTA:</b> LOS CONTRATANTES de comun acuerdo fijan una clausula penal para el que incumpla en todo o en parte alguna de las clausulas estipuladas en el presente documento por valor de <span class="f">'+esc(fm(c.penal))+'</span></p>'
+      +'<p><b>SEPTIMA:</b> los gastos para la legalizacion de los documentos con motivo de esta compraventa seran asumidos asi:</p><div class="blk">'+esc(c.gastos)+'</div>'
+      +'<p><b>OCTAVA:</b> El impuesto del presente año <span class="f" style="min-width:16mm">'+esc(c.impAnio)+'</span> sera asumido por: <span class="f">'+esc(c.impQuien)+'</span></p>'
+      +'<p><b>CLAUSULAS ADICIONALES:</b></p><div style="min-height:16mm;font-size:12px;font-weight:700;border-bottom:1px solid #000">'+esc(c.adicionales)+'</div>'
+      +'<p style="margin-top:4px">leido y aprobado por las partes firmamos en <span class="f">'+esc(c.city)+'</span> siendo hoy <span class="f">'+esc(longDate(c.date))+'</span></p>'
+      +'<div class="sig"><div><div class="huella"></div><div class="n">VENDEDOR</div><div class="line"></div>C.C, Nº: '+esc(sel.cedula)+'<br>DIR: '+esc(sel.direccion||'')+'<br>TEL: '+esc(sel.telefono||'')+'</div><div><div class="huella"></div><div class="n">COMPRADOR</div><div class="line"></div>C.C, Nº: '+esc(c.buyer.cedula)+'<br>DIR: '+esc(c.buyer.direccion)+'<br>TEL: '+esc(c.buyer.telefono)+'</div></div>'
+      +'</div>'
+      +'<div class="pg"><div class="top"><div class="logo">'+(logo?'<img src="'+esc(logo)+'">':'')+'</div><div class="hd"><div class="imp">ESPACIO PARA IMPRONTAS</div></div></div><div class="foot">DOCUMENTO VALIDO A NIVEL NACIONAL- COLOMBIA</div></div>'
+      +'</body></html>';
+    w.document.open();w.document.write(html);w.document.close();
+  };
+})();
+</script>
 <script id="jcp-estado-cuenta">
 (function(){
   'use strict';
@@ -20603,6 +20900,6 @@ window.jcpExtractMov=function(){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.10.26.87"></script>
+<script src="./app-update.js?v=2026.11.04.89"></script>
 </body>
 </html>
