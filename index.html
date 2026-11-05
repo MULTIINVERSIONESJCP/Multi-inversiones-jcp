@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.04.93</title>
+<title>COLOMBIAUTOS JP - V2026.11.04.95</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -3870,7 +3870,7 @@ body.jcp-custom-theme .database-actions-list button{
 #formVeh input.veh-bad{border-color:#e74c3c!important;box-shadow:0 0 0 1px rgba(231,76,60,.45)}
 #formVeh .veh-opts{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
 #formVeh .veh-opts small{font-size:10px;color:#f1c40f;font-weight:800}
-#formVeh .veh-opts button{min-height:28px;padding:0 9px;border-radius:999px;border:1px solid #6b5a14;background:#1d190c;color:#f1c40f;font-size:11px;font-weight:800}
+#formVeh .veh-cancel-btn,.veh-cancel-btn{grid-column:1/-1!important;width:100%!important;margin-top:8px!important;min-height:46px!important;border-radius:12px!important;font-size:14px!important;border:1.5px solid rgba(220,90,80,.7)!important;background:transparent!important;color:#ff8a80!important;font-weight:900;letter-spacing:.4px;cursor:pointer}#formVeh .veh-opts button{min-height:28px;padding:0 9px;border-radius:999px;border:1px solid #6b5a14;background:#1d190c;color:#f1c40f;font-size:11px;font-weight:800}
 #formVeh .veh-scan-preview{position:fixed;left:8px;right:8px;bottom:84px;z-index:900;background:#0d0d0d;border:2px solid #d4af37;border-radius:14px;padding:8px;box-shadow:0 -6px 24px rgba(0,0,0,.6);max-width:720px;margin:0 auto}
 #formVeh .veh-dock-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
 #formVeh .veh-dock-head b{font-size:10px;color:#d4af37;letter-spacing:.4px}
@@ -3881,6 +3881,45 @@ body.jcp-custom-theme .database-actions-list button{
 body.veh-dock-open #formVeh{padding-bottom:40vh}
 #formVeh input.veh-filled{border-color:#57d68d!important;box-shadow:0 0 0 1px rgba(87,214,141,.35)}
 @media(max-width:520px){#formVeh .veh-mode-grid{grid-template-columns:1fr}#formVeh .veh-mode-btn{min-height:56px}}
+
+/* v94: escáner en Completar inf. */
+#completeInfoFormBox .veh-mode{background:#121212;border:1px solid #3a321f;border-radius:14px;padding:14px}
+#completeInfoFormBox .veh-mode-title,#completeInfoFormBox .veh-section-title{font-size:11px;font-weight:900;letter-spacing:.5px;color:#d4af37;margin-bottom:10px}
+#completeInfoFormBox .veh-mode-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#completeInfoFormBox .veh-mode-btn{min-height:74px;border-radius:12px;border:1px solid #4a3d1c;background:#17130b;color:#fff;font-weight:900;font-size:12px;line-height:1.3}
+#completeInfoFormBox .veh-mode-btn small{display:block;font-weight:600;color:#aaa;font-size:10px;margin-top:3px}
+#completeInfoFormBox .veh-scan-status{font-size:12px;color:#ccc;margin-top:10px;min-height:0}
+#completeInfoFormBox .veh-scan-status.busy{color:#d4af37}
+#completeInfoFormBox .veh-rescan{margin-top:8px;width:100%;min-height:36px;border-radius:10px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37;font-size:11px;font-weight:800}
+#completeInfoFormBox .veh-scan-status.ok{color:#57d68d}
+#completeInfoFormBox .veh-scan-status.bad{color:#ff6b6b}
+#completeInfoFormBox .veh-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#completeInfoFormBox .veh-f{display:flex;flex-direction:column;gap:3px;min-width:0}
+#completeInfoFormBox .veh-f span{font-size:10px;color:#aaa;font-weight:800}
+#completeInfoFormBox .veh-f input{width:100%;max-width:100%;min-width:0;box-sizing:border-box;margin:0;text-transform:uppercase}
+#completeInfoFormBox .veh-f input[type=date],#completeInfoFormBox .veh-f input[type=month]{-webkit-appearance:none;appearance:none;display:block;min-height:46px;line-height:1.2}
+#completeInfoFormBox #purchaseSubmit{width:100%;margin-top:12px;min-height:46px}
+#completeInfoFormBox input.veh-ok{border-color:#2ecc71!important;box-shadow:0 0 0 1px rgba(46,204,113,.45)}
+#completeInfoFormBox input.veh-warn{border-color:#f1c40f!important;box-shadow:0 0 0 1px rgba(241,196,15,.5);background:rgba(241,196,15,.06)!important}
+#completeInfoFormBox input.veh-bad{border-color:#e74c3c!important;box-shadow:0 0 0 1px rgba(231,76,60,.45)}
+#completeInfoFormBox .veh-opts{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+#completeInfoFormBox .veh-opts small{font-size:10px;color:#f1c40f;font-weight:800}
+#completeInfoFormBox .veh-opts button{min-height:28px;padding:0 9px;border-radius:999px;border:1px solid #6b5a14;background:#1d190c;color:#f1c40f;font-size:11px;font-weight:800}
+#completeInfoFormBox .veh-scan-preview{position:fixed;left:8px;right:8px;bottom:84px;z-index:900;background:#0d0d0d;border:2px solid #d4af37;border-radius:14px;padding:8px;box-shadow:0 -6px 24px rgba(0,0,0,.6);max-width:720px;margin:0 auto}
+#completeInfoFormBox .veh-dock-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+#completeInfoFormBox .veh-dock-head b{font-size:10px;color:#d4af37;letter-spacing:.4px}
+#completeInfoFormBox .veh-dock-head button{min-height:28px;padding:0 10px;border-radius:999px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37;font-size:10px;font-weight:800;white-space:nowrap}
+#completeInfoFormBox .veh-dock-img{max-height:28vh;overflow:auto;border-radius:10px;background:#000}
+#completeInfoFormBox .veh-dock-img img{display:block;width:100%;max-height:28vh;object-fit:contain;cursor:zoom-in}
+#completeInfoFormBox .veh-dock-img img.zoom{width:220%;max-width:none;max-height:none;cursor:zoom-out}
+body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
+#completeInfoFormBox input.veh-filled{border-color:#57d68d!important;box-shadow:0 0 0 1px rgba(87,214,141,.35)}
+@media(max-width:520px){#completeInfoFormBox .veh-mode-grid{grid-template-columns:1fr}#completeInfoFormBox .veh-mode-btn{min-height:56px}}
+#completeInfoFormBox .ci-card-box{background:#121212;border:1px solid #3a321f;border-radius:14px;padding:12px;margin:10px 0}
+#completeInfoFormBox .ci-scan-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#completeInfoFormBox .ci-scan-btns .veh-mode-btn{min-height:46px}
+.veh-opts .veh-confirm{border-color:#2ecc71!important;color:#57d68d!important;background:#0f2a1a!important}
+body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </style>
 
 
@@ -4339,6 +4378,7 @@ body.veh-dock-open #formVeh{padding-bottom:40vh}
 <label class="paydist-row"><span>DAVIPLATA</span><input data-money="1" id="purchasePayDaviplata" inputmode="numeric" oninput="payDistInput('purchase',this)" placeholder="$ 0" type="text"/></label>
 </div><div class="paydist-summary"><div><span>VALOR TOTAL</span><b id="purchasePayTotal">$0</b></div><div><span>DISTRIBUIDO</span><b id="purchasePayDistributed">$0</b></div><div class="bad" id="purchasePayPendingBox"><span>FALTA</span><b id="purchasePayPending">$0</b></div></div><div class="paydist-hint">La operación se habilita únicamente cuando la distribución coincide exactamente con el valor total.</div></div>
 <button class="full paydist-locked" disabled="" id="purchaseSubmit" onclick="addVeh()">Guardar vehículo</button>
+<button class="full veh-cancel-btn" type="button" onclick="cancelVehPurchase()">✕ CANCELAR COMPRA</button>
 </div>
 </div>
 <div class="inventory-gold-line"></div>
@@ -4382,12 +4422,22 @@ body.veh-dock-open #formVeh{padding-bottom:40vh}
 </div>
 <div class="card" id="completeInfoFormBox" style="display:none;margin-top:12px">
 <div id="completeInfoVehicleCard"></div>
+<div id="ciCardBox" class="ci-card-box">
+<div class="veh-section-title">DATOS DE LA TARJETA DE PROPIEDAD</div>
+<div class="ci-scan-btns"><button type="button" class="veh-mode-btn" onclick="ciScanPick('camera')">📷 TOMAR FOTO</button><button type="button" class="veh-mode-btn" onclick="ciScanPick('gallery')">🖼️ CARGAR DE GALERÍA</button></div>
+<input accept="image/*" capture="environment" id="ciScanCamera" style="display:none" type="file" onchange="ciScanFile(this)"/>
+<input accept="image/*" id="ciScanGallery" style="display:none" type="file" onchange="ciScanFile(this)"/>
+<div class="veh-scan-status" id="ciScanStatus"></div>
+<small style="display:block;color:#999;font-size:10.5px;margin:4px 0 8px">El escáner solo completa los datos que faltan; lo que el carro ya tiene se conserva. Si lee algo distinto, te muestra las dos opciones.</small>
+<div class="veh-grid"><label class="veh-f"><span>Marca</span><input id="ci_marca" placeholder="" autocomplete="off"/></label><label class="veh-f"><span>Clase</span><input id="ci_clase" placeholder="AUTOMÓVIL, CAMIONETA…" autocomplete="off"/></label><label class="veh-f"><span>Línea</span><input id="ci_linea" placeholder="" autocomplete="off"/></label><label class="veh-f"><span>Modelo</span><input id="ci_modelo" placeholder="AÑO" autocomplete="off"/></label><label class="veh-f"><span>Placa</span><input id="ci_placa" placeholder="" autocomplete="off"/></label><label class="veh-f"><span>Color</span><input id="ci_color" placeholder="" autocomplete="off"/></label><label class="veh-f"><span>Servicio</span><input id="ci_servicio" placeholder="PARTICULAR / PÚBLICO" autocomplete="off"/></label><label class="veh-f"><span>Capacidad</span><input id="ci_capacidad" placeholder="EJ: 5" autocomplete="off"/></label><label class="veh-f"><span>N.º chasis</span><input id="ci_chasis" placeholder="CHASIS / VIN" autocomplete="off"/></label><label class="veh-f"><span>N.º motor</span><input id="ci_motor" placeholder="" autocomplete="off"/></label></div>
+<div id="ciScanPreview" class="veh-scan-preview" style="display:none"></div>
+</div>
 <div class="complete-info-grid">
-<label>SOAT
-        <input autocomplete="off" id="completeSoat" placeholder="EJ. HASTA JULIO 2027" type="text"/>
+<label>SOAT – VENCE (MES Y AÑO)
+        <input autocomplete="off" id="completeSoat" type="month"/>
 </label>
-<label>TECNOMECÁNICA
-        <input autocomplete="off" id="completeTecno" placeholder="EJ. HASTA JULIO 2027" type="text"/>
+<label>TECNO – VENCE (MES Y AÑO)
+        <input autocomplete="off" id="completeTecno" type="month"/>
 </label>
 <label>IMPUESTOS
         <select id="completeTaxes" onchange="toggleDocumentPendingFields()">
@@ -5765,9 +5815,9 @@ body.veh-dock-open #formVeh{padding-bottom:40vh}
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.04.93"></script>
-<script src="./jcp-sync.js?v=2026.11.04.93"></script>
-<script src="./jcp-images.js?v=2026.11.04.93"></script>
+<script src="./jcp-accounting.js?v=2026.11.04.95"></script>
+<script src="./jcp-sync.js?v=2026.11.04.95"></script>
+<script src="./jcp-images.js?v=2026.11.04.95"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -8628,6 +8678,32 @@ function renderInternalReceipts(){
     </div>
   `).join('');
 }
+function jcpPrintLightStyle(){return `<style>
+html,body{background:#fff!important;-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important}
+*{background-color:transparent!important;background-image:none!important;color:#111!important;box-shadow:none!important;text-shadow:none!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+*{border-color:#cdb27a!important}
+h3,h1 span,th,.sale-number small,.amount-hero small,.amount-hero b,.land-title b,.page-tag,.purchase-title h1 span,.purchase-date b,.title span,.num small,.date{color:#8a6510!important}
+.check,.doc span,.green,.doc-row span{color:#2e7d32!important}
+.gold-total,.money-row.total,.total,.row.total,.land-total,.inv-total{border:2px solid #b8901f!important;font-weight:900!important}
+.empty-photo,.photo-empty,.empty,.land-photo:empty{color:#999!important}
+.sale-footer{position:static!important;margin-top:14px!important}
+*{border-color:#c49a2c!important}
+.sale-box,.land-box,.box{border-width:1.5px!important;border-radius:12px!important;overflow:hidden}
+.sale-box h3,.land-box h3,.box h3{background:#f5ead0!important;color:#6e4f08!important;margin:-14px -14px 12px!important;padding:9px 14px!important;border-bottom:2px solid #c49a2c!important;letter-spacing:.3px}
+.land-box h3{margin:-11px -11px 10px!important;padding:8px 11px!important}
+.sale-head,.land-head,.purchase-head,.th{border-bottom:4px solid #c49a2c!important}
+.sale-number,.purchase-date,.num{background:#f5ead0!important;border:1.5px solid #c49a2c!important}
+.gold-total,.money-row.total,.total,.row.total,.land-total,.land-pay-total,.inv-total{background:#f1dfa8!important;padding-left:8px!important;padding-right:8px!important;border:1.5px solid #b8901f!important;color:#111!important}
+.amount-hero{background:#faf4e4!important;border:1.5px solid #e2c77c!important;border-radius:10px!important}
+.amount-hero b{color:#7a5a0c!important}
+th{background:#f5ead0!important}
+.land-result.positive,.result-hero.positive{background:#eaf6ec!important;border:2px solid #3f9a52!important}.land-result.positive b,.result-hero.positive b,.land-result.positive small,.result-hero.positive small{color:#1f6b30!important}
+.land-result.negative,.result-hero.negative{background:#fbeaea!important;border:2px solid #c0392b!important}.land-result.negative b,.result-hero.negative b{color:#a12a1f!important}
+.vehicle-row,.client-row,.pay-row,.doc-row{border-bottom:1px solid #eadcb5!important}
+.empty-photo,.photo-empty,.empty,.sale-photo,.land-photo{background:#faf6ec!important}
+
+@media print{.mode-switch,.actions{display:none!important}}
+.mode-switch button,.actions button,#jcpSupportTools button{background:#f5ead0!important;color:#6e4f08!important;border:1.5px solid #c49a2c!important}</style>`;}
 function supportLogoSrc(){
   const candidates=[document.querySelector('.brand-logo'),document.querySelector('#registrosLogo'),document.querySelector('#extractosLogo'),document.querySelector('.unified-module-logo')];
   const el=candidates.find(x=>x&&x.src);return el?el.src:'';
@@ -8738,7 +8814,7 @@ body{margin:0;padding:18px;background:#050505;color:#fff;font-family:Arial,sans-
 .actions button{padding:10px 15px;border:1px solid #b98d20;border-radius:8px;background:#111;color:#d8aa32;font-weight:900}
 
 @media print{body{padding:0}.actions{display:none}.purchase-sheet{border:0;max-width:none}}
-</style>
+</style>${jcpPrintLightStyle()}
 </head>
 <body>
 <div class="purchase-sheet">
@@ -8912,7 +8988,7 @@ function saleSupportStyles(){
   .sale-footer{position:absolute;left:18px;right:18px;bottom:15px;text-align:center;color:#8d8d8d;font-size:9px;border-top:1px solid #3d310f;padding-top:8px}
   .mode-switch{max-width:1040px;margin:0 auto 10px;display:flex;justify-content:flex-end}.mode-switch button{border:1px solid #a77c17;background:#111;color:#d8aa32;padding:10px 14px;border-radius:8px;font-weight:900}
   .page-tag{color:#d8aa32;font-weight:900;font-size:11px;text-align:right;margin-top:7px}
-  @media(max-width:700px),(hover:none) and (pointer:coarse){
+  @media(max-width:700px){
     html,body{width:100%!important;min-width:0!important;overflow-x:hidden!important}
     body{padding:8px!important}
     .sale-page{width:100%!important;max-width:100%!important;min-width:0!important;min-height:0!important;margin:0 auto 12px!important;padding:12px!important;border-radius:10px!important}
@@ -8933,11 +9009,13 @@ function saleSupportStyles(){
   `;
 }
 
+function saleVehicleRowList(d,c,r){const sv=d.sold||{},cl=x=>{x=String(x||'').trim();return /^SIN REGISTRAR$/i.test(x)?'':x},g=(k,...alt)=>(cl(c[k])||alt.map(cl).find(Boolean)||'').toUpperCase()||'SIN REGISTRAR';return [['MARCA',g('marca',sv.marca,sv.m)],['CLASE',g('clase',sv.clase)],['LÍNEA',g('referencia',sv.ref)],['MODELO',g('modelo',sv.modelo)],['PLACA',g('placa',r.plate,sv.pl)],['COLOR',g('color',sv.color)],['SERVICIO',g('servicio',sv.servicio)],['CAPACIDAD',g('capacidad',sv.capacidad)],['CILINDRAJE',g('cilindraje',sv.cilindraje)],['MATRÍCULA DE',g('matricula',sv.matricula)],['N.º CHASIS',g('chasis',sv.chasis)],['N.º MOTOR',g('motor',sv.motor)]];}
+function saleVehicleRowsHtml(d,c,r){return saleVehicleRowList(d,c,r).map(([l,v])=>`<div class="vehicle-row"><span>${l}</span><b>${priceEsc(v)}</b></div>`).join('')}
 function saleClientSupportHtml(r){
   const d=saleSupportData(r),c=d.commercial||{},logo=supportLogoSrc(),docs=saleDocRows(c),pays=salePayRows(d.distribution);
   const displayPays=pays.length?pays:[{label:d.method||'FORMA DE PAGO',value:d.received}];
 
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>${priceEsc(d.number)} · SOPORTE CLIENTE</title><style>${saleSupportStyles()}</style></head><body>
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>${priceEsc(d.number)} · SOPORTE CLIENTE</title><style>${saleSupportStyles()}</style>${jcpPrintLightStyle()}</head><body>
   <div class="mode-switch"><button onclick="if(window.opener&&window.opener.openSaleSupportMode){window.opener.openSaleSupportMode('${jcpInlineJsArg(d.number)}','internal')}">VER SOPORTE INTERNO</button></div>
   <section class="sale-page">
     <div class="sale-head">${logo?`<img class="sale-logo" src="${priceEsc(logo)}">`:''}<div class="sale-title"><h1>VENTA<br><span>DE VEHÍCULO</span></h1><div class="sale-number"><small>N° DE VENTA</small><b>${priceEsc(d.number)}</b></div></div></div>
@@ -8946,12 +9024,7 @@ function saleClientSupportHtml(r){
       <div>
         <div class="sale-box" style="margin-bottom:14px"><h3>📅 FECHA DE VENTA</h3><b>${priceEsc(d.date)}</b></div>
         <div class="sale-box"><h3>🚘 INFORMACIÓN DEL VEHÍCULO</h3>
-          <div class="vehicle-row"><span>MARCA</span><b>${priceEsc(c.marca||'SIN REGISTRAR')}</b></div>
-          <div class="vehicle-row"><span>REFERENCIA</span><b>${priceEsc(c.referencia||'SIN REGISTRAR')}</b></div>
-          <div class="vehicle-row"><span>MODELO</span><b>${priceEsc(c.modelo||'SIN REGISTRAR')}</b></div>
-          <div class="vehicle-row"><span>CILINDRAJE</span><b>${priceEsc(c.cilindraje||'SIN REGISTRAR')}</b></div>
-          <div class="vehicle-row"><span>PLACA</span><b>${priceEsc(c.placa||r.plate||'SIN REGISTRAR')}</b></div>
-          <div class="vehicle-row"><span>MATRÍCULA DE</span><b>${priceEsc(c.matricula||'SIN REGISTRAR')}</b></div>
+          ${saleVehicleRowsHtml(d,c,r)}
           <div class="vehicle-row"><span>KILOMETRAJE</span><b>${Number(c.kilometraje||0)>0?priceEsc(Number(c.kilometraje).toLocaleString('es-CO')+' KM'):'SIN REGISTRAR'}</b></div>
         </div>
       </div>
@@ -9020,12 +9093,7 @@ function saleInternalSupportHtml(r){
           <div>
             <div class="sale-box" style="margin-bottom:14px"><h3>📅 FECHA DE VENTA</h3><b>${priceEsc(d.date)}</b></div>
             <div class="sale-box"><h3>🚘 INFORMACIÓN DEL VEHÍCULO</h3>
-              <div class="vehicle-row"><span>MARCA</span><b>${priceEsc(c.marca||'SIN REGISTRAR')}</b></div>
-              <div class="vehicle-row"><span>REFERENCIA</span><b>${priceEsc(c.referencia||'SIN REGISTRAR')}</b></div>
-              <div class="vehicle-row"><span>MODELO</span><b>${priceEsc(c.modelo||'SIN REGISTRAR')}</b></div>
-              <div class="vehicle-row"><span>CILINDRAJE</span><b>${priceEsc(c.cilindraje||'SIN REGISTRAR')}</b></div>
-              <div class="vehicle-row"><span>PLACA</span><b>${priceEsc(c.placa||r.plate||'SIN REGISTRAR')}</b></div>
-              <div class="vehicle-row"><span>MATRÍCULA DE</span><b>${priceEsc(c.matricula||'SIN REGISTRAR')}</b></div>
+              ${saleVehicleRowsHtml(d,c,r)}
               <div class="vehicle-row"><span>KILOMETRAJE</span><b>${Number(c.kilometraje||0)>0?priceEsc(Number(c.kilometraje).toLocaleString('es-CO')+' KM'):'SIN REGISTRAR'}</b></div>
             </div>
           </div>
@@ -9057,7 +9125,7 @@ function saleInternalSupportHtml(r){
     </section>`;
   }).join('');
 
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>${priceEsc(d.number)} · SOPORTE INTERNO</title><style>${saleSupportStyles()}</style></head><body>
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>${priceEsc(d.number)} · SOPORTE INTERNO</title><style>${saleSupportStyles()}</style>${jcpPrintLightStyle()}</head><body>
     <div class="mode-switch"><button onclick="if(window.opener&&window.opener.openSaleSupportMode){window.opener.openSaleSupportMode('${jcpInlineJsArg(d.number)}','client')}">VER SOPORTE PARA CLIENTE</button></div>${pages}</body></html>`;
 }
 
@@ -9098,13 +9166,13 @@ function saleInternalSupportHtml(r){
   const resultPositive=Number(d.profit||0)>=0;
   const expenseRows=(d.expenses||[]).map((x,i)=>`<tr><td>${i+1}</td><td>${priceEsc(x.concept||'GASTO VEHÍCULO')}</td><td>${priceMoney(Number(x.value||0))}</td></tr>`).join('');
   const row=(label,value,extra='')=>`<div class="land-row ${extra}"><span>${priceEsc(label)}</span><b>${value}</b></div>`;
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${priceEsc(d.number)} · SOPORTE INTERNO</title><style>${saleInternalLandscapeStyles()}</style></head><body>
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${priceEsc(d.number)} · SOPORTE INTERNO</title><style>${saleInternalLandscapeStyles()}</style>${jcpPrintLightStyle()}</head><body>
   <div class="mode-switch"><button onclick="if(window.opener&&window.opener.openSaleSupportMode){window.opener.openSaleSupportMode('${jcpInlineJsArg(d.number)}','client')}">VER SOPORTE PARA CLIENTE</button></div>
   <section class="sale-page sale-landscape">
     <div class="land-head">${logo?`<img class="land-logo" src="${priceEsc(logo)}">`:''}<div class="land-title"><h1>VENTA <span>DE VEHÍCULO</span></h1><b>SOPORTE INTERNO · ${priceEsc(d.number)}</b></div><div class="land-meta"><strong>${priceEsc(d.date)}</strong>PÁGINA 1 DE 2</div></div>
     <div class="land-main">
       <div class="land-left">
-        <div class="land-box"><h3>🚘 INFORMACIÓN DEL VEHÍCULO</h3><div class="land-vehicle"><div class="land-photo">${c.photo?`<img src="${priceEsc(c.photo)}" alt="Foto principal del vehículo">`:`<div class="empty-photo">SIN FOTO PRINCIPAL</div>`}</div><div>${row('MARCA',priceEsc(c.marca||'SIN REGISTRAR'))}${row('REFERENCIA',priceEsc(c.referencia||'SIN REGISTRAR'))}${row('MODELO',priceEsc(c.modelo||'SIN REGISTRAR'))}${row('CILINDRAJE',priceEsc(c.cilindraje||'SIN REGISTRAR'))}${row('PLACA',priceEsc(c.placa||r.plate||'SIN REGISTRAR'))}${row('MATRÍCULA DE',priceEsc(c.matricula||'SIN REGISTRAR'))}${row('KILOMETRAJE',Number(c.kilometraje||0)>0?priceEsc(Number(c.kilometraje).toLocaleString('es-CO')+' KM'):'SIN REGISTRAR')}</div></div></div>
+        <div class="land-box"><h3>🚘 INFORMACIÓN DEL VEHÍCULO</h3><div class="land-vehicle"><div class="land-photo">${c.photo?`<img src="${priceEsc(c.photo)}" alt="Foto principal del vehículo">`:`<div class="empty-photo">SIN FOTO PRINCIPAL</div>`}</div><div>${saleVehicleRowList(d,c,r).map(([l,v])=>row(l,priceEsc(v))).join('')}${row('KILOMETRAJE',Number(c.kilometraje||0)>0?priceEsc(Number(c.kilometraje).toLocaleString('es-CO')+' KM'):'SIN REGISTRAR')}</div></div></div>
         <div class="land-box"><h3>📋 DOCUMENTACIÓN Y ESTADO</h3><div class="land-docs">${docs.map(([k,v])=>`<div class="land-doc"><span>✓ ${priceEsc(k)}</span><b>${priceEsc(v)}</b></div>`).join('')}</div></div>
       </div>
       <div class="land-right">
@@ -9163,7 +9231,7 @@ function tradeVehicle(title,c){
 }
 function tradeClientSupportHtml(r){
  const d=tradeSupportData(r),logo=supportLogoSrc(),pays=[['EFECTIVO',d.dist.cash],['BANCOLOMBIA',d.dist.bancolombia],['DAVIVIENDA',d.dist.davivienda],['NEQUI',d.dist.nequi],['DAVIPLATA',d.dist.daviplata]].filter(x=>Number(x[1]||0)>0);
- return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1180"><style>${tradeStyles()}</style></head><body><section class="tp"><div class="th">${logo?`<img class="logo" src="${priceEsc(logo)}">`:''}<div class="title"><h1>PERMUTA<br><span>DE VEHÍCULOS</span></h1><div class="num"><small>N° DE PERMUTA</small><b>${priceEsc(d.number)}</b></div></div></div><div class="date">📅 FECHA DE LA PERMUTA &nbsp; <b style="color:#fff">${priceEsc(d.date)}</b></div><div class="two">${tradeVehicle('🚘 VEHÍCULO ENTREGADO POR COLOMBIAUTOS JP',d.co)}${tradeVehicle('🚘 VEHÍCULO RECIBIDO EN PERMUTA',d.ci)}</div>
+ return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1180"><style>${tradeStyles()}</style>${jcpPrintLightStyle()}</head><body><section class="tp"><div class="th">${logo?`<img class="logo" src="${priceEsc(logo)}">`:''}<div class="title"><h1>PERMUTA<br><span>DE VEHÍCULOS</span></h1><div class="num"><small>N° DE PERMUTA</small><b>${priceEsc(d.number)}</b></div></div></div><div class="date">📅 FECHA DE LA PERMUTA &nbsp; <b style="color:#fff">${priceEsc(d.date)}</b></div><div class="two">${tradeVehicle('🚘 VEHÍCULO ENTREGADO POR COLOMBIAUTOS JP',d.co)}${tradeVehicle('🚘 VEHÍCULO RECIBIDO EN PERMUTA',d.ci)}</div>
  <div class="box" style="margin-top:12px"><h3>👤 DATOS DEL CLIENTE</h3><div class="two"><div><div class="line"><span>NOMBRE</span><b>${priceEsc(d.client)}</b></div><div class="line"><span>TELÉFONO</span><b>${priceEsc(d.phone||'SIN REGISTRAR')}</b></div></div><div><div class="line"><span>IDENTIFICACIÓN</span><b>${priceEsc(d.doc||'SIN REGISTRAR')}</b></div><div class="line"><span>DIRECCIÓN</span><b>${priceEsc(d.address||'SIN REGISTRAR')}</b></div></div></div></div>
  <div class="box" style="margin-top:12px"><h3>💱 LIQUIDACIÓN DE LA PERMUTA</h3><div class="line"><span>VALOR VEHÍCULO ENTREGADO</span><b>${priceMoney(d.outValue)}</b></div><div class="line"><span>VALOR VEHÍCULO RECIBIDO</span><b>${priceMoney(d.inValue)}</b></div><div class="line total"><span>DIFERENCIA</span><b>${priceMoney(d.difference)}</b></div><div class="line"><span>DIFERENCIA PAGADA POR</span><b>${priceEsc(d.differenceBy)}</b></div><div class="line"><span>CONDICIÓN</span><b>${priceEsc(d.paymentCondition)}</b></div>${(pays.length?pays:[[String(r.method||'RECIBIDO AHORA').toUpperCase(),d.received]]).map(x=>`<div class="line"><span>${priceEsc(x[0])}</span><b>${priceMoney(Number(x[1]||0))}</b></div>`).join('')}<div class="line"><span>SALDO PENDIENTE</span><b class="green">${priceMoney(d.pending)}</b></div></div>
  <div class="box" style="margin-top:12px"><h3>📝 OBSERVACIONES</h3><div style="min-height:70px;font-size:10px">${priceEsc(d.obs||'SIN OBSERVACIONES REGISTRADAS.')}</div></div><div class="two" style="margin-top:15px"><div class="box" style="text-align:center;padding-top:38px"><b>COLOMBIAUTOS JP</b><br><small>VENDEDOR</small></div><div class="box" style="text-align:center;padding-top:38px"><b>${priceEsc(d.client)}</b><br><small>CLIENTE</small></div></div><div class="foot">SOPORTE PARA CLIENTE · PERMUTA DE VEHÍCULOS</div></section></body></html>`;
@@ -9171,7 +9239,7 @@ function tradeClientSupportHtml(r){
 function tradeInternalSupportHtml(r){
  const d=tradeSupportData(r),logo=supportLogoSrc(),chunks=[d.expenses.slice(0,7)];for(let i=7;i<d.expenses.length;i+=20)chunks.push(d.expenses.slice(i,i+20));let ix=0;
  const table=(rows,last)=>`<table class="table"><thead><tr><th>#</th><th>CONCEPTO</th><th>VALOR</th></tr></thead><tbody>${rows.length?rows.map(x=>`<tr><td>${++ix}</td><td>${priceEsc(x.concept)}</td><td>${priceMoney(x.value)}</td></tr>`).join(''):`<tr><td colspan="3">SIN GASTOS RELACIONADOS</td></tr>`}${last?`<tr class="total"><td colspan="2">TOTAL GASTOS</td><td>${priceMoney(d.expenseTotal)}</td></tr>`:''}</tbody></table>`;
- return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1180"><style>${tradeStyles()}</style></head><body>${chunks.map((rows,i)=>i?`<section class="tp"><div class="th">${logo?`<img class="logo" src="${priceEsc(logo)}">`:''}<div class="title"><h1>PERMUTA<br><span>DE VEHÍCULOS</span></h1><div class="num"><small>N° DE PERMUTA</small><b>${priceEsc(d.number)}</b></div></div></div><div class="box" style="margin-top:15px"><h3>💲 DESGLOSE DE GASTOS · CONTINUACIÓN · PÁG. ${i+1} DE ${chunks.length}</h3>${table(rows,i===chunks.length-1)}</div><div class="foot">SOPORTE INTERNO · PÁG. ${i+1} DE ${chunks.length}</div></section>`:`<section class="tp"><div class="th">${logo?`<img class="logo" src="${priceEsc(logo)}">`:''}<div class="title"><h1>PERMUTA<br><span>DE VEHÍCULOS</span></h1><div class="num"><small>N° DE PERMUTA</small><b>${priceEsc(d.number)}</b></div></div></div><div class="date">📅 FECHA DE LA PERMUTA &nbsp; <b style="color:#fff">${priceEsc(d.date)}</b></div><div class="two">${tradeVehicle('🚘 VEHÍCULO QUE SALE DEL INVENTARIO',d.co)}${tradeVehicle('🚘 VEHÍCULO QUE ENTRA AL INVENTARIO',d.ci)}</div>
+ return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1180"><style>${tradeStyles()}</style>${jcpPrintLightStyle()}</head><body>${chunks.map((rows,i)=>i?`<section class="tp"><div class="th">${logo?`<img class="logo" src="${priceEsc(logo)}">`:''}<div class="title"><h1>PERMUTA<br><span>DE VEHÍCULOS</span></h1><div class="num"><small>N° DE PERMUTA</small><b>${priceEsc(d.number)}</b></div></div></div><div class="box" style="margin-top:15px"><h3>💲 DESGLOSE DE GASTOS · CONTINUACIÓN · PÁG. ${i+1} DE ${chunks.length}</h3>${table(rows,i===chunks.length-1)}</div><div class="foot">SOPORTE INTERNO · PÁG. ${i+1} DE ${chunks.length}</div></section>`:`<section class="tp"><div class="th">${logo?`<img class="logo" src="${priceEsc(logo)}">`:''}<div class="title"><h1>PERMUTA<br><span>DE VEHÍCULOS</span></h1><div class="num"><small>N° DE PERMUTA</small><b>${priceEsc(d.number)}</b></div></div></div><div class="date">📅 FECHA DE LA PERMUTA &nbsp; <b style="color:#fff">${priceEsc(d.date)}</b></div><div class="two">${tradeVehicle('🚘 VEHÍCULO QUE SALE DEL INVENTARIO',d.co)}${tradeVehicle('🚘 VEHÍCULO QUE ENTRA AL INVENTARIO',d.ci)}</div>
  <div class="box" style="margin-top:12px"><h3>👤 DATOS DEL CLIENTE</h3><div class="two"><div><div class="line"><span>NOMBRE</span><b>${priceEsc(d.client)}</b></div><div class="line"><span>TELÉFONO</span><b>${priceEsc(d.phone||'SIN REGISTRAR')}</b></div></div><div><div class="line"><span>IDENTIFICACIÓN</span><b>${priceEsc(d.doc||'SIN REGISTRAR')}</b></div><div class="line"><span>DIRECCIÓN</span><b>${priceEsc(d.address||'SIN REGISTRAR')}</b></div></div></div></div>
  <div class="two" style="margin-top:12px"><div class="box"><h3>📤 VEHÍCULO QUE SALE</h3><div class="line"><span>PRECIO DE COMPRA / SALDO HEREDADO</span><b>${priceMoney(d.purchasePrice)}</b></div><div class="line"><span>GASTOS RELACIONADOS</span><b>${priceMoney(d.expenseTotal)}</b></div><div class="line total"><span>INVERSIÓN REAL ACUMULADA</span><b>${priceMoney(d.investment)}</b></div></div><div class="box"><h3>📥 VEHÍCULO QUE ENTRA</h3><div class="line"><span>DINERO DE ENCIMA</span><b>${priceMoney(d.difference)}</b></div><div class="line"><span>MOVIMIENTO</span><b>${priceEsc(d.differenceBy)}</b></div><div class="line total"><span>SALDO DE INVERSIÓN HEREDADO</span><b>${priceMoney(d.inheritedInvestment)}</b></div></div></div>
  <div class="box" style="margin-top:12px"><h3>📊 TRATAMIENTO FINANCIERO</h3><div class="line"><span>INVERSIÓN VEHÍCULO QUE SALE</span><b>${priceMoney(d.investment)}</b></div><div class="line"><span>DIFERENCIA FÍSICA DE DINERO</span><b>${priceMoney(d.difference)}</b></div><div class="line total"><span>SALDO TRASLADADO AL VEHÍCULO RECIBIDO</span><b>${priceMoney(d.inheritedInvestment)}</b></div><div class="line"><span>RECONOCIMIENTO DE UTILIDAD</span><b>APLAZADO HASTA LA VENTA FINAL POR DINERO</b></div></div>
@@ -9338,6 +9406,7 @@ async function addVeh(){
  const gv=id=>(document.getElementById(id)?.value||'').trim().toUpperCase();
  const extra={clase:gv('vclase'),color:gv('vcolor'),servicio:gv('vservicio'),capacidad:gv('vcapacidad'),chasis:gv('vchasis').replace(/\s+/g,''),motor:gv('vmotor').replace(/\s+/g,''),soatVence:document.getElementById('vsoatVence')?.value||'',tecnoVence:document.getElementById('vtecnoVence')?.value||''};
  if(!marca||!referencia||!modelo||!placa||compra<=0){alert('COMPLETA LOS DATOS DE LA COMPRA: MARCA, LÍNEA, MODELO, PLACA Y PRECIO.');return;}
+ {const pend=(window.jcpCriticalPending?jcpCriticalPending(['vplaca','vchasis','vmotor','vcilindraje']):[]);if(pend.length){alert('ANTES DE GUARDAR, COMPARA CON LA TARJETA Y TOCA "✔ REVISADO" EN: '+pend.map(id=>({vplaca:'PLACA',vchasis:'CHASIS',vmotor:'MOTOR',vcilindraje:'CILINDRAJE'})[id]).join(', ')+'.\n\nSI UN NÚMERO QUEDA MAL, TRÁNSITO RECHAZA EL TRÁMITE.');try{document.getElementById(pend[0]).scrollIntoView({behavior:'smooth',block:'center'});}catch(_e){}return;}}
  if(!validatePaymentDistribution('purchase',compra))return;
  if((data.veh||[]).some(v=>String(v.pl||'').trim().toUpperCase().replace(/\s+/g,'')===placa)){alert('YA EXISTE UN VEHÍCULO CON ESA PLACA.');return;}
  const file=vfoto.files[0];let photo='';
@@ -9961,6 +10030,13 @@ function getVehicleCommercialSnapshot(vehicle){
       byAliases(['photo','foto','imagen','image'],'')
     ),
 
+    clase:String(v.clase||'').trim().toUpperCase(),
+    color:String(v.color||'').trim().toUpperCase(),
+    servicio:String(v.servicio||'').trim().toUpperCase(),
+    capacidad:String(v.capacidad||'').trim().toUpperCase(),
+    chasis:String(v.chasis||'').trim().toUpperCase(),
+    motor:String(v.motor||'').trim().toUpperCase(),
+
     marca:textFrom(
       ['marca','brand'],
       v.marca,v.m
@@ -10143,6 +10219,8 @@ function openVehicleDetail(id){
     .vd2-doc b{font-size:15px;font-weight:800;color:#fff;line-height:1.2;overflow-wrap:anywhere}
     .vd2-doc small{font-size:13px;margin-top:3px}
     .vd2-ok{background:#12281a;border-color:#2f6b45}.vd2-ok strong{color:#8fd4a8}
+    .vd2-missing{display:block;width:calc(100% - 24px);margin:0 12px 10px;min-height:40px;border-radius:10px;border:1px solid #a87a12;background:#33290d;color:#f0c35a;font-weight:800;font-size:11.5px}
+    .vd2-field.vd2-ok{border-color:rgba(70,190,120,.55)!important;background:rgba(40,120,70,.18)!important}.vd2-field.vd2-ok b{color:#5fd38d!important;font-size:14px!important}.vd2-more{display:block;width:calc(100% - 24px);margin:10px 12px 0;padding:11px;border-radius:12px;border:1px solid rgba(240,195,90,.45);background:transparent;color:#f0c35a;font-weight:800;font-size:12px;letter-spacing:.4px;cursor:pointer}.vd2-full{margin-top:10px}.vd2-full[hidden]{display:none!important}.vd2-missing-val{color:#f0c35a!important;font-weight:600!important;font-size:12px!important}
     .vd2-warn{background:#33290d;border-color:#a87a12}.vd2-warn strong,.vd2-warn small{color:#f0c35a}
     .vd2-bad{background:#341616;border-color:#a33a3a}.vd2-bad strong,.vd2-bad small{color:#f09595}
     .vd2-list{display:grid}
@@ -10168,21 +10246,22 @@ function openVehicleDetail(id){
     <div class="vd2-card vd2-first">
       <img class="vd2-photo" src="${jcpSafeImageSrc(photo)}" alt="Foto del vehículo">
       ${(typeof jcpVehBadgesRow==='function')?jcpVehBadgesRow(veh):''}
+      ${(!veh.chasis||!veh.motor||!veh.color||!veh.clase)?`<button type="button" class="vd2-missing" onclick="openCompleteInfoSelector();setTimeout(()=>selectVehicleCompleteInfo('${esc(veh.id)}'),0)">⚠️ FALTA TARJETA DE PROPIEDAD · TOCA PARA COMPLETAR</button>`:''}
       <div class="vd2-fields">
-        <div class="vd2-field"><small>Marca</small><b>${esc(commercial.marca||'SIN REGISTRAR')}</b></div>
-        <div class="vd2-field"><small>Referencia</small><b>${esc(commercial.referencia||'SIN REGISTRAR')}</b></div>
-        <div class="vd2-field"><small>Modelo</small><b>${esc(commercial.modelo||'SIN REGISTRAR')}</b></div>
-        <div class="vd2-field"><small>Cilindraje</small><b>${esc(commercial.cilindraje||'SIN REGISTRAR')}</b></div>
-        <div class="vd2-field"><small>Placa</small><b>${esc(commercial.placa||'SIN REGISTRAR')}</b></div>
-        <div class="vd2-field"><small>Matrícula de</small><b>${esc(read('matricula'))}</b></div>
+        ${[['Marca',commercial.marca||veh.marca||veh.m],['Clase',veh.clase],['Línea',commercial.referencia||veh.ref],['Modelo',commercial.modelo||veh.modelo],['Placa',commercial.placa||veh.pl],['Color',veh.color],['Cilindraje',commercial.cilindraje||veh.cilindraje],['Matrícula de',read('matricula','')]].map(([l,v])=>`<div class="vd2-field"><small>${l}</small><b${String(v||'').trim()?'':' class="vd2-missing-val"'}>${esc(String(v||'').trim()||'SIN REGISTRAR')}</b></div>`).join('')}
+        ${[['N.º chasis',veh.chasis],['N.º motor',veh.motor]].map(([l,v])=>String(v||'').trim()?`<div class="vd2-field vd2-ok"><small>${l}</small><b>✔ REGISTRADO</b></div>`:`<div class="vd2-field"><small>${l}</small><b class="vd2-missing-val">⚠️ FALTA</b></div>`).join('')}
+      </div>
+      <button type="button" class="vd2-more" onclick="const b=this.nextElementSibling;const o=b.hidden;b.hidden=!o;this.textContent=o?'▲ OCULTAR INFORMACIÓN COMPLETA':'▼ VER INFORMACIÓN COMPLETA'">▼ VER INFORMACIÓN COMPLETA</button>
+      <div class="vd2-fields vd2-full" hidden>
+        ${[['Servicio',veh.servicio],['Capacidad',veh.capacidad],['N.º chasis',veh.chasis],['N.º motor',veh.motor]].map(([l,v])=>`<div class="vd2-field"><small>${l}</small><b${String(v||'').trim()?'':' class="vd2-missing-val"'}>${esc(String(v||'').trim()||'SIN REGISTRAR')}</b></div>`).join('')}
       </div>
     </div>
 
     <div class="vd2-card">
       <div class="vd2-head">Documentación y estado</div>
       <div class="vd2-docgrid">
-        ${doc('SOAT',read('soat'),docTone(read('soat')))}
-        ${doc('Tecnomecánica',read('tecnomecanica'),docTone(read('tecnomecanica')))}
+        ${(()=>{const m=jcpDocMonth(veh.soatVence||read('soat',''));return m?doc('SOAT',m.text,m.tone,m.extra):doc('SOAT',read('soat'),docTone(read('soat')));})()}
+        ${(()=>{const m=jcpDocMonth(veh.tecnoVence||read('tecnomecanica',''));return m?doc('Tecnomecánica',m.text,m.tone,m.extra):doc('Tecnomecánica',read('tecnomecanica'),docTone(read('tecnomecanica')));})()}
         ${doc('Impuestos',read('impuestos'),taxTone,taxExtra)}
         ${doc('Comparendos',read('comparendos','SIN REGISTRAR'),yesNoTone(read('comparendos','SIN REGISTRAR')),compExtra)}
         ${doc('Prendas',read('prendas','SIN REGISTRAR'),yesNoTone(read('prendas','SIN REGISTRAR')))}
@@ -10355,6 +10434,24 @@ function printVehicleFinancialSupport(id){
 }
 
 let completingVehicleId=null;
+function jcpDocMonth(v){
+  const m=jcpToMonthValue(v);if(!m)return null;
+  const M=['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+  const y=+m.slice(0,4),mo=+m.slice(5,7),now=new Date(),cur=now.getFullYear()*12+now.getMonth(),due=y*12+(mo-1);
+  const text=M[mo-1]+' '+y;
+  if(due<cur)return {text,tone:'bad',extra:'VENCIDO'};
+  if(due===cur)return {text,tone:'warn',extra:'VENCE ESTE MES'};
+  if(due===cur+1)return {text,tone:'warn',extra:'VENCE EL PRÓXIMO MES'};
+  return {text,tone:'ok',extra:'VIGENTE'};
+}
+function jcpToMonthValue(v){
+  v=String(v||'').trim().toUpperCase();if(/^\d{4}-\d{2}/.test(v))return v.slice(0,7);
+  const M=['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+  const y=v.match(/(20\d{2}|19\d{2})/);const mi=M.findIndex(m=>v.includes(m));
+  if(y&&mi>=0)return y[1]+'-'+String(mi+1).padStart(2,'0');
+  const d=v.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);if(d){let yy=+d[3];if(yy<100)yy+=2000;return yy+'-'+String(+d[2]).padStart(2,'0');}
+  return '';
+}
 function openCompleteInfoSelector(){
   completingVehicleId=null;
   show('completarInfoVehiculo');
@@ -10367,8 +10464,9 @@ function renderCompleteInfoVehicles(){
   const el=document.getElementById('completeInfoVehicleGrid');if(!el)return;
   const q=(document.getElementById('completeInfoSearch')?.value||'').trim().toUpperCase();
   let rows=(data.veh||[]).filter(v=>!q||[v.pl,v.marca||v.m,v.ref,v.modelo].join(' ').toUpperCase().includes(q));
+  rows=rows.slice().sort((a,b)=>((!a.chasis||!a.motor||!a.color||!a.clase)?0:1)-((!b.chasis||!b.motor||!b.color||!b.clase)?0:1));
   const noPhoto='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
-  el.innerHTML=rows.length?rows.map(v=>`<div class="vehicle-card" onclick="selectVehicleCompleteInfo('${jcpInlineJsArg(v.id)}')"><img src="${jcpSafeImageSrc(v.photo,noPhoto)}" alt="Foto"><div class="vc-body"><div class="label">${clientEsc(v.pl||'SIN PLACA')}</div><b>${clientEsc(v.marca||v.m||'')} ${clientEsc(v.ref||'')}</b><div class="label">${clientEsc(v.modelo||'')}</div></div></div>`).join(''):'<div class="empty" style="grid-column:1/-1">NO HAY VEHÍCULOS COINCIDENTES.</div>';
+  el.innerHTML=rows.length?rows.map(v=>`<div class="vehicle-card" onclick="selectVehicleCompleteInfo('${jcpInlineJsArg(v.id)}')"><img src="${jcpSafeImageSrc(v.photo,noPhoto)}" alt="Foto"><div class="vc-body"><div class="label">${clientEsc(v.pl||'SIN PLACA')}</div><b>${clientEsc(v.marca||v.m||'')} ${clientEsc(v.ref||'')}</b><div class="label">${clientEsc(v.modelo||'')}</div>${(!v.chasis||!v.motor||!v.color||!v.clase)?'<div style="margin-top:4px;font-size:10px;font-weight:900;color:#f1c40f">⚠️ FALTA TARJETA</div>':'<div style="margin-top:4px;font-size:10px;font-weight:900;color:#57d68d">✔ TARJETA COMPLETA</div>'}</div></div>`).join(''):'<div class="empty" style="grid-column:1/-1">NO HAY VEHÍCULOS COINCIDENTES.</div>';
 }
 function normalizeDocSelect(value){
   const x=String(value||'').trim().toUpperCase().replace('Í','I');
@@ -10414,8 +10512,11 @@ function selectVehicleCompleteInfo(id){
   const noPhoto='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250"><rect width="100%" height="100%" fill="#111"/></svg>');
   const card=document.getElementById('completeInfoVehicleCard');
   if(card)card.innerHTML=`<div class="complete-vehicle-card"><img src="${jcpSafeImageSrc(v.photo,noPhoto)}"><div><b>${clientEsc(v.marca||v.m||'')} ${clientEsc(v.ref||'')}</b><div class="label">${clientEsc(v.pl||'SIN PLACA')} · ${clientEsc(v.modelo||'')}</div></div></div>`;
-  document.getElementById('completeSoat').value=info.soat??v.soat??'';
-  document.getElementById('completeTecno').value=info.tecnomecanica??v.tecnomecanica??'';
+  document.getElementById('completeSoat').value=jcpToMonthValue(v.soatVence||info.soat||v.soat||'');
+  document.getElementById('completeTecno').value=jcpToMonthValue(v.tecnoVence||info.tecnomecanica||v.tecnomecanica||'');
+  try{ciResetScan();}catch(_e){}
+  const civ={ci_marca:v.marca||v.m,ci_clase:v.clase,ci_linea:v.ref,ci_modelo:v.modelo,ci_placa:v.pl,ci_color:v.color,ci_servicio:v.servicio,ci_capacidad:v.capacidad,ci_chasis:v.chasis,ci_motor:v.motor};
+  Object.keys(civ).forEach(k=>{const e=document.getElementById(k);if(e){e.value=String(civ[k]||'').toUpperCase();delete e.dataset.confirmed;}});
   document.getElementById('completeTaxes').value=normalizeDocSelect(info.impuestos??v.impuestos??'');
   document.getElementById('completeComparendos').value=normalizeYesNoDoc(info.comparendos??v.comparendos??'');
   document.getElementById('completePrendas').value=normalizeYesNoDoc(info.prendas??v.prendas??'');
@@ -10443,7 +10544,7 @@ function clearCompleteInfoForm(){
   const card=document.getElementById('completeInfoVehicleCard');if(card)card.innerHTML='';
 }
 function closeCompleteInfoModule(){
-  completingVehicleId=null;
+  completingVehicleId=null;try{ciResetScan();}catch(_e){}
   clearCompleteInfoForm();
   show('vehiculos');
   try{render();}catch(e){}
@@ -10453,7 +10554,7 @@ function closeCompleteInfoModule(){
 }
 
 function cancelCompleteInfoVehicle(){
-  completingVehicleId=null;
+  completingVehicleId=null;try{ciResetScan();}catch(_e){}
   clearCompleteInfoForm();
   const form=document.getElementById('completeInfoFormBox');
   const selector=document.getElementById('completeInfoSelectorBox');
@@ -10464,8 +10565,13 @@ function cancelCompleteInfoVehicle(){
 function saveCompleteVehicleInfo(){
   const current=(data.veh||[]).find(x=>String(x.id)===String(completingVehicleId));
   if(!current){alert('SELECCIONA UN VEHÍCULO.');return false;}
-  const soat=(document.getElementById('completeSoat')?.value||'').trim().toUpperCase();
-  const tecnomecanica=(document.getElementById('completeTecno')?.value||'').trim().toUpperCase();
+  const soatM=(document.getElementById('completeSoat')?.value||'').trim(),tecnoM=(document.getElementById('completeTecno')?.value||'').trim();
+  const soat=soatM||String(current.soat||'');
+  const tecnomecanica=tecnoM||String(current.tecnomecanica||'');
+  {const pend=(window.jcpCriticalPending?jcpCriticalPending(['ci_placa','ci_chasis','ci_motor','completeCilindraje']):[]);if(pend.length){alert('ANTES DE GUARDAR, COMPARA CON LA TARJETA Y TOCA "✔ REVISADO" EN: '+pend.map(id=>({ci_placa:'PLACA',ci_chasis:'CHASIS',ci_motor:'MOTOR',completeCilindraje:'CILINDRAJE'})[id]).join(', ')+'.');try{document.getElementById(pend[0]).scrollIntoView({behavior:'smooth',block:'center'});}catch(_e){}return false;}}
+  const civ=id=>(document.getElementById(id)?.value||'').trim().toUpperCase();
+  const card={marca:civ('ci_marca'),clase:civ('ci_clase'),ref:civ('ci_linea'),modelo:civ('ci_modelo'),pl:civ('ci_placa').replace(/\s+/g,''),color:civ('ci_color'),servicio:civ('ci_servicio'),capacidad:civ('ci_capacidad'),chasis:civ('ci_chasis').replace(/\s+/g,''),motor:civ('ci_motor').replace(/\s+/g,'')};
+  if(card.pl&&card.pl!==String(current.pl||'').toUpperCase()&&(data.veh||[]).some(x=>x!==current&&String(x.pl||'').toUpperCase().replace(/\s+/g,'')===card.pl)){alert('YA EXISTE OTRO VEHÍCULO CON LA PLACA '+card.pl+'.');return false;}
   const impuestos=(document.getElementById('completeTaxes')?.value||'').trim().toUpperCase();
   const comparendos=(document.getElementById('completeComparendos')?.value||'').trim().toUpperCase();
   const prendas=(document.getElementById('completePrendas')?.value||'').trim().toUpperCase();
@@ -10483,6 +10589,8 @@ function saveCompleteVehicleInfo(){
   if(!nv){alert('NO SE ENCONTRÓ EL VEHÍCULO.');return false;}
   try{
     nv.additionalInfo={...(nv.additionalInfo||{}),soat,tecnomecanica,impuestos,valorPendienteImpuestos,comparendos,valorPendienteComparendos,prendas,embargos,reportes,valorReportes,cilindraje,matricula,kilometraje,precioEstimadoVenta,updatedAt:new Date().toISOString()};
+    Object.keys(card).forEach(k=>{if(card[k])nv[k]=card[k];});if(card.marca)nv.m=card.marca;
+    if(soatM)nv.soatVence=soatM;if(tecnoM)nv.tecnoVence=tecnoM;
     nv.soat=soat;nv.tecnomecanica=tecnomecanica;nv.impuestos=impuestos;nv.valorPendienteImpuestos=valorPendienteImpuestos;
     nv.comparendos=comparendos;nv.valorPendienteComparendos=valorPendienteComparendos;nv.prendas=prendas;nv.embargos=embargos;
     nv.reportes=reportes;nv.valorReportes=valorReportes;nv.cilindraje=cilindraje;nv.matricula=matricula;nv.kilometraje=kilometraje;nv.precioEstimadoVenta=precioEstimadoVenta;
@@ -10491,7 +10599,7 @@ function saveCompleteVehicleInfo(){
     assertInventoryUnchanged(inventoryIdentity(before),next,'COMPLETAR INFORMACIÓN DEL VEHÍCULO');
     data=next;save();render();
     alert('✅ INFORMACIÓN Y DOCUMENTACIÓN DEL VEHÍCULO ACTUALIZADA.');
-    completingVehicleId=null;clearCompleteInfoForm();show('vehiculos');window.scrollTo({top:0,behavior:'auto'});return true;
+    completingVehicleId=null;try{ciResetScan();}catch(_e){}clearCompleteInfoForm();show('vehiculos');window.scrollTo({top:0,behavior:'auto'});return true;
   }catch(e){data=before;try{render();}catch(_e){}console.error(e);alert('NO FUE POSIBLE GUARDAR LA INFORMACIÓN. LOS DATOS ANTERIORES FUERON RESTAURADOS.');return false;}
 }
 
@@ -12812,7 +12920,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.04.93\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.04.95\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -14312,6 +14420,16 @@ function saveOperationsOperatingExpense(){
 }
 </script>
 <script id="v16-inventory-readonly-purchase">
+function cancelVehPurchase(){
+  const form=document.getElementById('formVeh');
+  const filled=form?Array.from(form.querySelectorAll('input,select,textarea')).some(e=>e.type!=='button'&&e.type!=='checkbox'&&e.type!=='radio'&&String(e.value||'').trim()!==''):false;
+  if(filled&&!confirm('¿CANCELAR LA COMPRA? SE BORRARÁ TODO LO QUE LLENASTE.'))return;
+  const host=document.getElementById('operationsPurchaseHost');
+  if(host&&form&&form.parentElement===host){closeOperationsPurchase();return;}
+  try{clearVehicleForm();}catch(e){}
+  try{clearPaymentDistribution('purchase');}catch(e){}
+  if(form)form.style.display='none';
+}
 function closeOperationsPurchase(){
   const host=document.getElementById('operationsPurchaseHost');
   const form=document.getElementById('formVeh');
@@ -16674,10 +16792,13 @@ function voidAccountingDocument(){
   if(!baseHtml)baseHtml='<html><body>NO FUE POSIBLE GENERAR EL SOPORTE.</body></html>';
 
   baseHtml=baseHtml.replace(/<button[^>]*onclick=["']window\.print\(\)["'][^>]*>[\s\S]*?<\/button>/gi,'');
+  const jcpVwMatch=baseHtml.match(/<meta[^>]+name=["']viewport["'][^>]*content=["']width=(\d+)/i);
+  const jcpVw=jcpVwMatch?jcpVwMatch[1]:(/min-width:1180px/.test(baseHtml)?'1200':'1080');
+  const jcpVwTag='<meta name="viewport" content="width='+jcpVw+', user-scalable=yes">';
   if(/<meta[^>]+name=["']viewport["'][^>]*>/i.test(baseHtml)){
-    baseHtml=baseHtml.replace(/<meta[^>]+name=["']viewport["'][^>]*>/i,'<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">');
+    baseHtml=baseHtml.replace(/<meta[^>]+name=["']viewport["'][^>]*>/i,jcpVwTag);
   }else{
-    baseHtml=baseHtml.replace(/<head>/i,'<head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">');
+    baseHtml=baseHtml.replace(/<head>/i,'<head>'+jcpVwTag);
   }
 
   const safeFile=String(fileKey||'SOPORTE').replace(/[^A-Z0-9_-]/gi,'_');
@@ -16686,7 +16807,7 @@ function voidAccountingDocument(){
   #jcpSupportTools button{min-height:46px;border:0;border-radius:7px;padding:8px;font-weight:900;font-size:11px;cursor:pointer}
   #jcpDownloadImage{background:#b89227;color:#111}#jcpShareImage{background:#111;color:#fff}#jcpPrintPdf{background:#333;color:#fff}
   #jcpSupportMsg{grid-column:1/-1;text-align:center;font-size:10px;color:#777;min-height:14px}
-  @media(max-width:700px),(hover:none) and (pointer:coarse){
+  @media(max-width:700px){
     html,body{min-width:0!important;width:100%!important;overflow-x:hidden!important}
     body{padding:8px!important}
     .sheet,.purchase-sheet,.sale-sheet,.sale-page,.tp{width:100%!important;max-width:100%!important;min-width:0!important;margin:0 auto!important;padding:16px!important;transform:none!important}
@@ -16723,7 +16844,7 @@ function voidAccountingDocument(){
         const pages=Array.from(document.querySelectorAll('.sale-page,.tp'));
         const targets=pages.length?pages:[document.body],blobs=[];
         for(const target of targets){
-          const canvas=await html2canvas(target,{scale:2,backgroundColor:'#050505',useCORS:true,logging:false,ignoreElements:el=>el.id==='jcpSupportTools'});
+          const canvas=await html2canvas(target,{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false,ignoreElements:el=>el.id==='jcpSupportTools'});
           const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('No se pudo crear la imagen.')),'image/png',1));
           blobs.push(blob);
         }
@@ -17043,7 +17164,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.04.93',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.04.95',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -19011,6 +19132,7 @@ function save2(){
 </script>
 <style id="jcp-vehicle-badges-style">
 .vc-badges{display:inline-flex;gap:4px;margin-left:6px;vertical-align:middle}
+.vc-missing{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:#33290d;border:1px solid #a87a12;color:#f0c35a;font-size:9.5px;font-weight:800;vertical-align:middle;white-space:nowrap}
 .vc-badge{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;background:#0e2617;border-radius:50%;flex:none}
 #vehiculos #vehList .vc-badges{margin-left:4px}
 .vd2-badges{display:flex;flex-wrap:wrap;gap:8px;padding:0 12px 12px}
@@ -19065,11 +19187,12 @@ var CHECK='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#
 /* Chulitos compactos para las tarjetas de inventario. */
 window.jcpVehBadgesInline=function(v){
   var a=window.jcpVehInfoComplete(v),b=window.jcpVehImageReady(v);
-  if(!a&&!b)return '';
+  var miss=v&&(!v.chasis||!v.motor||!v.color||!v.clase)?'<span class="vc-missing" title="Falta tarjeta de propiedad">⚠️ Falta tarjeta</span>':'';
+  if(!a&&!b)return miss;
   var h='<span class="vc-badges">';
   if(a)h+='<span class="vc-badge" title="Listo para redes" aria-label="Listo para redes">'+CHECK+'</span>';
   if(b)h+='<span class="vc-badge" title="Listo para redes" aria-label="Listo para redes">'+CHECK+'</span>';
-  return h+'</span>';
+  return h+'</span>'+miss;
 };
 /* Fila con etiquetas para el detalle del vehículo. */
 window.jcpVehBadgesRow=function(v){
@@ -20581,7 +20704,7 @@ function jcpParseLicencia(raw){
 
   window.jcpParseLicencia=jcpParseLicencia;
   function status(t,cls){var s=el('vehScanStatus');if(s){s.textContent=t||'';s.className='veh-scan-status'+(cls?' '+cls:'');}}
-  window.vehDockToggle=function(){var i=el('vehDockImg'),b=el('vehDockBtn');if(!i)return;var hid=i.style.display==='none';i.style.display=hid?'':'none';if(b)b.textContent=hid?'▼ OCULTAR':'▲ VER TARJETA';};
+  window.vehDockToggle=function(btn){var box=btn&&btn.closest?btn.closest('.veh-scan-preview'):null;var i=box?box.querySelector('.veh-dock-img'):null;if(!i)return;var hid=i.style.display==='none';i.style.display=hid?'':'none';btn.textContent=hid?'▼ OCULTAR':'▲ VER TARJETA';};
   window.vehShowChooser=function(){var mg=document.querySelector('#vehModeBox .veh-mode-grid'),mt=document.querySelector('#vehModeBox .veh-mode-title'),rb=el('vehRescanBtn');if(mg)mg.style.display='';if(mt)mt.style.display='';if(rb)rb.style.display='none';};
   window.vehResetMode=function(){try{vehShowChooser();}catch(_e){}var b=el('vehFieldsBox');if(b)b.style.display='none';var pv=el('vehScanPreview');if(pv){pv.innerHTML='';pv.style.display='none';}document.body.classList.remove('veh-dock-open');Object.keys(MAP).forEach(function(k){try{setState(MAP[k],'',null);}catch(_e){}});var m=el('vehModeBox');if(m)m.style.display='';status('');};
   window.vehManualMode=function(){var b=el('vehFieldsBox');if(b)b.style.display='';status('');setTimeout(function(){try{el('vmarca').focus();}catch(e){}},50);};
@@ -20614,32 +20737,34 @@ function jcpParseLicencia(raw){
     return found?min:40;
   }
   function vins(text){var m=String(text||'').toUpperCase().match(/\b[A-HJ-NPR-Z0-9]{17}\b/g);return m||[];}
-  function setState(id,cls,opts){
+  function setState(id,cls,opts,key){
     var e=el(id);if(!e)return;e.classList.remove('veh-filled','veh-ok','veh-warn','veh-bad');if(cls)e.classList.add(cls);
     var box=el('opt_'+id);if(!box){box=document.createElement('div');box.id='opt_'+id;box.className='veh-opts';e.parentNode.appendChild(box);}
-    box.innerHTML=opts&&opts.length>1?'<small>¿Cuál es?</small>'+opts.map(function(o){return '<button type="button" data-veh-opt="'+id+'" data-v="'+esc(o)+'">'+esc(o)+'</button>';}).join(''):'';
+    var h=opts&&opts.length>1?'<small>¿Cuál es?</small>'+opts.map(function(o){return '<button type="button" data-veh-opt="'+id+'" data-v="'+esc(o)+'">'+esc(o)+'</button>';}).join(''):'';
+    if(cls==='veh-warn'&&key&&CRITICAL[key])h+='<button type="button" class="veh-confirm" data-veh-confirm="'+id+'">✔ REVISADO CON LA TARJETA</button>';
+    box.innerHTML=h;
   }
-  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-veh-opt]');if(!b)return;var id=b.getAttribute('data-veh-opt'),inp=el(id);if(inp){inp.value=b.getAttribute('data-v');setState(id,'veh-ok',null);}});
-  document.addEventListener('input',function(e){var t=e.target;if(t&&t.closest&&t.closest('#vehFieldsBox')&&(t.classList.contains('veh-warn')||t.classList.contains('veh-bad'))){t.classList.remove('veh-warn','veh-bad');t.classList.add('veh-ok');var bx=el('opt_'+t.id);if(bx)bx.innerHTML='';}});
-  window.vehScanFile=function(input){
-    var file=input&&input.files&&input.files[0];if(!file)return;
-    window.vehManualMode();
-    // foto al lado de los datos
-    var pv=el('vehScanPreview');if(pv){var u=URL.createObjectURL(file);pv.innerHTML='<div class="veh-dock-head"><b>TARJETA DE PROPIEDAD · COMPARA ANTES DE GUARDAR</b><button type="button" onclick="vehDockToggle()" id="vehDockBtn">▼ OCULTAR</button></div><div class="veh-dock-img" id="vehDockImg"><img src="'+u+'" alt="Tarjeta de propiedad" onclick="this.classList.toggle(\'zoom\')"/></div>';pv.style.display='';document.body.classList.add('veh-dock-open');}
-    Object.keys(MAP).forEach(function(k){setState(MAP[k],'',null);});
-    var mg=document.querySelector('#vehModeBox .veh-mode-grid'),mt=document.querySelector('#vehModeBox .veh-mode-title'),rb=el('vehRescanBtn');if(mg)mg.style.display='none';if(mt)mt.style.display='none';if(rb)rb.style.display='';
-    status('⏳ Preparando el lector… (la primera vez descarga unos segundos)','busy');
+  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-veh-confirm]');if(!b)return;var id=b.getAttribute('data-veh-confirm'),inp=el(id);if(inp){inp.dataset.confirmed='1';inp.classList.remove('veh-warn');inp.classList.add('veh-ok');var bx=el('opt_'+id);if(bx)bx.innerHTML='';}});
+  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-veh-opt]');if(!b)return;var id=b.getAttribute('data-veh-opt'),inp=el(id);if(inp){inp.value=b.getAttribute('data-v');inp.dataset.confirmed='1';setState(id,'veh-ok',null);}});
+  document.addEventListener('input',function(e){var t=e.target;if(t&&t.closest&&(t.closest('#vehFieldsBox')||t.closest('#ciCardBox')||t.closest('#completeInfoFormBox'))&&(t.classList.contains('veh-warn')||t.classList.contains('veh-bad'))){t.classList.remove('veh-warn','veh-bad');t.classList.add('veh-ok');t.dataset.confirmed='1';var bx=el('opt_'+t.id);if(bx)bx.innerHTML='';}});
+  var CRITICAL={placa:1,chasis:1,motor:1,cilindraje:1};
+  // Motor genérico de escaneo: cfg={map, statusFn, previewEl, fillOnlyEmpty, onDone}
+  function runCardScan(file,cfg){
+    var map=cfg.map,st=cfg.statusFn;
+    var pv=cfg.previewEl;if(pv){var u=URL.createObjectURL(file);pv.innerHTML='<div class="veh-dock-head"><b>TARJETA DE PROPIEDAD · COMPARA ANTES DE GUARDAR</b><button type="button" onclick="vehDockToggle(this)">▼ OCULTAR</button></div><div class="veh-dock-img"><img src="'+u+'" alt="Tarjeta de propiedad" onclick="this.classList.toggle(\'zoom\')"/></div>';pv.style.display='';document.body.classList.add('veh-dock-open');}
+    Object.keys(map).forEach(function(k){setState(map[k],'',null);var e=el(map[k]);if(e)delete e.dataset.confirmed;});
+    st('⏳ Preparando el lector… (la primera vez descarga unos segundos)','busy');
     var worker=null,results=[];
     loadTesseract().then(function(T){return T.createWorker('spa');}).then(function(w){
-      worker=w;status('🔎 Lectura 1 de 2…','busy');
+      worker=w;st('🔎 Lectura 1 de 2…','busy');
       return prep(file,'a').then(function(img){return worker.recognize(img);});
-    }).then(function(r1){results.push(r1&&r1.data||{});status('🔎 Lectura 2 de 2 (comprobando)…','busy');
+    }).then(function(r1){results.push(r1&&r1.data||{});st('🔎 Lectura 2 de 2 (comprobando)…','busy');
       return prep(file,'b').then(function(img){return worker.recognize(img);});
     }).then(function(r2){results.push(r2&&r2.data||{});try{worker.terminate();}catch(_e){}
       var A=jcpParseLicencia(results[0].text||''),B=jcpParseLicencia(results[1].text||'');
-      var g=0,y=0,r=0;
-      Object.keys(MAP).forEach(function(k){
-        var id=MAP[k],a=A[k]||'',b=B[k]||'',e=el(id);if(!e)return;
+      var g=0,y=0,r=0,kept=0;
+      Object.keys(map).forEach(function(k){
+        var id=map[k],a=A[k]||'',b=B[k]||'',e=el(id);if(!e)return;
         var val='',cls='veh-bad',opts=null;
         if(k==='chasis'){
           var all=vins(results[0].text).concat(vins(results[1].text));if(a)all.push(a);if(b)all.push(b);
@@ -20648,14 +20773,36 @@ function jcpParseLicencia(raw){
         }else if(a&&b&&a===b){val=a;var c=Math.max(confOf(a,results[0].words),confOf(b,results[1].words));cls=c>=60?'veh-ok':'veh-warn';}
         else if(a&&b){var ca=confOf(a,results[0].words),cb=confOf(b,results[1].words);val=ca>=cb?a:b;cls='veh-warn';opts=ca>=cb?[a,b]:[b,a];}
         else if(a||b){val=a||b;var c1=a?confOf(a,results[0].words):confOf(b,results[1].words);cls=c1>=85?'veh-ok':'veh-warn';}
+        var existing=String(e.value||'').trim().toUpperCase();
+        if(cfg.fillOnlyEmpty&&existing){
+          // El carro ya tenía este dato: se conserva. Si el escáner leyó otra cosa, se ofrecen las dos.
+          if(!val||existing===String(val).toUpperCase()){setState(id,'veh-ok',null,k);g++;kept++;return;}
+          setState(id,'veh-warn',[existing,val],k);y++;kept++;return;
+        }
         if(val)e.value=val;
-        setState(id,val?cls:'veh-bad',opts);
-        if(!val)g+=0;if(cls==='veh-ok'&&val)g++;else if(cls==='veh-warn'&&val)y++;else r++;
+        if(val&&CRITICAL[k]&&cls==='veh-ok')cls='veh-warn';
+        setState(id,val?cls:'veh-bad',opts,k);
+        if(cls==='veh-ok'&&val)g++;else if(cls==='veh-warn'&&val)y++;else r++;
       });
-      setTimeout(function(){try{el('vehModeBox').scrollIntoView({behavior:'smooth',block:'start'});}catch(_e){}},80);
-      status('🟢 '+g+' seguros · 🟡 '+y+' para revisar · 🔴 '+r+' sin leer. Revisa los amarillos (si hay dos opciones, toca la correcta), completa los rojos, el SOAT, la Tecno y el precio.',r+y?'busy':'ok');
-    }).catch(function(e){try{worker&&worker.terminate();}catch(_e){}status('⚠️ No fue posible escanear: '+(e&&e.message||e)+' Puedes llenar los datos a mano.','bad');});
+      st('🟢 '+g+' seguros · 🟡 '+y+' para revisar · 🔴 '+r+' sin leer.'+(kept?' Se conservaron los datos que el carro ya tenía.':'')+' Revisa los amarillos y confirma con ✔ placa, chasis, motor y cilindraje comparando con la tarjeta.',r+y?'busy':'ok');
+      if(cfg.onDone)cfg.onDone();
+    }).catch(function(e){try{worker&&worker.terminate();}catch(_e){}st('⚠️ No fue posible escanear: '+(e&&e.message||e)+' Puedes llenar los datos a mano.','bad');});
+  }
+  // ¿Quedó algún campo crítico escaneado sin confirmar?
+  window.jcpCriticalPending=function(ids){var miss=[];ids.forEach(function(id){var e=el(id);if(e&&e.classList.contains('veh-warn')&&!e.dataset.confirmed)miss.push(id);});return miss;};
+  window.vehScanFile=function(input){
+    var file=input&&input.files&&input.files[0];if(!file)return;
+    window.vehManualMode();
+    var mg=document.querySelector('#vehModeBox .veh-mode-grid'),mt=document.querySelector('#vehModeBox .veh-mode-title'),rb=el('vehRescanBtn');if(mg)mg.style.display='none';if(mt)mt.style.display='none';if(rb)rb.style.display='';
+    runCardScan(file,{map:MAP,statusFn:status,previewEl:el('vehScanPreview'),fillOnlyEmpty:false,onDone:function(){setTimeout(function(){try{el('vehModeBox').scrollIntoView({behavior:'smooth',block:'start'});}catch(_e){}},80);}});
   };
+  /* ---- Completar inf. de carros del inventario ---- */
+  var CI_MAP={marca:'ci_marca',clase:'ci_clase',linea:'ci_linea',modelo:'ci_modelo',placa:'ci_placa',color:'ci_color',servicio:'ci_servicio',capacidad:'ci_capacidad',chasis:'ci_chasis',motor:'ci_motor',cilindraje:'completeCilindraje'};
+  window.CI_MAP=CI_MAP;
+  function ciStatus(t,cls){var x=el('ciScanStatus');if(x){x.textContent=t||'';x.className='veh-scan-status'+(cls?' '+cls:'');}}
+  window.ciScanPick=function(kind){var i=el(kind==='camera'?'ciScanCamera':'ciScanGallery');if(i){i.value='';i.click();}};
+  window.ciScanFile=function(input){var file=input&&input.files&&input.files[0];if(!file)return;runCardScan(file,{map:CI_MAP,statusFn:ciStatus,previewEl:el('ciScanPreview'),fillOnlyEmpty:true});};
+  window.ciResetScan=function(){var pv=el('ciScanPreview');if(pv){pv.innerHTML='';pv.style.display='none';}document.body.classList.remove('veh-dock-open');ciStatus('');Object.keys(CI_MAP).forEach(function(k){try{setState(CI_MAP[k],'',null);}catch(_e){}});};
   /* ================= CONTRATO DE COMPRAVENTA ================= */
   var UN=['','UNO','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE','QUINCE','DIECISÉIS','DIECISIETE','DIECIOCHO','DIECINUEVE','VEINTE','VEINTIUNO','VEINTIDÓS','VEINTITRÉS','VEINTICUATRO','VEINTICINCO','VEINTISÉIS','VEINTISIETE','VEINTIOCHO','VEINTINUEVE'];
   var DE=['','','','TREINTA','CUARENTA','CINCUENTA','SESENTA','SETENTA','OCHENTA','NOVENTA'];
@@ -20970,6 +21117,6 @@ function jcpParseLicencia(raw){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.04.93"></script>
+<script src="./app-update.js?v=2026.11.04.95"></script>
 </body>
 </html>
