@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.08.115</title>
+<title>COLOMBIAUTOS JP - V2026.11.08.116</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5866,9 +5866,9 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.08.115"></script>
-<script src="./jcp-sync.js?v=2026.11.08.115"></script>
-<script src="./jcp-images.js?v=2026.11.08.115"></script>
+<script src="./jcp-accounting.js?v=2026.11.08.116"></script>
+<script src="./jcp-sync.js?v=2026.11.08.116"></script>
+<script src="./jcp-images.js?v=2026.11.08.116"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -13077,7 +13077,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.115\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.116\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -17321,7 +17321,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.08.115',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.08.116',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -20981,7 +20981,7 @@ function jcpParseLicencia(raw){
     m.querySelector('.pcm-cn').onclick=function(){m.remove();};
     m.querySelector('.pcm-ok').onclick=function(){var before=cloneAppData(data);try{var x=(data.clientes||[]).find(function(y){return String(y.id)===String(id);});if(!x)throw new Error('NO SE ENCONTRÓ');var g=window.jcpCphGet('prov');if(g)x.cedulaPhotos=g;else delete x.cedulaPhotos;x.tipo='proveedor';save();m.remove();try{renderClientes();}catch(_e){}alert(g?'✅ CÉDULA GUARDADA.':'CÉDULA ELIMINADA.');}catch(e){data=before;alert('NO FUE POSIBLE GUARDAR.');}};
   };
-  (function(){var st=document.createElement('style');st.textContent='#provCedModal{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:16px}#provCedModal .pcm-card{width:100%;max-width:520px;background:#121212;border:1px solid #6b5a2a;border-radius:16px;padding:16px}#provCedModal .pcm-t{color:#d4af37;font-weight:900;font-size:14px}#provCedModal .pcm-n{color:#fff;font-weight:800;font-size:12px;margin:4px 0 6px}#provCedModal .pcm-bar{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:14px}#provCedModal .pcm-bar button{min-height:46px;border-radius:12px;font-weight:900;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#provCedModal .pcm-ok{background:#d4af37!important;color:#111!important;border:0!important}.db-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.db-tabs button{min-height:44px;border-radius:12px;border:1px solid #4a3d1c;background:#121212;color:#bbb;font-weight:900;font-size:12.5px}.db-tabs button.on{background:#d4af37;color:#111;border-color:#d4af37}.db-tabs small{font-weight:800;opacity:.75;margin-left:4px}.db-ced-btn{min-height:30px;padding:2px 10px;border-radius:999px;border:1px solid #6b5a2a;background:#17130b;color:#d4af37;font-weight:800;font-size:11px;white-space:nowrap}.db-ced-btn.ok{border-color:#3f9a52;color:#57d68d;background:#0f2a1a}';document.head.appendChild(st);})();
+  (function(){var st=document.createElement('style');st.textContent='#tcxModal{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:16px}#tcxModal .pcm-card{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:#121212;border:1px solid #6b5a2a;border-radius:16px;padding:16px;box-sizing:border-box}#tcxModal .pcm-t{color:#d4af37;font-weight:900;font-size:14px}#tcxModal .pcm-n{color:#fff;font-weight:800;font-size:12px;margin:4px 0 8px}#tcxModal .pcm-bar{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:14px}#tcxModal .pcm-bar button{min-height:46px;border-radius:12px;font-weight:900;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#tcxModal .pcm-ok{background:#d4af37!important;color:#111!important;border:0!important}.tcx-btn{margin-top:6px;width:100%;min-height:36px;border-radius:10px;border:1px solid #6b5a2a;background:#17130b;color:#d4af37;font-weight:900;font-size:12px}.tcx-g{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.tcx-f{display:flex;flex-direction:column;gap:3px;min-width:0}.tcx-f b{color:#bbb;font-size:11px;font-weight:800}.tcx-f input{min-height:40px;border-radius:10px;border:1px solid #333;background:#0b0b0b;color:#fff;padding:0 10px;font-size:14px;width:100%;box-sizing:border-box}.tcx-w{grid-column:1/-1}.tcx-list{max-height:34vh;overflow:auto;border:1px solid #2a2a2a;border-radius:12px;margin:6px 0}.tcx-it{display:flex;width:100%;justify-content:space-between;align-items:center;gap:8px;text-align:left;padding:9px 10px;background:transparent;border:0;border-bottom:1px solid #222;color:#eee;font-size:12px}.tcx-it span{min-width:0}.tcx-it small{display:block;color:#888;font-size:10px;margin-top:2px}.tcx-it>b{color:#d4af37;white-space:nowrap}.tcx-it.on{background:#2a2210;outline:1px solid #d4af37}.tcx-msg{padding:12px;color:#bbb;font-size:12px;font-weight:700}.tcx-res{border:1px solid #2a2a2a;border-radius:12px;padding:8px 10px;margin-top:6px}.tcx-res div{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#ccc;padding:3px 0}.tcx-res b{color:#fff;white-space:nowrap}.tcx-res .tcx-tot{border-top:1px solid #333;margin-top:4px;padding-top:6px;font-weight:900;color:#d4af37}.tcx-tot b{color:#d4af37!important;font-size:15px}#provCedModal{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:16px}#provCedModal .pcm-card{width:100%;max-width:520px;background:#121212;border:1px solid #6b5a2a;border-radius:16px;padding:16px}#provCedModal .pcm-t{color:#d4af37;font-weight:900;font-size:14px}#provCedModal .pcm-n{color:#fff;font-weight:800;font-size:12px;margin:4px 0 6px}#provCedModal .pcm-bar{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:14px}#provCedModal .pcm-bar button{min-height:46px;border-radius:12px;font-weight:900;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#provCedModal .pcm-ok{background:#d4af37!important;color:#111!important;border:0!important}.db-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.db-tabs button{min-height:44px;border-radius:12px;border:1px solid #4a3d1c;background:#121212;color:#bbb;font-weight:900;font-size:12.5px}.db-tabs button.on{background:#d4af37;color:#111;border-color:#d4af37}.db-tabs small{font-weight:800;opacity:.75;margin-left:4px}.db-ced-btn{min-height:30px;padding:2px 10px;border-radius:999px;border:1px solid #6b5a2a;background:#17130b;color:#d4af37;font-weight:800;font-size:11px;white-space:nowrap}.db-ced-btn.ok{border-color:#3f9a52;color:#57d68d;background:#0f2a1a}';document.head.appendChild(st);})();
   window.jcpCriticalPending=function(ids){var miss=[];ids.forEach(function(id){var e=el(id);if(e&&e.classList.contains('veh-warn')&&!e.dataset.confirmed)miss.push(id);});return miss;};
   window.vehScanFile=function(input){
     var file0=input&&input.files&&input.files[0];if(!file0)return;try{input.value='';}catch(_e){}
@@ -21323,7 +21323,7 @@ function jcpParseLicencia(raw){
       +(noT?'':'<div class="sale-field"><b>Días hábiles para el traspaso *</b><input id="'+pre+'Traspaso" value="'+(P?'15':'30')+'" inputmode="numeric"/>'+ichips(pre+'Traspaso',[['15','15'],['30','30'],['45','45'],['60','60']])+'</div>')
       +'<div class="sale-field"><b>Cláusula penal ($) *</b><input id="'+pre+'Penal" data-money="1" inputmode="numeric" placeholder="$ 0"/><div class="ict-chips"><button type="button" onclick="ictPenal(\''+pre+'\',0.05)">5 %</button><button type="button" onclick="ictPenal(\''+pre+'\',0.10)">10 %</button><button type="button" onclick="ictPenal(\''+pre+'\',0.20)">20 %</button></div></div>'
       +(noT?'':'<div class="sale-field full"><b>Gastos de traspaso asumidos así *</b><input id="'+pre+'Gastos" value="'+(P?'50% POR CADA PARTE':'50% POR EL COMPRADOR Y 50% POR EL VENDEDOR')+'"/>'+ichips(pre+'Gastos',P?[['50 / 50','50% POR CADA PARTE'],['Quien recibe','CADA PARTE PAGA EL TRASPASO DEL VEHÍCULO QUE RECIBE'],['Quien entrega','CADA PARTE PAGA EL TRASPASO DEL VEHÍCULO QUE ENTREGA']]:[['50 / 50','50% POR EL COMPRADOR Y 50% POR EL VENDEDOR'],['Comprador','100% POR EL COMPRADOR'],['Vendedor','100% POR EL VENDEDOR']])+'</div>'
-        +(P?'':'<label class="sale-field"><b>Valor del trámite de traspaso ($) *</b><input id="'+pre+'Tramite" data-money="1" inputmode="numeric" placeholder="$ 0"/></label>'
+        +(P?'':'<label class="sale-field"><b>Valor del trámite de traspaso ($) *</b><input id="'+pre+'Tramite" data-money="1" inputmode="numeric" placeholder="$ 0"/><button type="button" class="tcx-btn" onclick="jcpTraspasoCalc(\''+pre+'\')">🧮 CALCULAR CON AVALÚO</button></label>'
           +'<label class="sale-field"><b>Tu parte (se registra como gasto del carro)</b><input id="'+pre+'TramiteMine" data-money="1" inputmode="numeric" placeholder="$ 0"/></label>'
           +'<label class="sale-field full"><b>Tu parte se paga desde</b><select id="'+pre+'TramiteFrom"><option value="cash">EFECTIVO</option><option value="bancolombia">BANCOLOMBIA</option><option value="davivienda">DAVIVIENDA</option><option value="nequi">NEQUI</option><option value="daviplata">DAVIPLATA</option></select></label>')
         +ifield('Impuesto del año *',pre+'ImpAnio',String(new Date().getFullYear()),'inputmode="numeric"')
@@ -21342,6 +21342,47 @@ function jcpParseLicencia(raw){
     try{var v2=el('pctVal2Show');if(v2){var v1=parseFormattedMoney(g('pctVal1'))||0,cc={};try{cc=updatePermutaCalculations()||{};}catch(_e){}var d=+cc.difference||0,st=cc.status||'even';v2.textContent=fm(Math.max(0,st==='receive'?v1-d:(st==='pay'?v1+d:v1)));}}catch(_e){}};
   function tramiteShare(txt){txt=up(txt);if(/100\s*%\s*POR EL VENDEDOR/.test(txt))return 1;if(/100\s*%\s*POR EL COMPRADOR/.test(txt))return 0;var m=txt.match(/(\d{1,3})\s*%\s*POR EL VENDEDOR/);if(m)return Math.min(100,+m[1])/100;var m2=txt.match(/(\d{1,3})\s*%\s*POR EL COMPRADOR/);if(m2)return 1-Math.min(100,+m2[1])/100;return 0.5;}
   function tramiteAuto(){var mine=el('sctTramiteMine');if(!mine||mine.dataset.manual)return;var tot=parseFormattedMoney(g('sctTramite'))||0;var v=Math.round(tot*tramiteShare(g('sctGastos')));mine.value=v?v.toLocaleString('es-CO'):'';try{updateSaleSummary();}catch(_e){}}
+  var AVAL=null,AVALP=null;
+  function avalLoad(){if(AVAL)return Promise.resolve(AVAL);if(AVALP)return AVALP;AVALP=fetch('./avaluos-2026.json').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(j){var all=[];j.t.forEach(function(t,ti){t.r.forEach(function(r){all.push({t:ti,tn:t.n,marca:t.m[r[0]],linea:r[1],cil:r[2],v:r[3],clase:t.c[r[4]],k:avalNorm(t.m[r[0]]+' '+r[1])});});});j.all=all;AVAL=j;return j;}).catch(function(e){AVALP=null;throw e;});return AVALP;}
+  function avalNorm(x){return String(x||'').toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Z0-9.]+/g,' ').trim();}
+  function avalVal(r,y){var y0=AVAL.y0||2001,i=Math.max(0,y-y0);if(r.linea==='*')i=0;var v=r.v[i];if(!v)return null;return {miles:Math.abs(v),aprox:v<0};}
+  function avalSearch(q,cil,y){var toks=avalNorm(q).split(' ').filter(Boolean);if(!toks.length)return [];var cl=+cil||0,out=[];
+    AVAL.all.forEach(function(r){var hit=0;for(var i=0;i<toks.length;i++){if((' '+r.k+' ').indexOf(' '+toks[i])>=0)hit++;}if(!hit)return;if(r.linea==='*'&&hit<1)return;
+      var mk=avalNorm(r.marca);if((' '+avalNorm(q)+' ').indexOf(' '+mk.split(' ')[0])<0)return;
+      var val=avalVal(r,y);if(!val)return;var sc=hit*10;if(cl&&r.cil>1){var d=Math.abs(r.cil-cl);sc+=d<=10?6:d<=60?4:d<=200?1:-3;}if(r.linea==='*')sc-=8;out.push({r:r,val:val,sc:sc});});
+    out.sort(function(a,b){return b.sc-a.sc||a.r.linea.length-b.r.linea.length;});return out.slice(0,25);}
+  function moneyFmt(n){return '$ '+Math.round(+n||0).toLocaleString('es-CO');}
+  window.jcpTraspasoCalc=function(pre){var vid=null;try{vid=selectedSaleVehicleId;}catch(e){}
+    var v=(data.veh||[]).find(function(x){return x&&String(x.id)===String(vid);});if(!v){alert('SELECCIONA PRIMERO EL VEHÍCULO.');return;}
+    var ai=v.additionalInfo||{},marca=up(v.marca||v.m),linea=up(v.ref),modelo=parseInt(String(v.modelo||'').replace(/\D/g,''),10)||new Date().getFullYear(),cil=parseInt(String(v.cilindraje||ai.cilindraje||'').replace(/\D/g,''),10)||'';
+    data.settings=(data.settings&&typeof data.settings==='object')?data.settings:{};var der=+data.settings.traspasoDerechos||260300;
+    var old=document.getElementById('tcxModal');if(old)old.remove();var m=document.createElement('div');m.id='tcxModal';
+    m.innerHTML='<div class="pcm-card"><div class="pcm-t">🧮 VALOR DEL TRASPASO</div><div class="pcm-n">'+esc([marca,linea,modelo,cil?cil+' CC':''].filter(Boolean).join(' · '))+'</div>'
+      +'<div class="tcx-g"><label class="tcx-f tcx-w"><b>Buscar en tabla MinTransporte</b><input id="tcxQ" value="'+esc((marca+' '+linea).trim())+'"/></label><label class="tcx-f"><b>Cilindraje</b><input id="tcxCil" inputmode="numeric" value="'+esc(cil)+'"/></label><label class="tcx-f"><b>Modelo</b><input id="tcxY" inputmode="numeric" value="'+esc(modelo)+'"/></label></div>'
+      +'<div id="tcxList" class="tcx-list"><div class="tcx-msg">CARGANDO TABLA…</div></div>'
+      +'<div class="tcx-g"><label class="tcx-f"><b>Avalúo ($)</b><input id="tcxAval" data-money="1" inputmode="numeric" placeholder="$ 0"/></label><label class="tcx-f"><b>Precio de venta ($)</b><input id="tcxPrice" data-money="1" inputmode="numeric" placeholder="$ 0"/></label>'
+      +'<label class="tcx-f"><b>Derechos de tránsito ($)</b><input id="tcxDer" data-money="1" inputmode="numeric" value="'+der.toLocaleString('es-CO')+'"/></label><label class="tcx-f"><b>Gestor / otros ($)</b><input id="tcxOtros" data-money="1" inputmode="numeric" placeholder="$ 0"/></label></div>'
+      +'<div id="tcxRes" class="tcx-res"></div>'
+      +'<div class="pcm-bar"><button type="button" class="pcm-cn">CERRAR</button><button type="button" class="pcm-ok">✅ USAR ESTE VALOR</button></div></div>';
+    document.body.appendChild(m);
+    var $=function(id){return document.getElementById(id);},num=function(id){return parseFormattedMoney(($(id)||{}).value)||0;};
+    var sp=parseFormattedMoney(g('salePrice'))||0;if(sp)$('tcxPrice').value=sp.toLocaleString('es-CO');
+    function calc(){var a=num('tcxAval'),p=num('tcxPrice'),base=Math.max(a,p),ret=Math.round(base*0.01),d=num('tcxDer'),o=num('tcxOtros'),tot=ret+d+o;
+      $('tcxRes').innerHTML='<div><span>Retención en la fuente 1% sobre '+(p>a?'el precio de venta':'el avalúo')+' ('+moneyFmt(base)+')</span><b>'+moneyFmt(ret)+'</b></div><div><span>Derechos de tránsito</span><b>'+moneyFmt(d)+'</b></div>'+(o?'<div><span>Gestor / otros</span><b>'+moneyFmt(o)+'</b></div>':'')+'<div class="tcx-tot"><span>TOTAL TRÁMITE</span><b>'+moneyFmt(tot)+'</b></div>';return tot;}
+    function list(){var box=$('tcxList');if(!AVAL)return;var y=parseInt($('tcxY').value,10)||modelo;
+      if(y>2025){box.innerHTML='<div class="tcx-msg">⚠️ MODELO '+y+': NO ESTÁ EN LA TABLA 2026 (SE TOMA EL VALOR DE LA FACTURA DE COMPRA). ESCRIBE EL AVALÚO A MANO.</div>';return;}
+      var res=avalSearch($('tcxQ').value,$('tcxCil').value,y);
+      if(!res.length){box.innerHTML='<div class="tcx-msg">NO HAY COINCIDENCIAS. PRUEBA SOLO CON MARCA Y UNA PALABRA DE LA LÍNEA, O ESCRIBE EL AVALÚO A MANO.</div>';return;}
+      box.innerHTML=res.map(function(x,i){var r=x.r;return '<button type="button" class="tcx-it" data-i="'+i+'"><span><b>'+esc(r.marca)+'</b> '+esc(r.linea==='*'?'LÍNEAS NO INCLUIDAS (VALOR GENÉRICO)':r.linea)+'<small>'+esc((r.cil>1?r.cil+' CC · ':'')+r.tn+' · '+(y<2001?'2001 Y ANTERIORES':y))+'</small></span><b>'+(x.val.aprox?'≈ ':'')+moneyFmt(x.val.miles*1000)+'</b></button>';}).join('');
+      box.querySelectorAll('.tcx-it').forEach(function(b){b.onclick=function(){var x=res[+b.dataset.i];box.querySelectorAll('.tcx-it').forEach(function(z){z.classList.remove('on');});b.classList.add('on');$('tcxAval').value=(x.val.miles*1000).toLocaleString('es-CO');calc();};});}
+    var tmr=null;['tcxQ','tcxCil','tcxY'].forEach(function(id){$(id).addEventListener('input',function(){clearTimeout(tmr);tmr=setTimeout(list,200);});});
+    ['tcxAval','tcxPrice','tcxDer','tcxOtros'].forEach(function(id){$(id).addEventListener('input',function(){setTimeout(calc,0);});});
+    calc();avalLoad().then(list).catch(function(){$('tcxList').innerHTML='<div class="tcx-msg">NO SE PUDO CARGAR LA TABLA DE AVALÚOS. ESCRIBE EL AVALÚO A MANO.</div>';});
+    m.querySelector('.pcm-cn').onclick=function(){m.remove();};
+    m.querySelector('.pcm-ok').onclick=function(){if(!num('tcxAval')&&!num('tcxPrice')){alert('FALTA EL AVALÚO.');return;}var tot=calc(),d=num('tcxDer');
+      if(d&&d!==(+data.settings.traspasoDerechos||260300)){data.settings.traspasoDerechos=d;try{save();}catch(_e){}}
+      var t=el(pre+'Tramite');if(t){t.value=tot.toLocaleString('es-CO');try{t.dispatchEvent(new Event('input',{bubbles:true}));}catch(_e){}}m.remove();};
+  };
   window.ictTraspasoInfo=function(){var box=el('saleCtBox');if(!box||box.dataset.noT)return {total:0,mine:0,from:'cash'};return {total:parseFormattedMoney(g('sctTramite'))||0,mine:parseFormattedMoney(g('sctTramiteMine'))||0,from:g('sctTramiteFrom')||'cash'};};
   window.ictTraspasoMine=function(){try{return ictTraspasoInfo().mine||0;}catch(e){return 0;}};
   document.addEventListener('input',function(ev){var t=ev.target;if(!t||!t.closest)return;if(t.id==='sctTramiteMine'){t.dataset.manual='1';try{updateSaleSummary();}catch(_e){}return;}if(t.id==='sctTramite'||t.id==='sctGastos'){setTimeout(tramiteAuto,0);}},true);
@@ -21742,6 +21783,6 @@ function jcpParseLicencia(raw){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.08.115"></script>
+<script src="./app-update.js?v=2026.11.08.116"></script>
 </body>
 </html>
