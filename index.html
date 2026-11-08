@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.08.119</title>
+<title>COLOMBIAUTOS JP - V2026.11.08.120</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4716,7 +4716,7 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 <div class="sale-invoice-section"><div class="sale-section-title"><span>2</span> PRECIO Y FORMA DE PAGO</div><div class="sale-field-grid">
 <label class="sale-field"><b>Valor de venta *</b><input data-money="1" id="salePrice" inputmode="numeric" oninput="updateSalePaymentTarget()" placeholder="$ 0" type="text"/></label>
 <label class="sale-field"><b>Condición *</b><select id="saleMethod" onchange="toggleMixedPayment()"><option value="">ESCOGE</option><option value="contado">CONTADO</option><option value="creditoTotal">CRÉDITO (TODO QUEDA DEBIENDO)</option><option value="credito">MIXTO (ABONO + SALDO)</option></select></label></div>
-<div class="sale-field-grid" id="creditPaymentFields" style="display:none;margin-top:10px"><label class="sale-field" id="saleReceivedWrap"><b>Abono recibido ahora</b><input data-money="1" id="saleReceived" inputmode="numeric" oninput="updateSalePaymentTarget()" placeholder="$ 0" type="text"/></label><label class="sale-field"><b>Pendiente por cobrar</b><input data-money="1" id="salePending" inputmode="numeric" readonly="" type="text"/></label><div class="sale-field full"><b>¿Cuándo se paga el saldo? *</b><input id="saleBalanceCond" placeholder="EJ: CONTRA ENTREGA DE LOS DOCUMENTOS DEL TRASPASO"/><div class="ict-chips"><button type="button" onclick="ctChip('saleBalanceCond','CONTRA ENTREGA DE LOS DOCUMENTOS DEL TRASPASO A NOMBRE DEL COMPRADOR')">Entrega de papeles</button><button type="button" onclick="ctChip('saleBalanceCond','EN LA FECHA ACORDADA: ')">Fecha acordada</button><button type="button" onclick="ctChip('saleBalanceCond','EN CUOTAS: ')">Cuotas</button></div></div></div><div class="paydist" id="salePayDist"><div class="paydist-title">DISTRIBUCIÓN DEL DINERO RECIBIDO</div><div class="paydist-grid">
+<div class="sale-field-grid" id="creditPaymentFields" style="display:none;margin-top:10px"><label class="sale-field" id="saleReceivedWrap"><b>Abono recibido ahora *</b><input data-money="1" id="saleReceived" inputmode="numeric" oninput="updateSalePaymentTarget()" placeholder="$ 0" type="text"/></label><label class="sale-field"><b>Pendiente por cobrar</b><input data-money="1" id="salePending" inputmode="numeric" readonly="" type="text"/></label><div class="sale-field full"><b>¿Cuándo se paga el saldo? *</b><input id="saleBalanceCond" placeholder="EJ: CONTRA ENTREGA DE LOS DOCUMENTOS DEL TRASPASO"/><div class="ict-chips"><button type="button" onclick="ctChip('saleBalanceCond','CONTRA ENTREGA DE LOS DOCUMENTOS DEL TRASPASO A NOMBRE DEL COMPRADOR')">Entrega de papeles</button><button type="button" onclick="ctChip('saleBalanceCond','EN LA FECHA ACORDADA: ')">Fecha acordada</button><button type="button" onclick="ctChip('saleBalanceCond','EN CUOTAS: ')">Cuotas</button></div></div></div><div class="paydist" id="salePayDist"><div class="paydist-title">DISTRIBUCIÓN DEL DINERO RECIBIDO</div><div class="paydist-grid">
 <label class="paydist-row"><span>EFECTIVO</span><input data-money="1" id="salePayCash" inputmode="numeric" oninput="payDistInput('sale',this)" placeholder="$ 0" type="text"/></label>
 <label class="paydist-row"><span>BANCOLOMBIA</span><input data-money="1" id="salePayBancolombia" inputmode="numeric" oninput="payDistInput('sale',this)" placeholder="$ 0" type="text"/></label>
 <label class="paydist-row"><span>DAVIVIENDA</span><input data-money="1" id="salePayDavivienda" inputmode="numeric" oninput="payDistInput('sale',this)" placeholder="$ 0" type="text"/></label>
@@ -5868,9 +5868,9 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.08.119"></script>
-<script src="./jcp-sync.js?v=2026.11.08.119"></script>
-<script src="./jcp-images.js?v=2026.11.08.119"></script>
+<script src="./jcp-accounting.js?v=2026.11.08.120"></script>
+<script src="./jcp-sync.js?v=2026.11.08.120"></script>
+<script src="./jcp-images.js?v=2026.11.08.120"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -8494,8 +8494,6 @@ function jcpRecordContractBtn(number){
     if(!r||/^(VOID|ANULAD[OA])$/.test(String(r.status||'ACTIVE').toUpperCase()))return '';
     let fn='',lbl='📄 CONTRATO';
     if(r.type==='purchase'&&r.vehicleId){const v=(data.veh||[]).find(x=>String(x.id)===String(r.vehicleId))||(data.sold||[]).find(x=>String(x.id)===String(r.vehicleId));if(!v)return '';fn="openPurchaseContract('"+jcpInlineJsArg(v.id)+"')";if(v.purchaseContract&&v.purchaseContract.numero)lbl='📄 '+v.purchaseContract.numero;}
-    else if(r.type==='sale'&&r.vehicleId){const v=(data.sold||[]).find(x=>String(x.id)===String(r.vehicleId));if(!v||!v.sale)return '';fn="openSaleContract('"+jcpInlineJsArg(v.id)+"')";if(v.sale.contract&&v.sale.contract.numero)lbl='📄 '+v.sale.contract.numero;}
-    else if(r.type==='trade'&&r.entityId){const p=(data.permutas||[]).find(x=>String(x.id)===String(r.entityId));if(!p)return '';fn="openPermutaContract('"+jcpInlineJsArg(p.id)+"')";if(p.contract&&p.contract.numero)lbl='📄 '+p.contract.numero;}
     if(!fn)return '';
     return '<button type="button" class="records-copy-btn records-ct-btn" onclick="'+fn+'">'+lbl+'</button>';
   }catch(e){return '';}
@@ -9212,6 +9210,27 @@ function saleInternalSupportHtml(r){
     <div class="mode-switch"><button onclick="if(window.opener&&window.opener.openSaleSupportMode){window.opener.openSaleSupportMode('${jcpInlineJsArg(d.number)}','client')}">VER SOPORTE PARA CLIENTE</button></div>${pages}</body></html>`;
 }
 
+function saleInternalPortraitStyles(){
+  return `
+  .sale-page.sale-portrait{aspect-ratio:1/1.294;overflow:visible;padding-bottom:42px}
+  .sale-portrait .land-head{height:auto;min-height:64px;grid-template-columns:190px 1fr 160px;gap:10px;padding-bottom:8px}
+  .sale-portrait .land-logo{width:180px;max-height:54px}
+  .sale-portrait .land-title h1{font-size:21px;white-space:nowrap}.sale-portrait .land-title b{font-size:11px;margin-top:4px;white-space:nowrap}
+  .sale-portrait .land-main{gap:9px;margin-top:9px}.sale-portrait .land-left,.sale-portrait .land-right{gap:8px}
+  .sale-portrait .land-box{padding:7px 8px}.sale-portrait .land-box h3{margin-bottom:4px;padding-bottom:5px}
+  .sale-portrait .land-photo{height:130px}
+  .sale-portrait .land-row{padding:3px 0}.sale-portrait .land-doc{padding:3px 0}
+  .sale-portrait .land-obs{min-height:26px}
+  .sale-portrait .land-expense-layout{margin-top:9px;gap:9px}
+  .sale-portrait .land-expense-table th,.sale-portrait .land-expense-table td{height:auto;padding:4px 6px}
+  .sale-portrait .land-result{padding:8px 6px}.sale-portrait .land-result b{font-size:22px;margin:4px 0}
+  .sale-portrait .land-expense-layout{height:auto;grid-template-columns:1.15fr 1fr;align-items:stretch}
+  .sale-portrait .land-summary{height:auto}
+  .sale-portrait .land-summary .land-result{margin-top:8px}
+  @media print{.sale-page.sale-portrait{aspect-ratio:1/1.294;width:100%;border:0;margin:0}}
+  @page{size:letter portrait;margin:7mm}
+  `;
+}
 function saleInternalLandscapeStyles(){
   return `
   *{box-sizing:border-box}
@@ -9249,10 +9268,10 @@ function saleInternalSupportHtml(r){
   const resultPositive=Number(d.profit||0)>=0;
   const expenseRows=(d.expenses||[]).map((x,i)=>`<tr><td>${i+1}</td><td>${priceEsc(x.concept||'GASTO VEHÍCULO')}</td><td>${priceMoney(Number(x.value||0))}</td></tr>`).join('');
   const row=(label,value,extra='')=>`<div class="land-row ${extra}"><span>${priceEsc(label)}</span><b>${value}</b></div>`;
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${priceEsc(d.number)} · SOPORTE INTERNO</title><style>${saleInternalLandscapeStyles()}</style>${jcpPrintLightStyle()}</head><body>
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${priceEsc(d.number)} · SOPORTE INTERNO</title><style>${saleInternalLandscapeStyles()}${saleInternalPortraitStyles()}</style>${jcpPrintLightStyle()}</head><body>
   <div class="mode-switch"><button onclick="if(window.opener&&window.opener.openSaleSupportMode){window.opener.openSaleSupportMode('${jcpInlineJsArg(d.number)}','client')}">VER SOPORTE PARA CLIENTE</button></div>
-  <section class="sale-page sale-landscape">
-    <div class="land-head">${logo?`<img class="land-logo" src="${priceEsc(logo)}">`:''}<div class="land-title"><h1>VENTA <span>DE VEHÍCULO</span></h1><b>SOPORTE INTERNO · ${priceEsc(d.number)}</b></div><div class="land-meta"><strong>${priceEsc(d.date)}</strong>PÁGINA 1 DE 2</div></div>
+  <section class="sale-page sale-landscape sale-portrait">
+    <div class="land-head">${logo?`<img class="land-logo" src="${priceEsc(logo)}">`:''}<div class="land-title"><h1>VENTA <span>DE VEHÍCULO</span></h1><b>SOPORTE INTERNO · ${priceEsc(d.number)}</b></div><div class="land-meta"><strong>${priceEsc(d.date)}</strong>SOPORTE INTERNO</div></div>
     <div class="land-main">
       <div class="land-left">
         <div class="land-box"><h3>🚘 INFORMACIÓN DEL VEHÍCULO</h3><div class="land-vehicle"><div class="land-photo">${c.photo?`<img src="${priceEsc(c.photo)}" alt="Foto principal del vehículo">`:`<div class="empty-photo">SIN FOTO PRINCIPAL</div>`}</div><div>${saleVehicleRowList(d,c,r).map(([l,v])=>row(l,priceEsc(v))).join('')}${row('KILOMETRAJE',Number(c.kilometraje||0)>0?priceEsc(Number(c.kilometraje).toLocaleString('es-CO')+' KM'):'SIN REGISTRAR')}</div></div></div>
@@ -9264,10 +9283,6 @@ function saleInternalSupportHtml(r){
         <div class="land-box"><h3>📝 OBSERVACIONES INTERNAS</h3><div class="land-obs">${priceEsc(d.obs||'SIN OBSERVACIONES REGISTRADAS.')}</div></div>
       </div>
     </div>
-    <div class="land-footer">SOPORTE INTERNO (CONTROL) · COLOMBIAUTOS JP · CONTINÚA EN PÁGINA 2</div>
-  </section>
-  <section class="sale-page sale-landscape">
-    <div class="land-head"><div></div><div class="land-title"><h1>DESGLOSE DE <span>GASTOS RELACIONADOS</span></h1><b>CONTINUACIÓN · ${priceEsc(d.number)}</b></div><div class="land-meta"><strong>${priceEsc(d.date)}</strong>PÁGINA 2 DE 2</div></div>
     <div class="land-expense-layout">
       <div class="land-box"><h3>💲 GASTOS DEL VEHÍCULO</h3><table class="land-expense-table"><thead><tr><th>#</th><th>CONCEPTO</th><th>VALOR</th></tr></thead><tbody>${expenseRows||'<tr><td colspan="3" style="text-align:center;color:#777">SIN GASTOS RELACIONADOS REGISTRADOS</td></tr>'}<tr class="expense-total"><td colspan="2">TOTAL GASTOS RELACIONADOS</td><td>${priceMoney(d.expenseTotal)}</td></tr></tbody></table></div>
       <div style="display:flex;flex-direction:column;gap:8px;min-height:0;height:100%">${d.traspaso?`<div class="land-box"><h3>🧾 TRÁMITE DE TRASPASO</h3>${saleTraspasoRows(d.traspaso,true).map(x=>row(x[0],x[1],x[2]==='tot'?'land-pay-total':'')).join('')}</div>`:''}<div class="land-box land-summary" style="flex:1;height:auto"><h3>💰 RESUMEN FINANCIERO FINAL</h3>${row('PRECIO DE COMPRA',priceMoney(d.purchasePrice))}${row('GASTOS RELACIONADOS',priceMoney(d.expenseTotal))}${row('TOTAL INVERSIÓN',priceMoney(d.investment),'land-pay-total')}${row('VALOR DE VENTA',priceMoney(d.price))}<div class="land-result ${resultPositive?'positive':'negative'}"><small>${resultPositive?'GANANCIA OBTENIDA':'PÉRDIDA DE LA OPERACIÓN'}</small><b>${priceMoney(d.profit)}</b><em>RENTABILIDAD: ${Number(d.margin||0).toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2})}%</em></div></div></div>
@@ -12160,6 +12175,7 @@ function saveVehicleSale(opts){
   const methodRaw=document.getElementById('saleMethod')?.value||'';
   if(!methodRaw){alert('ESCOGE LA CONDICIÓN DE LA VENTA: CONTADO, CRÉDITO O MIXTO.');return false;}
   const method=methodRaw==='creditoTotal'?'credito':methodRaw;
+  if(methodRaw==='credito'&&!(saleNumericValue('saleReceived')>0)){alert('ESCRIBE EL ABONO RECIBIDO AHORA. SI NO HAY ABONO, ESCOGE CRÉDITO.');return false;}
   const received=method==='credito'
     ?saleNumericValue('saleReceived')
     :price;
@@ -13103,7 +13119,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.119\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.120\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -16969,8 +16985,8 @@ function voidAccountingDocument(){
   }).join('');
 };
 
-  window.openSupportDocument=function(baseHtml,fileKey,shareTitle){
-  const w=window.open('','_blank');
+  window.openSupportDocument=function(baseHtml,fileKey,shareTitle,existingWin){
+  const w=existingWin||window.open('','_blank');
   if(!w){alert('EL NAVEGADOR BLOQUEÓ EL SOPORTE. HABILITA VENTANAS EMERGENTES.');return false;}
   if(!baseHtml)baseHtml='<html><body>NO FUE POSIBLE GENERAR EL SOPORTE.</body></html>';
 
@@ -17014,6 +17030,7 @@ function voidAccountingDocument(){
     <div id="jcpSupportMsg"></div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"><\/script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"><\/script>
   <script>
   (function(){
     const fileName=${JSON.stringify(safeFile)}+'.png';
@@ -17049,7 +17066,28 @@ function voidAccountingDocument(){
         setMsg('EL NAVEGADOR NO PERMITE COMPARTIR ARCHIVOS DIRECTAMENTE. SE DESCARGÓ LA IMAGEN.');
       }catch(e){if(e&&e.name==='AbortError'){setMsg('');return;}setMsg('');alert(e.message||'NO FUE POSIBLE COMPARTIR EL SOPORTE.');}
     };
-    document.getElementById('jcpPrintPdf').onclick=function(){window.print();};
+    async function makePdf(){
+      const J=window.jspdf&&window.jspdf.jsPDF;if(!J)return null;
+      const blobs=await makeBlobs();let pdf=null;
+      for(const blob of blobs){
+        const url=URL.createObjectURL(blob);
+        const img=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=url;});
+        const w=612,h=Math.round(612*img.naturalHeight/img.naturalWidth);
+        if(!pdf)pdf=new J({unit:'pt',format:[w,h],orientation:h>=w?'portrait':'landscape'});else pdf.addPage([w,h],h>=w?'portrait':'landscape');
+        pdf.addImage(img,'PNG',0,0,w,h);URL.revokeObjectURL(url);
+      }
+      return pdf?pdf.output('blob'):null;
+    }
+    document.getElementById('jcpPrintPdf').onclick=async function(){
+      try{
+        setMsg('GENERANDO PDF...');const pdfBlob=await makePdf();
+        if(!pdfBlob){setMsg('');window.print();return;}
+        const name=fileName.replace(/\.png$/i,'.pdf'),file=new File([pdfBlob],name,{type:'application/pdf'});
+        if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share({title,files:[file]});setMsg('');return;}catch(e){if(e&&e.name==='AbortError'){setMsg('');return;}}}
+        const url=URL.createObjectURL(pdfBlob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);
+        setMsg('PDF GENERADO.');
+      }catch(e){setMsg('');try{window.print();}catch(_e){alert(e.message||'NO FUE POSIBLE GENERAR EL PDF.');}}
+    };
   })();
   <\/script>`;
 
@@ -17183,6 +17221,7 @@ window.openRecordCopy=function(number){
     <div style="display:grid;grid-template-columns:1fr;gap:10px">
       <button id="saleSupportClientBtn" type="button" style="min-height:50px;border:1px solid #b58b20;border-radius:10px;background:#171717;color:#d8aa32;font-weight:900;font-size:14px">👤 SOPORTE PARA CLIENTE</button>
       <button id="saleSupportInternalBtn" type="button" style="min-height:50px;border:1px solid #b58b20;border-radius:10px;background:#171717;color:#d8aa32;font-weight:900;font-size:14px">📊 SOPORTE INTERNO / CONTROL</button>
+      <button id="saleSupportContractBtn" type="button" onclick="(function(){var n=document.getElementById('saleSupportChoiceNumber').textContent;closeSaleSupportChoice();var t=jcpSavedContractFor(n,'sale');if(!t){alert('NO SE ENCONTRÓ LA VENTA.');return;}jcpOpenSavedContract(t.kind,t.id);})()" style="min-height:50px;border:1px solid #b58b20;border-radius:10px;background:#171717;color:#d8aa32;font-weight:900;font-size:14px">📄 CONTRATO DE COMPRAVENTA</button>
       <button id="saleSupportCancelBtn" type="button" style="min-height:44px;border:1px solid #444;border-radius:10px;background:#101010;color:#aaa;font-weight:800;font-size:12px">CANCELAR</button>
     </div>
   </div>
@@ -17234,7 +17273,7 @@ window.openRecordCopy=function(number){
 </script>
 
 
-<div id="tradeSupportChoiceOverlay" style="display:none;position:fixed;inset:0;z-index:100001;background:rgba(0,0,0,.84);align-items:center;justify-content:center;padding:18px"><div style="width:min(430px,100%);background:#0b0b0b;border:1px solid #9b7717;border-radius:16px;padding:18px"><div style="color:#d8aa32;font-weight:900;font-size:18px;text-align:center">SOPORTE DE PERMUTA</div><div id="tradeSupportChoiceNumber" style="text-align:center;font-weight:900;margin:10px 0 16px"></div><div style="display:grid;gap:10px"><button id="tradeSupportClientBtn" style="min-height:50px;background:#171717;color:#d8aa32;border:1px solid #b58b20;border-radius:10px;font-weight:900">👤 SOPORTE PARA CLIENTE</button><button id="tradeSupportInternalBtn" style="min-height:50px;background:#171717;color:#d8aa32;border:1px solid #b58b20;border-radius:10px;font-weight:900">📊 SOPORTE INTERNO / CONTROL</button><button id="tradeSupportCancelBtn" style="min-height:44px;background:#101010;color:#aaa;border:1px solid #444;border-radius:10px;font-weight:800">CANCELAR</button></div></div></div>
+<div id="tradeSupportChoiceOverlay" style="display:none;position:fixed;inset:0;z-index:100001;background:rgba(0,0,0,.84);align-items:center;justify-content:center;padding:18px"><div style="width:min(430px,100%);background:#0b0b0b;border:1px solid #9b7717;border-radius:16px;padding:18px"><div style="color:#d8aa32;font-weight:900;font-size:18px;text-align:center">SOPORTE DE PERMUTA</div><div id="tradeSupportChoiceNumber" style="text-align:center;font-weight:900;margin:10px 0 16px"></div><div style="display:grid;gap:10px"><button id="tradeSupportClientBtn" style="min-height:50px;background:#171717;color:#d8aa32;border:1px solid #b58b20;border-radius:10px;font-weight:900">👤 SOPORTE PARA CLIENTE</button><button id="tradeSupportInternalBtn" style="min-height:50px;background:#171717;color:#d8aa32;border:1px solid #b58b20;border-radius:10px;font-weight:900">📊 SOPORTE INTERNO / CONTROL</button><button id="tradeSupportContractBtn" type="button" onclick="(function(){var n=document.getElementById('tradeSupportChoiceNumber').textContent;closeTradeSupportChoice();var t=jcpSavedContractFor(n,'trade');if(!t){alert('NO SE ENCONTRÓ LA PERMUTA.');return;}jcpOpenSavedContract(t.kind,t.id);})()" style="min-height:50px;background:#171717;color:#d8aa32;border:1px solid #b58b20;border-radius:10px;font-weight:900">📄 CONTRATO DE PERMUTA</button><button id="tradeSupportCancelBtn" style="min-height:44px;background:#101010;color:#aaa;border:1px solid #444;border-radius:10px;font-weight:800">CANCELAR</button></div></div></div>
 <script>(function(){let pending='';window.openTradeSupportMode=function(number,mode){const n=String(number||'').trim().toUpperCase(),r=typeof findInternalReceipt==='function'?findInternalReceipt(n):null;if(!r){alert('NO SE ENCONTRÓ EL SOPORTE DE PERMUTA.');return false;}const internal=String(mode||'client').toLowerCase()==='internal';return window.openSupportDocument(internal?tradeInternalSupportHtml(r):tradeClientSupportHtml(r),n+(internal?'_INTERNO':'_CLIENTE'),(internal?'Soporte interno ':'Soporte para cliente ')+n);};window.openTradeSupportChoice=function(number){pending=String(number||'').trim().toUpperCase();document.getElementById('tradeSupportChoiceNumber').textContent=pending;document.getElementById('tradeSupportChoiceOverlay').style.display='flex';};window.closeTradeSupportChoice=function(){pending='';document.getElementById('tradeSupportChoiceOverlay').style.display='none';};document.addEventListener('DOMContentLoaded',function(){const o=document.getElementById('tradeSupportChoiceOverlay');document.getElementById('tradeSupportClientBtn').onclick=()=>{const n=pending;window.closeTradeSupportChoice();if(n)window.openTradeSupportMode(n,'client')};document.getElementById('tradeSupportInternalBtn').onclick=()=>{const n=pending;window.closeTradeSupportChoice();if(n)window.openTradeSupportMode(n,'internal')};document.getElementById('tradeSupportCancelBtn').onclick=window.closeTradeSupportChoice;o.onclick=e=>{if(e.target===o)window.closeTradeSupportChoice()};});})();</script>
 
 <script id="jcp-nav-restore-without-style-change">
@@ -17347,7 +17386,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.08.119',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.08.120',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -21179,6 +21218,22 @@ function jcpParseLicencia(raw){
   };
   /* ================= CONTRATO DE PERMUTA ================= */
   function permVals(c){var v1=+c.val1||0,d=+c.diff||0,v2=c.dir==='receive'?v1-d:(c.dir==='pay'?v1+d:v1);return {v1:v1,v2:Math.max(0,v2),d:d,payer:c.dir==='receive'?'PERMUTANTE 2':(c.dir==='pay'?'PERMUTANTE 1':'')};}
+  // Contrato ya generado: solo ver / imprimir / compartir (no se edita)
+  window.jcpOpenSavedContract=function(kind,id){
+    var saved=null,stashPh=null;
+    if(kind==='sale'){var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(id);});if(!v||!v.sale){alert('NO SE ENCONTRÓ LA VENTA.');return;}saved=v.sale.contract;stashPh=v.cardPhotos||(window.__jcpCardStash||{})[String(v.id)];if(!saved||!saved.numero){openSaleContract(v.id);return;}}
+    else if(kind==='trade'){var p=(data.permutas||[]).find(function(x){return x&&String(x.id)===String(id);});if(!p){alert('NO SE ENCONTRÓ LA PERMUTA.');return;}saved=p.contract;if(!saved||!saved.numero){openPermutaContract(p.id);return;}}
+    else return;
+    cur=cloneAppData(saved);cur.draft=false;cur.inline=true;
+    var last=window.__jcpLastCtPh;ctPh=(last&&last.num===saved.numero)?Object.assign({},last.ph):{};
+    if(kind==='sale'&&stashPh)phPut('tarF','tarR',stashPh);
+    ctPrint();
+  };
+  window.jcpSavedContractFor=function(number,kind){
+    var n=String(number||'').trim().toUpperCase();var r=(data.receipts||[]).find(function(x){return String(x.number||'').toUpperCase()===n;});if(!r)return null;
+    if(kind==='sale'){var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(r.vehicleId);});return v?{kind:'sale',id:v.id}:null;}
+    var p=(data.permutas||[]).find(function(x){return x&&String(x.id)===String(r.entityId);});return p?{kind:'trade',id:p.id}:null;
+  };
   window.openPermutaContract=function(permId){
     ctPh={};
     var r=(data.permutas||[]).find(function(x){return x&&String(x.id)===String(permId);});
@@ -21573,6 +21628,7 @@ function jcpParseLicencia(raw){
       else if(CK){var pv=(data.veh||[]).find(function(x){return x&&String(x.id)===String(c.vehId);})||(data.sold||[]).find(function(x){return x&&String(x.id)===String(c.vehId);});if(pv){pv.purchaseContract=cloneAppData(c);pv.purchaseContract.generatedAt=new Date().toISOString();}}
       else{var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(c.vehId);});if(v&&v.sale){v.sale.contract=cloneAppData(c);v.sale.contract.generatedAt=new Date().toISOString();['clase','color','servicio','capacidad','chasis','motor'].forEach(function(k){if(c.veh[k]&&!v[k])v[k]=c.veh[k];});delete v.cardPhotos;}}
       data.settings=(data.settings&&typeof data.settings==='object')?data.settings:{};data.settings.contractCity=c.city;data.settings.contractLastSeller=c.sellerId;save();}catch(e){data=before;}}
+    if(!c.draft&&c.numero){try{window.__jcpLastCtPh={num:c.numero,ph:Object.assign({},ctPh)};}catch(_e){}}
     var logo=typeof supportLogoSrc==='function'?supportLogoSrc():'';
     var w=null;if(!c.draft){w=window.__ctPreW||window.open('','_blank','width=900,height=1000');window.__ctPreW=null;if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}}
     var tach=function(x){return c.noT?'<div class="tach">'+x+'<span class="na">NO APLICA · VEHÍCULO SIN TRASPASO</span></div>':x;};
@@ -21627,6 +21683,7 @@ function jcpParseLicencia(raw){
       if(typeof window.openSupportDocument==='function'){window.openSupportDocument(html,'CONTRATO_BORRADOR_'+(V.placa||''),'Contrato borrador '+(V.placa||''));return;}
       w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}
     }
+    if(typeof window.openSupportDocument==='function'){window.openSupportDocument(html,'CONTRATO_'+(c.numero||V.placa||''),'Contrato '+(c.numero||''),w);return;}
     w.document.open();w.document.write(html);w.document.close();
   };
 })();
@@ -21829,7 +21886,7 @@ function jcpParseLicencia(raw){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.08.119"></script>
+<script src="./app-update.js?v=2026.11.08.120"></script>
 <script>
 /* JCP: resaltar casillas obligatorias (rojo vacío / verde lleno) en Facturar venta y Permuta */
 (function(){
