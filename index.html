@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.08.120</title>
+<title>COLOMBIAUTOS JP - V2026.11.08.123</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5868,9 +5868,9 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.08.120"></script>
-<script src="./jcp-sync.js?v=2026.11.08.120"></script>
-<script src="./jcp-images.js?v=2026.11.08.120"></script>
+<script src="./jcp-accounting.js?v=2026.11.08.123"></script>
+<script src="./jcp-sync.js?v=2026.11.08.123"></script>
+<script src="./jcp-images.js?v=2026.11.08.123"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -13119,7 +13119,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.120\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.123\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -17386,7 +17386,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.08.120',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.08.123',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -21046,7 +21046,7 @@ function jcpParseLicencia(raw){
     m.querySelector('.pcm-cn').onclick=function(){m.remove();};
     m.querySelector('.pcm-ok').onclick=function(){var before=cloneAppData(data);try{var x=(data.clientes||[]).find(function(y){return String(y.id)===String(id);});if(!x)throw new Error('NO SE ENCONTRÓ');var g=window.jcpCphGet('prov');if(g)x.cedulaPhotos=g;else delete x.cedulaPhotos;x.tipo='proveedor';save();m.remove();try{renderClientes();}catch(_e){}alert(g?'✅ CÉDULA GUARDADA.':'CÉDULA ELIMINADA.');}catch(e){data=before;alert('NO FUE POSIBLE GUARDAR.');}};
   };
-  (function(){var st=document.createElement('style');st.textContent='#tcxModal{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:16px}#tcxModal .pcm-card{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:#121212;border:1px solid #6b5a2a;border-radius:16px;padding:16px;box-sizing:border-box}#tcxModal .pcm-t{color:#d4af37;font-weight:900;font-size:14px}#tcxModal .pcm-n{color:#fff;font-weight:800;font-size:12px;margin:4px 0 8px}#tcxModal .pcm-bar{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:14px}#tcxModal .pcm-bar button{min-height:46px;border-radius:12px;font-weight:900;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#tcxModal .pcm-ok{background:#d4af37!important;color:#111!important;border:0!important}.tcx-box{border:1px solid #3a3020;border-radius:12px;padding:10px;gap:6px}.tcx-h{color:#d4af37!important}.tcx-row{display:grid;grid-template-columns:1fr 46%;gap:8px;align-items:center}.tcx-row span{color:#ccc;font-size:12px;font-weight:700;line-height:1.25}.tcx-row input[readonly]{opacity:.9;background:#0b0b0b!important}.tcx-row.tcx-tot{border-top:1px solid #3a3020;padding-top:8px;margin-top:2px}.tcx-row.tcx-tot span{color:#d4af37;font-weight:900;font-size:13px}.tcx-row.tcx-tot input{color:#d4af37!important;font-weight:900}.tcx-info{display:block;margin-top:0;color:#aaa;font-size:11px;line-height:1.4;font-weight:600}.tcx-info b{color:#d4af37}.tcx-btn{margin-top:6px;width:100%;min-height:36px;border-radius:10px;border:1px solid #6b5a2a;background:#17130b;color:#d4af37;font-weight:900;font-size:12px}.tcx-g{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.tcx-f{display:flex;flex-direction:column;gap:3px;min-width:0}.tcx-f b{color:#bbb;font-size:11px;font-weight:800}.tcx-f input{min-height:40px;border-radius:10px;border:1px solid #333;background:#0b0b0b;color:#fff;padding:0 10px;font-size:14px;width:100%;box-sizing:border-box}.tcx-w{grid-column:1/-1}.tcx-list{max-height:34vh;overflow:auto;border:1px solid #2a2a2a;border-radius:12px;margin:6px 0}.tcx-it{display:flex;width:100%;justify-content:space-between;align-items:center;gap:8px;text-align:left;padding:9px 10px;background:transparent;border:0;border-bottom:1px solid #222;color:#eee;font-size:12px}.tcx-it span{min-width:0}.tcx-it small{display:block;color:#888;font-size:10px;margin-top:2px}.tcx-it>b{color:#d4af37;white-space:nowrap}.tcx-it.on{background:#2a2210;outline:1px solid #d4af37}.tcx-msg{padding:12px;color:#bbb;font-size:12px;font-weight:700}.tcx-res{border:1px solid #2a2a2a;border-radius:12px;padding:8px 10px;margin-top:6px}.tcx-res div{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#ccc;padding:3px 0}.tcx-res b{color:#fff;white-space:nowrap}.tcx-res .tcx-tot{border-top:1px solid #333;margin-top:4px;padding-top:6px;font-weight:900;color:#d4af37}.tcx-tot b{color:#d4af37!important;font-size:15px}#provCedModal{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:16px}#provCedModal .pcm-card{width:100%;max-width:520px;background:#121212;border:1px solid #6b5a2a;border-radius:16px;padding:16px}#provCedModal .pcm-t{color:#d4af37;font-weight:900;font-size:14px}#provCedModal .pcm-n{color:#fff;font-weight:800;font-size:12px;margin:4px 0 6px}#provCedModal .pcm-bar{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:14px}#provCedModal .pcm-bar button{min-height:46px;border-radius:12px;font-weight:900;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#provCedModal .pcm-ok{background:#d4af37!important;color:#111!important;border:0!important}.db-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.db-tabs button{min-height:44px;border-radius:12px;border:1px solid #4a3d1c;background:#121212;color:#bbb;font-weight:900;font-size:12.5px}.db-tabs button.on{background:#d4af37;color:#111;border-color:#d4af37}.db-tabs small{font-weight:800;opacity:.75;margin-left:4px}.db-ced-btn{min-height:30px;padding:2px 10px;border-radius:999px;border:1px solid #6b5a2a;background:#17130b;color:#d4af37;font-weight:800;font-size:11px;white-space:nowrap}.db-ced-btn.ok{border-color:#3f9a52;color:#57d68d;background:#0f2a1a}';document.head.appendChild(st);})();
+  (function(){var st=document.createElement('style');st.textContent='#tcxModal{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:16px}#tcxModal .pcm-card{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:#121212;border:1px solid #6b5a2a;border-radius:16px;padding:16px;box-sizing:border-box}#tcxModal .pcm-t{color:#d4af37;font-weight:900;font-size:14px}#tcxModal .pcm-n{color:#fff;font-weight:800;font-size:12px;margin:4px 0 8px}#tcxModal .pcm-bar{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:14px}#tcxModal .pcm-bar button{min-height:46px;border-radius:12px;font-weight:900;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#tcxModal .pcm-ok{background:#d4af37!important;color:#111!important;border:0!important}.tcx-box{border:1px solid #3a3020;border-radius:12px;padding:10px;gap:6px}.tcx-h{color:#d4af37!important}.tcx-row{display:grid;grid-template-columns:1fr 46%;gap:8px;align-items:center}.tcx-row span{color:#ccc;font-size:12px;font-weight:700;line-height:1.25}.tcx-row input[readonly]{opacity:.9;background:#0b0b0b!important}.tcx-row.tcx-tot{border-top:1px solid #3a3020;padding-top:8px;margin-top:2px}.tcx-row.tcx-tot span{color:#d4af37;font-weight:900;font-size:13px}.tcx-row.tcx-tot input{color:#d4af37!important;font-weight:900}.tcx-info{display:block;margin-top:0;color:#aaa;font-size:11px;line-height:1.4;font-weight:600}.tcx-info b{color:#d4af37}.tcx-btn{margin-top:6px;width:100%;min-height:36px;border-radius:10px;border:1px solid #6b5a2a;background:#17130b;color:#d4af37;font-weight:900;font-size:12px}.tcx-g{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.tcx-f{display:flex;flex-direction:column;gap:3px;min-width:0}.tcx-f b{color:#bbb;font-size:11px;font-weight:800}.tcx-f input{min-height:40px;border-radius:10px;border:1px solid #333;background:#0b0b0b;color:#fff;padding:0 10px;font-size:14px;width:100%;box-sizing:border-box}.tcx-w{grid-column:1/-1}.tcx-list{max-height:34vh;overflow:auto;border:1px solid #2a2a2a;border-radius:12px;margin:6px 0}.tcx-it{display:flex;width:100%;justify-content:space-between;align-items:center;gap:8px;text-align:left;padding:9px 10px;background:transparent;border:0;border-bottom:1px solid #222;color:#eee;font-size:12px}.tcx-it span{min-width:0}.tcx-it small{display:block;color:#888;font-size:10px;margin-top:2px}.tcx-it>b{color:#d4af37;white-space:nowrap}.tcx-it.on{background:#2a2210;outline:1px solid #d4af37}.tcx-msg{padding:12px;color:#bbb;font-size:12px;font-weight:700}.tcx-res{border:1px solid #2a2a2a;border-radius:12px;padding:8px 10px;margin-top:6px}.tcx-res div{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#ccc;padding:3px 0}.tcx-res b{color:#fff;white-space:nowrap}.tcx-res .tcx-tot{border-top:1px solid #333;margin-top:4px;padding-top:6px;font-weight:900;color:#d4af37}.tcx-tot b{color:#d4af37!important;font-size:15px}#ctAddPhModal{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:14px}#ctAddPhModal .pcm-card{width:100%;max-width:560px;max-height:94vh;overflow:auto;background:#121212;border:1px solid #6b5a2a;border-radius:16px;padding:16px;box-sizing:border-box}#ctAddPhModal .pcm-t{color:#d4af37;font-weight:900;font-size:14px}#ctAddPhModal .pcm-n{color:#ccc;font-weight:700;font-size:12px;margin:6px 0 10px;line-height:1.4}#ctAddPhModal .pcm-bar{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:14px}#ctAddPhModal .pcm-bar button,#ctAddPhModal .pcm-x{min-height:46px;border-radius:12px;font-weight:900;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#ctAddPhModal .pcm-ok{background:#d4af37!important;color:#111!important;border:0!important}#ctAddPhModal .pcm-x{width:100%;margin-top:8px;background:#101010;color:#aaa;border-color:#333}#provCedModal{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:16px}#provCedModal .pcm-card{width:100%;max-width:520px;background:#121212;border:1px solid #6b5a2a;border-radius:16px;padding:16px}#provCedModal .pcm-t{color:#d4af37;font-weight:900;font-size:14px}#provCedModal .pcm-n{color:#fff;font-weight:800;font-size:12px;margin:4px 0 6px}#provCedModal .pcm-bar{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:14px}#provCedModal .pcm-bar button{min-height:46px;border-radius:12px;font-weight:900;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#provCedModal .pcm-ok{background:#d4af37!important;color:#111!important;border:0!important}.db-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.db-tabs button{min-height:44px;border-radius:12px;border:1px solid #4a3d1c;background:#121212;color:#bbb;font-weight:900;font-size:12.5px}.db-tabs button.on{background:#d4af37;color:#111;border-color:#d4af37}.db-tabs small{font-weight:800;opacity:.75;margin-left:4px}.db-ced-btn{min-height:30px;padding:2px 10px;border-radius:999px;border:1px solid #6b5a2a;background:#17130b;color:#d4af37;font-weight:800;font-size:11px;white-space:nowrap}.db-ced-btn.ok{border-color:#3f9a52;color:#57d68d;background:#0f2a1a}';document.head.appendChild(st);})();
   window.jcpCriticalPending=function(ids){var miss=[];ids.forEach(function(id){var e=el(id);if(e&&e.classList.contains('veh-warn')&&!e.dataset.confirmed)miss.push(id);});return miss;};
   window.vehScanFile=function(input){
     var file0=input&&input.files&&input.files[0];if(!file0)return;try{input.value='';}catch(_e){}
@@ -21131,7 +21131,7 @@ function jcpParseLicencia(raw){
     requestAnimationFrame(layout);
   }
   window.ctPhotoClear=function(key){delete ctPh[key];ctPhotoPaint();};
-  function ctPhotoPaint(){CT_PH_V.concat(CT_PH_P).forEach(function(x){['ctPh_','sctPh_','pctPh_'].forEach(function(pre){var b=document.getElementById(pre+x[0]);if(!b)return;var d=ctPh[x[0]];var pv=b.querySelector('.ctph-prev,.cph-prev'),bx=b.querySelector('.ctph-x,.cph-x');if(pv)pv.innerHTML=d?'<img src="'+d+'">':'<span>📷</span>';if(bx)bx.style.display=d?'':'none';b.classList.toggle('ok',!!d);});});}
+  function ctPhotoPaint(){CT_PH_V.concat(CT_PH_P).forEach(function(x){['ctPh_','sctPh_','pctPh_','apPh_'].forEach(function(pre){var b=document.getElementById(pre+x[0]);if(!b)return;var d=ctPh[x[0]];var pv=b.querySelector('.ctph-prev,.cph-prev'),bx=b.querySelector('.ctph-x,.cph-x');if(pv)pv.innerHTML=d?'<img src="'+d+'">':'<span>📷</span>';if(bx)bx.style.display=d?'':'none';b.classList.toggle('ok',!!d);});});}
 
   function iso(d){d=d instanceof Date?d:new Date(d);if(isNaN(d.getTime()))d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
   function longDate(v){if(!v)return '';var p=String(v).split('-');var d=new Date(+p[0],+p[1]-1,+p[2]);return isNaN(d.getTime())?String(v):d.toLocaleDateString('es-CO',{day:'numeric',month:'long',year:'numeric'}).toUpperCase();}
@@ -21140,6 +21140,7 @@ function jcpParseLicencia(raw){
     if(+s.pending>0)t+=(t?'; ':'')+'Y EL SALDO DE '+fm(s.pending)+(s.balanceCondition?' SE PAGARÁ '+up(s.balanceCondition):' QUEDA PENDIENTE POR PAGAR');
     return t.toUpperCase();}
   window.openSaleContract=function(vehId){
+    if(!window.__ctForceEdit&&ctSavedFor('sale',vehId)){jcpOpenSavedContract('sale',vehId);return;}
     ctPh={};var stash=(window.__jcpCardStash||{});
     var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(vehId);});
     if(!v||!v.sale){alert('NO SE ENCONTRÓ LA VENTA.');return;}
@@ -21186,6 +21187,7 @@ function jcpParseLicencia(raw){
   function provOf(id){return (data.clientes||[]).find(function(c){return String(c.id||'')===String(id||'');})||null;}
   function dateFromAny(v){if(!v)return iso(new Date());var d=new Date(v);if(!isNaN(d.getTime()))return iso(d);var m=String(v).match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);if(m){var y=+m[3];if(y<100)y+=2000;return y+'-'+String(+m[2]).padStart(2,'0')+'-'+String(+m[1]).padStart(2,'0');}return iso(new Date());}
   window.openPurchaseContract=function(vehId){
+    if(!window.__ctForceEdit&&ctSavedFor('purchase',vehId)){jcpOpenSavedContract('purchase',vehId);return;}
     ctPh={};
     var v=(data.veh||[]).find(function(x){return x&&String(x.id)===String(vehId);})||(data.sold||[]).find(function(x){return x&&String(x.id)===String(vehId);});
     if(!v){alert('NO SE ENCONTRÓ EL VEHÍCULO.');return;}
@@ -21218,16 +21220,72 @@ function jcpParseLicencia(raw){
   };
   /* ================= CONTRATO DE PERMUTA ================= */
   function permVals(c){var v1=+c.val1||0,d=+c.diff||0,v2=c.dir==='receive'?v1-d:(c.dir==='pay'?v1+d:v1);return {v1:v1,v2:Math.max(0,v2),d:d,payer:c.dir==='receive'?'PERMUTANTE 2':(c.dir==='pay'?'PERMUTANTE 1':'')};}
+  // Copia del contrato: al generarlo se toma una imagen de cada hoja (con las fotos) y se guarda como un solo documento.
+  // Las fotos sueltas de cédulas y tarjeta NO se guardan.
+  var H2C='https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+  function ctCapturePages(html,num){
+    if(!num||!html)return;
+    try{
+      var fr=document.createElement('iframe');fr.setAttribute('aria-hidden','true');fr.style.cssText='position:fixed;left:-12000px;top:0;width:900px;height:1300px;border:0;opacity:0;pointer-events:none';
+      var doc=html.replace('</head>','<style>.act{display:none!important}body{background:#fff!important}</style></head>').replace('</body>','<script src="'+H2C+'"><\/script></body>');
+      var done=false,finish=function(){if(done)return;done=true;setTimeout(function(){try{fr.remove();}catch(e){}},50);};
+      fr.onload=function(){
+        var t0=Date.now();
+        (function wait(){
+          var cw=fr.contentWindow,cd=fr.contentDocument;if(!cw||!cd){finish();return;}
+          var ready=typeof cw.html2canvas==='function'&&[].slice.call(cd.images||[]).every(function(i){return i.complete;});
+          if(!ready){if(Date.now()-t0>30000){console.warn('Contrato: no se pudo guardar la copia');finish();return;}setTimeout(wait,400);return;}
+          var pgs=[].slice.call(cd.querySelectorAll('.pg')),out=[];
+          (function next(i){
+            if(i>=pgs.length){var ct=ctFindSaved(num);if(ct&&out.length===pgs.length){ct.pages=out;ct.pagesAt=new Date().toISOString();try{save();}catch(e){}}finish();return;}
+            cw.html2canvas(pgs[i],{scale:1.6,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.8));next(i+1);}).catch(function(e){console.warn('Contrato: hoja',i+1,e);finish();});
+          })(0);
+        })();
+      };
+      fr.srcdoc=doc;document.body.appendChild(fr);
+    }catch(e){console.warn('Contrato: copia',e);}
+  }
+  function ctPagesHtml(saved,pages){
+    return '<!doctype html><html><head><meta charset="utf-8"><title>Contrato '+esc(saved.numero||'')+'</title><style>@page{size:letter;margin:0}*{box-sizing:border-box}body{margin:0;background:#eee}.pg{width:816px;max-width:100%;margin:12px auto;background:#fff;box-shadow:0 0 0 1px #bbb;break-after:page;page-break-after:always}.pg:last-of-type{break-after:auto;page-break-after:auto}.pg img{display:block;width:100%;height:auto}@media print{body{background:#fff}.pg{margin:0;box-shadow:none;width:100%}}</style></head><body>'
+      +pages.map(function(src){return '<div class="pg">'+(src?'<img src="'+src+'">':'<p style="padding:40px;font-family:Arial">NO SE PUDO CARGAR ESTA HOJA. REVISA LA CONEXIÓN.</p>')+'</div>';}).join('')+'</body></html>';
+  }
+  function ctFindSaved(num){var hit=null;(data.sold||[]).forEach(function(v){if(v&&v.sale&&v.sale.contract&&v.sale.contract.numero===num)hit=v.sale.contract;if(v&&v.purchaseContract&&v.purchaseContract.numero===num)hit=v.purchaseContract;});(data.veh||[]).forEach(function(v){if(v&&v.purchaseContract&&v.purchaseContract.numero===num)hit=v.purchaseContract;});(data.permutas||[]).forEach(function(p){if(p&&p.contract&&p.contract.numero===num)hit=p.contract;});return hit;}
+  function ctSavedFor(kind,id){
+    if(kind==='sale'){var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(id);});return v&&v.sale&&v.sale.contract&&v.sale.contract.numero&&v.sale.contract.generatedAt?v.sale.contract:null;}
+    if(kind==='purchase'){var pv=(data.veh||[]).find(function(x){return x&&String(x.id)===String(id);})||(data.sold||[]).find(function(x){return x&&String(x.id)===String(id);});return pv&&pv.purchaseContract&&pv.purchaseContract.numero&&pv.purchaseContract.generatedAt?pv.purchaseContract:null;}
+    if(kind==='trade'){var p=(data.permutas||[]).find(function(x){return x&&String(x.id)===String(id);});return p&&p.contract&&p.contract.numero&&p.contract.generatedAt?p.contract:null;}
+    return null;}
   // Contrato ya generado: solo ver / imprimir / compartir (no se edita)
+  // Contrato generado antes de guardar copias: se pueden agregar las fotos una sola vez y queda guardado con ellas.
+  function ctAddPhotosFlow(kind,id,saved){
+    cur=cloneAppData(saved);cur.draft=false;cur.inline=true;ctPh={};
+    var last=window.__jcpLastCtPh;if(last&&last.num===saved.numero)Object.keys(last.ph||{}).forEach(function(k){if(last.ph[k])ctPh[k]=last.ph[k];});
+    if(kind==='sale'){var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(id);})||{};var st=v.cardPhotos||(window.__jcpCardStash||{})[String(v.id)];if(st){if(!ctPh.tarF&&st.F)ctPh.tarF=st.F;if(!ctPh.tarR&&st.R)ctPh.tarR=st.R;}}
+    var old=document.getElementById('ctAddPhModal');if(old)old.remove();
+    var m=document.createElement('div');m.id='ctAddPhModal';
+    m.innerHTML='<div class="pcm-card"><div class="pcm-t">📷 AGREGAR FOTOS AL CONTRATO '+esc(saved.numero)+'</div><div class="pcm-n">Este contrato se generó sin guardar copia. Sube las fotos y queda guardado así, como un solo documento. Después ya no se puede cambiar.</div>'
+      +'<label class="sale-field full" style="margin-bottom:10px"><b style="color:#bbb;font-size:12px">'+(cur.kind==='compra'?'COMPRADOR':(cur.kind==='permuta'?'PERMUTANTE 1':'VENDEDOR'))+' (QUIÉN FIRMA POR COLOMBIAUTOS) · REVÍSALO</b><select id="apSeller" style="width:100%;min-height:44px;border-radius:10px;background:#0b0b0b;color:#fff;border:1px solid #6b5a2a;padding:0 10px;margin-top:4px">'+sellers().map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===cur.sellerId?' selected':'')+'>'+esc(x.nombre)+' · '+esc(x.cedula)+'</option>';}).join('')+'</select></label>'
+      +iphotos('ap',phList(),null)
+      +'<div class="pcm-bar"><button type="button" class="pcm-cn">VER SIN FOTOS</button><button type="button" class="pcm-ok">✅ GUARDAR CONTRATO CON FOTOS</button></div><button type="button" class="pcm-x">CERRAR</button></div>';
+    document.body.appendChild(m);ctPhotoPaint();
+    var go=function(capture){var ss=document.getElementById('apSeller');if(ss&&ss.value)cur.sellerId=ss.value;var w=window.open('','_blank');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}m.remove();window.__ctPreW=w;window.__ctReprint=!capture;try{ctPrint();}finally{window.__ctReprint=false;}};
+    m.querySelector('.pcm-cn').onclick=function(){go(false);};
+    m.querySelector('.pcm-ok').onclick=function(){if(!Object.keys(ctPh).filter(function(k){return ctPh[k];}).length){alert('SUBE AL MENOS UNA FOTO.');return;}if(!confirm('¿GUARDAR EL CONTRATO '+saved.numero+' CON ESTAS FOTOS? DESPUÉS NO SE PUEDE CAMBIAR.'))return;go(true);};
+    m.querySelector('.pcm-x').onclick=function(){m.remove();};
+  }
   window.jcpOpenSavedContract=function(kind,id){
-    var saved=null,stashPh=null;
-    if(kind==='sale'){var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(id);});if(!v||!v.sale){alert('NO SE ENCONTRÓ LA VENTA.');return;}saved=v.sale.contract;stashPh=v.cardPhotos||(window.__jcpCardStash||{})[String(v.id)];if(!saved||!saved.numero){openSaleContract(v.id);return;}}
-    else if(kind==='trade'){var p=(data.permutas||[]).find(function(x){return x&&String(x.id)===String(id);});if(!p){alert('NO SE ENCONTRÓ LA PERMUTA.');return;}saved=p.contract;if(!saved||!saved.numero){openPermutaContract(p.id);return;}}
-    else return;
-    cur=cloneAppData(saved);cur.draft=false;cur.inline=true;
-    var last=window.__jcpLastCtPh;ctPh=(last&&last.num===saved.numero)?Object.assign({},last.ph):{};
-    if(kind==='sale'&&stashPh)phPut('tarF','tarR',stashPh);
-    ctPrint();
+    var saved=ctSavedFor(kind,id);
+    if(!saved){window.__ctForceEdit=true;try{if(kind==='sale')openSaleContract(id);else if(kind==='trade')openPermutaContract(id);else if(kind==='purchase')openPurchaseContract(id);}finally{window.__ctForceEdit=false;}return;}
+    if(!(Array.isArray(saved.pages)&&saved.pages.length)){ctAddPhotosFlow(kind,id,saved);return;}
+    var w=window.open('','_blank');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}
+    try{w.document.write('<p style="font-family:Arial;padding:30px;text-align:center">Cargando contrato…</p>');}catch(e){}
+    var rs=function(x){try{if(typeof x==='string'&&x.indexOf('jcpimg:')===0&&typeof jcpResolvePhotoSrc==='function')return jcpResolvePhotoSrc(x);}catch(e){}return Promise.resolve(x);};
+    if(Array.isArray(saved.pages)&&saved.pages.length){
+      Promise.all(saved.pages.map(function(p){return Promise.resolve(rs(p)).catch(function(){return '';});})).then(function(pp){
+        if(!pp.filter(Boolean).length){alert('NO SE PUDO DESCARGAR EL CONTRATO. REVISA LA CONEXIÓN.');try{w.close();}catch(e){}return;}
+        window.openSupportDocument(ctPagesHtml(saved,pp),'CONTRATO_'+saved.numero,'Contrato '+saved.numero,w);});
+      return;
+    }
   };
   window.jcpSavedContractFor=function(number,kind){
     var n=String(number||'').trim().toUpperCase();var r=(data.receipts||[]).find(function(x){return String(x.number||'').toUpperCase()===n;});if(!r)return null;
@@ -21235,6 +21293,7 @@ function jcpParseLicencia(raw){
     var p=(data.permutas||[]).find(function(x){return x&&String(x.id)===String(r.entityId);});return p?{kind:'trade',id:p.id}:null;
   };
   window.openPermutaContract=function(permId){
+    if(!window.__ctForceEdit&&ctSavedFor('trade',permId)){jcpOpenSavedContract('trade',permId);return;}
     ctPh={};
     var r=(data.permutas||[]).find(function(x){return x&&String(x.id)===String(permId);});
     if(!r){alert('NO SE ENCONTRÓ LA PERMUTA.');return;}
@@ -21624,6 +21683,7 @@ function jcpParseLicencia(raw){
     if(!c.draft){var before=cloneAppData(data);
     try{
       if(!c.numero)c.numero=seqNext(PK?'CP':'CV');
+      delete c.photos;delete c.pages;
       if(PK){var pr=(data.permutas||[]).find(function(x){return x&&String(x.id)===String(c.permId);});if(pr){pr.contract=cloneAppData(c);pr.contract.generatedAt=new Date().toISOString();delete pr.outCardPhotos;}}
       else if(CK){var pv=(data.veh||[]).find(function(x){return x&&String(x.id)===String(c.vehId);})||(data.sold||[]).find(function(x){return x&&String(x.id)===String(c.vehId);});if(pv){pv.purchaseContract=cloneAppData(c);pv.purchaseContract.generatedAt=new Date().toISOString();}}
       else{var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(c.vehId);});if(v&&v.sale){v.sale.contract=cloneAppData(c);v.sale.contract.generatedAt=new Date().toISOString();['clase','color','servicio','capacidad','chasis','motor'].forEach(function(k){if(c.veh[k]&&!v[k])v[k]=c.veh[k];});delete v.cardPhotos;}}
@@ -21683,6 +21743,7 @@ function jcpParseLicencia(raw){
       if(typeof window.openSupportDocument==='function'){window.openSupportDocument(html,'CONTRATO_BORRADOR_'+(V.placa||''),'Contrato borrador '+(V.placa||''));return;}
       w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}
     }
+    if(!c.draft&&c.numero&&!window.__ctReprint){var _ct=ctFindSaved(c.numero);if(_ct&&!(_ct.pages&&_ct.pages.length))ctCapturePages(html,c.numero);}
     if(typeof window.openSupportDocument==='function'){window.openSupportDocument(html,'CONTRATO_'+(c.numero||V.placa||''),'Contrato '+(c.numero||''),w);return;}
     w.document.open();w.document.write(html);w.document.close();
   };
@@ -21886,7 +21947,7 @@ function jcpParseLicencia(raw){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.08.120"></script>
+<script src="./app-update.js?v=2026.11.08.123"></script>
 <script>
 /* JCP: resaltar casillas obligatorias (rojo vacío / verde lleno) en Facturar venta y Permuta */
 (function(){
