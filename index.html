@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.05.112</title>
+<title>COLOMBIAUTOS JP - V2026.11.08.114</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -3870,7 +3870,7 @@ body.jcp-custom-theme .database-actions-list button{
 #formVeh input.veh-bad{border-color:#e74c3c!important;box-shadow:0 0 0 1px rgba(231,76,60,.45)}
 #formVeh .veh-opts{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
 #formVeh .veh-opts small{font-size:10px;color:#f1c40f;font-weight:800}
-.perm-ct-btn{min-height:30px;padding:2px 10px;border-radius:999px;border:1px solid #6b5a2a;background:#17130b;color:#d4af37;font-weight:800;font-size:11px;white-space:nowrap}.sale-draft-btn{width:100%;min-height:48px;margin-bottom:8px;border-radius:12px;border:1.5px solid #d4af37!important;background:transparent!important;color:#d4af37!important;font-weight:900;letter-spacing:.4px;cursor:pointer}#formVeh .veh-cancel-btn,.veh-cancel-btn{grid-column:1/-1!important;width:100%!important;margin-top:8px!important;min-height:46px!important;border-radius:12px!important;font-size:14px!important;border:1.5px solid rgba(220,90,80,.7)!important;background:transparent!important;color:#ff8a80!important;font-weight:900;letter-spacing:.4px;cursor:pointer}#formVeh .veh-opts button{min-height:28px;padding:0 9px;border-radius:999px;border:1px solid #6b5a14;background:#1d190c;color:#f1c40f;font-size:11px;font-weight:800}
+.records-actions{display:flex;flex-direction:column;gap:6px;align-items:stretch}.records-ct-btn{border-color:#3f9a52!important;color:#57d68d!important}#permScanPreview .veh-dock-img img{width:100%!important;max-width:100%!important;height:auto}#permScanPreview .veh-dock-img img.zoom{width:220%!important;max-width:none!important}#permScanPreview{box-sizing:border-box;width:auto}.ict-v2{min-height:46px;display:flex;align-items:center;padding:0 12px;border-radius:12px;border:1px solid #3a3122;background:#0c0c0c;color:#fff;font-weight:900;font-size:16px}.perm-ct-btn{min-height:30px;padding:2px 10px;border-radius:999px;border:1px solid #6b5a2a;background:#17130b;color:#d4af37;font-weight:800;font-size:11px;white-space:nowrap}.sale-draft-btn{width:100%;min-height:48px;margin-bottom:8px;border-radius:12px;border:1.5px solid #d4af37!important;background:transparent!important;color:#d4af37!important;font-weight:900;letter-spacing:.4px;cursor:pointer}#formVeh .veh-cancel-btn,.veh-cancel-btn{grid-column:1/-1!important;width:100%!important;margin-top:8px!important;min-height:46px!important;border-radius:12px!important;font-size:14px!important;border:1.5px solid rgba(220,90,80,.7)!important;background:transparent!important;color:#ff8a80!important;font-weight:900;letter-spacing:.4px;cursor:pointer}#formVeh .veh-opts button{min-height:28px;padding:0 9px;border-radius:999px;border:1px solid #6b5a14;background:#1d190c;color:#f1c40f;font-size:11px;font-weight:800}
 #formVeh .veh-scan-preview{position:fixed;left:8px;right:8px;bottom:84px;z-index:900;background:#0d0d0d;border:2px solid #d4af37;border-radius:14px;padding:8px;box-shadow:0 -6px 24px rgba(0,0,0,.6);max-width:720px;margin:0 auto}
 #formVeh .veh-dock-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
 #formVeh .veh-dock-head b{font-size:10px;color:#d4af37;letter-spacing:.4px}
@@ -4655,7 +4655,17 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 </div>
 <div class="sale-invoice-section">
-<div class="sale-section-title"><span>4</span> DIFERENCIA DE LA PERMUTA</div>
+<div class="sale-section-title"><span>4</span> PERMUTANTE 1 Y CONDICIONES DEL CONTRATO</div>
+<div id="permCtBox"></div>
+</div>
+<div class="sale-invoice-section">
+<div class="sale-section-title"><span>5</span> FOTOS PARA LA HOJA 2 DEL CONTRATO</div>
+<small class="cph-note">Las tarjetas vienen del inventario y del escáner. Las cédulas se toman aquí y no se guardan: solo quedan en el contrato.</small>
+<div id="permCtPhotos"></div>
+</div>
+<div class="sale-invoice-section">
+<div class="sale-section-title"><span>6</span> VALORES, DIFERENCIA Y FORMA DE PAGO</div>
+<div class="sale-field-grid"><label class="sale-field"><b>Valor que se le da al vehículo 1 en el contrato *</b><input id="pctVal1" data-money="1" inputmode="numeric" placeholder="$ 0"/></label><div class="sale-field"><b>Valor del vehículo 2 (automático)</b><div class="ict-v2" id="pctVal2Show">$ 0</div></div></div>
 <div class="sale-field-grid">
 <label class="sale-field"><b>Movimiento de dinero *</b><select id="permutaDifferenceDirection" onchange="updatePermutaCalculations()"><option value="even">SIN DINERO DE ENCIMA</option><option value="receive">RECIBIMOS DINERO</option><option value="pay">ENTREGAMOS DINERO</option></select></label>
 <label class="sale-field"><b>Valor real del dinero de encima *</b><input data-money="1" id="permutaDifferenceAmount" inputmode="numeric" oninput="formatPermutaMoney(this);updatePermutaCalculations()" placeholder="$ 0" type="text"/></label>
@@ -4675,9 +4685,10 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div><div class="paydist-summary"><div><span>VALOR TOTAL</span><b id="permutaPayTotal">$0</b></div><div><span>DISTRIBUIDO</span><b id="permutaPayDistributed">$0</b></div><div class="bad" id="permutaPayPendingBox"><span>FALTA</span><b id="permutaPayPending">$0</b></div></div><div class="paydist-hint">La operación se habilita únicamente cuando la distribución coincide exactamente con el valor total.</div></div></div></div><div class="sale-invoice-section"><div class="sale-section-title"><span>5</span> OBSERVACIONES</div>
 <textarea class="sale-observations" id="permutaObs" placeholder="OBSERVACIONES DE LA PERMUTA (OPCIONAL)"></textarea>
 </div>
+<div class="sale-invoice-section" style="margin-top:-6px"><div class="sale-field-grid"><label class="sale-field full"><b>Así dirá en el contrato la forma de pago de la diferencia</b><input id="pctPagoTxt" placeholder="EN EFECTIVO"/></label></div></div>
 <div class="sale-invoice-actions">
-<button class="sale-draft-btn" type="button" onclick="openPermutaContractDraft()">👁 VER CONTRATO (BORRADOR)</button>
-<button class="sale-save-btn" id="savePermutaBtn" onclick="savePermuta()">💾 GUARDAR PERMUTA</button>
+<button class="sale-ct-btn" type="button" onclick="permCtPreview()">👁 VER CONTRATO</button>
+<button class="sale-save-btn" id="savePermutaBtn" onclick="permFacturar()">💾 GUARDAR PERMUTA Y GENERAR CONTRATO</button>
 <button class="sale-cancel-btn" onclick="cancelPermutaToOperations()">CANCELAR</button>
 </div>
 </div>
@@ -4715,7 +4726,20 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 <label class="sale-field full"><b>Dirección *</b><input id="saleAddress" placeholder="DIRECCIÓN DEL COMPRADOR"/></label>
 </div>
 </div>
-<div class="sale-invoice-section"><div class="sale-section-title"><span>3</span> INFORMACIÓN DE LA VENTA</div><div class="sale-field-grid">
+<div class="sale-invoice-section">
+<div class="sale-section-title"><span>3</span> VENDEDOR Y CONDICIONES DEL CONTRATO</div>
+<div id="saleCtBox"></div>
+</div>
+<div class="sale-invoice-section">
+<div class="sale-section-title"><span>4</span> FOTOS PARA LA HOJA DE IMPRONTAS</div>
+<small class="cph-note">La tarjeta viene del inventario. La cédula del comprador se toma aquí y no se guarda: solo queda en el contrato.</small>
+<div id="saleCtPhotos"></div>
+</div>
+<div class="sale-invoice-section">
+<div class="sale-section-title"><span>5</span> OBSERVACIONES (NO VAN AL CONTRATO)</div>
+<textarea class="sale-observations" id="saleObs" placeholder="OBSERVACIONES (OPCIONAL)"></textarea>
+</div>
+<div class="sale-invoice-section"><div class="sale-section-title"><span>6</span> PRECIO Y FORMA DE PAGO</div><div class="sale-field-grid">
 <label class="sale-field"><b>Valor de venta *</b><input data-money="1" id="salePrice" inputmode="numeric" oninput="updateSalePaymentTarget()" placeholder="$ 0" type="text"/></label>
 <label class="sale-field"><b>Condición</b><select id="saleMethod" onchange="toggleMixedPayment()"><option value="contado">CONTADO</option><option value="credito">A CRÉDITO</option></select></label></div>
 <div class="sale-field-grid" id="creditPaymentFields" style="display:none;margin-top:10px"><label class="sale-field"><b>Abono recibido ahora</b><input data-money="1" id="saleReceived" inputmode="numeric" oninput="updateSalePaymentTarget()" placeholder="$ 0" type="text"/></label><label class="sale-field"><b>Pendiente por cobrar</b><input data-money="1" id="salePending" inputmode="numeric" readonly="" type="text"/></label></div><div class="paydist" id="salePayDist"><div class="paydist-title">DISTRIBUCIÓN DEL DINERO RECIBIDO</div><div class="paydist-grid">
@@ -4724,14 +4748,11 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 <label class="paydist-row"><span>DAVIVIENDA</span><input data-money="1" id="salePayDavivienda" inputmode="numeric" oninput="payDistInput('sale',this)" placeholder="$ 0" type="text"/></label>
 <label class="paydist-row"><span>NEQUI</span><input data-money="1" id="salePayNequi" inputmode="numeric" oninput="payDistInput('sale',this)" placeholder="$ 0" type="text"/></label>
 <label class="paydist-row"><span>DAVIPLATA</span><input data-money="1" id="salePayDaviplata" inputmode="numeric" oninput="payDistInput('sale',this)" placeholder="$ 0" type="text"/></label>
-</div><div class="paydist-summary"><div><span>VALOR TOTAL</span><b id="salePayTotal">$0</b></div><div><span>DISTRIBUIDO</span><b id="salePayDistributed">$0</b></div><div class="bad" id="salePayPendingBox"><span>FALTA</span><b id="salePayPending">$0</b></div></div><div class="paydist-hint">La operación se habilita únicamente cuando la distribución coincide exactamente con el valor total.</div></div><div id="saleSummary"></div></div>
-<div class="sale-invoice-section">
-<div class="sale-section-title"><span>5</span> OBSERVACIONES</div>
-<textarea class="sale-observations" id="saleObs" placeholder="OBSERVACIONES (OPCIONAL)"></textarea>
+</div><div class="paydist-summary"><div><span>VALOR TOTAL</span><b id="salePayTotal">$0</b></div><div><span>DISTRIBUIDO</span><b id="salePayDistributed">$0</b></div><div class="bad" id="salePayPendingBox"><span>FALTA</span><b id="salePayPending">$0</b></div></div><div class="paydist-hint">La operación se habilita únicamente cuando la distribución coincide exactamente con el valor total.</div></div><div id="saleSummary"></div><div class="sale-field-grid" style="margin-top:10px"><label class="sale-field full"><b>Así dirá la forma de pago en el contrato *</b><input id="salePagoTxt" placeholder="EN EFECTIVO"/></label></div>
 </div>
 <div class="sale-invoice-actions">
-<button class="sale-draft-btn" type="button" onclick="openSaleContractDraft()">👁 VER CONTRATO (BORRADOR)</button>
-<button class="sale-save-btn paydist-locked" disabled="" id="saleSubmit" onclick="saveVehicleSale()">💾 GUARDAR VENTA</button>
+<button class="sale-ct-btn" type="button" onclick="saleCtPreview()">👁 VER CONTRATO</button>
+<button class="sale-save-btn paydist-locked" disabled="" id="saleSubmit" onclick="saleFacturar()">💾 FACTURAR Y GENERAR CONTRATO</button>
 <button class="sale-cancel-btn" onclick="closeSaleForm()">CANCELAR</button>
 </div>
 </div>
@@ -5845,9 +5866,9 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.05.112"></script>
-<script src="./jcp-sync.js?v=2026.11.05.112"></script>
-<script src="./jcp-images.js?v=2026.11.05.112"></script>
+<script src="./jcp-accounting.js?v=2026.11.08.114"></script>
+<script src="./jcp-sync.js?v=2026.11.08.114"></script>
+<script src="./jcp-images.js?v=2026.11.08.114"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -8465,6 +8486,18 @@ function treasuryRecordSale(state,o){if(!(o.received>0))return;if(o.method==='ef
 window.addEventListener('load',()=>{ensureTreasuryState(data);fillTreasuryAccountSelects();});
 const JCP_VOID_PIN='1526';
 const JCP_RECEIPT_SERIES={purchase:'RC',finance:'RF',sale:'RV',operating_expense:'RG',vehicle_expense:'RG',debt_payment:'RPD',trade:'RP',loan:'RPO',investment:'RI',general_movement:'RM',profit_withdrawal:'RR',cash_close:'RCC',treasury_transfer:'RT',collection:'RCO'};
+function jcpRecordContractBtn(number){
+  try{
+    const r=(data.receipts||[]).find(x=>String(x.number||'').toUpperCase()===String(number||'').toUpperCase());
+    if(!r||/^(VOID|ANULAD[OA])$/.test(String(r.status||'ACTIVE').toUpperCase()))return '';
+    let fn='',lbl='📄 CONTRATO';
+    if(r.type==='purchase'&&r.vehicleId){const v=(data.veh||[]).find(x=>String(x.id)===String(r.vehicleId))||(data.sold||[]).find(x=>String(x.id)===String(r.vehicleId));if(!v)return '';fn="openPurchaseContract('"+jcpInlineJsArg(v.id)+"')";if(v.purchaseContract&&v.purchaseContract.numero)lbl='📄 '+v.purchaseContract.numero;}
+    else if(r.type==='sale'&&r.vehicleId){const v=(data.sold||[]).find(x=>String(x.id)===String(r.vehicleId));if(!v||!v.sale)return '';fn="openSaleContract('"+jcpInlineJsArg(v.id)+"')";if(v.sale.contract&&v.sale.contract.numero)lbl='📄 '+v.sale.contract.numero;}
+    else if(r.type==='trade'&&r.entityId){const p=(data.permutas||[]).find(x=>String(x.id)===String(r.entityId));if(!p)return '';fn="openPermutaContract('"+jcpInlineJsArg(p.id)+"')";if(p.contract&&p.contract.numero)lbl='📄 '+p.contract.numero;}
+    if(!fn)return '';
+    return '<button type="button" class="records-copy-btn records-ct-btn" onclick="'+fn+'">'+lbl+'</button>';
+  }catch(e){return '';}
+}
 function receiptList(state=data){state.receipts=Array.isArray(state.receipts)?state.receipts:[];return state.receipts;}
 function receiptPrefix(type){return JCP_RECEIPT_SERIES[type]||'R';}
 function receiptNumberValue(number,prefix){
@@ -10266,7 +10299,7 @@ function openVehicleDetail(id){
     .vd2-doc small{font-size:13px;margin-top:3px}
     .vd2-ok{background:#12281a;border-color:#2f6b45}.vd2-ok strong{color:#8fd4a8}
     .vd2-missing{display:block;width:calc(100% - 24px);margin:0 12px 10px;min-height:40px;border-radius:10px;border:1px solid #a87a12;background:#33290d;color:#f0c35a;font-weight:800;font-size:11.5px}
-    .vd2-field.vd2-ok{border-color:rgba(70,190,120,.55)!important;background:rgba(40,120,70,.18)!important}.vd2-field.vd2-ok b{color:#5fd38d!important;font-size:14px!important}.vd2-more{display:block;width:calc(100% - 24px);margin:10px 12px 12px;padding:11px;border-radius:12px;border:1px solid rgba(240,195,90,.45);background:transparent;color:#f0c35a;font-weight:800;font-size:12px;letter-spacing:.4px;cursor:pointer}.vd2-full{margin-top:10px}.vd2-full[hidden]{display:none!important}.vd2-full .vd2-subhead{margin:6px 12px 10px}.vd2-full .vd2-docgrid{padding:0 12px 12px}.vd2-missing-val{color:#f0c35a!important;font-weight:600!important;font-size:12px!important}
+    .vd2-field.vd2-ok{border-color:rgba(70,190,120,.55)!important;background:rgba(40,120,70,.18)!important}.vd2-field.vd2-ok b{color:#5fd38d!important;font-size:14px!important}.vd2-more{display:block;width:calc(100% - 24px);margin:10px 12px 12px;padding:11px;border-radius:12px;border:1px solid rgba(240,195,90,.45);background:transparent;color:#f0c35a;font-weight:800;font-size:12px;letter-spacing:.4px;cursor:pointer}.vd2-full{margin-top:10px}.vd2-full[hidden]{display:none!important}.vd2-cardph{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px}.vd2-cardph figure{margin:0;display:flex;flex-direction:column;gap:4px}.vd2-cardph img{width:100%;aspect-ratio:85.6/54;object-fit:cover;border-radius:10px;border:1px solid #4a3d1c;cursor:zoom-in;background:#000}.vd2-cardph img.zoom{position:fixed;inset:0;z-index:9999;width:100vw;height:100vh;aspect-ratio:auto;object-fit:contain;border-radius:0;border:0;background:rgba(0,0,0,.95);cursor:zoom-out}.vd2-cardph figure.empty div{aspect-ratio:85.6/54;border:1.5px dashed #4a3d1c;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#777;font-weight:800}.vd2-cardph figcaption{font-size:9.5px;font-weight:800;color:#aaa;text-align:center}.vd2-cardph-note{display:block;padding:6px 12px 12px;font-size:10.5px;color:#888}.vd2-full .vd2-subhead{margin:6px 12px 10px}.vd2-full .vd2-docgrid{padding:0 12px 12px}.vd2-missing-val{color:#f0c35a!important;font-weight:600!important;font-size:12px!important}
     .vd2-warn{background:#33290d;border-color:#a87a12}.vd2-warn strong,.vd2-warn small{color:#f0c35a}
     .vd2-bad{background:#341616;border-color:#a33a3a}.vd2-bad strong,.vd2-bad small{color:#f09595}
     .vd2-list{display:grid}
@@ -10291,7 +10324,6 @@ function openVehicleDetail(id){
     <div class="vd2-card vd2-first">
       <img class="vd2-photo" src="${jcpSafeImageSrc(photo)}" alt="Foto del vehículo">
       ${(typeof jcpVehBadgesRow==='function')?jcpVehBadgesRow(veh):''}
-      <button type="button" class="vd2-more" style="margin-top:0" onclick="openPurchaseContract('${esc(veh.id)}')">📄 CONTRATO DE COMPRA${veh.purchaseContract&&veh.purchaseContract.numero?' · '+esc(veh.purchaseContract.numero):''}</button>
       ${(!veh.chasis||!veh.motor||!veh.color||!veh.clase)?`<button type="button" class="vd2-missing" onclick="openCompleteInfoSelector();setTimeout(()=>selectVehicleCompleteInfo('${esc(veh.id)}'),0)">⚠️ FALTA TARJETA DE PROPIEDAD · TOCA PARA COMPLETAR</button>`:''}
       <div class="vd2-fields">
         ${[['Marca',commercial.marca||veh.marca||veh.m],['Línea',commercial.referencia||veh.ref],['Modelo',commercial.modelo||veh.modelo],['Placa',commercial.placa||veh.pl],['Cilindraje',commercial.cilindraje||veh.cilindraje],['Matrícula de',read('matricula','')]].map(([l,v])=>`<div class="vd2-field"><small>${l}</small><b${String(v||'').trim()?'':' class="vd2-missing-val"'}>${esc(String(v||'').trim()||'SIN REGISTRAR')}</b></div>`).join('')}
@@ -10312,6 +10344,7 @@ function openVehicleDetail(id){
         ${doc('Reportes',read('reportes','SIN REGISTRAR'),yesNoTone(read('reportes','SIN REGISTRAR')),reportExtra)}
         ${doc('Kilometraje',kmText,'neutral')}
       </div>
+      ${(veh.cardPhotos&&(veh.cardPhotos.F||veh.cardPhotos.R))?`<div class="vd2-head vd2-subhead">Tarjeta de propiedad</div><div class="vd2-cardph">${['F','R'].map(k=>veh.cardPhotos[k]?`<figure><img src="${veh.cardPhotos[k]}" alt="" onclick="this.classList.toggle('zoom')"><figcaption>${k==='F'?'FRENTE':'RESPALDO'}</figcaption></figure>`:`<figure class="empty"><div>SIN FOTO</div><figcaption>${k==='F'?'FRENTE':'RESPALDO'}</figcaption></figure>`).join('')}</div><small class="vd2-cardph-note">Se borran solas cuando el carro se factura. Quedan solo en el contrato.</small>`:`<div class="vd2-head vd2-subhead">Tarjeta de propiedad</div><small class="vd2-cardph-note">Sin fotos guardadas. Puedes tomarlas en Completar información.</small>`}
       </div>
     </div>
 
@@ -11243,6 +11276,7 @@ return `<div class="vehicle-card" onclick="selectSaleVehicle('${jcpInlineJsArg(x
 function selectSaleVehicle(id){
 selectedSaleVehicleId=id;
 let x=data.veh.find(v=>v.id===id);if(!x)return;
+setTimeout(()=>{try{saleCtMount(id);}catch(e){console.warn(e);}},0);
 const preview=document.getElementById('saleVehiclePreview');
 if(preview){
   const img=x.photo||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
@@ -11697,6 +11731,7 @@ function renderPermutaCards(){
 function selectPermutaVehicle(id){
   selectedPermutaVehicleId=id;
   const x=data.veh.find(v=>String(v.id)===String(id)); if(!x)return;
+  setTimeout(()=>{try{permCtMount(id);}catch(e){console.warn(e);}},0);
   const preview=document.getElementById('permutaVehiclePreview');
   if(preview){
     const img=x.photo||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#111"/><text x="50%" y="50%" fill="#d4af37" font-size="34" text-anchor="middle" dominant-baseline="middle">SIN FOTO</text></svg>');
@@ -11812,6 +11847,7 @@ function clearPermutaForm(){
   selectedPermutaVehicleId=null;
 }
 function closePermutaForm(){
+  try{const pv=document.getElementById('permScanPreview');if(pv)pv.style.display='none';document.body.classList.remove('veh-dock-open');}catch(_e){}
   const form=document.getElementById('permutaForm');if(form)form.style.display='none';
   clearPermutaForm();
 }
@@ -11917,7 +11953,8 @@ function purchaseSellerSuggestions(){
   }));
   box.style.display='block';
 }
-async function savePermuta(){
+async function savePermuta(opts){
+  opts=opts||{};
   if(!requireTreasuryReady())return false;
   const saveBtn=document.getElementById('savePermutaBtn');
   if(saveBtn?.disabled)return false;
@@ -11970,10 +12007,12 @@ async function savePermuta(){
       if((data.veh||[]).some(v=>String(v.pl||'').trim().toUpperCase().replace(/\s+/g,'')===inPlaca.replace(/\s+/g,''))){alert('YA EXISTE UN VEHÍCULO CON ESA PLACA EN EL INVENTARIO.');return false;}
     }
     const inCardPhotos=(window.jcpCphGet?jcpCphGet('perm'):null)||undefined;
+    if(outgoing.cardPhotos){window.__jcpCardStash=window.__jcpCardStash||{};window.__jcpCardStash[String(outgoing.id)]=outgoing.cardPhotos;}
     if(calc.status!=='even'&&calc.difference<=0){alert('INGRESA EL VALOR REAL DEL DINERO DE ENCIMA.');return false;}
     if(calc.status==='receive'&&calc.paymentCondition==='mixto'&&calc.receivedEntered>calc.difference){alert('EL DINERO RECIBIDO AHORA NO PUEDE SUPERAR LA DIFERENCIA TOTAL.');return false;}
 
     if(calc.cashFlowAmount>0&&!validatePaymentDistribution('permuta',calc.cashFlowAmount))return false;
+    if(opts.dry)return true;
     const differenceDistribution=calc.cashFlowAmount>0?paymentDistribution('permuta'):{};
 
     const files=Array.from(document.getElementById('permutaInPhotos')?.files||[]).slice(0,4);
@@ -12001,7 +12040,7 @@ async function savePermuta(){
     };
     const record={id:permutaId,date:dateTime,createdAt:iso,outgoingVehicleId:outgoing.id,
       outgoingCard:{marca:outgoing.marca||outgoing.m||'',clase:outgoing.clase||'',linea:outgoing.ref||'',modelo:outgoing.modelo||'',placa:outgoing.pl||'',color:outgoing.color||'',servicio:outgoing.servicio||'',capacidad:outgoing.capacidad||'',chasis:outgoing.chasis||'',motor:outgoing.motor||'',soat:outgoing.soatVence||outgoing.soat||outgoing.additionalInfo?.soat||'',tecno:outgoing.tecnoVence||outgoing.tecnomecanica||outgoing.additionalInfo?.tecnomecanica||''},
-      outCardPhotos:outgoing.cardPhotos||undefined,
+
       outgoingVehicle:{marca:outgoing.marca||outgoing.m||'',ref:outgoing.ref||'',modelo:outgoing.modelo||'',cilindraje:outgoing.cilindraje||outgoing.additionalInfo?.cilindraje||'',pl:outgoing.pl||'',matricula:outgoing.matricula||outgoing.additionalInfo?.matricula||'',photo:outgoing.photo||'',photos:Array.isArray(outgoing.photos)?outgoing.photos:[],c:outgoingPurchasePrice,g:outgoingExpenseTotal},
       outgoingPurchasePrice,outgoingExpenseRows:cloneAppData(outgoingExpenseRows),outgoingExpenseTotal,
       outgoingInvestment:calc.outgoingInvestment,profit:0,profitRecognition:'deferred',
@@ -12058,6 +12097,7 @@ async function savePermuta(){
     try{populateVehicleSelect();renderPermutaHistory();}catch(e){}
     try{clearPaymentDistribution('permuta');clearPermutaForm();closePermutaForm();returnToSalesMenu();}catch(e){}
 
+    if(opts.silent)return {id:permutaId,number:receipt.number};
     alert('✅ PERMUTA GUARDADA CORRECTAMENTE. SOPORTE '+receipt.number+' GENERADO.');
     if(confirm('¿GENERAR AHORA EL CONTRATO DE PERMUTA?'))setTimeout(()=>{try{openPermutaContract(permutaId);}catch(e){}},60);
     return true;
@@ -12066,7 +12106,7 @@ async function savePermuta(){
     alert('NO FUE POSIBLE GUARDAR LA PERMUTA.\n\nDETALLE: '+(err?.message||String(err)));
     return false;
   }finally{
-    if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='💾 GUARDAR PERMUTA';}
+    if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='💾 GUARDAR PERMUTA Y GENERAR CONTRATO';}
   }
 }
 
@@ -12077,7 +12117,8 @@ function jcpSaleContractMissing(v,b){
   const bf=[['NOMBRE',b.buyer],['CÉDULA',b.doc],['TELÉFONO',b.phone],['DIRECCIÓN',b.address]];
   return {veh:vf.filter(x=>!val(x[1])).map(x=>x[0]),buyer:bf.filter(x=>!val(x[1])).map(x=>x[0])};
 }
-function saveVehicleSale(){
+function saveVehicleSale(opts){
+  opts=opts||{};
   if(!requireTreasuryReady())return;
 
   if(!selectedSaleVehicleId){
@@ -12128,10 +12169,13 @@ function saveVehicleSale(){
     }
   }
   const obs=(document.getElementById('saleObs')?.value||'').trim().toUpperCase();
+  if(opts.dry)return true;
 
   const before=cloneAppData(data);
   const next=cloneAppData(data);
   const soldVehicle=cloneAppData(next.veh[vehicleIndex]);
+  // Las fotos de la tarjeta no se guardan después de facturar: quedan en memoria solo para el contrato.
+  if(soldVehicle.cardPhotos){window.__jcpCardStash=window.__jcpCardStash||{};window.__jcpCardStash[String(soldVehicle.id)]=soldVehicle.cardPhotos;delete soldVehicle.cardPhotos;}
   const now=new Date();
   const date=now.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'});
   const createdAt=now.toISOString();
@@ -12271,6 +12315,7 @@ function saveVehicleSale(){
     console.warn('La venta fue guardada, pero no fue posible limpiar toda la interfaz.',uiError);
   }
 
+  if(opts.silent)return {id:soldVehicle.id,number:receipt.number};
   alert('✅ '+receipt.number+' REGISTRADO.');
   try{if(confirm('¿GENERAR AHORA EL CONTRATO DE COMPRAVENTA DE ESTE VEHÍCULO?'))openSaleContract(soldVehicle.id);}catch(_e){}
   return true;
@@ -13013,7 +13058,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.05.112\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.114\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -14152,7 +14197,7 @@ window.renderRecordsModule=function(){
         '<div class="records-date">'+(typeof priceEsc==='function'?priceEsc(String(r.date||'—')):String(r.date||'—'))+'</div>'+
         '<div class="records-main"><small>'+(typeof priceEsc==='function'?priceEsc(t):t)+'</small><strong>'+(typeof priceEsc==='function'?priceEsc(title):title)+'</strong></div>'+
         '<div class="records-amount">'+(typeof money==='function'?money(amount):amount)+'</div>'+
-        '<button type="button" class="records-copy-btn" onclick="openRecordCopy(\''+jcpInlineJsArg(n)+'\')">VER SOPORTE</button>'+
+        '<div class="records-actions"><button type="button" class="records-copy-btn" onclick="openRecordCopy(\''+jcpInlineJsArg(n)+'\')">VER SOPORTE</button>'+jcpRecordContractBtn(n)+'</div>'+
       '</div>';
     }).join('');
   };
@@ -15565,7 +15610,7 @@ window.addEventListener('orientationchange',function(){try{closeTopMenu();}catch
     if(/\b(confirmar|confirma|ejecutar|ejecuta)\b/.test(q)&&pendingAction){const fn=pendingAction,label=pendingLabel;clearPending();try{fn();speak(`Confirmado. Ejecuté ${label}.`);}catch(e){speak('No pude ejecutar la operación.');}return;}
     const vh=findVehicle(raw);
 
-    if(/\b(guardar|guarda)\b/.test(q)&&/\bventa\b/.test(q)&&typeof saveVehicleSale==='function'){askConfirm('guardar la venta',()=>saveVehicleSale());return;}
+    if(/\b(guardar|guarda)\b/.test(q)&&/\bventa\b/.test(q)&&typeof saveVehicleSale==='function'){askConfirm('guardar la venta',()=>saleFacturar());return;}
     if(/\b(guardar|guarda)\b/.test(q)&&/\b(gasto|gastos)\b/.test(q)&&/\b(vehiculo|vehículo|carro)\b/.test(q)&&typeof saveOpVehicleExpenses==='function'){askConfirm('guardar los gastos del vehículo',()=>saveOpVehicleExpenses());return;}
     if(/\b(reiniciar|borrar|eliminar)\b/.test(q)&&/\b(datos|todo|registros)\b/.test(q)){speak('Por seguridad, el reinicio total solo se hace manualmente desde Seguridad.');return;}
 
@@ -16874,7 +16919,7 @@ function voidAccountingDocument(){
       '<div class="records-date">'+(typeof priceEsc==='function'?priceEsc(String(r.date||'—')):String(r.date||'—'))+'</div>'+
       '<div class="records-main"><small>'+(typeof priceEsc==='function'?priceEsc(t):t)+'</small><strong>'+(typeof priceEsc==='function'?priceEsc(title):title)+'</strong></div>'+
       '<div class="records-amount">'+(typeof money==='function'?money(amount):amount)+'</div>'+
-      '<button type="button" class="records-copy-btn" onclick="openRecordCopy(\''+jcpInlineJsArg(n)+'\')">VER SOPORTE</button>'+
+      '<div class="records-actions"><button type="button" class="records-copy-btn" onclick="openRecordCopy(\''+jcpInlineJsArg(n)+'\')">VER SOPORTE</button>'+jcpRecordContractBtn(n)+'</div>'+
     '</div>';
   }).join('');
 };
@@ -17257,7 +17302,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.05.112',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.08.114',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -21002,7 +21047,7 @@ function jcpParseLicencia(raw){
     requestAnimationFrame(layout);
   }
   window.ctPhotoClear=function(key){delete ctPh[key];ctPhotoPaint();};
-  function ctPhotoPaint(){phList().forEach(function(x){var b=document.getElementById('ctPh_'+x[0]);if(!b)return;var d=ctPh[x[0]];b.querySelector('.ctph-prev').innerHTML=d?'<img src="'+d+'">':'<span>📷</span>';b.querySelector('.ctph-x').style.display=d?'':'none';b.classList.toggle('ok',!!d);});}
+  function ctPhotoPaint(){CT_PH_V.concat(CT_PH_P).forEach(function(x){['ctPh_','sctPh_','pctPh_'].forEach(function(pre){var b=document.getElementById(pre+x[0]);if(!b)return;var d=ctPh[x[0]];var pv=b.querySelector('.ctph-prev,.cph-prev'),bx=b.querySelector('.ctph-x,.cph-x');if(pv)pv.innerHTML=d?'<img src="'+d+'">':'<span>📷</span>';if(bx)bx.style.display=d?'':'none';b.classList.toggle('ok',!!d);});});}
 
   function iso(d){d=d instanceof Date?d:new Date(d);if(isNaN(d.getTime()))d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
   function longDate(v){if(!v)return '';var p=String(v).split('-');var d=new Date(+p[0],+p[1]-1,+p[2]);return isNaN(d.getTime())?String(v):d.toLocaleDateString('es-CO',{day:'numeric',month:'long',year:'numeric'}).toUpperCase();}
@@ -21011,11 +21056,11 @@ function jcpParseLicencia(raw){
     if(+s.pending>0)t+=(t?'; ':'')+'Y EL SALDO DE '+fm(s.pending)+' QUEDA PENDIENTE POR PAGAR';
     return t.toUpperCase();}
   window.openSaleContract=function(vehId){
-    ctPh={};
+    ctPh={};var stash=(window.__jcpCardStash||{});
     var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(vehId);});
     if(!v||!v.sale){alert('NO SE ENCONTRÓ LA VENTA.');return;}
     var s=v.sale,prev=s.contract||{},st=data.settings||{};
-    phPut('tarF','tarR',v.cardPhotos);
+    phPut('tarF','tarR',v.cardPhotos||stash[String(v.id)]);
     var cl=(data.clientes||[]).find(function(c){return (s.doc&&up(c.cedula)===up(s.doc))||up(c.nombre)===up(s.buyer);})||{};
     var info=(typeof getVehicleCommercialSnapshot==='function'?(function(){try{return getVehicleCommercialSnapshot(v)||{};}catch(e){return {};}})():{});
     var sDate=Date.parse(s.createdAt||'');
@@ -21109,11 +21154,11 @@ function jcpParseLicencia(raw){
       pago:prev.pago||(d>0?(+r.pending>0?(+r.received>0?fm(r.received)+' DE CONTADO Y EL SALDO DE '+fm(r.pending)+' QUEDA PENDIENTE POR PAGAR':'EL VALOR DE '+fm(d)+' QUEDA PENDIENTE POR PAGAR'):'EN EFECTIVO'):''),
       entrega:prev.entrega||dateFromAny(r.createdAt||r.date),traspaso:prev.traspaso||'15',penal:prev.penal!=null?prev.penal:Math.round(val1*0.10),
       gastos:prev.gastos||'50% POR CADA PARTE',impAnio:prev.impAnio||String(new Date().getFullYear()),impQuien:prev.impQuien||'QUIEN LO ENTREGA',adicionales:prev.adicionales||''};
-    phPut('t1F','t1R',r.outCardPhotos);phPut('t2F','t2R',inc.cardPhotos);
+    phPut('t1F','t1R',r.outCardPhotos||(window.__jcpCardStash||{})[String(r.outgoingVehicleId)]);phPut('t2F','t2R',inc.cardPhotos);
     show('contratoVenta');render();window.scrollTo({top:0,behavior:'auto'});
   };
   window.openPermutaContractDraft=function(){
-    ctPh={};
+    ctPh={};try{permDockHide();}catch(_e){}
     var vid=null;try{vid=selectedPermutaVehicleId;}catch(e){}
     var o=(data.veh||[]).find(function(x){return x&&String(x.id)===String(vid);});
     if(!o){alert('SELECCIONA PRIMERO EL VEHÍCULO QUE SALE.');return;}
@@ -21138,7 +21183,7 @@ function jcpParseLicencia(raw){
   function renderPermuta(){
     var h=el('ctContent'),c=cur,sl=sellers(),pv=permVals(c);
     h.innerHTML=ctStyle()
-      +(c.draft?'<div class="ct-card" style="border-color:#c0392b;background:#1c0f0e"><div class="ct-t" style="color:#ff8a80">📝 BORRADOR — NO SE GUARDA NADA</div><div style="font-size:12px;color:#ddd;line-height:1.45">Es solo para revisar con el cliente. Sale con la marca BORRADOR. El contrato definitivo se genera al guardar la permuta.</div><button type="button" onclick="ctBackToSale()" style="width:100%;margin-top:10px;min-height:42px;border-radius:10px;border:1px solid #d4af37;background:transparent;color:#d4af37;font-weight:900">← VOLVER A LA PERMUTA</button></div>':'')
+      +(c.finalize?finalizeBanner(c):'')+(c.draft?'<div class="ct-card" style="border-color:#c0392b;background:#1c0f0e"><div class="ct-t" style="color:#ff8a80">📝 BORRADOR — NO SE GUARDA NADA</div><div style="font-size:12px;color:#ddd;line-height:1.45">Es solo para revisar con el cliente. Sale con la marca BORRADOR. El contrato definitivo se genera al guardar la permuta.</div><button type="button" onclick="ctBackToSale()" style="width:100%;margin-top:10px;min-height:42px;border-radius:10px;border:1px solid #d4af37;background:transparent;color:#d4af37;font-weight:900">← VOLVER A LA PERMUTA</button></div>':'')
       +'<div class="ct-card"><div class="ct-t">CONTRATO DE PERMUTA'+(c.numero?' <small class="ct-lock">'+esc(c.numero)+'</small>':'')+'</div><div class="ct-g">'+f('Ciudad','ctCity',c.city)+ro('Fecha','ctDate',c.date,'date',longDate(c.date))+'</div></div>'
       +'<div class="ct-card"><div class="ct-t">PERMUTANTE 1 (ENTREGA EL VEHÍCULO 1)</div><select id="ctSeller"><option value="">ESCOGE EL PERMUTANTE 1</option>'+sl.map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===c.sellerId?' selected':'')+'>'+esc(x.nombre)+' · '+esc(x.cedula)+'</option>';}).join('')+'</select>'
         +'<div class="ct-chips"><button type="button" onclick="ctNewSeller()">+ NUEVO</button></div>'
@@ -21163,7 +21208,7 @@ function jcpParseLicencia(raw){
         +'<label class="ct-f ct-full"><span>Cláusulas adicionales</span><textarea id="ctAdic" rows="3">'+esc(c.adicionales)+'</textarea></label>'
       +'</div></div>'
       +'<div class="ct-card"><div class="ct-t">📷 FOTOS PARA LA HOJA 2 (OPCIONAL)</div><div style="font-size:11px;color:#aaa;margin:-4px 0 10px;line-height:1.4">Las tarjetas guardadas de los carros ya vienen puestas. Las cédulas se toman aquí y no se guardan: solo quedan en el contrato.</div><div class="ctph-grid">'+phList().map(function(x){return '<div class="ctph" id="ctPh_'+x[0]+'"><label class="ctph-img"><div class="ctph-prev"><span>📷</span></div><input type="file" accept="image/*" onchange="ctPhotoPick(\''+x[0]+'\',this)"></label><small>'+x[1]+'</small><button type="button" class="ctph-x" style="display:none" onclick="ctPhotoClear(\''+x[0]+'\')">✕ QUITAR</button></div>';}).join('')+'</div></div>'
-      +'<button type="button" onclick="ctPrint()" style="width:100%;margin-top:12px;min-height:48px;border-radius:12px;border:0;background:#d4af37;color:#111;font-weight:900">'+(c.draft?'👁 GENERAR BORRADOR (COMPARTIR / IMPRIMIR)':'🖨️ GENERAR CONTRATO DE PERMUTA')+'</button>';
+      +(c.finalize?finalizeBtn(c):'<button type="button" onclick="ctPrint()" style="width:100%;margin-top:12px;min-height:48px;border-radius:12px;border:0;background:#d4af37;color:#111;font-weight:900">'+(c.draft?'👁 GENERAR BORRADOR (COMPARTIR / IMPRIMIR)':'🖨️ GENERAR CONTRATO DE PERMUTA')+'</button>');
     try{bindMoneyInputs();}catch(e){}
     try{ctPhotoPaint();}catch(e){}
   }
@@ -21210,13 +21255,148 @@ function jcpParseLicencia(raw){
       +'<div class="pg">'+head('ESPACIO PARA IMPRONTAS','','ctr')+'<div class="imp2"><div class="impb"><small>VEHÍCULO 1 · PLACA '+esc(A.placa||'')+'</small></div><div class="impb"><small>VEHÍCULO 2 · PLACA '+esc(B.placa||'')+'</small></div></div><div class="foot"><i></i>DOCUMENTO VÁLIDO A NIVEL NACIONAL - COLOMBIA<i></i></div></div>'
       +'</body></html>';
   }
-  window.ctBackToSale=function(){try{if(typeof jcpGoBack==='function'){jcpGoBack();}else{show('ventas');}}catch(e){show('ventas');}setTimeout(function(){var f=document.getElementById('saleForm');if(f&&f.style.display!=='none')f.scrollIntoView({behavior:'auto',block:'start'});},60);};
+  /* ---- Facturar = contrato completo: venta y permuta se guardan al generar el contrato ---- */
+  window.saleContinueToContract=function(){try{if(saveVehicleSale({dry:true})!==true)return;}catch(e){alert('REVISA LOS DATOS DE LA VENTA.');return;}window.openSaleContractDraft();if(cur&&cur.kind==='venta'){cur.draft=false;cur.finalize=true;render();}};
+  function permDockHide(){var pv=el('permScanPreview');if(pv&&pv.style.display!=='none'){pv.dataset.wasOpen='1';pv.style.display='none';}document.body.classList.remove('veh-dock-open');}
+  window.permutaContinueToContract=async function(){var ok=false;try{ok=await savePermuta({dry:true});}catch(e){ok=false;}if(ok!==true)return;permDockHide();window.openPermutaContractDraft();if(cur&&cur.kind==='permuta'){cur.draft=false;cur.finalize=true;render();}};
+  function ctFullMissing(c){var L=[],t=function(x){return String(x==null?'':x).trim();};
+    if(!t(c.city))L.push('CIUDAD');if(!t(c.entrega))L.push('FECHA DE ENTREGA');if(!(+c.penal>0))L.push('CLÁUSULA PENAL');
+    if(!c.noT){if(!t(c.traspaso))L.push('DÍAS DE TRASPASO');if(!t(c.gastos))L.push('GASTOS DE TRASPASO');if(!t(c.impAnio))L.push('AÑO DEL IMPUESTO');if(!t(c.impQuien))L.push('QUIÉN ASUME EL IMPUESTO');}
+    if(c.kind==='permuta'){L=L.concat(permMissing(c));}
+    else{var V0=c.veh||{},B0=c.buyer||{};[['MARCA',V0.marca],['CLASE',V0.clase],['LÍNEA',V0.linea],['MODELO',V0.modelo],['PLACA',V0.placa],['COLOR',V0.color],['SERVICIO',V0.servicio],['CAPACIDAD',V0.capacidad],['N.º CHASIS',V0.chasis],['N.º MOTOR',V0.motor],['SOAT',V0.soat],['TECNOMECÁNICA',V0.tecno],['NOMBRE DEL COMPRADOR',B0.nombre],['CÉDULA DEL COMPRADOR',B0.cedula],['DIRECCIÓN DEL COMPRADOR',B0.direccion],['TELÉFONO DEL COMPRADOR',B0.telefono],['FORMA DE PAGO',c.pago]].forEach(function(x){if(!t(x[1]))L.push(x[0]);});}
+    return L;}
+  window.ctFinalize=async function(){
+    collect();var c=cur;if(!c||!c.finalize)return;
+    var sel=sellers().find(function(s){return s.id===c.sellerId;});
+    if(!sel){alert('ESCOGE O CREA EL '+(c.kind==='permuta'?'PERMUTANTE 1':'VENDEDOR')+'.');return;}
+    var miss=ctFullMissing(c);
+    if(miss.length){alert('PARA FACTURAR, EL CONTRATO DEBE ESTAR COMPLETO. FALTA:\n\n'+miss.join(', '));return;}
+    if(!confirm(c.kind==='permuta'?'¿GUARDAR LA PERMUTA Y GENERAR EL CONTRATO?':'¿FACTURAR LA VENTA Y GENERAR EL CONTRATO?'))return;
+    var w=window.open('','_blank','width=900,height=1000');
+    if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES Y VUELVE A INTENTAR.');return;}
+    try{w.document.write('<p style="font-family:Arial;padding:20px">Generando contrato…</p>');}catch(_e){}
+    var res=null;
+    try{res=c.kind==='permuta'?await savePermuta({silent:true}):saveVehicleSale({silent:true});}catch(e){res=null;}
+    if(!res||!res.id){try{w.close();}catch(_e){}show('contratoVenta');return;}
+    if(c.kind==='permuta')c.permId=res.id;else c.vehId=res.id;
+    c.finalize=false;c.draft=false;c.receiptNumber=res.number;
+    window.__ctPreW=w;
+    show('contratoVenta');
+    ctPrint();
+    try{render();}catch(_e){}
+    setTimeout(function(){alert('✅ '+res.number+' REGISTRADO Y CONTRATO '+(c.numero||'')+' GENERADO.');},300);
+  };
+  /* ================= CONTRATO DENTRO DEL FORMULARIO (venta y permuta) ================= */
+  function ichips(target,list){return '<div class="ict-chips">'+list.map(function(c){return '<button type="button" onclick="ctChip(\''+target+'\',\''+String(c[1]).replace(/'/g,"\\'")+'\')">'+c[0]+'</button>';}).join('')+'</div>';}
+  function ifield(lbl,id,val,attrs,full){return '<label class="sale-field'+(full?' full':'')+'"><b>'+lbl+'</b><input id="'+id+'" value="'+esc(val==null?'':val)+'" '+(attrs||'')+'/></label>';}
+  function iphotos(pre,list,notes){return '<div class="cph-grid ict-ph">'+list.map(function(x){var auto=notes&&notes[x[0]];return '<div class="cph" id="'+pre+'Ph_'+x[0]+'"><label class="cph-img"><div class="cph-prev"><span>📷</span></div><input type="file" accept="image/*" onchange="ctPhotoPick(\''+x[0]+'\',this)"></label><small>'+x[1]+(auto?'<br><i>'+auto+'</i>':'')+'</small><button type="button" class="cph-x" style="display:none" onclick="ctPhotoClear(\''+x[0]+'\')">✕ QUITAR</button></div>';}).join('')+'</div>';}
+  function isellerHtml(pre,lbl){var st=data.settings||{},sl=sellers(),cid=st.contractLastSeller||((sl[0]||{}).id||'');
+    return '<label class="sale-field full"><b>'+lbl+' *</b><select id="'+pre+'Seller"><option value="">ESCOGE '+lbl+'</option>'+sl.map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===cid?' selected':'')+'>'+esc(x.nombre)+' · '+esc(x.cedula)+'</option>';}).join('')+'</select></label>'
+      +'<div class="sale-field full"><div class="ict-chips"><button type="button" onclick="var f=document.getElementById(\''+pre+'SForm\');f.style.display=f.style.display===\'none\'?\'\':\'none\'">+ NUEVO</button></div><div id="'+pre+'SForm" class="sale-field-grid" style="display:none;margin-top:6px">'
+      +ifield('Nombre',pre+'SNombre','')+ifield('Cédula / NIT',pre+'SCedula','')+ifield('Dirección',pre+'SDir','')+ifield('Teléfono',pre+'STel','','inputmode="tel"')
+      +'<div class="sale-field full"><div class="ict-chips"><button type="button" onclick="ictSaveSeller(\''+pre+'\')">GUARDAR</button></div></div></div></div>';}
+  window.ictSaveSeller=function(pre){var n=up(g(pre+'SNombre')),cc=up(g(pre+'SCedula'));if(!n||!cc){alert('ESCRIBE NOMBRE Y CÉDULA / NIT.');return;}var id='sel_'+Date.now();
+    if(saveSettings(function(st){st.contractSellers=Array.isArray(st.contractSellers)?st.contractSellers:[];st.contractSellers.push({id:id,nombre:n,cedula:cc,direccion:up(g(pre+'SDir')),telefono:String(g(pre+'STel')||'').trim()});st.contractLastSeller=id;})){
+      var box=el(pre+'SellerWrap');if(box)box.innerHTML=isellerHtml(pre,pre==='pct'?'PERMUTANTE 1 (QUIÉN FIRMA)':'VENDEDOR (QUIÉN FIRMA)');}};
+  function iclauses(pre,noT,kind){var st=data.settings||{},today=iso(new Date()),P=kind==='permuta';
+    var nt=noT?'<div class="sale-field full ict-not">🚫 CARRO SIN TRASPASO: en el contrato salen tachados el traspaso, el valor del trámite y el impuesto.</div>':'';
+    return nt+ifield('Ciudad *',pre+'City',st.contractCity||'BOGOTÁ')+ifield('Fecha de entrega del vehículo *',pre+'Entrega',today,'type="date"')
+      +(noT?'':'<div class="sale-field"><b>Días hábiles para el traspaso *</b><input id="'+pre+'Traspaso" value="'+(P?'15':'30')+'" inputmode="numeric"/>'+ichips(pre+'Traspaso',[['15','15'],['30','30'],['45','45'],['60','60']])+'</div>')
+      +'<div class="sale-field"><b>Cláusula penal ($) *</b><input id="'+pre+'Penal" data-money="1" inputmode="numeric" placeholder="$ 0"/><div class="ict-chips"><button type="button" onclick="ictPenal(\''+pre+'\',0.05)">5 %</button><button type="button" onclick="ictPenal(\''+pre+'\',0.10)">10 %</button><button type="button" onclick="ictPenal(\''+pre+'\',0.20)">20 %</button></div></div>'
+      +(noT?'':'<div class="sale-field full"><b>Gastos de traspaso asumidos así *</b><input id="'+pre+'Gastos" value="'+(P?'50% POR CADA PARTE':'50% POR EL COMPRADOR Y 50% POR EL VENDEDOR')+'"/>'+ichips(pre+'Gastos',P?[['50 / 50','50% POR CADA PARTE'],['Quien recibe','CADA PARTE PAGA EL TRASPASO DEL VEHÍCULO QUE RECIBE'],['Quien entrega','CADA PARTE PAGA EL TRASPASO DEL VEHÍCULO QUE ENTREGA']]:[['50 / 50','50% POR EL COMPRADOR Y 50% POR EL VENDEDOR'],['Comprador','100% POR EL COMPRADOR'],['Vendedor','100% POR EL VENDEDOR']])+'</div>'
+        +ifield('Impuesto del año *',pre+'ImpAnio',String(new Date().getFullYear()),'inputmode="numeric"')
+        +'<div class="sale-field"><b>Impuesto asumido por *</b><input id="'+pre+'ImpQuien" value="'+(P?'QUIEN LO ENTREGA':'EL VENDEDOR')+'"/>'+ichips(pre+'ImpQuien',P?[['Quien entrega','QUIEN LO ENTREGA'],['Quien recibe','QUIEN LO RECIBE']]:[['Vendedor','EL VENDEDOR'],['Comprador','EL COMPRADOR'],['50 / 50','50% COMPRADOR Y 50% VENDEDOR']])+'</div>')
+      +'<label class="sale-field full"><b>Cláusulas adicionales (opcional)</b><textarea id="'+pre+'Adic" rows="2" class="sale-observations" style="min-height:64px"></textarea></label>';}
+  window.ictPenal=function(pre,pct){var base=0;try{base=pre==='pct'?(parseFormattedMoney(g('pctVal1'))||0):(parseFormattedMoney(g('salePrice'))||0);}catch(e){}if(!base){alert(pre==='pct'?'ESCRIBE PRIMERO EL VALOR DEL VEHÍCULO 1 (ABAJO, EN LA DIFERENCIA).':'ESCRIBE PRIMERO EL VALOR DE VENTA (ABAJO).');return;}var e=el(pre+'Penal');if(e){e.value=Math.round(base*pct).toLocaleString('es-CO');try{e.dispatchEvent(new Event('input',{bubbles:true}));}catch(_e){}}};
+  function iread(pre,c){c.city=up(g(pre+'City'));c.entrega=g(pre+'Entrega');c.sellerId=g(pre+'Seller');c.penal=parseFormattedMoney(g(pre+'Penal'))||0;c.adicionales=up(g(pre+'Adic'));
+    if(!c.noT){c.traspaso=g(pre+'Traspaso').replace(/\D/g,'');c.gastos=up(g(pre+'Gastos'));c.impAnio=g(pre+'ImpAnio').replace(/\D/g,'');c.impQuien=up(g(pre+'ImpQuien'));}
+    else{c.traspaso='';c.gastos='';c.impAnio='';c.impQuien='';}return c;}
+  // ---- forma de pago automática para el contrato
+  function autoPago(prefix,pending){var d={};try{d=paymentDistribution(prefix)||{};}catch(e){}var cash=+d.cash||0,bank=0;Object.keys(d).forEach(function(k){if(k!=='cash')bank+=(+d[k]||0);});
+    var t='';if(cash>0&&bank>0)t=fm(cash)+' EN EFECTIVO Y '+fm(bank)+' POR TRANSFERENCIA BANCARIA';else if(bank>0)t='POR TRANSFERENCIA BANCARIA';else t='EN EFECTIVO';
+    if(+pending>0)t=(cash>0||bank>0?t:'')+(cash>0||bank>0?'; Y ':'')+'EL SALDO DE '+fm(pending)+' QUEDA PENDIENTE POR PAGAR';return t.toUpperCase();}
+  window.ictAutoPago=function(){var e=el('salePagoTxt');if(e&&!e.dataset.manual){var price=parseFormattedMoney(g('salePrice'))||0,method=g('saleMethod')||'contado',rec=method==='credito'?(parseFormattedMoney(g('saleReceived'))||0):price;e.value=autoPago('sale',Math.max(0,price-rec));}
+    var p=el('pctPagoTxt');if(p&&!p.dataset.manual){var calc={};try{calc=updatePermutaCalculations()||{};}catch(_e){}p.value=(+calc.difference>0)?autoPago('permuta',+calc.pending||0):'';}
+    try{var v2=el('pctVal2Show');if(v2){var v1=parseFormattedMoney(g('pctVal1'))||0,cc={};try{cc=updatePermutaCalculations()||{};}catch(_e){}var d=+cc.difference||0,st=cc.status||'even';v2.textContent=fm(Math.max(0,st==='receive'?v1-d:(st==='pay'?v1+d:v1)));}}catch(_e){}};
+  document.addEventListener('input',function(ev){var t=ev.target;if(!t||!t.closest)return;if(t.id==='salePagoTxt'||t.id==='pctPagoTxt'){t.dataset.manual='1';return;}if(t.closest('#saleForm')||t.closest('#permutaForm'))setTimeout(ictAutoPago,0);},true);
+  document.addEventListener('change',function(ev){var t=ev.target;if(t&&t.closest&&(t.closest('#saleForm')||t.closest('#permutaForm')))setTimeout(ictAutoPago,0);},true);
+
+  // ---- VENTA
+  window.saleCtMount=function(vehId){var box=el('saleCtBox');if(!box)return;var v=(data.veh||[]).find(function(x){return x&&String(x.id)===String(vehId);});if(!v){box.innerHTML='';return;}
+    ctPh={};phPut('tarF','tarR',v.cardPhotos);var noT=!!(v.additionalInfo&&v.additionalInfo.publicacion&&v.additionalInfo.publicacion.noTraspaso);box.dataset.noT=noT?'1':'';
+    var miss=jcpSaleContractMissing(v,{buyer:'x',doc:'x',phone:'x',address:'x'}).veh;
+    box.innerHTML=(miss.length?'<div class="sale-field full ict-miss">⚠️ A la tarjeta de este carro le falta: '+miss.join(', ')+'. <button type="button" onclick="openCompleteInfoSelector();setTimeout(function(){selectVehicleCompleteInfo(\''+String(v.id).replace(/'/g,"\\'")+'\')},0)">COMPLETAR</button></div>':'')
+      +'<div id="sctSellerWrap" class="sale-field-grid full-row">'+isellerHtml('sct','VENDEDOR (QUIÉN FIRMA)')+'</div>'
+      +'<div class="sale-field-grid">'+iclauses('sct',noT,'venta')+'</div>';
+    var ph=el('saleCtPhotos');if(ph)ph.innerHTML=iphotos('sct',CT_PH_V,{tarF:v.cardPhotos&&v.cardPhotos.F?'Viene del inventario':'',tarR:v.cardPhotos&&v.cardPhotos.R?'Viene del inventario':''});
+    var pt=el('salePagoTxt');if(pt){delete pt.dataset.manual;}
+    try{bindMoneyInputs();}catch(e){}ctPhotoPaint();ictAutoPago();};
+  function saleBuild(draft){var vid=null;try{vid=selectedSaleVehicleId;}catch(e){}
+    var v=(data.veh||[]).find(function(x){return x&&String(x.id)===String(vid);});if(!v){alert('SELECCIONA PRIMERO EL VEHÍCULO.');return null;}
+    var price=parseFormattedMoney(g('salePrice'))||0,box=el('saleCtBox')||{dataset:{}};
+    var c={kind:'venta',inline:true,draft:!!draft,vehId:v.id,price:price,date:iso(new Date()),noT:!!(box.dataset&&box.dataset.noT),
+      buyer:{nombre:up(g('saleBuyer')),cedula:up(g('saleDoc')),direccion:up(g('saleAddress')),telefono:String(g('salePhone')||'').trim()},
+      veh:vehCard(v),pago:up(g('salePagoTxt')).trim()};
+    return iread('sct',c);}
+  window.saleCtPreview=function(){var c=saleBuild(true);if(!c)return;if(!c.sellerId){alert('ESCOGE EL VENDEDOR (QUIÉN FIRMA).');return;}cur=c;ctPrint();};
+  window.saleFacturar=async function(){
+    var c=saleBuild(false);if(!c)return;
+    try{if(saveVehicleSale({dry:true})!==true)return;}catch(e){alert('REVISA LOS DATOS DE LA VENTA.');return;}
+    var sel=sellers().find(function(s){return s.id===c.sellerId;});if(!sel){alert('ESCOGE EL VENDEDOR (QUIÉN FIRMA).');return;}
+    var miss=ctFullMissing(c);if(miss.length){alert('PARA FACTURAR, TODOS LOS DATOS DEL CONTRATO DEBEN ESTAR LLENOS. FALTA:\n\n'+miss.join(', '));return;}
+    if(!confirm('¿FACTURAR LA VENTA Y GENERAR EL CONTRATO?'))return;
+    var w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES Y VUELVE A INTENTAR.');return;}
+    try{w.document.write('<p style="font-family:Arial;padding:20px">Generando contrato…</p>');}catch(_e){}
+    var res=null;try{res=saveVehicleSale({silent:true});}catch(e){res=null;}
+    if(!res||!res.id){try{w.close();}catch(_e){}return;}
+    c.vehId=res.id;c.draft=false;cur=c;window.__ctPreW=w;ctPrint();
+    var box=el('saleCtBox');if(box)box.innerHTML='';var ph=el('saleCtPhotos');if(ph)ph.innerHTML='';
+    setTimeout(function(){alert('✅ '+res.number+' REGISTRADO Y CONTRATO '+(c.numero||'')+' GENERADO.');},300);};
+
+  // ---- PERMUTA
+  window.permCtMount=function(vehId){var box=el('permCtBox');if(!box)return;var o=(data.veh||[]).find(function(x){return x&&String(x.id)===String(vehId);});if(!o){box.innerHTML='';return;}
+    ctPh={};phPut('t1F','t1R',o.cardPhotos);
+    var miss=jcpSaleContractMissing(o,{buyer:'x',doc:'x',phone:'x',address:'x'}).veh;
+    box.innerHTML=(miss.length?'<div class="sale-field full ict-miss">⚠️ A la tarjeta del carro que sale le falta: '+miss.join(', ')+'. <button type="button" onclick="openCompleteInfoSelector();setTimeout(function(){selectVehicleCompleteInfo(\''+String(o.id).replace(/'/g,"\\'")+'\')},0)">COMPLETAR</button></div>':'')
+      +'<div id="pctSellerWrap" class="sale-field-grid full-row">'+isellerHtml('pct','PERMUTANTE 1 (QUIÉN FIRMA)')+'</div>'
+      +'<div class="sale-field-grid">'+iclauses('pct',false,'permuta')+'</div>';
+    var ph=el('permCtPhotos');if(ph)ph.innerHTML=iphotos('pct',CT_PH_P,{t1F:o.cardPhotos&&o.cardPhotos.F?'Viene del inventario':'',t1R:o.cardPhotos&&o.cardPhotos.R?'Viene del inventario':'',t2F:'Sale de la foto que escaneas arriba',t2R:'Sale de la foto del respaldo de arriba'});
+    var v1=el('pctVal1');if(v1){var est=+((o.additionalInfo||{}).precioEstimadoVenta||o.precioEstimadoVenta||0)||((+o.c||0)+(+o.g||0));v1.value=est?Number(est).toLocaleString('es-CO'):'';}
+    var pt=el('pctPagoTxt');if(pt){delete pt.dataset.manual;}
+    try{bindMoneyInputs();}catch(e){}ctPhotoPaint();ictAutoPago();};
+  function permBuild(draft){var vid=null;try{vid=selectedPermutaVehicleId;}catch(e){}
+    var o=(data.veh||[]).find(function(x){return x&&String(x.id)===String(vid);});if(!o){alert('SELECCIONA PRIMERO EL VEHÍCULO QUE SALE.');return null;}
+    var gv=function(id){return up(g(id));},calc={};try{calc=updatePermutaCalculations()||{};}catch(e){}
+    var cp=window.jcpCphGet?jcpCphGet('perm'):null;if(cp){if(cp.F&&!ctPh.t2F)ctPh.t2F=cp.F;if(cp.R&&!ctPh.t2R)ctPh.t2R=cp.R;}
+    var c={kind:'permuta',inline:true,draft:!!draft,permId:'',date:iso(new Date()),noT:false,
+      buyer:{nombre:gv('permutaClientName'),cedula:gv('permutaClientDoc'),direccion:gv('permutaClientAddress'),telefono:String(g('permutaClientPhone')||'').trim()},
+      v1:vehCard(o),v2:{marca:gv('permutaInMarca'),clase:gv('permutaInClase'),linea:gv('permutaInRef'),modelo:gv('permutaInModelo'),placa:gv('permutaInPlaca'),color:gv('permutaInColor'),servicio:gv('permutaInServicio'),capacidad:gv('permutaInCapacidad'),chasis:gv('permutaInChasis'),motor:gv('permutaInMotor'),soat:g('permutaInSoat'),tecno:g('permutaInTecno')},
+      val1:parseFormattedMoney(g('pctVal1'))||0,diff:+calc.difference||0,dir:calc.status||'even',pago:up(g('pctPagoTxt')).trim()};
+    return iread('pct',c);}
+  window.permCtPreview=function(){var c=permBuild(true);if(!c)return;if(!c.sellerId){alert('ESCOGE EL PERMUTANTE 1 (QUIÉN FIRMA).');return;}cur=c;ctPrint();};
+  window.permFacturar=async function(){
+    var c=permBuild(false);if(!c)return;
+    var ok=false;try{ok=await savePermuta({dry:true});}catch(e){ok=false;}if(ok!==true)return;
+    var sel=sellers().find(function(s){return s.id===c.sellerId;});if(!sel){alert('ESCOGE EL PERMUTANTE 1 (QUIÉN FIRMA).');return;}
+    var miss=ctFullMissing(c);if(miss.length){alert('PARA GUARDAR, TODOS LOS DATOS DEL CONTRATO DEBEN ESTAR LLENOS. FALTA:\n\n'+miss.join(', '));return;}
+    if(!confirm('¿GUARDAR LA PERMUTA Y GENERAR EL CONTRATO?'))return;
+    var w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES Y VUELVE A INTENTAR.');return;}
+    try{w.document.write('<p style="font-family:Arial;padding:20px">Generando contrato…</p>');}catch(_e){}
+    var res=null;try{res=await savePermuta({silent:true});}catch(e){res=null;}
+    if(!res||!res.id){try{w.close();}catch(_e){}return;}
+    c.permId=res.id;c.draft=false;cur=c;window.__ctPreW=w;ctPrint();
+    var box=el('permCtBox');if(box)box.innerHTML='';var ph=el('permCtPhotos');if(ph)ph.innerHTML='';
+    setTimeout(function(){alert('✅ '+res.number+' REGISTRADO Y CONTRATO '+(c.numero||'')+' GENERADO.');},300);};
+  (function(){var st=document.createElement('style');st.textContent='.ict-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.ict-chips button{min-height:30px!important;width:auto!important;padding:3px 11px!important;border-radius:999px!important;border:1px solid #6b5a2a!important;background:#17130b!important;color:#d4af37!important;font-size:11.5px!important;font-weight:800!important}.ict-not{color:#ff8a80;font-size:12px;font-weight:800;border:1px dashed #7a3a32;border-radius:10px;padding:8px 10px;background:#1a0f0f}.ict-miss{color:#f0c35a;font-size:12px;font-weight:800;border:1px solid #6b5a2a;border-radius:10px;padding:8px 10px;background:#17130b}.ict-miss button{margin-left:6px;min-height:28px;padding:2px 10px;border-radius:999px;border:1px solid #d4af37;background:transparent;color:#d4af37;font-weight:900;font-size:11px}.full-row{margin-bottom:8px}.ict-ph small i{font-style:normal;color:#57d68d;font-size:9px}.sale-ct-btn{width:100%;min-height:48px;margin-bottom:8px;border-radius:12px;border:1.5px solid #d4af37!important;background:transparent!important;color:#d4af37!important;font-weight:900;letter-spacing:.4px}';document.head.appendChild(st);})();
+  window.ctBackToSale=function(){try{var pv=el('permScanPreview');if(pv&&pv.dataset.wasOpen&&pv.innerHTML){pv.style.display='';delete pv.dataset.wasOpen;document.body.classList.add('veh-dock-open');}}catch(_e){}try{if(typeof jcpGoBack==='function'){jcpGoBack();}else{show('ventas');}}catch(e){show('ventas');}setTimeout(function(){var f=document.getElementById('saleForm');if(f&&f.style.display!=='none')f.scrollIntoView({behavior:'auto',block:'start'});},60);};
   function toMonth(v){v=String(v||'');return /^\d{4}-\d{2}/.test(v)?v.slice(0,7):v;}
   function f(lbl,id,val,type,extra){return '<label class="ct-f"><span>'+lbl+'</span><input id="'+id+'" '+(type?'type="'+type+'" ':'')+'value="'+esc(val==null?'':val)+'" '+(extra||'')+'/></label>';}
   function chips(target,list){return '<div class="ct-chips">'+list.map(function(c){return '<button type="button" onclick="ctChip(\''+target+'\',\''+String(c[1]).replace(/'/g,"\\'")+'\')">'+c[0]+'</button>';}).join('')+'</div>';}
   window.ctChip=function(id,v){var e=el(id);if(!e)return;e.value=v;try{e.dispatchEvent(new Event('input',{bubbles:true}));}catch(_e){}};
   function ro(lbl,id,val,type,shown){var v=String(val==null?'':val).trim();if(v)return '<div class="ct-ro"><span>'+lbl+'</span><b>'+esc(shown||v)+'</b></div>';return '<label class="ct-f ct-miss"><span>'+lbl+' · FALTA</span><input id="'+id+'" '+(type?'type="'+type+'" ':'')+'value=""/></label>';}
   function na(lbl){return '<div class="ct-full ct-na"><span>'+lbl+'</span><b>NO APLICA · SIN TRASPASO</b></div>';}
+  function finalizeBanner(c){var P=c.kind==='permuta';return '<div class="ct-card" style="border-color:#3f9a52;background:#0f1d14"><div class="ct-t" style="color:#57d68d">✅ ÚLTIMO PASO: CONTRATO</div><div style="font-size:12px;color:#ddd;line-height:1.45">Completa todos los espacios del contrato. Al tocar el botón verde de abajo se '+(P?'guarda la permuta':'factura la venta')+' y se genera el contrato con su número. Mientras no lo toques, no se guarda nada.</div><button type="button" onclick="ctBackToSale()" style="width:100%;margin-top:10px;min-height:42px;border-radius:10px;border:1px solid #d4af37;background:transparent;color:#d4af37;font-weight:900">← VOLVER A LA '+(P?'PERMUTA':'VENTA')+'</button></div>';}
+  function finalizeBtn(c){var P=c.kind==='permuta';return '<button type="button" onclick="ctFinalize()" style="width:100%;margin-top:12px;min-height:52px;border-radius:12px;border:0;background:#2ecc71;color:#06210f;font-weight:900;font-size:14px">💾 '+(P?'GUARDAR PERMUTA':'FACTURAR VENTA')+' Y GENERAR CONTRATO</button>';}
   function ctStyle(){return '<style>#contratoVenta .ct-card{background:#121212;border:1px solid #3a321f;border-radius:14px;padding:14px;margin-top:12px}#contratoVenta .ct-t{font-size:11px;font-weight:900;color:#d4af37;letter-spacing:.5px;margin-bottom:10px}#contratoVenta .ct-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#contratoVenta .ct-f{display:flex;flex-direction:column;gap:3px;min-width:0}#contratoVenta .ct-f span{font-size:10px;color:#aaa;font-weight:800}#contratoVenta .ct-f input,#contratoVenta select,#contratoVenta textarea{width:100%;max-width:100%;min-width:0;box-sizing:border-box;margin:0;text-transform:uppercase}#contratoVenta .ct-f input[type=date],#contratoVenta .ct-f input[type=month]{-webkit-appearance:none;appearance:none;display:block;min-height:42px}#contratoVenta .ct-chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}#contratoVenta .ct-chips button{min-height:32px;padding:0 12px;border-radius:999px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37;font-weight:800;font-size:11px}#contratoVenta .ct-full{grid-column:1/-1}#contratoVenta .ct-ro{display:flex;flex-direction:column;gap:2px;min-width:0;padding:8px 10px;border-radius:10px;background:#0c0c0c;border:1px solid #2a2418}#contratoVenta .ct-ro span{font-size:10px;color:#888;font-weight:800}#contratoVenta .ct-ro b{font-size:13px;color:#fff;overflow-wrap:anywhere}#contratoVenta .ct-miss span{color:#f0c35a!important}#contratoVenta .ct-miss input,#contratoVenta .ct-miss textarea{border-color:#f0c35a!important}#contratoVenta .ct-lock{font-size:9px;color:#8a7a50;font-weight:800;margin-left:6px}#contratoVenta .ct-na{padding:8px 10px;border-radius:10px;background:#1a0f0f;border:1px dashed #7a3a32}#contratoVenta .ct-na span{display:block;font-size:10px;color:#aaa;font-weight:800;text-decoration:line-through}#contratoVenta .ct-na b{font-size:12px;color:#ff8a80}#contratoVenta .ct-not{font-size:11px;font-weight:800;color:#ff8a80;margin:-4px 0 10px}#contratoVenta .ctph-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#contratoVenta .ctph{display:flex;flex-direction:column;gap:5px;min-width:0}#contratoVenta .ctph-img{position:relative;display:flex;align-items:center;justify-content:center;aspect-ratio:85.6/54;border:1.5px dashed #6b5a2a;border-radius:10px;background:#0c0c0c;overflow:hidden;cursor:pointer}#contratoVenta .ctph-img span{font-size:26px;opacity:.7}#contratoVenta .ctph-prev{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}#contratoVenta .ctph-img img{width:100%;height:100%;object-fit:cover}#contratoVenta .ctph-img input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}#contratoVenta .ctph.ok .ctph-img{border-style:solid;border-color:#3f9a52}#contratoVenta .ctph small{font-size:9.5px;font-weight:800;color:#bbb;text-align:center;line-height:1.25}#contratoVenta .ctph-x{min-height:28px;border-radius:999px;border:1px solid #7a3a32;background:transparent;color:#ff8a80;font-size:10px;font-weight:800}@media(max-width:520px){#contratoVenta .ct-g{grid-template-columns:1fr}}</style>';}
   function render(){
     var h=el('ctContent');if(!h||!cur)return;var c=cur,sl=sellers();
@@ -21225,7 +21405,7 @@ function jcpParseLicencia(raw){
     var CK=c.kind==='compra',WE=CK?'COMPRADOR':'VENDEDOR',THEY=CK?'VENDEDOR':'COMPRADOR';
     var price=c.price;
     h.innerHTML=ctStyle()
-      +(c.draft?'<div class="ct-card" style="border-color:#c0392b;background:#1c0f0e"><div class="ct-t" style="color:#ff8a80">📝 BORRADOR — NO SE GUARDA NADA</div><div style="font-size:12px;color:#ddd;line-height:1.45">Es solo para revisar con el cliente. Sale con la marca BORRADOR. El contrato definitivo se genera al guardar la venta.</div><button type="button" onclick="ctBackToSale()" style="width:100%;margin-top:10px;min-height:42px;border-radius:10px;border:1px solid #d4af37;background:transparent;color:#d4af37;font-weight:900">← VOLVER A LA '+(c.kind==='compra'?'COMPRA':(c.kind==='permuta'?'PERMUTA':'VENTA'))+'</button></div>':'')
+      +(c.finalize?finalizeBanner(c):'')+(c.draft?'<div class="ct-card" style="border-color:#c0392b;background:#1c0f0e"><div class="ct-t" style="color:#ff8a80">📝 BORRADOR — NO SE GUARDA NADA</div><div style="font-size:12px;color:#ddd;line-height:1.45">Es solo para revisar con el cliente. Sale con la marca BORRADOR. El contrato definitivo se genera al guardar la venta.</div><button type="button" onclick="ctBackToSale()" style="width:100%;margin-top:10px;min-height:42px;border-radius:10px;border:1px solid #d4af37;background:transparent;color:#d4af37;font-weight:900">← VOLVER A LA '+(c.kind==='compra'?'COMPRA':(c.kind==='permuta'?'PERMUTA':'VENTA'))+'</button></div>':'')
       +'<div class="ct-card"><div class="ct-t">LUGAR Y FECHA</div><div class="ct-g">'+f('Ciudad','ctCity',c.city)+ro('Fecha','ctDate',c.date,'date',longDate(c.date))+'</div></div>'
       +'<div class="ct-card"><div class="ct-t">'+WE+(c.numero?' <small class="ct-lock">CONTRATO '+esc(c.numero)+'</small>':'')+'</div><select id="ctSeller"><option value="">ESCOGE EL '+WE+'</option>'+sl.map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===c.sellerId?' selected':'')+'>'+esc(x.nombre)+' · '+esc(x.cedula)+'</option>';}).join('')+'</select>'
         +'<div class="ct-chips"><button type="button" onclick="ctNewSeller()">+ NUEVO '+WE+'</button></div>'
@@ -21245,7 +21425,7 @@ function jcpParseLicencia(raw){
         +'<label class="ct-f ct-full"><span>Cláusulas adicionales</span><textarea id="ctAdic" rows="3">'+esc(c.adicionales)+'</textarea></label>'
       +'</div></div>'
       +'<div class="ct-card"><div class="ct-t">📷 FOTOS PARA LA HOJA DE IMPRONTAS (OPCIONAL)</div><div style="font-size:11px;color:#aaa;margin:-4px 0 10px;line-height:1.4">Salen impresas atrás del contrato, en la hoja de improntas. No se guardan en la app: solo quedan en el contrato que imprimes o compartes.</div><div class="ctph-grid">'+phList().map(function(x){return '<div class="ctph" id="ctPh_'+x[0]+'"><label class="ctph-img"><div class="ctph-prev"><span>📷</span></div><input type="file" accept="image/*" onchange="ctPhotoPick(\''+x[0]+'\',this)"></label><small>'+x[1]+'</small><button type="button" class="ctph-x" style="display:none" onclick="ctPhotoClear(\''+x[0]+'\')">✕ QUITAR</button></div>';}).join('')+'</div></div>'
-      +'<button type="button" onclick="ctPrint()" style="width:100%;margin-top:12px;min-height:48px;border-radius:12px;border:0;background:#d4af37;color:#111;font-weight:900">'+(c.draft?'👁 GENERAR BORRADOR (COMPARTIR / IMPRIMIR)':'🖨️ GENERAR CONTRATO (IMPRIMIR / PDF)')+'</button>';
+      +(c.finalize?finalizeBtn(c):'<button type="button" onclick="ctPrint()" style="width:100%;margin-top:12px;min-height:48px;border-radius:12px;border:0;background:#d4af37;color:#111;font-weight:900">'+(c.draft?'👁 GENERAR BORRADOR (COMPARTIR / IMPRIMIR)':'🖨️ GENERAR CONTRATO (IMPRIMIR / PDF)')+'</button>');
     try{bindMoneyInputs();}catch(e){}
     try{ctPhotoPaint();}catch(e){}
   }
@@ -21255,7 +21435,7 @@ function jcpParseLicencia(raw){
     collect();var id=window.__ctEditSeller||('sel_'+Date.now());
     if(saveSettings(function(st){st.contractSellers=Array.isArray(st.contractSellers)?st.contractSellers:[];var x=st.contractSellers.find(function(s){return s.id===id;});var rec={id:id,nombre:n,cedula:cc,direccion:up(el('ctSDir').value),telefono:String(el('ctSTel').value||'').trim()};if(x)Object.assign(x,rec);else st.contractSellers.push(rec);})){cur.sellerId=id;render();}};
   function g(id){return (el(id)||{}).value||'';}
-  function collect(){if(cur&&cur.kind==='permuta'){collectPermuta();return;}var c=cur;var has=function(id){return !!el(id);};var gv=function(id,old,fn){return has(id)?(fn?fn(g(id)):g(id)):old;};
+  function collect(){if(cur&&cur.inline)return;if(cur&&cur.kind==='permuta'){collectPermuta();return;}var c=cur;var has=function(id){return !!el(id);};var gv=function(id,old,fn){return has(id)?(fn?fn(g(id)):g(id)):old;};
     c.city=up(g('ctCity'));c.date=gv('ctDate',c.date);c.sellerId=g('ctSeller');
     var b=c.buyer||{};c.buyer={nombre:gv('ctBNombre',b.nombre,up),cedula:gv('ctBCedula',b.cedula,up),direccion:gv('ctBDir',b.direccion,up),telefono:gv('ctBTel',b.telefono,function(x){return x.trim();})};
     var v=c.veh||{};c.veh={marca:gv('ctVmarca',v.marca,up),clase:gv('ctVclase',v.clase,up),linea:gv('ctVlinea',v.linea,up),modelo:gv('ctVmodelo',v.modelo,up),placa:gv('ctVplaca',v.placa,up),color:gv('ctVcolor',v.color,up),servicio:gv('ctVservicio',v.servicio,up),capacidad:gv('ctVcapacidad',v.capacidad,up),chasis:gv('ctVchasis',v.chasis,up),motor:gv('ctVmotor',v.motor,up),soat:gv('ctVsoat',v.soat),tecno:gv('ctVtecno',v.tecno)};
@@ -21280,7 +21460,7 @@ function jcpParseLicencia(raw){
       else{var v=(data.sold||[]).find(function(x){return x&&String(x.id)===String(c.vehId);});if(v&&v.sale){v.sale.contract=cloneAppData(c);v.sale.contract.generatedAt=new Date().toISOString();['clase','color','servicio','capacidad','chasis','motor'].forEach(function(k){if(c.veh[k]&&!v[k])v[k]=c.veh[k];});delete v.cardPhotos;}}
       data.settings=(data.settings&&typeof data.settings==='object')?data.settings:{};data.settings.contractCity=c.city;data.settings.contractLastSeller=c.sellerId;save();}catch(e){data=before;}}
     var logo=typeof supportLogoSrc==='function'?supportLogoSrc():'';
-    var w=null;if(!c.draft){w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}}
+    var w=null;if(!c.draft){w=window.__ctPreW||window.open('','_blank','width=900,height=1000');window.__ctPreW=null;if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}}
     var tach=function(x){return c.noT?'<div class="tach">'+x+'<span class="na">NO APLICA · VEHÍCULO SIN TRASPASO</span></div>':x;};
     var VEN=CK?c.buyer:sel,COM=CK?sel:c.buyer;
     var V=PK?{placa:((c.v1||{}).placa||'')+'-'+((c.v2||{}).placa||'')}:c.veh,cell=function(t){return '<td class="v">'+esc(t||'')+'</td>';};
@@ -21535,6 +21715,6 @@ function jcpParseLicencia(raw){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.05.112"></script>
+<script src="./app-update.js?v=2026.11.08.114"></script>
 </body>
 </html>
