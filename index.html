@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.08.118</title>
+<title>COLOMBIAUTOS JP - V2026.11.08.119</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4715,8 +4715,8 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 <div class="sale-invoice-section"><div class="sale-section-title"><span>2</span> PRECIO Y FORMA DE PAGO</div><div class="sale-field-grid">
 <label class="sale-field"><b>Valor de venta *</b><input data-money="1" id="salePrice" inputmode="numeric" oninput="updateSalePaymentTarget()" placeholder="$ 0" type="text"/></label>
-<label class="sale-field"><b>Condición</b><select id="saleMethod" onchange="toggleMixedPayment()"><option value="contado">CONTADO</option><option value="credito">MIXTO (QUEDA SALDO)</option></select></label></div>
-<div class="sale-field-grid" id="creditPaymentFields" style="display:none;margin-top:10px"><label class="sale-field"><b>Abono recibido ahora</b><input data-money="1" id="saleReceived" inputmode="numeric" oninput="updateSalePaymentTarget()" placeholder="$ 0" type="text"/></label><label class="sale-field"><b>Pendiente por cobrar</b><input data-money="1" id="salePending" inputmode="numeric" readonly="" type="text"/></label><div class="sale-field full"><b>¿Cuándo se paga el saldo? *</b><input id="saleBalanceCond" placeholder="EJ: CONTRA ENTREGA DE LOS DOCUMENTOS DEL TRASPASO"/><div class="ict-chips"><button type="button" onclick="ctChip('saleBalanceCond','CONTRA ENTREGA DE LOS DOCUMENTOS DEL TRASPASO A NOMBRE DEL COMPRADOR')">Entrega de papeles</button><button type="button" onclick="ctChip('saleBalanceCond','EN LA FECHA ACORDADA: ')">Fecha acordada</button><button type="button" onclick="ctChip('saleBalanceCond','EN CUOTAS: ')">Cuotas</button></div></div></div><div class="paydist" id="salePayDist"><div class="paydist-title">DISTRIBUCIÓN DEL DINERO RECIBIDO</div><div class="paydist-grid">
+<label class="sale-field"><b>Condición *</b><select id="saleMethod" onchange="toggleMixedPayment()"><option value="">ESCOGE</option><option value="contado">CONTADO</option><option value="creditoTotal">CRÉDITO (TODO QUEDA DEBIENDO)</option><option value="credito">MIXTO (ABONO + SALDO)</option></select></label></div>
+<div class="sale-field-grid" id="creditPaymentFields" style="display:none;margin-top:10px"><label class="sale-field" id="saleReceivedWrap"><b>Abono recibido ahora</b><input data-money="1" id="saleReceived" inputmode="numeric" oninput="updateSalePaymentTarget()" placeholder="$ 0" type="text"/></label><label class="sale-field"><b>Pendiente por cobrar</b><input data-money="1" id="salePending" inputmode="numeric" readonly="" type="text"/></label><div class="sale-field full"><b>¿Cuándo se paga el saldo? *</b><input id="saleBalanceCond" placeholder="EJ: CONTRA ENTREGA DE LOS DOCUMENTOS DEL TRASPASO"/><div class="ict-chips"><button type="button" onclick="ctChip('saleBalanceCond','CONTRA ENTREGA DE LOS DOCUMENTOS DEL TRASPASO A NOMBRE DEL COMPRADOR')">Entrega de papeles</button><button type="button" onclick="ctChip('saleBalanceCond','EN LA FECHA ACORDADA: ')">Fecha acordada</button><button type="button" onclick="ctChip('saleBalanceCond','EN CUOTAS: ')">Cuotas</button></div></div></div><div class="paydist" id="salePayDist"><div class="paydist-title">DISTRIBUCIÓN DEL DINERO RECIBIDO</div><div class="paydist-grid">
 <label class="paydist-row"><span>EFECTIVO</span><input data-money="1" id="salePayCash" inputmode="numeric" oninput="payDistInput('sale',this)" placeholder="$ 0" type="text"/></label>
 <label class="paydist-row"><span>BANCOLOMBIA</span><input data-money="1" id="salePayBancolombia" inputmode="numeric" oninput="payDistInput('sale',this)" placeholder="$ 0" type="text"/></label>
 <label class="paydist-row"><span>DAVIVIENDA</span><input data-money="1" id="salePayDavivienda" inputmode="numeric" oninput="payDistInput('sale',this)" placeholder="$ 0" type="text"/></label>
@@ -5868,9 +5868,9 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.08.118"></script>
-<script src="./jcp-sync.js?v=2026.11.08.118"></script>
-<script src="./jcp-images.js?v=2026.11.08.118"></script>
+<script src="./jcp-accounting.js?v=2026.11.08.119"></script>
+<script src="./jcp-sync.js?v=2026.11.08.119"></script>
+<script src="./jcp-images.js?v=2026.11.08.119"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -8407,7 +8407,7 @@ async function persistVehicle(veh){
 const PAYMENT_ACCOUNT_FIELDS=[['cash','Cash','EFECTIVO'],['bancolombia','Bancolombia','BANCOLOMBIA'],['davivienda','Davivienda','DAVIVIENDA'],['nequi','Nequi','NEQUI'],['daviplata','Daviplata','DAVIPLATA']];
 const PAYMENT_CONFIG={
  purchase:{total:()=>numericValue('vcompra'),submit:'purchaseSubmit'},
- sale:{total:()=>document.getElementById('saleMethod')?.value==='credito'?saleNumericValue('saleReceived'):saleNumericValue('salePrice'),submit:'saleSubmit'},
+ sale:{total:()=>/^credito/.test(document.getElementById('saleMethod')?.value||'')?saleNumericValue('saleReceived'):saleNumericValue('salePrice'),submit:'saleSubmit'},
  permuta:{total:()=>Number(document.getElementById('permutaPaymentBlock')?.dataset?.total||0),submit:'savePermutaBtn'},
  opExpense:{total:()=>parseFormattedMoney(document.getElementById('opExpenseValue')?.value||''),submit:'opExpenseSubmit'},
  vehExpense:{total:()=>[...document.querySelectorAll('#opVehExpenseRows [data-op-exp-value]')].reduce((s,e)=>s+parseFormattedMoney(e.value),0),submit:'vehExpenseSubmit'},
@@ -8423,7 +8423,7 @@ function clearPaymentDistribution(prefix){PAYMENT_ACCOUNT_FIELDS.forEach(([,suff
 function updatePaymentDistribution(prefix){const cfg=PAYMENT_CONFIG[prefix];if(!cfg)return false;const total=Math.max(0,Number(cfg.total()||0)),distributed=paymentDistributedTotal(prefix),pending=total-distributed,box=document.getElementById(prefix+'PayDist');if(box)box.classList.toggle('open',total>0);const put=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=money(Math.max(0,v));};put(prefix+'PayTotal',total);put(prefix+'PayDistributed',distributed);const pe=document.getElementById(prefix+'PayPending');if(pe)pe.textContent=pending<0?'EXCEDE '+money(Math.abs(pending)):money(pending);const pb=document.getElementById(prefix+'PayPendingBox'),ok=total>0&&Math.abs(pending)<1;if(pb){pb.classList.toggle('ok',ok);pb.classList.toggle('bad',!ok);}const btn=document.getElementById(cfg.submit);if(btn)btn.disabled=!ok;return ok;}
 function validatePaymentDistribution(prefix,totalOverride=null){const cfg=PAYMENT_CONFIG[prefix],total=totalOverride===null?Number(cfg?.total?.()||0):Number(totalOverride||0),distributed=paymentDistributedTotal(prefix),diff=total-distributed;if(total<=0){alert('INGRESA UN VALOR VÁLIDO.');return false;}if(Math.abs(diff)>=1){alert(diff>0?'FALTA DISTRIBUIR '+money(diff)+'.':'LA DISTRIBUCIÓN EXCEDE EL VALOR EN '+money(Math.abs(diff))+'.');return false;}return true;}
 function applyPaymentDistribution(state,{prefix,direction,total,operationType,operationId='',receiptNumber='',concept='',date='',createdAt=''}){if(!validatePaymentDistribution(prefix,total))throw new Error('DISTRIBUCIÓN INCOMPLETA.');const dist=paymentDistribution(prefix);Object.entries(dist).forEach(([accountId,amount])=>{if(amount>0)addTreasuryMovement(state,{accountId,direction,amount,operationType,operationId,receiptNumber,concept,date,createdAt,method:accountId==='cash'?'efectivo':'transferencia'});});return dist;}
-function updateSalePaymentTarget(){const price=saleNumericValue('salePrice'),credit=document.getElementById('saleMethod')?.value==='credito',received=credit?saleNumericValue('saleReceived'):price,pending=Math.max(0,price-received),p=document.getElementById('salePending');if(p)p.value=pending?new Intl.NumberFormat('es-CO').format(pending):'';updatePaymentDistribution('sale');try{updateSaleSummary();}catch(e){}}
+function updateSalePaymentTarget(){const price=saleNumericValue('salePrice'),credit=/^credito/.test(document.getElementById('saleMethod')?.value||''),received=credit?saleNumericValue('saleReceived'):price,pending=Math.max(0,price-received),p=document.getElementById('salePending');if(p)p.value=pending?new Intl.NumberFormat('es-CO').format(pending):'';updatePaymentDistribution('sale');try{updateSaleSummary();}catch(e){}}
 
 const TREASURY_ACCOUNT_DEFS=[{id:'cash',name:'EFECTIVO'},{id:'bancolombia',name:'BANCOLOMBIA'},{id:'davivienda',name:'DAVIVIENDA'},{id:'daviplata',name:'DAVIPLATA'},{id:'nequi',name:'NEQUI'}];
 function ensureTreasuryState(state=data){state.treasuryAccounts=Array.isArray(state.treasuryAccounts)?state.treasuryAccounts:[];state.treasuryMovements=Array.isArray(state.treasuryMovements)?state.treasuryMovements:[];state.treasuryConfig=(state.treasuryConfig&&typeof state.treasuryConfig==='object')?state.treasuryConfig:{initialized:false};TREASURY_ACCOUNT_DEFS.forEach(def=>{if(!state.treasuryAccounts.some(a=>a.id===def.id))state.treasuryAccounts.push({id:def.id,name:def.name,active:true});});return state;}
@@ -9004,10 +9004,27 @@ function saleSupportData(r){
   return {
     sold,sale,commercial,buyer,doc,phone,address,price,received,pending,method,
     distribution,expenses,expenseTotal,purchasePrice,investment,profit,margin,
+    traspaso:(snap.traspaso&&+snap.traspaso.total>0)?snap.traspaso:((sale.traspaso&&+sale.traspaso.total>0)?sale.traspaso:null),
     obs:String(snap.obs||sale.obs||'').trim().toUpperCase(),
     date:String(r.date||sale.date||''),
     number:String(r.number||sale.receiptNumber||'')
   };
+}
+
+function saleTraspasoRows(t,internal){
+  if(!t)return [];
+  const src={cash:'EFECTIVO',bancolombia:'BANCOLOMBIA',davivienda:'DAVIVIENDA',nequi:'NEQUI',daviplata:'DAVIPLATA'};
+  const rows=[
+    ['1. DERECHOS DE TRASPASO',priceMoney(t.der)],
+    ['2. RETENCIÓN EN LA FUENTE (1% DEL AVALÚO'+(t.aval?' '+priceMoney(t.aval):'')+')',priceMoney(t.ret)],
+    ['3. SERVICIOS (TRAMITADOR)',priceMoney(t.serv)],
+    ['4. TOTAL TRÁMITE DE TRASPASO',priceMoney(t.total),'tot']
+  ];
+  if(t.gastos)rows.push(['ASUMIDO ASÍ',priceEsc(t.gastos)]);
+  rows.push(['A CARGO DEL COMPRADOR',priceMoney(t.buyer)]);
+  rows.push(['A CARGO DEL VENDEDOR',priceMoney(t.mine)]);
+  if(internal){if(t.avalLabel)rows.push(['AVALÚO USADO (MINTRANSPORTE)',priceEsc(t.avalLabel)]);rows.push(['PARTE DEL VENDEDOR PAGADA DESDE',priceEsc(src[t.from]||String(t.from||'').toUpperCase())]);}
+  return rows;
 }
 
 function saleDocRows(c){
@@ -9115,6 +9132,7 @@ function saleClientSupportHtml(r){
       </div>
       <div class="sale-box"><h3>📝 OBSERVACIONES</h3><div class="obs">${priceEsc(d.obs||'SIN OBSERVACIONES REGISTRADAS.')}</div></div>
     </div>
+    ${d.traspaso?`<div class="sale-box" style="margin-top:14px"><h3>🧾 TRÁMITE DE TRASPASO</h3>${saleTraspasoRows(d.traspaso,false).map(x=>`<div class="pay-row${x[2]==='tot'?' gold-total':''}"><span>${priceEsc(x[0])}</span><b>${x[1]}</b></div>`).join('')}</div>`:''}
 
     <div class="sale-grid-two" style="margin-top:20px">
       <div class="sale-box" style="text-align:center;padding-top:48px"><div style="border-top:1px solid #d8aa32;padding-top:8px"><b>COLOMBIAUTOS JP</b><br><small>VENDEDOR</small></div></div>
@@ -9252,7 +9270,7 @@ function saleInternalSupportHtml(r){
     <div class="land-head"><div></div><div class="land-title"><h1>DESGLOSE DE <span>GASTOS RELACIONADOS</span></h1><b>CONTINUACIÓN · ${priceEsc(d.number)}</b></div><div class="land-meta"><strong>${priceEsc(d.date)}</strong>PÁGINA 2 DE 2</div></div>
     <div class="land-expense-layout">
       <div class="land-box"><h3>💲 GASTOS DEL VEHÍCULO</h3><table class="land-expense-table"><thead><tr><th>#</th><th>CONCEPTO</th><th>VALOR</th></tr></thead><tbody>${expenseRows||'<tr><td colspan="3" style="text-align:center;color:#777">SIN GASTOS RELACIONADOS REGISTRADOS</td></tr>'}<tr class="expense-total"><td colspan="2">TOTAL GASTOS RELACIONADOS</td><td>${priceMoney(d.expenseTotal)}</td></tr></tbody></table></div>
-      <div class="land-box land-summary"><h3>💰 RESUMEN FINANCIERO FINAL</h3>${row('PRECIO DE COMPRA',priceMoney(d.purchasePrice))}${row('GASTOS RELACIONADOS',priceMoney(d.expenseTotal))}${row('TOTAL INVERSIÓN',priceMoney(d.investment),'land-pay-total')}${row('VALOR DE VENTA',priceMoney(d.price))}<div class="land-result ${resultPositive?'positive':'negative'}"><small>${resultPositive?'GANANCIA OBTENIDA':'PÉRDIDA DE LA OPERACIÓN'}</small><b>${priceMoney(d.profit)}</b><em>RENTABILIDAD: ${Number(d.margin||0).toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2})}%</em></div></div>
+      <div style="display:flex;flex-direction:column;gap:8px;min-height:0;height:100%">${d.traspaso?`<div class="land-box"><h3>🧾 TRÁMITE DE TRASPASO</h3>${saleTraspasoRows(d.traspaso,true).map(x=>row(x[0],x[1],x[2]==='tot'?'land-pay-total':'')).join('')}</div>`:''}<div class="land-box land-summary" style="flex:1;height:auto"><h3>💰 RESUMEN FINANCIERO FINAL</h3>${row('PRECIO DE COMPRA',priceMoney(d.purchasePrice))}${row('GASTOS RELACIONADOS',priceMoney(d.expenseTotal))}${row('TOTAL INVERSIÓN',priceMoney(d.investment),'land-pay-total')}${row('VALOR DE VENTA',priceMoney(d.price))}<div class="land-result ${resultPositive?'positive':'negative'}"><small>${resultPositive?'GANANCIA OBTENIDA':'PÉRDIDA DE LA OPERACIÓN'}</small><b>${priceMoney(d.profit)}</b><em>RENTABILIDAD: ${Number(d.margin||0).toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2})}%</em></div></div></div>
     </div>
     <div class="land-footer">SOPORTE INTERNO (CONTROL) · COLOMBIAUTOS JP · DOCUMENTO DE USO INTERNO</div>
   </section></body></html>`;
@@ -11291,7 +11309,7 @@ document.getElementById('saleTitle').textContent='Registrar nueva venta';
 document.getElementById('salePrice').value='';
 formatSaleMoney(document.getElementById('salePrice'));
 document.getElementById('saleBuyer').value='';document.getElementById('saleDoc').value='';document.getElementById('salePhone').value='';{const ad=document.getElementById('saleAddress');if(ad)ad.value='';}document.getElementById('saleObs').value='';
-document.getElementById('saleMethod').value='efectivo';
+document.getElementById('saleMethod').value='';
 document.getElementById('saleReceived').value='';document.getElementById('salePending').value=0;
 const cashEl=document.getElementById('saleCash'); if(cashEl)cashEl.value='';
 const transferEl=document.getElementById('saleTransfer'); if(transferEl)transferEl.value='';
@@ -11323,7 +11341,7 @@ function clearSaleForm(){
   setValue('saleReceived');
   setValue('salePending','0');
   setValue('saleObs');
-  setValue('saleMethod','contado');
+  setValue('saleMethod','');
 
   const preview=document.getElementById('saleVehiclePreview');
   if(preview)preview.innerHTML='';
@@ -11347,7 +11365,7 @@ function closeSaleForm(){
   if(form)form.style.display='none';
   toggleSaleGrid();
 }
-function toggleMixedPayment(){const credit=document.getElementById('saleMethod')?.value==='credito',box=document.getElementById('creditPaymentFields');if(box)box.style.display=credit?'grid':'none';if(!credit){const r=document.getElementById('saleReceived');if(r)r.value='';}updateSalePaymentTarget();}
+function toggleMixedPayment(){const mv=document.getElementById('saleMethod')?.value||'',credit=/^credito/.test(mv),total=mv==='creditoTotal',box=document.getElementById('creditPaymentFields');if(box)box.style.display=credit?'grid':'none';const rw=document.getElementById('saleReceivedWrap');if(rw)rw.style.display=total?'none':'';const r=document.getElementById('saleReceived');if(r){if(total)r.value='0';else if(!credit)r.value='';else if(r.value==='0')r.value='';}updateSalePaymentTarget();try{ictAutoPago();}catch(e){}}
 function updateSaleSummary(){
 if(!selectedSaleVehicleId)return;
 let x=data.veh.find(v=>v.id===selectedSaleVehicleId);if(!x)return;
@@ -11360,7 +11378,7 @@ let cash=0,transfer=0,received=0;
 if(method==='efectivo'){cash=sale;received=sale;}
 else if(method==='transferencia'){transfer=sale;received=sale;}
 else if(method==='mixto'){cash=saleNumericValue('saleCash');transfer=saleNumericValue('saleTransfer');received=cash+transfer;}
-else if(method==='credito'){received=saleNumericValue('saleReceived');}
+else if(/^credito/.test(method)){received=saleNumericValue('saleReceived');}
 let pending=Math.max(0,sale-received);
 const pendingInput=document.getElementById('salePending');
 if(pendingInput){pendingInput.value=pending?new Intl.NumberFormat('es-CO').format(pending):'0';}
@@ -12139,7 +12157,9 @@ function saveVehicleSale(opts){
   }
 
   const price=saleNumericValue('salePrice');
-  const method=document.getElementById('saleMethod')?.value||'contado';
+  const methodRaw=document.getElementById('saleMethod')?.value||'';
+  if(!methodRaw){alert('ESCOGE LA CONDICIÓN DE LA VENTA: CONTADO, CRÉDITO O MIXTO.');return false;}
+  const method=methodRaw==='creditoTotal'?'credito':methodRaw;
   const received=method==='credito'
     ?saleNumericValue('saleReceived')
     :price;
@@ -12185,9 +12205,11 @@ function saveVehicleSale(opts){
   const date=now.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'});
   const createdAt=now.toISOString();
   const saleId='sale_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  let saleTraspaso=null;
   // Traspaso: la parte del vendedor se registra como gasto del carro antes de calcular la utilidad.
   {
     const tr=(opts.silent&&window.ictTraspasoInfo)?ictTraspasoInfo():{mine:0};
+    if(+tr.total>0)saleTraspaso={total:+tr.total||0,der:+tr.der||0,ret:+tr.ret||0,serv:+tr.serv||0,aval:+tr.aval||0,avalLabel:tr.avalLabel||'',gastos:tr.gastos||'',mine:+tr.mine||0,buyer:Math.max(0,(+tr.total||0)-(+tr.mine||0)),from:tr.from||'cash'};
     if(+tr.mine>0){
       try{
         const opId='ve_tr_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
@@ -12245,7 +12267,8 @@ function saveVehicleSale(opts){
         expenseTotal:saleExpenseTotal,
         investment:saleInvestment,
         profit:saleProfit,
-        margin:saleMargin
+        margin:saleMargin,
+        traspaso:saleTraspaso?cloneAppData(saleTraspaso):null
       }
     });
 
@@ -12280,7 +12303,8 @@ function saveVehicleSale(opts){
       pending,
       paymentDistribution:distribution,
       obs,
-      balanceCondition:pending>0?balanceCond:''
+      balanceCondition:pending>0?balanceCond:'',
+      traspaso:saleTraspaso?cloneAppData(saleTraspaso):null
     };
     soldVehicle.status='vendido';
 
@@ -13079,7 +13103,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.118\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.119\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -17323,7 +17347,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.08.118',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.08.119',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -21102,7 +21126,7 @@ function jcpParseLicencia(raw){
     if(!v){alert('SELECCIONA PRIMERO EL VEHÍCULO QUE VAS A VENDER.');return;}
     var gv=function(id){return (document.getElementById(id)||{}).value||'';};
     var price=parseFormattedMoney(gv('salePrice'))||0,method=gv('saleMethod')||'contado';
-    var received=method==='credito'?(parseFormattedMoney(gv('saleReceived'))||0):price,pending=Math.max(0,price-received);
+    var received=/^credito/.test(method)?(parseFormattedMoney(gv('saleReceived'))||0):price,pending=Math.max(0,price-received);
     var dist={};try{dist=paymentDistribution('sale')||{};}catch(e){}
     var buyer=up(gv('saleBuyer')),doc=up(gv('saleDoc')),st=data.settings||{};
     var cl=(data.clientes||[]).find(function(c){return (doc&&up(c.cedula)===doc)||(buyer&&up(c.nombre)===buyer);})||{};
@@ -21282,7 +21306,7 @@ function jcpParseLicencia(raw){
   window.permutaContinueToContract=async function(){var ok=false;try{ok=await savePermuta({dry:true});}catch(e){ok=false;}if(ok!==true)return;permDockHide();window.openPermutaContractDraft();if(cur&&cur.kind==='permuta'){cur.draft=false;cur.finalize=true;render();}};
   function ctFullMissing(c){var L=[],t=function(x){return String(x==null?'':x).trim();};
     if(!t(c.city))L.push('CIUDAD');if(!t(c.entrega))L.push('FECHA DE ENTREGA');if(!(+c.penal>0))L.push('CLÁUSULA PENAL');
-    if(!c.noT){if(c.kind==='venta'&&c.inline&&!(+c.tramite>0))L.push('VALOR DEL TRÁMITE DE TRASPASO');if(!t(c.traspaso))L.push('DÍAS DE TRASPASO');if(!t(c.gastos))L.push('GASTOS DE TRASPASO');if(!t(c.impAnio))L.push('AÑO DEL IMPUESTO');if(!t(c.impQuien))L.push('QUIÉN ASUME EL IMPUESTO');}
+    if(!c.noT){if(c.kind==='venta'&&c.inline){if(!(parseFormattedMoney(g('sctDer'))>0))L.push('DERECHOS DE TRASPASO');if(!String(g('sctServ')||'').trim())L.push('SERVICIOS DEL TRAMITADOR');if(!(+c.tramite>0))L.push('VALOR DEL TRÁMITE DE TRASPASO');if(!g('sctTramiteFrom'))L.push('DE DÓNDE SALE TU PARTE DEL TRÁMITE');}if(!t(c.traspaso))L.push('DÍAS DE TRASPASO');if(!t(c.gastos))L.push('GASTOS DE TRASPASO');if(!t(c.impAnio))L.push('AÑO DEL IMPUESTO');if(!t(c.impQuien))L.push('QUIÉN ASUME EL IMPUESTO');}
     if(c.kind==='permuta'){L=L.concat(permMissing(c));}
     else{var V0=c.veh||{},B0=c.buyer||{};[['MARCA',V0.marca],['CLASE',V0.clase],['LÍNEA',V0.linea],['MODELO',V0.modelo],['PLACA',V0.placa],['COLOR',V0.color],['SERVICIO',V0.servicio],['CAPACIDAD',V0.capacidad],['N.º CHASIS',V0.chasis],['N.º MOTOR',V0.motor],['SOAT',V0.soat],['TECNOMECÁNICA',V0.tecno],['NOMBRE DEL COMPRADOR',B0.nombre],['CÉDULA DEL COMPRADOR',B0.cedula],['DIRECCIÓN DEL COMPRADOR',B0.direccion],['TELÉFONO DEL COMPRADOR',B0.telefono],['FORMA DE PAGO',c.pago]].forEach(function(x){if(!t(x[1]))L.push(x[0]);});}
     return L;}
@@ -21311,7 +21335,7 @@ function jcpParseLicencia(raw){
   function ichips(target,list){return '<div class="ict-chips">'+list.map(function(c){return '<button type="button" onclick="ctChip(\''+target+'\',\''+String(c[1]).replace(/'/g,"\\'")+'\')">'+c[0]+'</button>';}).join('')+'</div>';}
   function ifield(lbl,id,val,attrs,full){return '<label class="sale-field'+(full?' full':'')+'"><b>'+lbl+'</b><input id="'+id+'" value="'+esc(val==null?'':val)+'" '+(attrs||'')+'/></label>';}
   function iphotos(pre,list,notes){return '<div class="cph-grid ict-ph">'+list.map(function(x){var auto=notes&&notes[x[0]];return '<div class="cph" id="'+pre+'Ph_'+x[0]+'"><label class="cph-img"><div class="cph-prev"><span>📷</span></div><input type="file" accept="image/*" onchange="ctPhotoPick(\''+x[0]+'\',this)"></label><small>'+x[1]+(auto?'<br><i>'+auto+'</i>':'')+'</small><button type="button" class="cph-x" style="display:none" onclick="ctPhotoClear(\''+x[0]+'\')">✕ QUITAR</button></div>';}).join('')+'</div>';}
-  function isellerHtml(pre,lbl){var st=data.settings||{},sl=sellers(),cid=st.contractLastSeller||((sl[0]||{}).id||'');
+  function isellerHtml(pre,lbl){var st=data.settings||{},sl=sellers(),cid='';
     return '<label class="sale-field full"><b>'+lbl+' *</b><select id="'+pre+'Seller"><option value="">ESCOGE '+lbl+'</option>'+sl.map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===cid?' selected':'')+'>'+esc(x.nombre)+' · '+esc(x.cedula)+'</option>';}).join('')+'</select></label>'
       +'<div class="sale-field full"><div class="ict-chips"><button type="button" onclick="var f=document.getElementById(\''+pre+'SForm\');f.style.display=f.style.display===\'none\'?\'\':\'none\'">+ NUEVO</button></div><div id="'+pre+'SForm" class="sale-field-grid" style="display:none;margin-top:6px">'
       +ifield('Nombre',pre+'SNombre','')+ifield('Cédula / NIT',pre+'SCedula','')+ifield('Dirección',pre+'SDir','')+ifield('Teléfono',pre+'STel','','inputmode="tel"')
@@ -21322,19 +21346,19 @@ function jcpParseLicencia(raw){
   function iclauses(pre,noT,kind){var st=data.settings||{},today=iso(new Date()),P=kind==='permuta';
     var nt=noT?'<div class="sale-field full ict-not">🚫 CARRO SIN TRASPASO: en el contrato salen tachados el traspaso, el valor del trámite y el impuesto.</div>':'';
     return nt+ifield('Ciudad *',pre+'City',st.contractCity||'BOGOTÁ')+ifield('Fecha de entrega del vehículo *',pre+'Entrega',today,'type="date"')
-      +(noT?'':'<div class="sale-field"><b>Días hábiles para el traspaso *</b><input id="'+pre+'Traspaso" value="'+(P?'15':'30')+'" inputmode="numeric"/>'+ichips(pre+'Traspaso',[['15','15'],['30','30'],['45','45'],['60','60']])+'</div>')
+      +(noT?'':'<div class="sale-field"><b>Días hábiles para el traspaso *</b><input id="'+pre+'Traspaso" value="" placeholder="ESCOGE" inputmode="numeric"/>'+ichips(pre+'Traspaso',[['15','15'],['30','30'],['45','45'],['60','60']])+'</div>')
       +'<div class="sale-field"><b>Cláusula penal ($) *</b><input id="'+pre+'Penal" data-money="1" inputmode="numeric" placeholder="$ 0"/><div class="ict-chips"><button type="button" onclick="ictPenal(\''+pre+'\',0.05)">5 %</button><button type="button" onclick="ictPenal(\''+pre+'\',0.10)">10 %</button><button type="button" onclick="ictPenal(\''+pre+'\',0.20)">20 %</button></div></div>'
-      +(noT?'':'<div class="sale-field full"><b>Gastos de traspaso asumidos así *</b><input id="'+pre+'Gastos" value="'+(P?'50% POR CADA PARTE':'50% POR EL COMPRADOR Y 50% POR EL VENDEDOR')+'"/>'+ichips(pre+'Gastos',P?[['50 / 50','50% POR CADA PARTE'],['Quien recibe','CADA PARTE PAGA EL TRASPASO DEL VEHÍCULO QUE RECIBE'],['Quien entrega','CADA PARTE PAGA EL TRASPASO DEL VEHÍCULO QUE ENTREGA']]:[['50 / 50','50% POR EL COMPRADOR Y 50% POR EL VENDEDOR'],['Comprador','100% POR EL COMPRADOR'],['Vendedor','100% POR EL VENDEDOR']])+'</div>'
+      +(noT?'':'<div class="sale-field full"><b>Gastos de traspaso asumidos así *</b><input id="'+pre+'Gastos" value="" placeholder="ESCOGE QUIÉN ASUME"/>'+ichips(pre+'Gastos',P?[['50 / 50','50% POR CADA PARTE'],['Quien recibe','CADA PARTE PAGA EL TRASPASO DEL VEHÍCULO QUE RECIBE'],['Quien entrega','CADA PARTE PAGA EL TRASPASO DEL VEHÍCULO QUE ENTREGA']]:[['50 / 50','50% POR EL COMPRADOR Y 50% POR EL VENDEDOR'],['Comprador','100% POR EL COMPRADOR'],['Vendedor','100% POR EL VENDEDOR']])+'</div>'
         +(P?'':'<div class="sale-field full tcx-box"><b class="tcx-h">VALOR DEL TRÁMITE DE TRASPASO *</b>'
-          +'<div class="tcx-row"><span>1. Derechos de traspaso</span><input id="'+pre+'Der" data-money="1" inputmode="numeric" placeholder="$ 0" value="'+(function(){data.settings=(data.settings&&typeof data.settings==='object')?data.settings:{};return (+data.settings.traspasoDerechos||260300).toLocaleString('es-CO');})()+'"/></div>'
+          +'<div class="tcx-row"><span>1. Derechos de traspaso *</span><input id="'+pre+'Der" data-money="1" inputmode="numeric" placeholder="$ 0" value=""/></div>'+(function(){data.settings=(data.settings&&typeof data.settings==='object')?data.settings:{};var d=(+data.settings.traspasoDerechos||260300).toLocaleString('es-CO');return ichips(pre+'Der',[[d,d]]);})()
           +'<div class="tcx-row"><span>2. Retención en la fuente (1% del avalúo)</span><input id="'+pre+'Ret" readonly tabindex="-1" placeholder="$ 0"/></div>'
           +'<small id="'+pre+'AvalInfo" class="tcx-info"></small><button type="button" class="tcx-btn" onclick="jcpTraspasoCalc(\''+pre+'\')">🧮 VER / CAMBIAR AVALÚO</button>'
-          +'<div class="tcx-row"><span>3. Servicios (tramitador)</span><input id="'+pre+'Serv" data-money="1" inputmode="numeric" placeholder="$ 0"/></div>'
+          +'<div class="tcx-row"><span>3. Servicios (tramitador) *</span><input id="'+pre+'Serv" data-money="1" data-zero-ok="1" inputmode="numeric" placeholder="$ 0"/></div>'
           +'<div class="tcx-row tcx-tot"><span>4. TOTAL</span><input id="'+pre+'Tramite" readonly tabindex="-1" placeholder="$ 0"/></div></div>'
           +'<label class="sale-field full"><b>Tu parte según cómo se asumen los gastos (se registra como gasto del carro)</b><input id="'+pre+'TramiteMine" data-money="1" inputmode="numeric" placeholder="$ 0"/></label>'
-          +'<label class="sale-field full"><b>Tu parte se paga desde</b><select id="'+pre+'TramiteFrom"><option value="cash">EFECTIVO</option><option value="bancolombia">BANCOLOMBIA</option><option value="davivienda">DAVIVIENDA</option><option value="nequi">NEQUI</option><option value="daviplata">DAVIPLATA</option></select></label>')
-        +ifield('Impuesto del año *',pre+'ImpAnio',String(new Date().getFullYear()),'inputmode="numeric"')
-        +'<div class="sale-field"><b>Impuesto asumido por *</b><input id="'+pre+'ImpQuien" value="'+(P?'QUIEN LO ENTREGA':'EL VENDEDOR')+'"/>'+(P?ichips(pre+'ImpQuien',[['Quien entrega','QUIEN LO ENTREGA'],['Quien recibe','QUIEN LO RECIBE']]):'')+'</div>'+(P?'':'<div class="sale-field full">'+ichips(pre+'ImpQuien',[['50 / 50','50% COMPRADOR Y 50% VENDEDOR'],['Vendedor','EL VENDEDOR'],['Comprador','EL COMPRADOR']])+'</div>'))
+          +'<label class="sale-field full"><b>Tu parte se paga desde *</b><select id="'+pre+'TramiteFrom"><option value="">ESCOGE DE DÓNDE SALE</option><option value="cash">EFECTIVO</option><option value="bancolombia">BANCOLOMBIA</option><option value="davivienda">DAVIVIENDA</option><option value="nequi">NEQUI</option><option value="daviplata">DAVIPLATA</option></select></label>')
+        +('<div class="sale-field"><b>Impuesto del año *</b><input id="'+pre+'ImpAnio" value="" placeholder="ESCOGE" inputmode="numeric"/>'+ichips(pre+'ImpAnio',[[String(new Date().getFullYear()),String(new Date().getFullYear())],[String(new Date().getFullYear()+1),String(new Date().getFullYear()+1)]])+'</div>')
+        +'<div class="sale-field"><b>Impuesto asumido por *</b><input id="'+pre+'ImpQuien" value="" placeholder="ESCOGE QUIÉN ASUME"/>'+(P?ichips(pre+'ImpQuien',[['Quien entrega','QUIEN LO ENTREGA'],['Quien recibe','QUIEN LO RECIBE']]):'')+'</div>'+(P?'':'<div class="sale-field full">'+ichips(pre+'ImpQuien',[['50 / 50','50% COMPRADOR Y 50% VENDEDOR'],['Vendedor','EL VENDEDOR'],['Comprador','EL COMPRADOR']])+'</div>'))
       +'<label class="sale-field full"><b>Cláusulas adicionales (opcional)</b><textarea id="'+pre+'Adic" rows="2" class="sale-observations" style="min-height:64px"></textarea></label>';}
   window.ictPenal=function(pre,pct){var base=0;try{base=pre==='pct'?(parseFormattedMoney(g('pctVal1'))||0):(parseFormattedMoney(g('salePrice'))||0);}catch(e){}if(!base){alert(pre==='pct'?'ESCRIBE PRIMERO EL VALOR DEL VEHÍCULO 1 (ARRIBA, PASO 3).':'ESCRIBE PRIMERO EL VALOR DE VENTA (ARRIBA, PASO 2).');return;}var e=el(pre+'Penal');if(e){e.value=Math.round(base*pct).toLocaleString('es-CO');try{e.dispatchEvent(new Event('input',{bubbles:true}));}catch(_e){}}};
   function iread(pre,c){c.tramite=parseFormattedMoney(g(pre+'Tramite'))||0;c.city=up(g(pre+'City'));c.entrega=g(pre+'Entrega');c.sellerId=g(pre+'Seller');c.penal=parseFormattedMoney(g(pre+'Penal'))||0;c.adicionales=up(g(pre+'Adic'));
@@ -21342,12 +21366,12 @@ function jcpParseLicencia(raw){
     else{c.traspaso='';c.gastos='';c.impAnio='';c.impQuien='';}return c;}
   // ---- forma de pago automática para el contrato
   function autoPago(prefix,pending){var d={};try{d=paymentDistribution(prefix)||{};}catch(e){}var cash=+d.cash||0,bank=0;Object.keys(d).forEach(function(k){if(k!=='cash')bank+=(+d[k]||0);});
-    var t='',P=+pending>0;if(cash>0&&bank>0)t=fm(cash)+' EN EFECTIVO Y '+fm(bank)+' POR TRANSFERENCIA BANCARIA';else if(bank>0)t=(P?fm(bank)+' ':'')+'POR TRANSFERENCIA BANCARIA';else if(cash>0||!P)t=(P?fm(cash)+' ':'')+'EN EFECTIVO';
+    var t='',P=+pending>0;if(cash>0&&bank>0)t=fm(cash)+' EN EFECTIVO Y '+fm(bank)+' POR TRANSFERENCIA BANCARIA';else if(bank>0)t=(P?fm(bank)+' ':'')+'POR TRANSFERENCIA BANCARIA';else if(cash>0)t=(P?fm(cash)+' ':'')+'EN EFECTIVO';
     if(+pending>0){var bc=up(g('saleBalanceCond')).trim();t=(cash>0||bank>0?t+'; Y ':'')+'EL SALDO DE '+fm(pending)+(bc&&prefix==='sale'?' SE PAGARÁ '+bc:' QUEDA PENDIENTE POR PAGAR');}return t.toUpperCase();}
-  window.ictAutoPago=function(){var e=el('salePagoTxt');if(e&&!e.dataset.manual){var price=parseFormattedMoney(g('salePrice'))||0,method=g('saleMethod')||'contado',rec=method==='credito'?(parseFormattedMoney(g('saleReceived'))||0):price;e.value=autoPago('sale',Math.max(0,price-rec));}
+  window.ictAutoPago=function(){var e=el('salePagoTxt');if(e&&!e.dataset.manual){var price=parseFormattedMoney(g('salePrice'))||0,method=g('saleMethod')||'contado',rec=/^credito/.test(method)?(parseFormattedMoney(g('saleReceived'))||0):price;e.value=autoPago('sale',Math.max(0,price-rec));}
     var p=el('pctPagoTxt');if(p&&!p.dataset.manual){var calc={};try{calc=updatePermutaCalculations()||{};}catch(_e){}p.value=(+calc.difference>0)?autoPago('permuta',+calc.pending||0):'';}
     try{var v2=el('pctVal2Show');if(v2){var v1=parseFormattedMoney(g('pctVal1'))||0,cc={};try{cc=updatePermutaCalculations()||{};}catch(_e){}var d=+cc.difference||0,st=cc.status||'even';v2.textContent=fm(Math.max(0,st==='receive'?v1-d:(st==='pay'?v1+d:v1)));}}catch(_e){}};
-  function tramiteShare(txt){txt=up(txt);if(/100\s*%\s*POR EL VENDEDOR/.test(txt))return 1;if(/100\s*%\s*POR EL COMPRADOR/.test(txt))return 0;var m=txt.match(/(\d{1,3})\s*%\s*POR EL VENDEDOR/);if(m)return Math.min(100,+m[1])/100;var m2=txt.match(/(\d{1,3})\s*%\s*POR EL COMPRADOR/);if(m2)return 1-Math.min(100,+m2[1])/100;return 0.5;}
+  function tramiteShare(txt){txt=up(txt);if(/100\s*%\s*POR EL VENDEDOR/.test(txt))return 1;if(/100\s*%\s*POR EL COMPRADOR/.test(txt))return 0;var m=txt.match(/(\d{1,3})\s*%\s*POR EL VENDEDOR/);if(m)return Math.min(100,+m[1])/100;var m2=txt.match(/(\d{1,3})\s*%\s*POR EL COMPRADOR/);if(m2)return 1-Math.min(100,+m2[1])/100;if(/50\s*%\s*POR CADA PARTE|50\s*\/\s*50/.test(txt))return 0.5;return null;}
   function tramiteAuto(){var mine=el('sctTramiteMine');if(!mine||mine.dataset.manual)return;var tot=parseFormattedMoney(g('sctTramite'))||0;var v=Math.round(tot*tramiteShare(g('sctGastos')));mine.value=v?v.toLocaleString('es-CO'):'';try{updateSaleSummary();}catch(_e){}}
   var AVAL=null,AVALP=null;
   function avalLoad(){if(AVAL)return Promise.resolve(AVAL);if(AVALP)return AVALP;AVALP=fetch('./avaluos-2026.json').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(j){var all=[];j.t.forEach(function(t,ti){t.r.forEach(function(r){all.push({t:ti,tn:t.n,marca:t.m[r[0]],linea:r[1],cil:r[2],v:r[3],clase:t.c[r[4]],k:avalNorm(t.m[r[0]]+' '+r[1])});});});j.all=all;AVAL=j;return j;}).catch(function(e){AVALP=null;throw e;});return AVALP;}
@@ -21405,7 +21429,7 @@ function jcpParseLicencia(raw){
     m.querySelector('.pcm-ok').onclick=function(){if(!num('tcxAval')){alert('FALTA EL AVALÚO.');return;}
       var a=num('tcxAval');TCX={aval:a,label:(a===pickedVal&&picked?picked:'ESCRITO A MANO')};tcxApply();m.remove();};
   };
-  window.ictTraspasoInfo=function(){var box=el('saleCtBox');if(!box||box.dataset.noT)return {total:0,mine:0,from:'cash'};return {total:parseFormattedMoney(g('sctTramite'))||0,mine:parseFormattedMoney(g('sctTramiteMine'))||0,from:g('sctTramiteFrom')||'cash'};};
+  window.ictTraspasoInfo=function(){var box=el('saleCtBox');if(!box||box.dataset.noT)return {total:0,mine:0,from:'cash'};var n=function(id){return parseFormattedMoney(g(id))||0;};return {total:n('sctTramite'),mine:n('sctTramiteMine'),from:g('sctTramiteFrom')||'cash',der:n('sctDer'),ret:n('sctRet'),serv:n('sctServ'),aval:+TCX.aval||0,avalLabel:TCX.aval?(TCX.label||'ESCRITO A MANO'):'',gastos:up(g('sctGastos'))};};
   window.ictTraspasoMine=function(){try{return ictTraspasoInfo().mine||0;}catch(e){return 0;}};
   document.addEventListener('input',function(ev){var t=ev.target;if(!t||!t.closest)return;if(t.id==='sctTramiteMine'){t.dataset.manual='1';try{updateSaleSummary();}catch(_e){}return;}if(t.id==='sctTramite'||t.id==='sctGastos'){setTimeout(tramiteAuto,0);}},true);
   document.addEventListener('input',function(ev){var t=ev.target;if(!t||!t.closest)return;if(t.id==='salePagoTxt'||t.id==='pctPagoTxt'){t.dataset.manual='1';return;}if(t.closest('#saleForm')||t.closest('#permutaForm'))setTimeout(ictAutoPago,0);},true);
@@ -21805,13 +21829,13 @@ function jcpParseLicencia(raw){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.08.118"></script>
+<script src="./app-update.js?v=2026.11.08.119"></script>
 <script>
 /* JCP: resaltar casillas obligatorias (rojo vacío / verde lleno) en Facturar venta y Permuta */
 (function(){
   var FORMS=['saleForm','permutaForm'];
   function isReq(inp){var host=inp.closest('label,.sale-field,.tcx-row,.ct-f');if(!host)return false;var b=host.querySelector('b,span');var t=b?b.textContent:'';return /\*/.test(t)||(inp.id&&/Tramite$/.test(inp.id)&&!/Mine/.test(inp.id));}
-  function filled(inp){var v=String(inp.value==null?'':inp.value).trim();if(!v)return false;if(inp.dataset&&inp.dataset.money){return (parseFloat(v.replace(/[^\d]/g,''))||0)>0;}return true;}
+  function filled(inp){var v=String(inp.value==null?'':inp.value).trim();if(!v)return false;if(inp.dataset&&inp.dataset.zeroOk)return true;if(inp.dataset&&inp.dataset.money){return (parseFloat(v.replace(/[^\d]/g,''))||0)>0;}return true;}
   function paint(f){if(!f||f.style.display==='none'||!f.offsetParent)return;
     f.querySelectorAll('input,select,textarea').forEach(function(inp){if(inp.type==='file'||inp.type==='hidden'||inp.type==='checkbox'||inp.type==='radio')return;
       var box=inp.closest('label,.sale-field,.tcx-row');if(!inp.offsetParent||(box&&box.closest('[data-not],.ct-na'))){inp.classList.remove('jreq-no','jreq-ok');return;}
