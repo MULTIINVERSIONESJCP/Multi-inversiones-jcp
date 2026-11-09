@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.08.132</title>
+<title>COLOMBIAUTOS JP - V2026.11.08.133</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5875,9 +5875,9 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.08.132"></script>
-<script src="./jcp-sync.js?v=2026.11.08.132"></script>
-<script src="./jcp-images.js?v=2026.11.08.132"></script>
+<script src="./jcp-accounting.js?v=2026.11.08.133"></script>
+<script src="./jcp-sync.js?v=2026.11.08.133"></script>
+<script src="./jcp-images.js?v=2026.11.08.133"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -13130,7 +13130,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.132\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.133\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -17047,7 +17047,7 @@ function voidAccountingDocument(){
     const title=${JSON.stringify(String(shareTitle||safeFile))};
     const msg=document.getElementById('jcpSupportMsg');
     function setMsg(t){if(msg)msg.textContent=t||'';}
-    const LIB=${JSON.stringify(new URL('jcp-print.js?v=2026.11.08.132',location.href).href)};
+    const LIB=${JSON.stringify(new URL('jcp-print.js?v=2026.11.08.133',location.href).href)};
     const SNAP=${JSON.stringify(String(window.__jcpSnapFor||''))};
     let libP=null;
     function ensureLib(){
@@ -17438,7 +17438,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.08.132',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.08.133',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -21156,19 +21156,17 @@ function jcpParseLicencia(raw){
   function jcpCropOpen(srcCv,outW,onOk,onCancel){
     var old=document.getElementById('ctCropModal');if(old)old.remove();
     var m=document.createElement('div');m.id='ctCropModal';
-    m.innerHTML='<style>#ctCropModal{position:fixed;inset:0;z-index:99999;background:#050505;display:flex;flex-direction:column;font-family:Arial,sans-serif;color:#fff;touch-action:none;-webkit-user-select:none;user-select:none}#ctCropModal .ch{padding:12px 14px 6px;font-weight:900;font-size:13px;color:#d4af37;text-align:center}#ctCropModal .cs{font-size:11px;color:#aaa;text-align:center;padding:0 14px 8px}#ctCropModal .stage{position:relative;flex:1;margin:0;overflow:hidden;touch-action:none}#ctCropModal .stage img{position:absolute;user-select:none;-webkit-user-drag:none;pointer-events:none;max-width:none}#ctCropModal .box{position:absolute;border:2px solid #d4af37;box-shadow:0 0 0 9999px rgba(0,0,0,.6);border-radius:10px;cursor:move;touch-action:none}#ctCropModal .box:after{content:"";position:absolute;inset:0;border-radius:8px;background-image:linear-gradient(#ffffff33 1px,transparent 1px),linear-gradient(90deg,#ffffff33 1px,transparent 1px);background-size:33.33% 33.33%;pointer-events:none}#ctCropModal .hd{position:absolute;width:34px;height:34px;right:-17px;bottom:-17px;border-radius:50%;background:#d4af37;border:3px solid #111;touch-action:none;cursor:nwse-resize}#ctCropModal .hd.tl{left:-17px;top:-17px;right:auto;bottom:auto}#ctCropModal .zm{display:grid;grid-template-columns:56px 1fr 56px;gap:8px;align-items:center;padding:8px 12px 0}#ctCropModal .zm button{min-height:44px;border-radius:12px;font-weight:900;font-size:22px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#ctCropModal .zm span{text-align:center;color:#aaa;font-size:11px;font-weight:800}#ctCropModal .bar{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom))}#ctCropModal .bar button{min-height:48px;border-radius:12px;font-weight:900;font-size:13px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#ctCropModal .bar .ok{background:#d4af37;color:#111;border:0}</style>'
+    m.innerHTML='<style>#ctCropModal{position:fixed;inset:0;z-index:99999;background:#050505;display:flex;flex-direction:column;font-family:Arial,sans-serif;color:#fff;-webkit-user-select:none;user-select:none}#ctCropModal button{touch-action:manipulation;-webkit-tap-highlight-color:rgba(212,175,55,.3)}#ctCropModal .ch{padding:12px 14px 6px;font-weight:900;font-size:13px;color:#d4af37;text-align:center}#ctCropModal .cs{font-size:11px;color:#aaa;text-align:center;padding:0 14px 8px}#ctCropModal .stage{position:relative;flex:1;margin:0;overflow:hidden;touch-action:none}#ctCropModal .stage img{position:absolute;user-select:none;-webkit-user-drag:none;pointer-events:none;max-width:none}#ctCropModal .box{position:absolute;border:2px solid #d4af37;box-shadow:0 0 0 9999px rgba(0,0,0,.6);border-radius:10px;cursor:move;touch-action:none}#ctCropModal .box:after{content:"";position:absolute;inset:0;border-radius:8px;background-image:linear-gradient(#ffffff33 1px,transparent 1px),linear-gradient(90deg,#ffffff33 1px,transparent 1px);background-size:33.33% 33.33%;pointer-events:none}#ctCropModal .hd{position:absolute;width:34px;height:34px;right:-17px;bottom:-17px;border-radius:50%;background:#d4af37;border:3px solid #111;touch-action:none;cursor:nwse-resize}#ctCropModal .hd.tl{left:-17px;top:-17px;right:auto;bottom:auto}#ctCropModal .zm{display:grid;grid-template-columns:56px 1fr 56px;gap:8px;align-items:center;padding:8px 12px 0}#ctCropModal .zm button{min-height:44px;border-radius:12px;font-weight:900;font-size:22px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#ctCropModal .zm span{text-align:center;color:#aaa;font-size:11px;font-weight:800}#ctCropModal .bar{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom))}#ctCropModal .bar button{min-height:48px;border-radius:12px;font-weight:900;font-size:13px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#ctCropModal .bar .ok{background:#d4af37;color:#111;border:0}</style>'
       +'<div class="ch">✂️ AJUSTA EL RECUADRO A LA CÉDULA / TARJETA</div><div class="cs">Arrastra el recuadro para moverlo y usa los círculos dorados para cambiar el tamaño. Para acercar la foto usa + / − o pellizca con dos dedos dentro de la foto.</div>'
       +'<div class="stage"><img alt=""><div class="box"><div class="hd tl"></div><div class="hd"></div></div></div>'
       +'<div class="zm"><button type="button" class="zo">−</button><span class="zl">ZOOM 100%</span><button type="button" class="zi">+</button></div>'
       +'<div class="bar"><button type="button" class="cn">CANCELAR</button><button type="button" class="rt">↻ GIRAR</button><button type="button" class="ok">✔ USAR FOTO</button></div>';
     document.body.appendChild(m);
     // Bloquear el zoom de la pantalla mientras está abierto (en iPhone dejaba la vista trabada sin botones).
-    var vp=document.querySelector('meta[name="viewport"]'),vpOld=vp?vp.getAttribute('content'):null;
-    if(vp)vp.setAttribute('content','width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
     var stopG=function(e){e.preventDefault();};
     document.addEventListener('gesturestart',stopG,{passive:false});document.addEventListener('gesturechange',stopG,{passive:false});
     var stopT=function(e){if(e.touches&&e.touches.length>1)e.preventDefault();};m.addEventListener('touchmove',stopT,{passive:false});
-    function close(){document.removeEventListener('gesturestart',stopG);document.removeEventListener('gesturechange',stopG);if(vp&&vpOld!==null)vp.setAttribute('content',vpOld);m.remove();}
+    function close(){document.removeEventListener('gesturestart',stopG);document.removeEventListener('gesturechange',stopG);m.remove();}
     var stage=m.querySelector('.stage'),im=m.querySelector('img'),box=m.querySelector('.box'),zl=m.querySelector('.zl'),src=srcCv,R={},B={},F={},Z=1;
     function SW(){return stage.clientWidth;}function SH(){return stage.clientHeight;}
     function placeImg(){im.style.left=R.x+'px';im.style.top=R.y+'px';im.style.width=R.w+'px';im.style.height=R.h+'px';zl.textContent='ZOOM '+Math.round(Z*100)+'%';}
@@ -21187,8 +21185,9 @@ function jcpParseLicencia(raw){
       // si la foto no cubre el recuadro, achicar el recuadro
       if(B.w>R.w){B.w=R.w;B.h=B.w/CR_RATIO;}if(B.h>R.h){B.h=R.h;B.w=B.h*CR_RATIO;}
       clampImg();placeImg();paint();}
-    m.querySelector('.zi').onclick=function(){setZoom(Z*1.4);};
-    m.querySelector('.zo').onclick=function(){setZoom(Z/1.4);};
+    function tap(sel,fn){var b=m.querySelector(sel);if(!b)return;var t=0;b.addEventListener('touchend',function(e){e.preventDefault();t=Date.now();fn();},{passive:false});b.addEventListener('click',function(){if(Date.now()-t<700)return;fn();});}
+    tap('.zi',function(){setZoom(Z*1.4);});
+    tap('.zo',function(){setZoom(Z/1.4);});
     var drag=null,pts={},pinch=null;
     function local(e){var r=stage.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};}
     stage.addEventListener('pointerdown',function(e){e.preventDefault();pts[e.pointerId]=local(e);try{stage.setPointerCapture(e.pointerId);}catch(_){}
@@ -21209,9 +21208,9 @@ function jcpParseLicencia(raw){
       paint();});
     var up=function(e){delete pts[e.pointerId];if(Object.keys(pts).length<2)pinch=null;if(!Object.keys(pts).length)drag=null;};
     stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);
-    m.querySelector('.cn').onclick=function(){close();if(onCancel)onCancel();};
-    m.querySelector('.rt').onclick=function(){var c=document.createElement('canvas');c.width=src.height;c.height=src.width;var x=c.getContext('2d');x.translate(c.width,0);x.rotate(Math.PI/2);x.drawImage(src,0,0);src=c;layout();};
-    m.querySelector('.ok').onclick=function(){var k=src.width/R.w,sx=(B.x-R.x)*k,sy=(B.y-R.y)*k,sw=B.w*k,sh=B.h*k,ow=outW||1100,oh=Math.round(ow/CR_RATIO),o=document.createElement('canvas');o.width=ow;o.height=oh;var x=o.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,ow,oh);x.drawImage(src,sx,sy,sw,sh,0,0,ow,oh);close();onOk(o);};
+    tap('.cn',function(){close();if(onCancel)onCancel();});
+    tap('.rt',function(){var c=document.createElement('canvas');c.width=src.height;c.height=src.width;var x=c.getContext('2d');x.translate(c.width,0);x.rotate(Math.PI/2);x.drawImage(src,0,0);src=c;layout();});
+    tap('.ok',function(){var k=src.width/R.w,sx=(B.x-R.x)*k,sy=(B.y-R.y)*k,sw=B.w*k,sh=B.h*k,ow=outW||1100,oh=Math.round(ow/CR_RATIO),o=document.createElement('canvas');o.width=ow;o.height=oh;var x=o.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,ow,oh);x.drawImage(src,sx,sy,sw,sh,0,0,ow,oh);close();onOk(o);});
     requestAnimationFrame(layout);
   }
   window.ctPhotoClear=function(key){delete ctPh[key];ctPhotoPaint();};
@@ -21306,7 +21305,7 @@ function jcpParseLicencia(raw){
   function permVals(c){var v1=+c.val1||0,d=+c.diff||0,v2=c.dir==='receive'?v1-d:(c.dir==='pay'?v1+d:v1);return {v1:v1,v2:Math.max(0,v2),d:d,payer:c.dir==='receive'?'PERMUTANTE 2':(c.dir==='pay'?'PERMUTANTE 1':'')};}
   // Copia del contrato: al generarlo se toma una imagen de cada hoja (con las fotos) y se guarda como un solo documento.
   // Las fotos sueltas de cédulas y tarjeta NO se guardan.
-  var H2C=new URL('jcp-print.js?v=2026.11.08.132',location.href).href;
+  var H2C=new URL('jcp-print.js?v=2026.11.08.133',location.href).href;
   function ctToast(t,ok){try{var d=document.createElement('div');d.textContent=t;d.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:100005;max-width:92%;padding:12px 16px;border-radius:12px;font:900 13px Arial,sans-serif;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.5);background:'+(ok?'#1f7a45':'#9b1c1c')+';color:#fff';document.body.appendChild(d);setTimeout(function(){d.remove();},ok?3500:7000);}catch(e){}}
   var CT_STORING={};
   function ctStorePages(num,out){if(!out||!out.length)return false;if(CT_STORING[num])return true;CT_STORING[num]=true;setTimeout(function(){delete CT_STORING[num];},600000);var sz=out.reduce(function(a,x){return a+String(x).length;},0);jcpCtLog(num+': '+out.length+' HOJAS CAPTURADAS ('+Math.round(sz/1024)+' KB). GUARDANDO…');var tries=0;jcpPersistLater(function(){tries++;var ct=ctFindSaved(num);if(!ct){if(tries%5===1)jcpCtLog(num+': EL CONTRATO TODAVÍA NO ESTÁ GUARDADO, ESPERANDO…');return false;}delete CT_STORING[num];if(ct.pages&&ct.pages.length)return;ct.pages=out;ct.pagesAt=new Date().toISOString();setTimeout(function(){var c2=ctFindSaved(num);jcpCtLog(num+': '+((c2&&c2.pages&&c2.pages.length)?'✅ COPIA GUARDADA':'⚠️ NO QUEDÓ GUARDADA'));},50);},'LA COPIA DEL CONTRATO');return true;}
@@ -21893,7 +21892,7 @@ function jcpParseLicencia(raw){
 window.jcpCtLog=function(msg){try{var k='jcp_ctcap_log',a=JSON.parse(localStorage.getItem(k)||'[]');var t=new Date();a.unshift(('0'+t.getHours()).slice(-2)+':'+('0'+t.getMinutes()).slice(-2)+':'+('0'+t.getSeconds()).slice(-2)+' '+String(msg).slice(0,160));localStorage.setItem(k,JSON.stringify(a.slice(0,40)));}catch(e){}try{console.log('[contrato]',msg);}catch(e){}};
 window.jcpCtLogGet=function(n){try{return JSON.parse(localStorage.getItem('jcp_ctcap_log')||'[]').slice(0,n||8);}catch(e){return [];}};
 window.jcpPrintLib=function(){
-  if(!window.__jcpPrintLibP){window.__jcpPrintLibP=fetch(new URL('jcp-print.js?v=2026.11.08.132',location.href).href).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(function(t){if(t.indexOf('html2canvas')<0)throw new Error('ARCHIVO jcp-print.js INVÁLIDO');return t;}).catch(function(e){window.__jcpPrintLibP=null;try{jcpCtLog('NO CARGÓ jcp-print.js: '+(e&&e.message||e));}catch(_e){}throw e;});}
+  if(!window.__jcpPrintLibP){window.__jcpPrintLibP=fetch(new URL('jcp-print.js?v=2026.11.08.133',location.href).href).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(function(t){if(t.indexOf('html2canvas')<0)throw new Error('ARCHIVO jcp-print.js INVÁLIDO');return t;}).catch(function(e){window.__jcpPrintLibP=null;try{jcpCtLog('NO CARGÓ jcp-print.js: '+(e&&e.message||e));}catch(_e){}throw e;});}
   return window.__jcpPrintLibP;
 };
 window.jcpInjectPrintLib=function(win){
@@ -22129,7 +22128,7 @@ window.jcpPersistLater=function(fn,label,tries){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.08.132"></script>
+<script src="./app-update.js?v=2026.11.08.133"></script>
 <script>
 /* JCP: resaltar casillas obligatorias (rojo vacío / verde lleno) en Facturar venta y Permuta */
 (function(){
