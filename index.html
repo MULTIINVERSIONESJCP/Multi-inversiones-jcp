@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.08.126</title>
+<title>COLOMBIAUTOS JP - V2026.11.08.131</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5875,9 +5875,9 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.08.126"></script>
-<script src="./jcp-sync.js?v=2026.11.08.126"></script>
-<script src="./jcp-images.js?v=2026.11.08.126"></script>
+<script src="./jcp-accounting.js?v=2026.11.08.131"></script>
+<script src="./jcp-sync.js?v=2026.11.08.131"></script>
+<script src="./jcp-images.js?v=2026.11.08.131"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -9493,7 +9493,8 @@ function voidOperatingExpenseReceipt(state,r,reason){
 }
 
 
-async function addVeh(){
+async function addVeh(_retry){
+ if(window.jcpSaveBusy&&window.jcpSaveBusy()){const b=document.getElementById('purchaseSubmit');if(b){b.disabled=true;b.dataset.waitTxt=b.dataset.waitTxt||b.textContent;b.textContent='⏳ GUARDANDO EL CAMBIO ANTERIOR…';}jcpWaitSaveReady(null).then(ok=>{if(b){b.disabled=false;b.textContent=b.dataset.waitTxt||b.textContent;}if(ok)addVeh(true);else alert('TODAVÍA SE ESTÁ GUARDANDO EL CAMBIO ANTERIOR. REVISA LA CONEXIÓN Y VUELVE A INTENTAR.');});return;}
  if(!requireTreasuryReady())return;
  const marca=vmarca.value.trim().toUpperCase();
  const referencia=vref.value.trim().toUpperCase();
@@ -9517,16 +9518,19 @@ async function addVeh(){
  const file=vfoto.files[0];let photo='';
  try{if(file)photo=await readVehiclePhotoFile(file);}catch(e){alert('NO FUE POSIBLE PROCESAR LA FOTO.');return;}
  const before=cloneAppData(data),next=cloneAppData(data),now=new Date();
+ let id,receipt;
  try{
-  const id='veh_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
-  const receipt=addInternalReceipt(next,'purchase',{entityId:id,vehicleId:id,amount:compra,plate:placa,title:'COMPRA VEHÍCULO — '+marca+' '+referencia,date:now.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),createdAt:now.toISOString(),snapshot:{marca,ref:referencia,modelo,cilindraje,pl:placa,matricula,c:compra,photo:photo||'',paymentDistribution:paymentDistribution('purchase'),associatedExpenses:0,otherExpenses:0,obs:''}});
+  id='veh_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  receipt=addInternalReceipt(next,'purchase',{entityId:id,vehicleId:id,amount:compra,plate:placa,title:'COMPRA VEHÍCULO — '+marca+' '+referencia,date:now.toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'}),createdAt:now.toISOString(),snapshot:{marca,ref:referencia,modelo,cilindraje,pl:placa,matricula,c:compra,photo:photo||'',paymentDistribution:paymentDistribution('purchase'),associatedExpenses:0,otherExpenses:0,obs:''}});
   const moveId='mov_compra_'+Date.now();
   const dist=applyPaymentDistribution(next,{prefix:'purchase',direction:'out',total:compra,operationType:'COMPRA VEHÍCULO',operationId:moveId,receiptNumber:receipt.number,concept:'COMPRA '+placa,date:receipt.date,createdAt:receipt.createdAt});
   receipt.snapshot.paymentDistribution=cloneAppData(dist);
   next.veh.push({id,marca,m:marca,ref:referencia,modelo,cilindraje,pl:placa,matricula,...extra,cardPhotos:(window.jcpCphGet?jcpCphGet('veh'):null)||undefined,soat:extra.soatVence||undefined,tecnomecanica:extra.tecnoVence||undefined,vendedor,vendedorId:vendedorRec?vendedorId:'',c:compra,g:0,v:0,photo,purchaseDate:now.toISOString().slice(0,10),purchaseReceiptNumber:receipt.number});
   next.mov.unshift({id:moveId,t:'gasto',subtype:'compra_vehiculo',c:'COMPRA VEHÍCULO — '+placa+' — '+marca+' '+referencia,v:compra,vehicleId:id,receiptNumber:receipt.number,paymentDistribution:dist,date:receipt.date,createdAt:receipt.createdAt,source:'vehicle_purchase',investmentMovement:true});
-  data=next;save();clearVehicleForm();clearPaymentDistribution('purchase');populateVehicleSelect();document.getElementById('formVeh').style.display='none';openOperationsHub();alert('✅ '+receipt.number+' REGISTRADO.');if(confirm('¿GENERAR AHORA EL CONTRATO DE COMPRA?'))setTimeout(()=>{try{openPurchaseContract(id);}catch(_e){}},60);
- }catch(e){data=before;alert('NO FUE POSIBLE REGISTRAR LA COMPRA.\n\n'+e.message);}
+  data=next;save();
+ }catch(e){data=before;alert('NO FUE POSIBLE REGISTRAR LA COMPRA.\n\n'+e.message);return;}
+ try{clearVehicleForm();}catch(_e){console.warn(_e);}try{clearPaymentDistribution('purchase');}catch(_e){}try{populateVehicleSelect();}catch(_e){}try{document.getElementById('formVeh').style.display='none';openOperationsHub();}catch(_e){}
+ alert('✅ '+receipt.number+' REGISTRADO.');if(confirm('¿GENERAR AHORA EL CONTRATO DE COMPRA?'))setTimeout(()=>{try{openPurchaseContract(id);}catch(_e){}},60);
 }
 function clearVehicleForm(){
 document.getElementById('vmarca').value="";
@@ -10366,7 +10370,7 @@ function openVehicleDetail(id){
     <div class="vd2-card vd2-first">
       <img class="vd2-photo" src="${jcpSafeImageSrc(photo)}" alt="Foto del vehículo">
       ${(typeof jcpVehBadgesRow==='function')?jcpVehBadgesRow(veh):''}
-      ${(!veh.chasis||!veh.motor||!veh.color||!veh.clase)?`<button type="button" class="vd2-missing" onclick="openCompleteInfoSelector();setTimeout(()=>selectVehicleCompleteInfo('${esc(veh.id)}'),0)">⚠️ FALTA TARJETA DE PROPIEDAD · TOCA PARA COMPLETAR</button>`:''}
+      ${(()=>{let miss=[];try{miss=(typeof jcpSaleContractMissing==='function'?jcpSaleContractMissing(veh,{buyer:'x',doc:'x',phone:'x',address:'x'}).veh:[])||[];}catch(e){}if(!miss.length&&(!veh.chasis||!veh.motor||!veh.color||!veh.clase))miss=[['N.º CHASIS',veh.chasis],['N.º MOTOR',veh.motor],['COLOR',veh.color],['CLASE',veh.clase]].filter(x=>!String(x[1]||'').trim()).map(x=>x[0]);return miss.length?`<button type="button" class="vd2-missing" onclick="openCompleteInfoSelector();setTimeout(()=>selectVehicleCompleteInfo('${esc(veh.id)}'),0)">⚠️ FALTA: ${esc(miss.join(' · '))} · TOCA PARA COMPLETAR</button>`:'';})()}
       <div class="vd2-fields">
         ${[['Marca',commercial.marca||veh.marca||veh.m],['Línea',commercial.referencia||veh.ref],['Modelo',commercial.modelo||veh.modelo],['Placa',commercial.placa||veh.pl],['Cilindraje',commercial.cilindraje||veh.cilindraje],['Matrícula de',read('matricula','')]].map(([l,v])=>`<div class="vd2-field"><small>${l}</small><b${String(v||'').trim()?'':' class="vd2-missing-val"'}>${esc(String(v||'').trim()||'SIN REGISTRAR')}</b></div>`).join('')}
       </div>
@@ -13126,7 +13130,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.126\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.131\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -14558,6 +14562,7 @@ function openOperationsPurchase(){
     if(!form.dataset.originalParent) form.dataset.originalParent='vehiculos';
     host.appendChild(form);
     form.style.display='grid';
+    try{clearVehicleForm();}catch(_e){}try{clearPaymentDistribution('purchase');}catch(_e){}
     try{vehResetMode();}catch(_e){}
     host.style.display='block';
     host.scrollIntoView({behavior:'smooth',block:'start'});
@@ -17397,7 +17402,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.08.126',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.08.131',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -18925,7 +18930,7 @@ window.openRecordCopy=function(number){
 if(window.__jcpRecaudo2)return;window.__jcpRecaudo2=true;
 
 var accs=[],cur=null,mode='partial',comp='capital',bound=false,src='';
-function srcNeeded(){return !!cur&&cur.kind==='loan'&&comp==='capital';}
+function srcNeeded(){return false;} /* Un recaudo siempre es plata que entra a la caja: no se pregunta de dónde sale. */
 function profitSrc(){return srcNeeded()&&src==='utilidades';}
 var KIND={sale:'VENTA A CRÉDITO',trade:'PERMUTA',loan:'PRÉSTAMO'};
 var KSHORT={sale:'VENTA',trade:'PERMUTA',loan:'PRÉSTAMO'};
@@ -19174,7 +19179,7 @@ function refresh(){
 }
 function onSelect(){
   var i=el('rcSelect').value;
-  cur=(i===''?null:accs[+i]||null);mode='partial';comp='capital';src='';
+  cur=(i===''?null:accs[+i]||null);mode='partial';comp='capital';src='bolsillo';
   var v=el('rcValue');if(v){v.value='';v.readOnly=false}
   try{clearPaymentDistribution('cobro')}catch(e){}
   syncButtons();refresh();
@@ -21115,30 +21120,62 @@ function jcpParseLicencia(raw){
   function jcpCropOpen(srcCv,outW,onOk,onCancel){
     var old=document.getElementById('ctCropModal');if(old)old.remove();
     var m=document.createElement('div');m.id='ctCropModal';
-    m.innerHTML='<style>#ctCropModal{position:fixed;inset:0;z-index:99999;background:#050505;display:flex;flex-direction:column;font-family:Arial,sans-serif;color:#fff;touch-action:none}#ctCropModal .ch{padding:12px 14px 6px;font-weight:900;font-size:13px;color:#d4af37;text-align:center}#ctCropModal .cs{font-size:11px;color:#aaa;text-align:center;padding:0 14px 8px}#ctCropModal .stage{position:relative;flex:1;margin:0;overflow:hidden}#ctCropModal .stage img{position:absolute;user-select:none;-webkit-user-drag:none;pointer-events:none}#ctCropModal .shade{position:absolute;inset:0;pointer-events:none}#ctCropModal .box{position:absolute;border:2px solid #d4af37;box-shadow:0 0 0 9999px rgba(0,0,0,.6);border-radius:10px;cursor:move;touch-action:none}#ctCropModal .box:after{content:"";position:absolute;inset:0;border-radius:8px;background-image:linear-gradient(#ffffff33 1px,transparent 1px),linear-gradient(90deg,#ffffff33 1px,transparent 1px);background-size:33.33% 33.33%;pointer-events:none}#ctCropModal .hd{position:absolute;width:34px;height:34px;right:-17px;bottom:-17px;border-radius:50%;background:#d4af37;border:3px solid #111;touch-action:none;cursor:nwse-resize}#ctCropModal .hd.tl{left:-17px;top:-17px;right:auto;bottom:auto}#ctCropModal .bar{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom))}#ctCropModal .bar button{min-height:48px;border-radius:12px;font-weight:900;font-size:13px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#ctCropModal .bar .ok{background:#d4af37;color:#111;border:0}</style>'
-      +'<div class="ch">✂️ AJUSTA EL RECUADRO A LA CÉDULA / TARJETA</div><div class="cs">Arrastra el recuadro para moverlo y usa los círculos dorados para agrandarlo o achicarlo.</div>'
+    m.innerHTML='<style>#ctCropModal{position:fixed;inset:0;z-index:99999;background:#050505;display:flex;flex-direction:column;font-family:Arial,sans-serif;color:#fff;touch-action:none;-webkit-user-select:none;user-select:none}#ctCropModal .ch{padding:12px 14px 6px;font-weight:900;font-size:13px;color:#d4af37;text-align:center}#ctCropModal .cs{font-size:11px;color:#aaa;text-align:center;padding:0 14px 8px}#ctCropModal .stage{position:relative;flex:1;margin:0;overflow:hidden;touch-action:none}#ctCropModal .stage img{position:absolute;user-select:none;-webkit-user-drag:none;pointer-events:none;max-width:none}#ctCropModal .box{position:absolute;border:2px solid #d4af37;box-shadow:0 0 0 9999px rgba(0,0,0,.6);border-radius:10px;cursor:move;touch-action:none}#ctCropModal .box:after{content:"";position:absolute;inset:0;border-radius:8px;background-image:linear-gradient(#ffffff33 1px,transparent 1px),linear-gradient(90deg,#ffffff33 1px,transparent 1px);background-size:33.33% 33.33%;pointer-events:none}#ctCropModal .hd{position:absolute;width:34px;height:34px;right:-17px;bottom:-17px;border-radius:50%;background:#d4af37;border:3px solid #111;touch-action:none;cursor:nwse-resize}#ctCropModal .hd.tl{left:-17px;top:-17px;right:auto;bottom:auto}#ctCropModal .zm{display:grid;grid-template-columns:56px 1fr 56px;gap:8px;align-items:center;padding:8px 12px 0}#ctCropModal .zm button{min-height:44px;border-radius:12px;font-weight:900;font-size:22px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#ctCropModal .zm span{text-align:center;color:#aaa;font-size:11px;font-weight:800}#ctCropModal .bar{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom))}#ctCropModal .bar button{min-height:48px;border-radius:12px;font-weight:900;font-size:13px;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#ctCropModal .bar .ok{background:#d4af37;color:#111;border:0}</style>'
+      +'<div class="ch">✂️ AJUSTA EL RECUADRO A LA CÉDULA / TARJETA</div><div class="cs">Arrastra el recuadro para moverlo y usa los círculos dorados para cambiar el tamaño. Para acercar la foto usa + / − o pellizca con dos dedos dentro de la foto.</div>'
       +'<div class="stage"><img alt=""><div class="box"><div class="hd tl"></div><div class="hd"></div></div></div>'
+      +'<div class="zm"><button type="button" class="zo">−</button><span class="zl">ZOOM 100%</span><button type="button" class="zi">+</button></div>'
       +'<div class="bar"><button type="button" class="cn">CANCELAR</button><button type="button" class="rt">↻ GIRAR</button><button type="button" class="ok">✔ USAR FOTO</button></div>';
     document.body.appendChild(m);
-    var stage=m.querySelector('.stage'),im=m.querySelector('img'),box=m.querySelector('.box'),src=srcCv,R={},B={};
-    function layout(){var P=22,sw=stage.clientWidth,sh=stage.clientHeight,k=Math.min((sw-2*P)/src.width,(sh-2*P)/src.height);R={w:src.width*k,h:src.height*k};R.x=(sw-R.w)/2;R.y=(sh-R.h)/2;
-      im.src=src.toDataURL('image/jpeg',0.9);im.style.left=R.x+'px';im.style.top=R.y+'px';im.style.width=R.w+'px';im.style.height=R.h+'px';
+    // Bloquear el zoom de la pantalla mientras está abierto (en iPhone dejaba la vista trabada sin botones).
+    var vp=document.querySelector('meta[name="viewport"]'),vpOld=vp?vp.getAttribute('content'):null;
+    if(vp)vp.setAttribute('content','width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    var stopG=function(e){e.preventDefault();};
+    document.addEventListener('gesturestart',stopG,{passive:false});document.addEventListener('gesturechange',stopG,{passive:false});
+    var stopT=function(e){if(e.touches&&e.touches.length>1)e.preventDefault();};m.addEventListener('touchmove',stopT,{passive:false});
+    function close(){document.removeEventListener('gesturestart',stopG);document.removeEventListener('gesturechange',stopG);if(vp&&vpOld!==null)vp.setAttribute('content',vpOld);m.remove();}
+    var stage=m.querySelector('.stage'),im=m.querySelector('img'),box=m.querySelector('.box'),zl=m.querySelector('.zl'),src=srcCv,R={},B={},F={},Z=1;
+    function SW(){return stage.clientWidth;}function SH(){return stage.clientHeight;}
+    function placeImg(){im.style.left=R.x+'px';im.style.top=R.y+'px';im.style.width=R.w+'px';im.style.height=R.h+'px';zl.textContent='ZOOM '+Math.round(Z*100)+'%';}
+    function layout(){var P=22,sw=SW(),sh=SH(),k=Math.min((sw-2*P)/src.width,(sh-2*P)/src.height);F={w:src.width*k,h:src.height*k};F.x=(sw-F.w)/2;F.y=(sh-F.h)/2;Z=1;R={x:F.x,y:F.y,w:F.w,h:F.h};
+      im.src=src.toDataURL('image/jpeg',0.9);placeImg();
       var w=R.w*0.9,h=w/CR_RATIO;if(h>R.h*0.9){h=R.h*0.9;w=h*CR_RATIO;}B={w:w,h:h,x:R.x+(R.w-w)/2,y:R.y+(R.h-h)/2};paint();}
-    function clamp(){B.w=Math.max(70,Math.min(B.w,R.w));B.h=B.w/CR_RATIO;if(B.h>R.h){B.h=R.h;B.w=B.h*CR_RATIO;}B.x=Math.max(R.x,Math.min(B.x,R.x+R.w-B.w));B.y=Math.max(R.y,Math.min(B.y,R.y+R.h-B.h));}
-    function paint(){clamp();box.style.left=B.x+'px';box.style.top=B.y+'px';box.style.width=B.w+'px';box.style.height=B.h+'px';}
-    var drag=null;
-    function down(e,mode){e.preventDefault();e.stopPropagation();drag={mode:mode,px:e.clientX,py:e.clientY,b:{x:B.x,y:B.y,w:B.w,h:B.h}};try{stage.setPointerCapture(e.pointerId);}catch(_){}}
-    stage.addEventListener('pointerdown',function(e){var r=stage.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,near=function(px,py){return Math.hypot(x-px,y-py)<40;};
-      var mode=near(B.x+B.w,B.y+B.h)?'br':(near(B.x,B.y)?'tl':'mv');down(e,mode);});
-    m.addEventListener('pointermove',function(e){if(!drag)return;var dx=e.clientX-drag.px,dy=e.clientY-drag.py,o=drag.b;
+    function clampBox(){var L=Math.max(R.x,0),T=Math.max(R.y,0),Rt=Math.min(R.x+R.w,SW()),Bt=Math.min(R.y+R.h,SH());
+      B.w=Math.max(70,Math.min(B.w,Rt-L));B.h=B.w/CR_RATIO;if(B.h>Bt-T){B.h=Bt-T;B.w=B.h*CR_RATIO;}
+      B.x=Math.max(L,Math.min(B.x,Rt-B.w));B.y=Math.max(T,Math.min(B.y,Bt-B.h));}
+    function paint(){clampBox();box.style.left=B.x+'px';box.style.top=B.y+'px';box.style.width=B.w+'px';box.style.height=B.h+'px';}
+    function clampImg(){ // la foto siempre cubre el recuadro
+      if(R.x>B.x)R.x=B.x;if(R.x+R.w<B.x+B.w)R.x=B.x+B.w-R.w;if(R.y>B.y)R.y=B.y;if(R.y+R.h<B.y+B.h)R.y=B.y+B.h-R.h;}
+    function setZoom(nz,cx,cy){nz=Math.max(1,Math.min(5,nz));if(cx==null){cx=B.x+B.w/2;cy=B.y+B.h/2;}
+      var px=(cx-R.x)/R.w,py=(cy-R.y)/R.h;Z=nz;R.w=F.w*Z;R.h=F.h*Z;R.x=cx-px*R.w;R.y=cy-py*R.h;
+      if(Z===1){R.x=F.x;R.y=F.y;}
+      // si la foto no cubre el recuadro, achicar el recuadro
+      if(B.w>R.w){B.w=R.w;B.h=B.w/CR_RATIO;}if(B.h>R.h){B.h=R.h;B.w=B.h*CR_RATIO;}
+      clampImg();placeImg();paint();}
+    m.querySelector('.zi').onclick=function(){setZoom(Z*1.4);};
+    m.querySelector('.zo').onclick=function(){setZoom(Z/1.4);};
+    var drag=null,pts={},pinch=null;
+    function local(e){var r=stage.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};}
+    stage.addEventListener('pointerdown',function(e){e.preventDefault();pts[e.pointerId]=local(e);try{stage.setPointerCapture(e.pointerId);}catch(_){}
+      var ids=Object.keys(pts);
+      if(ids.length>=2){var a=pts[ids[0]],b=pts[ids[1]];pinch={d:Math.hypot(a.x-b.x,a.y-b.y)||1,z:Z};drag=null;return;}
+      var p=pts[e.pointerId],near=function(px,py){return Math.hypot(p.x-px,p.y-py)<40;};
+      var inBox=p.x>=B.x&&p.x<=B.x+B.w&&p.y>=B.y&&p.y<=B.y+B.h;
+      var mode=near(B.x+B.w,B.y+B.h)?'br':(near(B.x,B.y)?'tl':(inBox?'mv':'pan'));
+      drag={mode:mode,px:p.x,py:p.y,b:{x:B.x,y:B.y,w:B.w,h:B.h},r:{x:R.x,y:R.y}};});
+    stage.addEventListener('pointermove',function(e){if(!pts[e.pointerId])return;pts[e.pointerId]=local(e);
+      var ids=Object.keys(pts);
+      if(pinch&&ids.length>=2){var a=pts[ids[0]],b=pts[ids[1]],d=Math.hypot(a.x-b.x,a.y-b.y)||1;setZoom(pinch.z*d/pinch.d,(a.x+b.x)/2,(a.y+b.y)/2);return;}
+      if(!drag)return;var p=pts[e.pointerId],dx=p.x-drag.px,dy=p.y-drag.py,o=drag.b;
+      if(drag.mode==='pan'){R.x=drag.r.x+dx;R.y=drag.r.y+dy;clampImg();placeImg();return;}
       if(drag.mode==='mv'){B.x=o.x+dx;B.y=o.y+dy;}
-      else if(drag.mode==='br'){var d=Math.max(dx,dy*CR_RATIO);B.w=o.w+d;B.x=o.x;B.y=o.y;clamp();if(B.x+B.w>R.x+R.w){B.w=R.x+R.w-B.x;}B.h=B.w/CR_RATIO;if(B.y+B.h>R.y+R.h){B.h=R.y+R.h-B.y;B.w=B.h*CR_RATIO;}}
-      else{var d2=Math.max(-dx,-dy*CR_RATIO),nw=Math.max(70,o.w+d2);nw=Math.min(nw,o.x+o.w-R.x,(o.y+o.h-R.y)*CR_RATIO);B.w=nw;B.h=nw/CR_RATIO;B.x=o.x+o.w-nw;B.y=o.y+o.h-B.h;}
+      else if(drag.mode==='br'){var d1=Math.max(dx,dy*CR_RATIO);B.w=o.w+d1;B.h=B.w/CR_RATIO;B.x=o.x;B.y=o.y;}
+      else{var d2=Math.max(-dx,-dy*CR_RATIO),nw=Math.max(70,o.w+d2);B.w=nw;B.h=nw/CR_RATIO;B.x=o.x+o.w-nw;B.y=o.y+o.h-B.h;}
       paint();});
-    var up=function(){drag=null;};m.addEventListener('pointerup',up);m.addEventListener('pointercancel',up);
-    m.querySelector('.cn').onclick=function(){m.remove();if(onCancel)onCancel();};
+    var up=function(e){delete pts[e.pointerId];if(Object.keys(pts).length<2)pinch=null;if(!Object.keys(pts).length)drag=null;};
+    stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);
+    m.querySelector('.cn').onclick=function(){close();if(onCancel)onCancel();};
     m.querySelector('.rt').onclick=function(){var c=document.createElement('canvas');c.width=src.height;c.height=src.width;var x=c.getContext('2d');x.translate(c.width,0);x.rotate(Math.PI/2);x.drawImage(src,0,0);src=c;layout();};
-    m.querySelector('.ok').onclick=function(){var k=src.width/R.w,sx=(B.x-R.x)*k,sy=(B.y-R.y)*k,sw=B.w*k,sh=B.h*k,ow=outW||1100,oh=Math.round(ow/CR_RATIO),o=document.createElement('canvas');o.width=ow;o.height=oh;var x=o.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,ow,oh);x.drawImage(src,sx,sy,sw,sh,0,0,ow,oh);m.remove();onOk(o);};
+    m.querySelector('.ok').onclick=function(){var k=src.width/R.w,sx=(B.x-R.x)*k,sy=(B.y-R.y)*k,sw=B.w*k,sh=B.h*k,ow=outW||1100,oh=Math.round(ow/CR_RATIO),o=document.createElement('canvas');o.width=ow;o.height=oh;var x=o.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,ow,oh);x.drawImage(src,sx,sy,sw,sh,0,0,ow,oh);close();onOk(o);};
     requestAnimationFrame(layout);
   }
   window.ctPhotoClear=function(key){delete ctPh[key];ctPhotoPaint();};
@@ -21233,25 +21270,26 @@ function jcpParseLicencia(raw){
   function permVals(c){var v1=+c.val1||0,d=+c.diff||0,v2=c.dir==='receive'?v1-d:(c.dir==='pay'?v1+d:v1);return {v1:v1,v2:Math.max(0,v2),d:d,payer:c.dir==='receive'?'PERMUTANTE 2':(c.dir==='pay'?'PERMUTANTE 1':'')};}
   // Copia del contrato: al generarlo se toma una imagen de cada hoja (con las fotos) y se guarda como un solo documento.
   // Las fotos sueltas de cédulas y tarjeta NO se guardan.
-  var H2C=new URL('jcp-print.js?v=2026.11.08.126',location.href).href;
+  var H2C=new URL('jcp-print.js?v=2026.11.08.131',location.href).href;
   function ctToast(t,ok){try{var d=document.createElement('div');d.textContent=t;d.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:100005;max-width:92%;padding:12px 16px;border-radius:12px;font:900 13px Arial,sans-serif;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.5);background:'+(ok?'#1f7a45':'#9b1c1c')+';color:#fff';document.body.appendChild(d);setTimeout(function(){d.remove();},ok?3500:7000);}catch(e){}}
   function ctStorePages(num,out){if(!out||!out.length)return false;jcpPersistLater(function(){var ct=ctFindSaved(num);if(!ct)return false;if(ct.pages&&ct.pages.length)return;ct.pages=out;ct.pagesAt=new Date().toISOString();},'LA COPIA DEL CONTRATO');return true;}
   // Captura en la misma ventana del contrato (la que ya carga html2canvas); si no se puede, intenta en segundo plano.
   function ctCaptureFromWin(w,num,html){
-    var t0=Date.now(),fell=false,fallback=function(why){if(fell)return;fell=true;console.warn('Contrato copia (ventana):',why);ctCapturePages(html,num);};
+    var t0=Date.now()+1200,fell=false,fallback=function(why){if(fell)return;fell=true;console.warn('Contrato copia (ventana):',why);ctCapturePages(html,num);};
     (function wait(){
       var d=null,cw=null;try{if(!w||w.closed){fallback('ventana cerrada');return;}d=w.document;cw=w;}catch(e){fallback(e);return;}
       var ready=false;try{ready=typeof cw.html2canvas==='function'&&[].slice.call(d.images||[]).every(function(i){return i.complete;})&&d.querySelectorAll('.pg').length>0;}catch(e){}
-      if(!ready){if(Date.now()-t0>15000){fallback('tiempo');return;}setTimeout(wait,400);return;}
+      if(!ready||Date.now()<t0){if(Date.now()-t0>15000){fallback('tiempo');return;}setTimeout(wait,400);return;}
       var hide=[].slice.call(d.querySelectorAll('#jcpSupportTools,#jcpBackBar,.act,.mode-switch')),olds=hide.map(function(x){return x.style.display;});
       var msg=d.getElementById('jcpSupportMsg');
+      try{if(msg)msg.textContent='⏳ GUARDANDO COPIA DEL CONTRATO… (UNOS SEGUNDOS)';}catch(e){}
       var pgs=[].slice.call(d.querySelectorAll('.pg')),out=[];
       hide.forEach(function(x){x.style.display='none';});
       (function next(i){
         if(i>=pgs.length){hide.forEach(function(x,k){x.style.display=olds[k];});
           if(ctStorePages(num,out)){ctToast('✅ COPIA DEL CONTRATO '+num+' GUARDADA CON LAS FOTOS.',true);try{if(msg)msg.textContent='✅ COPIA DEL CONTRATO GUARDADA EN LA APP.';}catch(e){}}else fallback('no guardó');
           return;}
-        cw.html2canvas(pgs[i],{scale:1.6,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.8));next(i+1);}).catch(function(e){hide.forEach(function(x,k){x.style.display=olds[k];});fallback(e);});
+        cw.html2canvas(pgs[i],{scale:1.2,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.78));setTimeout(function(){next(i+1);},60);}).catch(function(e){hide.forEach(function(x,k){x.style.display=olds[k];});fallback(e);});
       })(0);
     })();
   }
@@ -21271,7 +21309,7 @@ function jcpParseLicencia(raw){
           var pgs=[].slice.call(cd.querySelectorAll('.pg')),out=[];
           (function next(i){
             if(i>=pgs.length){if(out.length===pgs.length&&ctStorePages(num,out))ctToast('✅ COPIA DEL CONTRATO '+num+' GUARDADA CON LAS FOTOS.',true);else ctToast('⚠️ NO SE PUDO GUARDAR LA COPIA DEL CONTRATO '+num+'. ÁBRELO DE NUEVO DESDE VER SOPORTE CON INTERNET.',false);finish();return;}
-            cw.html2canvas(pgs[i],{scale:1.6,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.8));next(i+1);}).catch(function(e){ctToast('⚠️ NO SE PUDO GUARDAR LA COPIA DEL CONTRATO '+num+'.',false);finish();});
+            cw.html2canvas(pgs[i],{scale:1.2,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.78));setTimeout(function(){next(i+1);},60);}).catch(function(e){ctToast('⚠️ NO SE PUDO GUARDAR LA COPIA DEL CONTRATO '+num+'.',false);finish();});
           })(0);
         })();
       };
@@ -21613,6 +21651,7 @@ function jcpParseLicencia(raw){
     if(!confirm('¿FACTURAR LA VENTA Y GENERAR EL CONTRATO?'))return;
     var w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES Y VUELVE A INTENTAR.');return;}
     try{w.document.write('<p style="font-family:Arial;padding:20px">Generando contrato…</p>');}catch(_e){}
+    if(!(await jcpWaitSaveReady(w))){try{w.close();}catch(_e){}alert('TODAVÍA SE ESTÁ GUARDANDO EL CAMBIO ANTERIOR. REVISA LA CONEXIÓN Y VUELVE A TOCAR FACTURAR.');return;}
     var res=null;try{res=saveVehicleSale({silent:true});}catch(e){res=null;}
     if(!res||!res.id){try{w.close();}catch(_e){}return;}
     c.vehId=res.id;c.draft=false;cur=c;window.__ctPreW=w;ctPrint();
@@ -21648,6 +21687,7 @@ function jcpParseLicencia(raw){
     if(!confirm('¿GUARDAR LA PERMUTA Y GENERAR EL CONTRATO?'))return;
     var w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES Y VUELVE A INTENTAR.');return;}
     try{w.document.write('<p style="font-family:Arial;padding:20px">Generando contrato…</p>');}catch(_e){}
+    if(!(await jcpWaitSaveReady(w))){try{w.close();}catch(_e){}alert('TODAVÍA SE ESTÁ GUARDANDO EL CAMBIO ANTERIOR. REVISA LA CONEXIÓN Y VUELVE A INTENTAR.');return;}
     var res=null;try{res=await savePermuta({silent:true});}catch(e){res=null;}
     if(!res||!res.id){try{w.close();}catch(_e){}return;}
     c.permId=res.id;c.draft=false;cur=c;window.__ctPreW=w;ctPrint();
@@ -21795,7 +21835,7 @@ function jcpParseLicencia(raw){
 <script id="jcp-print-lib">
 /* Librería local de imagen/PDF (html2canvas + PDF propio). Se inyecta como código en cada ventana de soporte/contrato. */
 window.jcpPrintLib=function(){
-  if(!window.__jcpPrintLibP){window.__jcpPrintLibP=fetch(new URL('jcp-print.js?v=2026.11.08.126',location.href).href).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).catch(function(e){window.__jcpPrintLibP=null;throw e;});}
+  if(!window.__jcpPrintLibP){window.__jcpPrintLibP=fetch(new URL('jcp-print.js?v=2026.11.08.131',location.href).href).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).catch(function(e){window.__jcpPrintLibP=null;throw e;});}
   return window.__jcpPrintLibP;
 };
 window.jcpInjectPrintLib=function(win){
@@ -21803,13 +21843,32 @@ window.jcpInjectPrintLib=function(win){
 };
 setTimeout(function(){try{window.jcpPrintLib().catch(function(){});}catch(e){}},4000);
 </script>
+<script id="jcp-wait-save">
+/* Espera a que termine de subir el guardado anterior antes de registrar otro (evita "NO FUE POSIBLE…" por cambio pendiente). */
+window.jcpSaveBusy=function(){try{return (typeof cloudStore!=='undefined'&&cloudStore.pending())||window.jcpCloudBootstrapReady!==true;}catch(e){return false;}};
+window.jcpWaitSaveReady=function(win,maxMs){
+  maxMs=maxMs||60000;var t0=Date.now();
+  return new Promise(function(res){
+    (function tick(){
+      if(!window.jcpSaveBusy()){res(true);return;}
+      if(Date.now()-t0>maxMs){res(false);return;}
+      try{if(win&&!win.closed)win.document.body.innerHTML='<p style="font-family:Arial;padding:20px">⏳ Terminando de guardar el cambio anterior… un momento.</p>';}catch(e){}
+      setTimeout(tick,500);
+    })();
+  });
+};
+</script>
 <script id="jcp-persist-later">
 /* Guarda aunque haya un guardado anterior todavía subiendo a Supabase: reintenta hasta que se pueda. */
 window.jcpPersistLater=function(fn,label,tries){
-  tries=tries||0;var before=cloneAppData(data),r;
+  tries=tries||0;
+  // Si todavía hay una subida pendiente, esperar sin copiar todos los datos (copiar en cada intento ponía lenta la app).
+  var busy=false;try{busy=(typeof cloudStore!=='undefined'&&cloudStore.pending())||window.jcpCloudBootstrapReady!==true;}catch(e){}
+  if(busy&&tries<120){setTimeout(function(){window.jcpPersistLater(fn,label,tries+1);},Math.min(5000,1500+tries*250));return false;}
+  var before=cloneAppData(data),r;
   try{r=fn();if(r===false)throw new Error('AUN NO');save();return true;}
   catch(e){data=before;
-    if(tries<90){setTimeout(function(){window.jcpPersistLater(fn,label,tries+1);},2000);}
+    if(tries<120){setTimeout(function(){window.jcpPersistLater(fn,label,tries+1);},Math.min(5000,1500+tries*250));}
     else{try{alert('⚠️ NO SE PUDO GUARDAR '+(label||'EL CAMBIO')+'. REVISA LA CONEXIÓN Y VUELVE A INTENTAR.');}catch(_e){}}
     return false;}
 };
@@ -22012,7 +22071,7 @@ window.jcpPersistLater=function(fn,label,tries){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.08.126"></script>
+<script src="./app-update.js?v=2026.11.08.131"></script>
 <script>
 /* JCP: resaltar casillas obligatorias (rojo vacío / verde lleno) en Facturar venta y Permuta */
 (function(){
