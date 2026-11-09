@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.08.131</title>
+<title>COLOMBIAUTOS JP - V2026.11.08.132</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5875,9 +5875,9 @@ body.veh-dock-open #completeInfoFormBox{padding-bottom:40vh}
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.08.131"></script>
-<script src="./jcp-sync.js?v=2026.11.08.131"></script>
-<script src="./jcp-images.js?v=2026.11.08.131"></script>
+<script src="./jcp-accounting.js?v=2026.11.08.132"></script>
+<script src="./jcp-sync.js?v=2026.11.08.132"></script>
+<script src="./jcp-images.js?v=2026.11.08.132"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -13130,7 +13130,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.131\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.132\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -17047,7 +17047,42 @@ function voidAccountingDocument(){
     const title=${JSON.stringify(String(shareTitle||safeFile))};
     const msg=document.getElementById('jcpSupportMsg');
     function setMsg(t){if(msg)msg.textContent=t||'';}
+    const LIB=${JSON.stringify(new URL('jcp-print.js?v=2026.11.08.132',location.href).href)};
+    const SNAP=${JSON.stringify(String(window.__jcpSnapFor||''))};
+    let libP=null;
+    function ensureLib(){
+      if(typeof html2canvas==='function')return Promise.resolve();
+      if(!libP)libP=new Promise(function(res,rej){
+        let done=false,ferr=null;const t0=Date.now();
+        (function poll(){if(done)return;if(typeof html2canvas==='function'){done=true;res();return;}if(Date.now()-t0>25000){done=true;rej(ferr||new Error('tiempo de espera'));return;}setTimeout(poll,200);})();
+        try{fetch(LIB).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(function(t){if(typeof html2canvas==='function')return;const sc=document.createElement('script');sc.text=t;document.head.appendChild(sc);}).catch(function(e){ferr=e;});}catch(e){ferr=e;}
+      }).catch(function(e){libP=null;throw e;});
+      return libP;
+    }
+    function olog(m){try{if(window.opener&&window.opener.jcpCtLog)window.opener.jcpCtLog(m);}catch(e){}}
+    function idbPut(key,val){return new Promise(function(res,rej){try{const rq=indexedDB.open('jcp_ct_snaps',1);rq.onupgradeneeded=function(){rq.result.createObjectStore('snaps');};rq.onerror=function(){rej(rq.error);};rq.onsuccess=function(){const db=rq.result,tx=db.transaction('snaps','readwrite');tx.objectStore('snaps').put(val,key);tx.oncomplete=function(){db.close();res(true);};tx.onerror=function(){db.close();rej(tx.error);};};}catch(e){rej(e);}});}
+    ensureLib().catch(function(e){setMsg('⚠️ NO CARGÓ EL GENERADOR DE IMAGEN/PDF ('+(e&&e.message||e)+'). REVISA QUE jcp-print.js ESTÉ SUBIDO.');olog('VENTANA: NO CARGÓ jcp-print.js ('+(e&&e.message||e)+')');});
+    if(SNAP){
+      (async function(){
+        try{
+          setMsg('⏳ GUARDANDO COPIA DEL CONTRATO… NO CIERRES ESTA VENTANA.');
+          await ensureLib();
+          const imgs=Array.from(document.images);await Promise.all(imgs.map(function(im){return im.complete?null:new Promise(function(r){im.onload=im.onerror=r;});}));
+          await new Promise(function(r){setTimeout(r,500);});
+          const tools=document.getElementById('jcpSupportTools'),bb=document.getElementById('jcpBackBar'),o1=tools.style.display,o2=bb?bb.style.display:'';tools.style.display='none';if(bb)bb.style.display='none';
+          const out=[];
+          try{for(const pg of Array.from(document.querySelectorAll('.pg'))){const cv=await html2canvas(pg,{scale:1.2,backgroundColor:'#ffffff',useCORS:true,logging:false});out.push(cv.toDataURL('image/jpeg',0.78));}}
+          finally{tools.style.display=o1;if(bb)bb.style.display=o2;}
+          if(!out.length)throw new Error('sin hojas');
+          let direct=false;try{if(window.opener&&!window.opener.closed&&typeof window.opener.jcpCtReceive==='function')direct=window.opener.jcpCtReceive(SNAP,out)===true;}catch(e){}
+          let saved=false;try{saved=await idbPut(SNAP,{num:SNAP,pages:out,at:Date.now()});}catch(e){olog('VENTANA: IndexedDB '+(e&&e.message||e));}
+          olog('VENTANA: '+SNAP+' '+out.length+' HOJAS · directo='+direct+' · idb='+saved);
+          setMsg(direct||saved?'✅ COPIA DEL CONTRATO LISTA. YA PUEDES VOLVER A LA APP.':'⚠️ NO SE PUDO GUARDAR LA COPIA.');
+        }catch(e){setMsg('⚠️ NO SE PUDO GUARDAR LA COPIA: '+(e&&e.message||e));olog('VENTANA: ERROR '+(e&&e.message||e));}
+      })();
+    }
     async function makeBlobs(){
+      try{await ensureLib();}catch(e){}
       if(typeof html2canvas!=='function')throw new Error('No se pudo cargar el generador de imagen.');
       const tools=document.getElementById('jcpSupportTools'),old=tools.style.display;tools.style.display='none';
       try{
@@ -17077,6 +17112,7 @@ function voidAccountingDocument(){
       }catch(e){if(e&&e.name==='AbortError'){setMsg('');return;}setMsg('');alert(e.message||'NO FUE POSIBLE COMPARTIR EL SOPORTE.');}
     };
     async function makePdf(){
+      try{await ensureLib();}catch(e){}
       if(typeof window.jcpMakePdf==='function'&&typeof html2canvas==='function'){
         const tools=document.getElementById('jcpSupportTools'),old=tools.style.display;tools.style.display='none';
         try{const pages=Array.from(document.querySelectorAll('.sale-page,.tp,.pg'));const targets=pages.length?pages:[document.body],cvs=[];
@@ -17402,7 +17438,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.08.131',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.08.132',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -21270,16 +21306,18 @@ function jcpParseLicencia(raw){
   function permVals(c){var v1=+c.val1||0,d=+c.diff||0,v2=c.dir==='receive'?v1-d:(c.dir==='pay'?v1+d:v1);return {v1:v1,v2:Math.max(0,v2),d:d,payer:c.dir==='receive'?'PERMUTANTE 2':(c.dir==='pay'?'PERMUTANTE 1':'')};}
   // Copia del contrato: al generarlo se toma una imagen de cada hoja (con las fotos) y se guarda como un solo documento.
   // Las fotos sueltas de cédulas y tarjeta NO se guardan.
-  var H2C=new URL('jcp-print.js?v=2026.11.08.131',location.href).href;
+  var H2C=new URL('jcp-print.js?v=2026.11.08.132',location.href).href;
   function ctToast(t,ok){try{var d=document.createElement('div');d.textContent=t;d.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:100005;max-width:92%;padding:12px 16px;border-radius:12px;font:900 13px Arial,sans-serif;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.5);background:'+(ok?'#1f7a45':'#9b1c1c')+';color:#fff';document.body.appendChild(d);setTimeout(function(){d.remove();},ok?3500:7000);}catch(e){}}
-  function ctStorePages(num,out){if(!out||!out.length)return false;jcpPersistLater(function(){var ct=ctFindSaved(num);if(!ct)return false;if(ct.pages&&ct.pages.length)return;ct.pages=out;ct.pagesAt=new Date().toISOString();},'LA COPIA DEL CONTRATO');return true;}
+  var CT_STORING={};
+  function ctStorePages(num,out){if(!out||!out.length)return false;if(CT_STORING[num])return true;CT_STORING[num]=true;setTimeout(function(){delete CT_STORING[num];},600000);var sz=out.reduce(function(a,x){return a+String(x).length;},0);jcpCtLog(num+': '+out.length+' HOJAS CAPTURADAS ('+Math.round(sz/1024)+' KB). GUARDANDO…');var tries=0;jcpPersistLater(function(){tries++;var ct=ctFindSaved(num);if(!ct){if(tries%5===1)jcpCtLog(num+': EL CONTRATO TODAVÍA NO ESTÁ GUARDADO, ESPERANDO…');return false;}delete CT_STORING[num];if(ct.pages&&ct.pages.length)return;ct.pages=out;ct.pagesAt=new Date().toISOString();setTimeout(function(){var c2=ctFindSaved(num);jcpCtLog(num+': '+((c2&&c2.pages&&c2.pages.length)?'✅ COPIA GUARDADA':'⚠️ NO QUEDÓ GUARDADA'));},50);},'LA COPIA DEL CONTRATO');return true;}
   // Captura en la misma ventana del contrato (la que ya carga html2canvas); si no se puede, intenta en segundo plano.
   function ctCaptureFromWin(w,num,html){
-    var t0=Date.now()+1200,fell=false,fallback=function(why){if(fell)return;fell=true;console.warn('Contrato copia (ventana):',why);ctCapturePages(html,num);};
+    jcpCtLog(num+': INICIA COPIA EN LA VENTANA DEL CONTRATO');
+    var t0=Date.now()+1200,fell=false,fallback=function(why){if(fell)return;fell=true;jcpCtLog(num+': VENTANA FALLÓ ('+(why&&why.message||why)+'). INTENTO EN SEGUNDO PLANO');ctCapturePages(html,num);};
     (function wait(){
       var d=null,cw=null;try{if(!w||w.closed){fallback('ventana cerrada');return;}d=w.document;cw=w;}catch(e){fallback(e);return;}
       var ready=false;try{ready=typeof cw.html2canvas==='function'&&[].slice.call(d.images||[]).every(function(i){return i.complete;})&&d.querySelectorAll('.pg').length>0;}catch(e){}
-      if(!ready||Date.now()<t0){if(Date.now()-t0>15000){fallback('tiempo');return;}setTimeout(wait,400);return;}
+      if(!ready||Date.now()<t0){if(Date.now()-t0>15000){var why='TIEMPO';try{why='TIEMPO · html2canvas='+(typeof cw.html2canvas)+' · fotos listas='+[].slice.call(d.images||[]).filter(function(i){return i.complete;}).length+'/'+(d.images||[]).length+' · hojas='+d.querySelectorAll('.pg').length;}catch(e){}fallback(why);return;}setTimeout(wait,400);return;}
       var hide=[].slice.call(d.querySelectorAll('#jcpSupportTools,#jcpBackBar,.act,.mode-switch')),olds=hide.map(function(x){return x.style.display;});
       var msg=d.getElementById('jcpSupportMsg');
       try{if(msg)msg.textContent='⏳ GUARDANDO COPIA DEL CONTRATO… (UNOS SEGUNDOS)';}catch(e){}
@@ -21289,7 +21327,7 @@ function jcpParseLicencia(raw){
         if(i>=pgs.length){hide.forEach(function(x,k){x.style.display=olds[k];});
           if(ctStorePages(num,out)){ctToast('✅ COPIA DEL CONTRATO '+num+' GUARDADA CON LAS FOTOS.',true);try{if(msg)msg.textContent='✅ COPIA DEL CONTRATO GUARDADA EN LA APP.';}catch(e){}}else fallback('no guardó');
           return;}
-        cw.html2canvas(pgs[i],{scale:1.2,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.78));setTimeout(function(){next(i+1);},60);}).catch(function(e){hide.forEach(function(x,k){x.style.display=olds[k];});fallback(e);});
+        cw.html2canvas(pgs[i],{scale:1.2,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.78));setTimeout(function(){next(i+1);},60);}).catch(function(e){hide.forEach(function(x,k){x.style.display=olds[k];});fallback('ERROR AL DIBUJAR: '+(e&&e.message||e));});
       })(0);
     })();
   }
@@ -21299,23 +21337,40 @@ function jcpParseLicencia(raw){
       var fr=document.createElement('iframe');fr.setAttribute('aria-hidden','true');fr.style.cssText='position:fixed;left:-12000px;top:0;width:900px;height:1300px;border:0;opacity:0;pointer-events:none';
       var doc=html.replace('</head>','<style>.act{display:none!important}body{background:#fff!important}</style></head>');
       var done=false,finish=function(){if(done)return;done=true;setTimeout(function(){try{fr.remove();}catch(e){}},50);};
+      jcpCtLog(num+': INICIA COPIA EN SEGUNDO PLANO');
       fr.onload=function(){
-        try{window.jcpInjectPrintLib(fr.contentWindow).catch(function(){});}catch(e){}
+        try{window.jcpInjectPrintLib(fr.contentWindow).catch(function(){});}catch(e){jcpCtLog('INYECCIÓN: '+e.message);}
         var t0=Date.now();
         (function wait(){
           var cw=fr.contentWindow,cd=fr.contentDocument;if(!cw||!cd){finish();return;}
           var ready=typeof cw.html2canvas==='function'&&[].slice.call(cd.images||[]).every(function(i){return i.complete;});
-          if(!ready){if(Date.now()-t0>30000){ctToast('⚠️ NO SE PUDO GUARDAR LA COPIA DEL CONTRATO '+num+'. ÁBRELO DE NUEVO DESDE VER SOPORTE CON INTERNET.',false);finish();return;}setTimeout(wait,400);return;}
+          if(!ready){if(Date.now()-t0>30000){try{jcpCtLog(num+': SEGUNDO PLANO SIN RESPUESTA · html2canvas='+(typeof cw.html2canvas)+' · fotos listas='+[].slice.call(cd.images||[]).filter(function(i){return i.complete;}).length+'/'+(cd.images||[]).length);}catch(_e){}ctToast('⚠️ NO SE PUDO GUARDAR LA COPIA DEL CONTRATO '+num+'. ÁBRELO DE NUEVO DESDE VER SOPORTE CON INTERNET.',false);finish();return;}setTimeout(wait,400);return;}
           var pgs=[].slice.call(cd.querySelectorAll('.pg')),out=[];
           (function next(i){
             if(i>=pgs.length){if(out.length===pgs.length&&ctStorePages(num,out))ctToast('✅ COPIA DEL CONTRATO '+num+' GUARDADA CON LAS FOTOS.',true);else ctToast('⚠️ NO SE PUDO GUARDAR LA COPIA DEL CONTRATO '+num+'. ÁBRELO DE NUEVO DESDE VER SOPORTE CON INTERNET.',false);finish();return;}
-            cw.html2canvas(pgs[i],{scale:1.2,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.78));setTimeout(function(){next(i+1);},60);}).catch(function(e){ctToast('⚠️ NO SE PUDO GUARDAR LA COPIA DEL CONTRATO '+num+'.',false);finish();});
+            cw.html2canvas(pgs[i],{scale:1.2,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.78));setTimeout(function(){next(i+1);},60);}).catch(function(e){jcpCtLog(num+': ERROR AL DIBUJAR HOJA '+(i+1)+': '+(e&&e.message||e));ctToast('⚠️ NO SE PUDO GUARDAR LA COPIA DEL CONTRATO '+num+'.',false);finish();});
           })(0);
         })();
       };
       fr.srcdoc=doc;document.body.appendChild(fr);
     }catch(e){console.warn('Contrato: copia',e);}
   }
+  // Recibe la copia tomada en la ventana del contrato (directo o guardada en IndexedDB si la app estaba en pausa).
+  window.jcpCtReceive=function(num,pages){try{jcpCtLog(num+': COPIA RECIBIDA DE LA VENTANA');return ctStorePages(num,pages)===true;}catch(e){jcpCtLog('RECIBIR: '+e.message);return false;}};
+  function ctIdb(fn){return new Promise(function(res){try{var rq=indexedDB.open('jcp_ct_snaps',1);rq.onupgradeneeded=function(){rq.result.createObjectStore('snaps');};rq.onerror=function(){res(null);};rq.onsuccess=function(){var db=rq.result;fn(db,function(v){db.close();res(v);});};}catch(e){res(null);}});}
+  function ctImportSnaps(){
+    if(!window.indexedDB)return;
+    ctIdb(function(db,done){var out=[];try{var tx=db.transaction('snaps','readonly'),st=tx.objectStore('snaps'),cr=st.openCursor();cr.onsuccess=function(){var c=cr.result;if(c){out.push({key:c.key,val:c.value});c.continue();}else done(out);};cr.onerror=function(){done(out);};}catch(e){done(out);}}).then(function(list){
+      (list||[]).forEach(function(it){var num=it.key,ct=ctFindSaved(num);
+        if(ct&&ct.pages&&ct.pages.length){ctIdb(function(db,done){try{var tx=db.transaction('snaps','readwrite');tx.objectStore('snaps').delete(num);tx.oncomplete=function(){done(true);};}catch(e){done(false);}});jcpCtLog(num+': ✅ COPIA YA GUARDADA EN LA APP');return;}
+        if(it.val&&Array.isArray(it.val.pages)&&!it._q){jcpCtLog(num+': IMPORTANDO COPIA PENDIENTE');ctStorePages(num,it.val.pages);}
+      });
+    });
+  }
+  window.jcpCtImportSnaps=ctImportSnaps;
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(ctImportSnaps,400);});
+  window.addEventListener('focus',function(){setTimeout(ctImportSnaps,400);});
+  setInterval(ctImportSnaps,15000);setTimeout(ctImportSnaps,6000);
   function ctPagesHtml(saved,pages){
     return '<!doctype html><html><head><meta charset="utf-8"><title>Contrato '+esc(saved.numero||'')+'</title><style>@page{size:letter;margin:0}*{box-sizing:border-box}body{margin:0;background:#eee}.pg{width:816px;max-width:100%;margin:12px auto;background:#fff;box-shadow:0 0 0 1px #bbb;break-after:page;page-break-after:always}.pg:last-of-type{break-after:auto;page-break-after:auto}.pg img{display:block;width:100%;height:auto}@media print{body{background:#fff}.pg{margin:0;box-shadow:none;width:100%}}</style></head><body>'
       +pages.map(function(src){return '<div class="pg">'+(src?'<img src="'+src+'">':'<p style="padding:40px;font-family:Arial">NO SE PUDO CARGAR ESTA HOJA. REVISA LA CONEXIÓN.</p>')+'</div>';}).join('')+'</body></html>';
@@ -21335,6 +21390,7 @@ function jcpParseLicencia(raw){
     var m=document.createElement('div');m.id='ctAddPhModal';
     m.innerHTML='<div class="pcm-card"><div class="pcm-t">📷 CONTRATO '+esc(saved.numero)+' SIN COPIA GUARDADA</div><div class="pcm-n">Sube las fotos para que quede guardado con ellas. Cuando aparezca “COPIA GUARDADA”, ya queda solo para ver.</div>'
       +iphotos('ap',phList(),null)
+      +(function(){var L=jcpCtLogGet(8);return L.length?'<div style="margin-top:10px;padding:8px;border:1px dashed #444;border-radius:10px;font:600 10px/1.45 monospace;color:#9a9a9a;white-space:pre-wrap;word-break:break-word">ÚLTIMOS INTENTOS DE GUARDAR COPIA:\n'+L.map(esc).join('\n')+'</div>':'';})()
       +'<div class="pcm-bar"><button type="button" class="pcm-cn">VER SIN FOTOS</button><button type="button" class="pcm-ok">✅ GUARDAR CON FOTOS</button></div><button type="button" class="pcm-x">CERRAR</button></div>';
     document.body.appendChild(m);ctPhotoPaint();
     var go=function(capture){var w=window.open('','_blank');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}m.remove();window.__ctPreW=w;window.__ctReprint=!capture;window.__ctViewOnly=true;try{ctPrint();}finally{window.__ctReprint=false;window.__ctViewOnly=false;}};
@@ -21826,7 +21882,7 @@ function jcpParseLicencia(raw){
       w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}
     }
     var _cap=false;if(!c.draft&&c.numero&&!window.__ctReprint){var _ct=ctFindSaved(c.numero);_cap=!(_ct&&_ct.pages&&_ct.pages.length);}
-    if(typeof window.openSupportDocument==='function'){window.openSupportDocument(html,'CONTRATO_'+(c.numero||V.placa||''),'Contrato '+(c.numero||''),w);if(_cap)ctCaptureFromWin(w,c.numero,html);return;}
+    if(typeof window.openSupportDocument==='function'){window.__jcpSnapFor=_cap?c.numero:'';if(_cap)jcpCtLog(c.numero+': VENTANA DEL CONTRATO ABIERTA, TOMANDO COPIA ALLÁ');try{window.openSupportDocument(html,'CONTRATO_'+(c.numero||V.placa||''),'Contrato '+(c.numero||''),w);}finally{window.__jcpSnapFor='';}return;}
     if(_cap)ctCapturePages(html,c.numero);
     w.document.open();w.document.write(html);w.document.close();
   };
@@ -21834,12 +21890,14 @@ function jcpParseLicencia(raw){
 </script>
 <script id="jcp-print-lib">
 /* Librería local de imagen/PDF (html2canvas + PDF propio). Se inyecta como código en cada ventana de soporte/contrato. */
+window.jcpCtLog=function(msg){try{var k='jcp_ctcap_log',a=JSON.parse(localStorage.getItem(k)||'[]');var t=new Date();a.unshift(('0'+t.getHours()).slice(-2)+':'+('0'+t.getMinutes()).slice(-2)+':'+('0'+t.getSeconds()).slice(-2)+' '+String(msg).slice(0,160));localStorage.setItem(k,JSON.stringify(a.slice(0,40)));}catch(e){}try{console.log('[contrato]',msg);}catch(e){}};
+window.jcpCtLogGet=function(n){try{return JSON.parse(localStorage.getItem('jcp_ctcap_log')||'[]').slice(0,n||8);}catch(e){return [];}};
 window.jcpPrintLib=function(){
-  if(!window.__jcpPrintLibP){window.__jcpPrintLibP=fetch(new URL('jcp-print.js?v=2026.11.08.131',location.href).href).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).catch(function(e){window.__jcpPrintLibP=null;throw e;});}
+  if(!window.__jcpPrintLibP){window.__jcpPrintLibP=fetch(new URL('jcp-print.js?v=2026.11.08.132',location.href).href).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(function(t){if(t.indexOf('html2canvas')<0)throw new Error('ARCHIVO jcp-print.js INVÁLIDO');return t;}).catch(function(e){window.__jcpPrintLibP=null;try{jcpCtLog('NO CARGÓ jcp-print.js: '+(e&&e.message||e));}catch(_e){}throw e;});}
   return window.__jcpPrintLibP;
 };
 window.jcpInjectPrintLib=function(win){
-  return window.jcpPrintLib().then(function(code){try{if(win.closed||win.html2canvas)return;var d=win.document,sc=d.createElement('script');sc.text=code;(d.head||d.documentElement).appendChild(sc);}catch(e){console.warn(e);}});
+  return window.jcpPrintLib().then(function(code){try{if(win.closed||win.html2canvas)return;var d=win.document,sc=d.createElement('script');sc.text=code;(d.head||d.documentElement).appendChild(sc);if(typeof win.html2canvas!=='function')jcpCtLog('LIBRERÍA INYECTADA PERO html2canvas NO QUEDÓ DISPONIBLE');}catch(e){jcpCtLog('NO SE PUDO INYECTAR LA LIBRERÍA: '+(e&&e.message||e));}});
 };
 setTimeout(function(){try{window.jcpPrintLib().catch(function(){});}catch(e){}},4000);
 </script>
@@ -22071,7 +22129,7 @@ window.jcpPersistLater=function(fn,label,tries){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.08.131"></script>
+<script src="./app-update.js?v=2026.11.08.132"></script>
 <script>
 /* JCP: resaltar casillas obligatorias (rojo vacío / verde lleno) en Facturar venta y Permuta */
 (function(){
