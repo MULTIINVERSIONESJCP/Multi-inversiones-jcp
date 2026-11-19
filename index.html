@@ -24,7 +24,7 @@ window.jcpArchiveToIdb=function(key,val){
 
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.08.148</title>
+<title>COLOMBIAUTOS JP - V2026.11.08.151</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4712,8 +4712,10 @@ img.brand-logo,img.unified-module-logo,img.inventory-inline-logo,img.acc-logo{ba
 <div class="sale-section-title"><span>4</span> DATOS DEL CLIENTE</div>
 <div class="sale-field-grid">
 <label class="sale-field full"><b>Nombre del cliente *</b>
-  <input id="permutaClientName" autocomplete="off" placeholder="NOMBRE DEL CLIENTE" oninput="permutaClientSuggestions()"/>
+  <div class="client-autocomplete">
+  <input id="permutaClientName" autocomplete="off" placeholder="🔍 BUSCAR O ESCRIBIR EL CLIENTE" oninput="permutaClientSuggestions()" onfocus="permutaClientSuggestions()" onblur="setTimeout(function(){var b=document.getElementById('permutaClientSuggestions');if(b)b.style.display='none';},250)"/>
   <div class="client-suggestions" id="permutaClientSuggestions" style="display:none"></div>
+  </div>
 </label>
 <label class="sale-field"><b>Cédula / NIT *</b><input id="permutaClientDoc" placeholder="DOCUMENTO"/></label>
 <label class="sale-field"><b>Teléfono *</b><input id="permutaClientPhone" inputmode="tel" placeholder="TELÉFONO"/></label>
@@ -5916,9 +5918,9 @@ img.brand-logo,img.unified-module-logo,img.inventory-inline-logo,img.acc-logo{ba
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.08.148"></script>
-<script src="./jcp-sync.js?v=2026.11.08.148"></script>
-<script src="./jcp-images.js?v=2026.11.08.148"></script>
+<script src="./jcp-accounting.js?v=2026.11.08.151"></script>
+<script src="./jcp-sync.js?v=2026.11.08.151"></script>
+<script src="./jcp-images.js?v=2026.11.08.151"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -12032,7 +12034,7 @@ function permutaClientSuggestions(){
   const rows=(data.clientes||[]).filter(c=>[c.nombre,c.cedula,c.telefono,c.direccion].some(v=>String(v||'').toUpperCase().includes(q))).slice(0,8);
   if(!rows.length){box.innerHTML='';box.style.display='none';return;}
   box.innerHTML=rows.map(c=>'<button type="button" class="permuta-client-option" data-client-id="'+clientEsc(String(c.id||''))+'" style="display:block;width:100%;text-align:left;padding:10px;border:0;border-bottom:1px solid #2a2a2a;background:#111;color:#fff"><b>'+clientEsc(c.nombre||'')+'</b><br><small>'+clientEsc(c.cedula||'')+' · '+clientEsc(c.telefono||'')+'</small></button>').join('');
-  box.querySelectorAll('.permuta-client-option').forEach(btn=>btn.addEventListener('click',()=>selectPermutaClient(btn.dataset.clientId||'')));
+  box.querySelectorAll('.permuta-client-option').forEach(btn=>{const pick=ev=>{ev.preventDefault();selectPermutaClient(btn.dataset.clientId||'');};btn.addEventListener('mousedown',pick);btn.addEventListener('touchstart',pick,{passive:false});btn.addEventListener('click',pick);});
   box.style.display='block';
 }
 function selectPermutaClient(id){
@@ -13220,7 +13222,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.148\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.151\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -17138,7 +17140,7 @@ function voidAccountingDocument(){
     const title=${JSON.stringify(String(shareTitle||safeFile))};
     const msg=document.getElementById('jcpSupportMsg');
     function setMsg(t){if(msg)msg.textContent=t||'';}
-    const LIB=${JSON.stringify(new URL('jcp-print.js?v=2026.11.08.148',location.href).href)};
+    const LIB=${JSON.stringify(new URL('jcp-print.js?v=2026.11.08.151',location.href).href)};
     const SNAP=${JSON.stringify(String(window.__jcpSnapFor||''))};
     let libP=null;
     function ensureLib(){
@@ -17174,7 +17176,7 @@ function voidAccountingDocument(){
           snapBar(40);await new Promise(function(r){setTimeout(r,500);});
           const tools=document.getElementById('jcpSupportTools'),bb=document.getElementById('jcpBackBar'),o1=tools.style.display,o2=bb?bb.style.display:'';tools.style.display='none';if(bb)bb.style.display='none';
           const out=[];
-          try{const _pgs=Array.from(document.querySelectorAll('.pg'));for(let _i=0;_i<_pgs.length;_i++){const cv=await html2canvas(_pgs[_i],{scale:1.2,backgroundColor:'#ffffff',useCORS:true,logging:false,ignoreElements:function(el){return el&&el.id==='jcpSnapBar';}});out.push(cv.toDataURL('image/jpeg',0.78));snapBar(40+Math.round(45*(_i+1)/_pgs.length));}}
+          try{const _pgs=Array.from(document.querySelectorAll('.pg'));for(let _i=0;_i<_pgs.length;_i++){const cv=await html2canvas(_pgs[_i],{scale:1,backgroundColor:'#ffffff',useCORS:true,logging:false,ignoreElements:function(el){return el&&el.id==='jcpSnapBar';}});out.push(cv.toDataURL('image/jpeg',0.78));snapBar(40+Math.round(45*(_i+1)/_pgs.length));}}
           finally{tools.style.display=o1;if(bb)bb.style.display=o2;}
           if(!out.length)throw new Error('sin hojas');
           let direct=false;try{if(window.opener&&!window.opener.closed&&typeof window.opener.jcpCtReceive==='function')direct=window.opener.jcpCtReceive(SNAP,out)===true;}catch(e){}
@@ -17542,7 +17544,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.08.148',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.08.151',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -21409,7 +21411,7 @@ function jcpParseLicencia(raw){
   function permVals(c){var v1=+c.val1||0,d=+c.diff||0,v2=c.dir==='receive'?v1-d:(c.dir==='pay'?v1+d:v1);return {v1:v1,v2:Math.max(0,v2),d:d,payer:c.dir==='receive'?'PERMUTANTE 2':(c.dir==='pay'?'PERMUTANTE 1':'')};}
   // Copia del contrato: al generarlo se toma una imagen de cada hoja (con las fotos) y se guarda como un solo documento.
   // Las fotos sueltas de cédulas y tarjeta NO se guardan.
-  var H2C=new URL('jcp-print.js?v=2026.11.08.148',location.href).href;
+  var H2C=new URL('jcp-print.js?v=2026.11.08.151',location.href).href;
   function ctToast(t,ok){try{var d=document.createElement('div');d.textContent=t;d.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:100005;max-width:92%;padding:12px 16px;border-radius:12px;font:900 13px Arial,sans-serif;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.5);background:'+(ok?'#1f7a45':'#9b1c1c')+';color:#fff';document.body.appendChild(d);setTimeout(function(){d.remove();},ok?3500:7000);}catch(e){}}
   var CT_STORING={};
   function ctStorePages(num,out){if(!out||!out.length)return false;if(CT_STORING[num])return true;CT_STORING[num]=true;setTimeout(function(){delete CT_STORING[num];},600000);var sz=out.reduce(function(a,x){return a+String(x).length;},0);jcpCtLog(num+': '+out.length+' HOJAS CAPTURADAS ('+Math.round(sz/1024)+' KB). GUARDANDO…');var tries=0;jcpPersistLater(function(){tries++;var ct=ctFindSaved(num);if(!ct){if(tries%5===1)jcpCtLog(num+': EL CONTRATO TODAVÍA NO ESTÁ GUARDADO, ESPERANDO…');return false;}delete CT_STORING[num];if(ct.pages&&ct.pages.length)return;ct.pages=out;ct.pagesAt=new Date().toISOString();setTimeout(function(){var c2=ctFindSaved(num);jcpCtLog(num+': '+((c2&&c2.pages&&c2.pages.length)?'✅ COPIA GUARDADA':'⚠️ NO QUEDÓ GUARDADA'));},50);},'LA COPIA DEL CONTRATO');return true;}
@@ -21430,7 +21432,7 @@ function jcpParseLicencia(raw){
         if(i>=pgs.length){hide.forEach(function(x,k){x.style.display=olds[k];});
           if(ctStorePages(num,out)){ctToast('✅ COPIA DEL CONTRATO '+num+' GUARDADA CON LAS FOTOS.',true);try{if(msg)msg.textContent='✅ COPIA DEL CONTRATO GUARDADA EN LA APP.';}catch(e){}}else fallback('no guardó');
           return;}
-        cw.html2canvas(pgs[i],{scale:1.2,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.78));setTimeout(function(){next(i+1);},60);}).catch(function(e){hide.forEach(function(x,k){x.style.display=olds[k];});fallback('ERROR AL DIBUJAR: '+(e&&e.message||e));});
+        cw.html2canvas(pgs[i],{scale:1,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.78));setTimeout(function(){next(i+1);},60);}).catch(function(e){hide.forEach(function(x,k){x.style.display=olds[k];});fallback('ERROR AL DIBUJAR: '+(e&&e.message||e));});
       })(0);
     })();
   }
@@ -21451,7 +21453,7 @@ function jcpParseLicencia(raw){
           var pgs=[].slice.call(cd.querySelectorAll('.pg')),out=[];
           (function next(i){
             if(i>=pgs.length){if(out.length===pgs.length&&ctStorePages(num,out))_toast('✅ COPIA DEL CONTRATO '+num+' GUARDADA CON LAS FOTOS.',true);else _toast('⚠️ NO SE PUDO GUARDAR LA COPIA DEL CONTRATO '+num+'. ÁBRELO DE NUEVO DESDE VER SOPORTE CON INTERNET.',false);finish();return;}
-            cw.html2canvas(pgs[i],{scale:1.2,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.78));setTimeout(function(){next(i+1);},60);}).catch(function(e){jcpCtLog(num+': ERROR AL DIBUJAR HOJA '+(i+1)+': '+(e&&e.message||e));_toast('⚠️ NO SE PUDO GUARDAR LA COPIA DEL CONTRATO '+num+'.',false);finish();});
+            cw.html2canvas(pgs[i],{scale:1,backgroundColor:'#ffffff',useCORS:true,logging:false}).then(function(cv){out.push(cv.toDataURL('image/jpeg',0.78));setTimeout(function(){next(i+1);},60);}).catch(function(e){jcpCtLog(num+': ERROR AL DIBUJAR HOJA '+(i+1)+': '+(e&&e.message||e));_toast('⚠️ NO SE PUDO GUARDAR LA COPIA DEL CONTRATO '+num+'.',false);finish();});
           })(0);
         })();
       };
@@ -21476,7 +21478,30 @@ function jcpParseLicencia(raw){
     jcpCtLog(num+': TOMANDO LA COPIA AUTOMÁTICAMENTE EN LA APP (INTENTO '+n+')');
     ctCapturePages(v.html,num,true);
   }
+  // Anexo de una sola vez: contratos que quedaron guardados sin la tarjeta del carro que entra (error de la v148).
+  var CT_ANNEX={'CP-000002':1};
+  function ctAnnexDraw(num,placa,F,R){return new Promise(function(res,rej){
+    var W=1240,H=1754,cv=document.createElement('canvas');cv.width=W;cv.height=H;var x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,H);
+    x.fillStyle='#8a6a12';x.font='bold 30px Arial';x.textAlign='center';x.fillText('ANEXO · CONTRATO '+num,W/2,90);
+    x.fillStyle='#111';x.font='bold 26px Arial';x.fillText('TARJETA DE PROPIEDAD · VEHÍCULO 2 · PLACA '+String(placa||'').toUpperCase(),W/2,135);
+    x.strokeStyle='#c9a227';x.lineWidth=3;x.beginPath();x.moveTo(80,160);x.lineTo(W-80,160);x.stroke();
+    var boxes=[[F,'TARJETA VEHÍCULO 2 · FRENTE',200],[R,'TARJETA VEHÍCULO 2 · RESPALDO',960]],left=boxes.filter(function(b){return b[0];}).length;if(!left){rej(new Error('sin fotos'));return;}
+    var done=0;boxes.forEach(function(b){var bx=110,bw=W-220,bh=680,by=b[2];x.strokeStyle='#999';x.lineWidth=2;x.setLineDash([10,8]);x.strokeRect(bx,by,bw,bh);x.setLineDash([]);x.fillStyle='#333';x.font='bold 22px Arial';x.fillText(b[1],W/2,by+bh+34);
+      if(!b[0]){return;}var im=new Image();im.onload=function(){var k=Math.min((bw-20)/im.width,(bh-20)/im.height),w=im.width*k,h=im.height*k;x.drawImage(im,bx+(bw-w)/2,by+(bh-h)/2,w,h);if(++done===left){try{res(cv.toDataURL('image/jpeg',0.8));}catch(e){rej(e);}}};im.onerror=function(){rej(new Error('foto no carga'));};im.src=b[0];});
+  });}
+  function ctAnnexRun(){Object.keys(CT_ANNEX).forEach(function(num){if(CT_ANNEX[num]!==1)return;
+    var ct=ctFindSaved(num);if(!ct||!ct.pages||!ct.pages.length)return;if(ct.annexCards){CT_ANNEX[num]=2;return;}
+    var p=(data.permutas||[]).find(function(x){return x&&x.contract&&x.contract.numero===num;});if(!p)return;
+    var vid=String(p.incomingVehicleId||''),v=(data.veh||[]).concat(data.sold||[]).find(function(x){return x&&String(x.id)===vid;})||p.incomingVehicle||{};
+    var cp=v.cardPhotos||(p.incomingVehicle||{}).cardPhotos;if(!cp||!(cp.F||cp.R)){CT_ANNEX[num]=3;jcpCtLog(num+': ANEXO: EL CARRO QUE ENTRA NO TIENE FOTOS DE LA TARJETA GUARDADAS');return;}
+    CT_ANNEX[num]=0;
+    (function(){var rs=function(x){try{return typeof jcpResolvePhotoSrc==='function'?jcpResolvePhotoSrc(x):Promise.resolve(x);}catch(e){return Promise.resolve(x);}};return Promise.all([rs(cp.F||''),rs(cp.R||'')]);})().then(function(r){return ctAnnexDraw(num,v.pl||v.placa||'',r[0],r[1]);}).then(function(img){
+      jcpPersistLater(function(){var c2=ctFindSaved(num);if(!c2)return false;if(c2.annexCards)return;c2.pages=(c2.pages||[]).concat([img]);c2.annexCards=new Date().toISOString();setTimeout(function(){jcpCtLog(num+': ✅ ANEXO CON LA TARJETA DEL VEHÍCULO 2 AGREGADO');},50);},'EL ANEXO DEL CONTRATO');
+      CT_ANNEX[num]=2;
+    }).catch(function(e){CT_ANNEX[num]=1;jcpCtLog(num+': ANEXO: NO SE PUDO ('+(e&&e.message||e)+'), SE REINTENTA');});
+  });}
   function ctImportSnaps(){
+    try{ctAnnexRun();}catch(_e){}
     if(!window.indexedDB)return;
     ctIdb(function(db,done){var out=[];try{var tx=db.transaction('snaps','readonly'),st=tx.objectStore('snaps'),cr=st.openCursor();cr.onsuccess=function(){var c=cr.result;if(c){out.push({key:c.key,val:c.value});c.continue();}else done(out);};cr.onerror=function(){done(out);};}catch(e){done(out);}}).then(function(list){
       (list||[]).forEach(function(it){if(String(it.key).indexOf('job|')===0){ctRunJob(it);return;}var num=it.key,ct=ctFindSaved(num);
@@ -21828,16 +21853,16 @@ function jcpParseLicencia(raw){
     var w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES Y VUELVE A INTENTAR.');return;}
     try{w.document.write('<p style="font-family:Arial;padding:20px">Generando contrato…</p>');}catch(_e){}
     if(!(await jcpWaitSaveReady(w))){try{w.close();}catch(_e){}alert('TODAVÍA SE ESTÁ GUARDANDO EL CAMBIO ANTERIOR. REVISA LA CONEXIÓN Y VUELVE A TOCAR FACTURAR.');return;}
-    var res=null;try{res=saveVehicleSale({silent:true});}catch(e){res=null;}
+    var _ph=Object.assign({},ctPh);var res=null;try{res=saveVehicleSale({silent:true});}catch(e){res=null;}
     if(!res||!res.id){try{w.close();}catch(_e){}return;}
-    c.vehId=res.id;c.draft=false;cur=c;window.__ctPreW=w;ctPrint();
+    ctPh=Object.assign(ctPh||{},_ph);c.vehId=res.id;c.draft=false;cur=c;window.__ctPreW=w;ctPrint();
     var box=el('saleCtBox');if(box)box.innerHTML='';var ph=el('saleCtPhotos');if(ph)ph.innerHTML='';
     setTimeout(function(){alert('✅ '+res.number+' REGISTRADO Y CONTRATO '+(c.numero||'')+' GENERADO.');},300);};
 
   // ---- COMPRA (un solo formulario, igual que la venta)
   // Las fotos de la tarjeta tomadas arriba pasan de una vez a la hoja de improntas (compra y permuta).
   window.jcpCphChanged=function(sc){var map={perm:['t2F','t2R'],veh:['tarF','tarR']}[sc];if(!map)return;var t=(window.jcpCphGet?jcpCphGet(sc):null)||{};
-    if(t.F)ctPh[map[0]]=t.F;else delete ctPh[map[0]];if(t.R)ctPh[map[1]]=t.R;else delete ctPh[map[1]];try{ctPhotoPaint();}catch(_e){}};
+    if(t.F)ctPh[map[0]]=t.F;if(t.R)ctPh[map[1]]=t.R;try{ctPhotoPaint();}catch(_e){}};  // solo agrega: al limpiar el formulario después de guardar NO se borran las fotos del contrato
   function purchPhSync(){var t=window.jcpCphGet?jcpCphGet('veh'):null;if(t){if(t.F)ctPh.tarF=t.F;if(t.R)ctPh.tarR=t.R;}}
   function purchAutoPago(){var e=el('vctPagoTxt');if(e&&!e.dataset.manual)e.value=autoPago('purchase',0);}
   window.purchNoTChange=function(cb){var box=el('vctCtBox');if(!box)return;var on=!!(cb&&cb.checked);box.dataset.noT=on?'1':'';
@@ -21872,9 +21897,9 @@ function jcpParseLicencia(raw){
     var w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES Y VUELVE A INTENTAR.');return;}
     try{w.document.write('<p style="font-family:Arial;padding:20px">Generando contrato…</p>');}catch(_e){}
     if(!(await jcpWaitSaveReady(w))){try{w.close();}catch(_e){}alert('TODAVÍA SE ESTÁ GUARDANDO EL CAMBIO ANTERIOR. REVISA LA CONEXIÓN Y VUELVE A TOCAR GUARDAR.');return;}
-    var res=null;try{res=await addVeh({silent:true});}catch(e){res=null;}
+    var _ph=Object.assign({},ctPh);var res=null;try{res=await addVeh({silent:true});}catch(e){res=null;}
     if(!res||!res.id){try{w.close();}catch(_e){}return;}
-    c.vehId=res.id;c.draft=false;cur=c;window.__ctPreW=w;ctPrint();
+    ctPh=Object.assign(ctPh||{},_ph);c.vehId=res.id;c.draft=false;cur=c;window.__ctPreW=w;ctPrint();
     try{addVehAfterSave();}catch(_e){}
     var box=el('vctCtBox');if(box)box.innerHTML='';var ph=el('vctPhotos');if(ph)ph.innerHTML='';
     setTimeout(function(){alert('✅ '+res.number+' REGISTRADO Y CONTRATO '+(c.numero||'')+' GENERADO.');},300);};
@@ -21909,9 +21934,9 @@ function jcpParseLicencia(raw){
     var w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES Y VUELVE A INTENTAR.');return;}
     try{w.document.write('<p style="font-family:Arial;padding:20px">Generando contrato…</p>');}catch(_e){}
     if(!(await jcpWaitSaveReady(w))){try{w.close();}catch(_e){}alert('TODAVÍA SE ESTÁ GUARDANDO EL CAMBIO ANTERIOR. REVISA LA CONEXIÓN Y VUELVE A INTENTAR.');return;}
-    var res=null;try{res=await savePermuta({silent:true});}catch(e){res=null;}
+    var _ph=Object.assign({},ctPh);var res=null;try{res=await savePermuta({silent:true});}catch(e){res=null;}
     if(!res||!res.id){try{w.close();}catch(_e){}return;}
-    c.permId=res.id;c.draft=false;cur=c;window.__ctPreW=w;ctPrint();
+    ctPh=Object.assign(ctPh||{},_ph);c.permId=res.id;c.draft=false;cur=c;window.__ctPreW=w;ctPrint();
     var box=el('permCtBox');if(box)box.innerHTML='';var ph=el('permCtPhotos');if(ph)ph.innerHTML='';
     setTimeout(function(){alert('✅ '+res.number+' REGISTRADO Y CONTRATO '+(c.numero||'')+' GENERADO.');},300);};
   (function(){var st=document.createElement('style');st.textContent='.ict-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.ict-chips button{min-height:30px!important;width:auto!important;padding:3px 11px!important;border-radius:999px!important;border:1px solid #6b5a2a!important;background:#17130b!important;color:#d4af37!important;font-size:11.5px!important;font-weight:800!important}.ict-not{color:#ff8a80;font-size:12px;font-weight:800;border:1px dashed #7a3a32;border-radius:10px;padding:8px 10px;background:#1a0f0f}.ict-miss{color:#f0c35a;font-size:12px;font-weight:800;border:1px solid #6b5a2a;border-radius:10px;padding:8px 10px;background:#17130b}.ict-miss button{margin-left:6px;min-height:28px;padding:2px 10px;border-radius:999px;border:1px solid #d4af37;background:transparent;color:#d4af37;font-weight:900;font-size:11px}.full-row{margin-bottom:8px}.ict-ph small i{font-style:normal;color:#57d68d;font-size:9px}.sale-ct-btn{width:100%;min-height:48px;margin-bottom:8px;border-radius:12px;border:1.5px solid #d4af37!important;background:transparent!important;color:#d4af37!important;font-weight:900;letter-spacing:.4px}';document.head.appendChild(st);})();
@@ -22049,7 +22074,7 @@ function jcpParseLicencia(raw){
       w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}
     }
     var _cap=false;if(!c.draft&&c.numero&&!window.__ctReprint){var _ct=ctFindSaved(c.numero);_cap=!(_ct&&_ct.pages&&_ct.pages.length);}
-    if(!c.draft&&!window.__ctReprint){try{jcpCtLog((c.numero||'SIN NÚMERO')+': GENERANDO CONTRATO · '+(c.kind||'')+' · copia='+(_cap?'SÍ':'NO')+' · v2026.11.08.148');}catch(_e){}}
+    if(!c.draft&&!window.__ctReprint){try{jcpCtLog((c.numero||'SIN NÚMERO')+': GENERANDO CONTRATO · '+(c.kind||'')+' · copia='+(_cap?'SÍ':'NO')+' · v2026.11.08.151');}catch(_e){}}
     if(_cap){try{ctJobPut(c.numero,html);}catch(_e){}setTimeout(ctImportSnaps,25000);setTimeout(ctImportSnaps,45000);}
     if(typeof window.openSupportDocument==='function'){window.__jcpSnapFor=_cap?c.numero:'';if(_cap)jcpCtLog(c.numero+': VENTANA DEL CONTRATO ABIERTA, TOMANDO COPIA ALLÁ');try{window.openSupportDocument(html,'CONTRATO_'+(c.numero||V.placa||''),'Contrato '+(c.numero||''),w);}finally{window.__jcpSnapFor='';}return;}
     if(_cap)ctCapturePages(html,c.numero);
@@ -22062,7 +22087,7 @@ function jcpParseLicencia(raw){
 window.jcpCtLog=function(msg){try{var k='jcp_ctcap_log',a=JSON.parse(localStorage.getItem(k)||'[]');var t=new Date();a.unshift(('0'+t.getHours()).slice(-2)+':'+('0'+t.getMinutes()).slice(-2)+':'+('0'+t.getSeconds()).slice(-2)+' '+String(msg).slice(0,160));localStorage.setItem(k,JSON.stringify(a.slice(0,40)));}catch(e){}try{console.log('[contrato]',msg);}catch(e){}};
 window.jcpCtLogGet=function(n){try{return JSON.parse(localStorage.getItem('jcp_ctcap_log')||'[]').slice(0,n||8);}catch(e){return [];}};
 window.jcpPrintLib=function(){
-  if(!window.__jcpPrintLibP){window.__jcpPrintLibP=fetch(new URL('jcp-print.js?v=2026.11.08.148',location.href).href).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(function(t){if(t.indexOf('html2canvas')<0)throw new Error('ARCHIVO jcp-print.js INVÁLIDO');return t;}).catch(function(e){window.__jcpPrintLibP=null;try{jcpCtLog('NO CARGÓ jcp-print.js: '+(e&&e.message||e));}catch(_e){}throw e;});}
+  if(!window.__jcpPrintLibP){window.__jcpPrintLibP=fetch(new URL('jcp-print.js?v=2026.11.08.151',location.href).href).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(function(t){if(t.indexOf('html2canvas')<0)throw new Error('ARCHIVO jcp-print.js INVÁLIDO');return t;}).catch(function(e){window.__jcpPrintLibP=null;try{jcpCtLog('NO CARGÓ jcp-print.js: '+(e&&e.message||e));}catch(_e){}throw e;});}
   return window.__jcpPrintLibP;
 };
 window.jcpInjectPrintLib=function(win){
@@ -22298,7 +22323,7 @@ window.jcpPersistLater=function(fn,label,tries){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.08.148"></script>
+<script src="./app-update.js?v=2026.11.08.151"></script>
 <script>
 /* JCP: resaltar casillas obligatorias (rojo vacío / verde lleno) en Facturar venta y Permuta */
 (function(){
