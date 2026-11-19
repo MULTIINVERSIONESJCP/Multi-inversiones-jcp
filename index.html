@@ -2,9 +2,29 @@
 
 <html lang="es">
 <head>
+<script>
+// Los archivos de conflicto se guardaban en el almacenamiento del navegador y lo llenaban ("quota exceeded").
+// Ahora se guardan en IndexedDB (mucho más espacio) y los viejos se mueven allá al abrir la app.
+window.jcpArchiveToIdb=function(key,val){
+  return new Promise(function(res){
+    try{if(!window.indexedDB){res(false);return;}var rq=indexedDB.open('jcp_archives',1);
+      rq.onupgradeneeded=function(){try{rq.result.createObjectStore('a');}catch(e){}};
+      rq.onerror=function(){res(false);};
+      rq.onsuccess=function(){try{var db=rq.result,tx=db.transaction('a','readwrite');tx.objectStore('a').put({key:key,at:Date.now(),val:val},key);tx.oncomplete=function(){db.close();res(true);};tx.onerror=function(){db.close();res(false);};}catch(e){res(false);}};
+    }catch(e){res(false);}
+  });
+};
+(function jcpMoveConflictArchives(){
+  try{var keys=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('jcp_conflict_archive_')===0)keys.push(k);}
+    keys.forEach(function(k){var raw=null;try{raw=localStorage.getItem(k);}catch(e){}var val=raw;try{val=JSON.parse(raw);}catch(e){}
+      jcpArchiveToIdb(k,val).then(function(ok){if(ok){try{localStorage.removeItem(k);}catch(e){}}});});
+  }catch(e){}
+})();
+</script>
+
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.08.146</title>
+<title>COLOMBIAUTOS JP - V2026.11.08.148</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -5896,9 +5916,9 @@ img.brand-logo,img.unified-module-logo,img.inventory-inline-logo,img.acc-logo{ba
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.08.146"></script>
-<script src="./jcp-sync.js?v=2026.11.08.146"></script>
-<script src="./jcp-images.js?v=2026.11.08.146"></script>
+<script src="./jcp-accounting.js?v=2026.11.08.148"></script>
+<script src="./jcp-sync.js?v=2026.11.08.148"></script>
+<script src="./jcp-images.js?v=2026.11.08.148"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -6602,7 +6622,7 @@ function jcpShowConflict(){
       const pending=cloudStore.pending();
       if(pending&&!cloudStore.conflicted)throw new Error('Primero reintenta la conexión para confirmar si el guardado llegó.');
       // Archivo local adicional para revisión; si no hay espacio, no se descarta el pendiente.
-      if(pending)localStorage.setItem('jcp_conflict_archive_'+pending.requestId,JSON.stringify(pending));
+      if(pending){try{jcpArchiveToIdb('jcp_conflict_archive_'+pending.requestId,pending);}catch(_e){}}
       cloudStore.clearAfterExport();
       jcpWriteLocalSnapshot(row.data);
       panel.remove();jcpHideSyncBanner();
@@ -13200,7 +13220,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.146\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.148\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -17118,7 +17138,7 @@ function voidAccountingDocument(){
     const title=${JSON.stringify(String(shareTitle||safeFile))};
     const msg=document.getElementById('jcpSupportMsg');
     function setMsg(t){if(msg)msg.textContent=t||'';}
-    const LIB=${JSON.stringify(new URL('jcp-print.js?v=2026.11.08.146',location.href).href)};
+    const LIB=${JSON.stringify(new URL('jcp-print.js?v=2026.11.08.148',location.href).href)};
     const SNAP=${JSON.stringify(String(window.__jcpSnapFor||''))};
     let libP=null;
     function ensureLib(){
@@ -17522,7 +17542,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.08.146',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.08.148',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -21157,7 +21177,7 @@ function jcpParseLicencia(raw){
   var CPH={veh:{},ci:{},perm:{},prov:{}};
   function cphShrink(cnv){var ow=900,oh=Math.round(ow*cnv.height/cnv.width),o=document.createElement('canvas');o.width=ow;o.height=oh;o.getContext('2d').drawImage(cnv,0,0,ow,oh);return o.toDataURL('image/jpeg',0.72);}
   function cphSetFromCanvas(scope,k,cnv){try{CPH[scope][k]=cphShrink(cnv);cphPaint(scope);}catch(e){}}
-  function cphPaint(scope){['F','R'].forEach(function(k){var b=document.getElementById('cph_'+scope+'_'+k);if(!b)return;var d=CPH[scope][k];b.querySelector('.cph-prev').innerHTML=d?'<img src="'+d+'">':'<span>📷</span>';b.querySelector('.cph-x').style.display=d?'':'none';b.classList.toggle('ok',!!d);});}
+  function cphPaint(scope){['F','R'].forEach(function(k){var b=document.getElementById('cph_'+scope+'_'+k);if(!b)return;var d=CPH[scope][k];b.querySelector('.cph-prev').innerHTML=d?'<img src="'+d+'">':'<span>📷</span>';b.querySelector('.cph-x').style.display=d?'':'none';b.classList.toggle('ok',!!d);});try{if(window.jcpCphChanged)window.jcpCphChanged(scope);}catch(_e){}}
   function cphHtml(scope){return '<div class="cph-wrap"><div class="veh-section-title" style="margin-top:12px">FOTOS DE LA TARJETA (PARA LOS CONTRATOS)</div><small class="cph-note">El frente queda guardado solo al escanear. Toma también el respaldo. Se usan en los contratos y se borran cuando el carro se vende.</small><div class="cph-grid">'
     +['F','R'].map(function(k){return '<div class="cph" id="cph_'+scope+'_'+k+'"><label class="cph-img"><div class="cph-prev"><span>📷</span></div><input type="file" accept="image/*" onchange="jcpCphPick(\''+scope+'\',\''+k+'\',this)"></label><small>TARJETA · '+(k==='F'?'FRENTE':'RESPALDO')+'</small><button type="button" class="cph-x" style="display:none" onclick="jcpCphClear(\''+scope+'\',\''+k+'\')">✕ QUITAR</button></div>';}).join('')+'</div></div>';}
   window.jcpCphPick=function(scope,k,inp){var f=inp&&inp.files&&inp.files[0];if(!f)return;try{inp.value='';}catch(_e){}var url=URL.createObjectURL(f),img=new Image();
@@ -21389,7 +21409,7 @@ function jcpParseLicencia(raw){
   function permVals(c){var v1=+c.val1||0,d=+c.diff||0,v2=c.dir==='receive'?v1-d:(c.dir==='pay'?v1+d:v1);return {v1:v1,v2:Math.max(0,v2),d:d,payer:c.dir==='receive'?'PERMUTANTE 2':(c.dir==='pay'?'PERMUTANTE 1':'')};}
   // Copia del contrato: al generarlo se toma una imagen de cada hoja (con las fotos) y se guarda como un solo documento.
   // Las fotos sueltas de cédulas y tarjeta NO se guardan.
-  var H2C=new URL('jcp-print.js?v=2026.11.08.146',location.href).href;
+  var H2C=new URL('jcp-print.js?v=2026.11.08.148',location.href).href;
   function ctToast(t,ok){try{var d=document.createElement('div');d.textContent=t;d.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:100005;max-width:92%;padding:12px 16px;border-radius:12px;font:900 13px Arial,sans-serif;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.5);background:'+(ok?'#1f7a45':'#9b1c1c')+';color:#fff';document.body.appendChild(d);setTimeout(function(){d.remove();},ok?3500:7000);}catch(e){}}
   var CT_STORING={};
   function ctStorePages(num,out){if(!out||!out.length)return false;if(CT_STORING[num])return true;CT_STORING[num]=true;setTimeout(function(){delete CT_STORING[num];},600000);var sz=out.reduce(function(a,x){return a+String(x).length;},0);jcpCtLog(num+': '+out.length+' HOJAS CAPTURADAS ('+Math.round(sz/1024)+' KB). GUARDANDO…');var tries=0;jcpPersistLater(function(){tries++;var ct=ctFindSaved(num);if(!ct){if(tries%5===1)jcpCtLog(num+': EL CONTRATO TODAVÍA NO ESTÁ GUARDADO, ESPERANDO…');return false;}delete CT_STORING[num];if(ct.pages&&ct.pages.length)return;ct.pages=out;ct.pagesAt=new Date().toISOString();setTimeout(function(){var c2=ctFindSaved(num);jcpCtLog(num+': '+((c2&&c2.pages&&c2.pages.length)?'✅ COPIA GUARDADA':'⚠️ NO QUEDÓ GUARDADA'));},50);},'LA COPIA DEL CONTRATO');return true;}
@@ -21815,6 +21835,9 @@ function jcpParseLicencia(raw){
     setTimeout(function(){alert('✅ '+res.number+' REGISTRADO Y CONTRATO '+(c.numero||'')+' GENERADO.');},300);};
 
   // ---- COMPRA (un solo formulario, igual que la venta)
+  // Las fotos de la tarjeta tomadas arriba pasan de una vez a la hoja de improntas (compra y permuta).
+  window.jcpCphChanged=function(sc){var map={perm:['t2F','t2R'],veh:['tarF','tarR']}[sc];if(!map)return;var t=(window.jcpCphGet?jcpCphGet(sc):null)||{};
+    if(t.F)ctPh[map[0]]=t.F;else delete ctPh[map[0]];if(t.R)ctPh[map[1]]=t.R;else delete ctPh[map[1]];try{ctPhotoPaint();}catch(_e){}};
   function purchPhSync(){var t=window.jcpCphGet?jcpCphGet('veh'):null;if(t){if(t.F)ctPh.tarF=t.F;if(t.R)ctPh.tarR=t.R;}}
   function purchAutoPago(){var e=el('vctPagoTxt');if(e&&!e.dataset.manual)e.value=autoPago('purchase',0);}
   window.purchNoTChange=function(cb){var box=el('vctCtBox');if(!box)return;var on=!!(cb&&cb.checked);box.dataset.noT=on?'1':'';
@@ -21866,7 +21889,7 @@ function jcpParseLicencia(raw){
     var ph=el('permCtPhotos');if(ph)ph.innerHTML=iphotos('pct',CT_PH_P,{t1F:o.cardPhotos&&o.cardPhotos.F?'Viene del inventario':'',t1R:o.cardPhotos&&o.cardPhotos.R?'Viene del inventario':'',t2F:'Sale de la foto que escaneas arriba',t2R:'Sale de la foto del respaldo de arriba'});
     var v1=el('pctVal1');if(v1){var est=+((o.additionalInfo||{}).precioEstimadoVenta||o.precioEstimadoVenta||0)||((+o.c||0)+(+o.g||0));v1.value=est?Number(est).toLocaleString('es-CO'):'';}
     var pt=el('pctPagoTxt');if(pt){delete pt.dataset.manual;}
-    try{bindMoneyInputs();}catch(e){}ctPhotoPaint();ictAutoPago();};
+    try{bindMoneyInputs();}catch(e){}try{window.jcpCphChanged('perm');}catch(_e){}ctPhotoPaint();ictAutoPago();};
   function permBuild(draft){var vid=null;try{vid=selectedPermutaVehicleId;}catch(e){}
     var o=(data.veh||[]).find(function(x){return x&&String(x.id)===String(vid);});if(!o){alert('SELECCIONA PRIMERO EL VEHÍCULO QUE SALE.');return null;}
     var gv=function(id){return up(g(id));},calc={};try{calc=updatePermutaCalculations()||{};}catch(e){}
@@ -22026,7 +22049,7 @@ function jcpParseLicencia(raw){
       w=window.open('','_blank','width=900,height=1000');if(!w){alert('EL NAVEGADOR BLOQUEÓ LA VENTANA. HABILITA VENTANAS EMERGENTES.');return;}
     }
     var _cap=false;if(!c.draft&&c.numero&&!window.__ctReprint){var _ct=ctFindSaved(c.numero);_cap=!(_ct&&_ct.pages&&_ct.pages.length);}
-    if(!c.draft&&!window.__ctReprint){try{jcpCtLog((c.numero||'SIN NÚMERO')+': GENERANDO CONTRATO · '+(c.kind||'')+' · copia='+(_cap?'SÍ':'NO')+' · v2026.11.08.146');}catch(_e){}}
+    if(!c.draft&&!window.__ctReprint){try{jcpCtLog((c.numero||'SIN NÚMERO')+': GENERANDO CONTRATO · '+(c.kind||'')+' · copia='+(_cap?'SÍ':'NO')+' · v2026.11.08.148');}catch(_e){}}
     if(_cap){try{ctJobPut(c.numero,html);}catch(_e){}setTimeout(ctImportSnaps,25000);setTimeout(ctImportSnaps,45000);}
     if(typeof window.openSupportDocument==='function'){window.__jcpSnapFor=_cap?c.numero:'';if(_cap)jcpCtLog(c.numero+': VENTANA DEL CONTRATO ABIERTA, TOMANDO COPIA ALLÁ');try{window.openSupportDocument(html,'CONTRATO_'+(c.numero||V.placa||''),'Contrato '+(c.numero||''),w);}finally{window.__jcpSnapFor='';}return;}
     if(_cap)ctCapturePages(html,c.numero);
@@ -22039,7 +22062,7 @@ function jcpParseLicencia(raw){
 window.jcpCtLog=function(msg){try{var k='jcp_ctcap_log',a=JSON.parse(localStorage.getItem(k)||'[]');var t=new Date();a.unshift(('0'+t.getHours()).slice(-2)+':'+('0'+t.getMinutes()).slice(-2)+':'+('0'+t.getSeconds()).slice(-2)+' '+String(msg).slice(0,160));localStorage.setItem(k,JSON.stringify(a.slice(0,40)));}catch(e){}try{console.log('[contrato]',msg);}catch(e){}};
 window.jcpCtLogGet=function(n){try{return JSON.parse(localStorage.getItem('jcp_ctcap_log')||'[]').slice(0,n||8);}catch(e){return [];}};
 window.jcpPrintLib=function(){
-  if(!window.__jcpPrintLibP){window.__jcpPrintLibP=fetch(new URL('jcp-print.js?v=2026.11.08.146',location.href).href).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(function(t){if(t.indexOf('html2canvas')<0)throw new Error('ARCHIVO jcp-print.js INVÁLIDO');return t;}).catch(function(e){window.__jcpPrintLibP=null;try{jcpCtLog('NO CARGÓ jcp-print.js: '+(e&&e.message||e));}catch(_e){}throw e;});}
+  if(!window.__jcpPrintLibP){window.__jcpPrintLibP=fetch(new URL('jcp-print.js?v=2026.11.08.148',location.href).href).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(function(t){if(t.indexOf('html2canvas')<0)throw new Error('ARCHIVO jcp-print.js INVÁLIDO');return t;}).catch(function(e){window.__jcpPrintLibP=null;try{jcpCtLog('NO CARGÓ jcp-print.js: '+(e&&e.message||e));}catch(_e){}throw e;});}
   return window.__jcpPrintLibP;
 };
 window.jcpInjectPrintLib=function(win){
@@ -22275,7 +22298,7 @@ window.jcpPersistLater=function(fn,label,tries){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.08.146"></script>
+<script src="./app-update.js?v=2026.11.08.148"></script>
 <script>
 /* JCP: resaltar casillas obligatorias (rojo vacío / verde lleno) en Facturar venta y Permuta */
 (function(){
