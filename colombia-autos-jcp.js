@@ -19,9 +19,12 @@ const css=`
 #ca-overlay.ca-open{display:block}
 #ca-panel{position:fixed;z-index:2147483645;right:0;top:0;bottom:0;width:min(550px,100vw);background:#0e0e0e;color:#f5f5f5;box-shadow:-12px 0 45px #0008;transform:translateX(103%);transition:transform .2s;overflow:auto;font:14px system-ui,-apple-system,Arial,sans-serif;overscroll-behavior:contain}
 #ca-panel.ca-open{transform:translateX(0)}
-#ca-panel *,#ca-fab{box-sizing:border-box}
+#ca-panel *{box-sizing:border-box}
 #ca-panel header{position:sticky;top:0;z-index:2;background:#171717;color:#fff;padding:19px 18px;border-bottom:1px solid #53411e;display:flex;justify-content:space-between;gap:10px;align-items:center}
 #ca-panel .ca-body{padding:15px 15px 100px}
+#dashboard .ca-home-card{font:inherit;color:inherit;min-width:0;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;text-align:center;cursor:pointer}
+#dashboard .ca-home-card b{display:block;font-weight:800}
+#dashboard .ca-home-emoji{font-size:29px;line-height:1.2}
 #ca-panel h2{font-size:20px;margin:0;letter-spacing:.5px;color:#fff}
 #ca-panel h3{font-size:17px;line-height:1.25;color:#fff!important;margin:0 0 7px;font-weight:800}
 #ca-panel p{line-height:1.5;color:#bbb}
@@ -57,7 +60,6 @@ const css=`
 #ca-panel .ca-photos img{width:100%;height:105px;object-fit:cover;border-radius:7px;border:1px solid #594b2e;background:#111}
 #ca-panel .ca-muted{color:#a6a6a6;font-size:12px}
 #ca-panel .ca-caption{color:#c8a76b;font-size:12px;font-weight:800;letter-spacing:.6px}
-#ca-fab{position:fixed;right:14px;bottom:88px;z-index:2147483643;padding:13px 17px;border-radius:999px;border:1px solid #b69454;background:#1d1d1d;color:#f2d08c;font:700 13px system-ui;box-shadow:0 5px 17px #0007;cursor:pointer}
 @media(max-width:600px){#ca-panel{width:100vw}#ca-panel .ca-body{padding:13px 13px 105px}#ca-panel .ca-photos img{height:90px}}
 `;
 function mount(){if(document.getElementById('ca-panel'))return;
@@ -65,10 +67,30 @@ function mount(){if(document.getElementById('ca-panel'))return;
  const overlay=document.createElement('div');overlay.id='ca-overlay';
  const panel=document.createElement('aside');panel.id='ca-panel';panel.setAttribute('aria-label','Panel comercial Colombia Autos');
  panel.innerHTML=`<header><div><h2>COLOMBIA AUTOS</h2><div class="ca-caption">ADMINISTRACIÓN COMERCIAL DE JCP</div></div><button type="button" id="ca-close" class="ca-light">Cerrar</button></header><div class="ca-body"><p>Vehículo elegido desde el inventario original de JCP. Configura su precio y fotos públicas; las finanzas permanecen privadas.</p><p><a href="${SITE}" target="_blank" rel="noopener noreferrer">Abrir página pública de Colombia Autos</a></p><div id="ca-status" class="ca-msg" role="status">Abre el panel para consultar tu inventario.</div><div id="ca-picker" class="ca-picker"></div><div id="ca-cars"></div></div>`;
- const fab=document.createElement('button');fab.id='ca-fab';fab.type='button';fab.textContent='🚗 Colombia Autos';
- document.body.append(overlay,panel,fab);
- const close=()=>{overlay.classList.remove('ca-open');panel.classList.remove('ca-open')};
+ document.body.append(overlay,panel);
+ // Cierra y limpia únicamente selecciones temporales de fotos; NO elimina fotos guardadas.
+ const close=()=>{
+   overlay.classList.remove('ca-open');panel.classList.remove('ca-open');
+   panel.querySelectorAll('input.ca-file').forEach(input=>{input.value=''});
+   panel.querySelectorAll('.ca-result').forEach(el=>{el.textContent=''});
+   selectingFromInventory=false;
+ };
  overlay.addEventListener('click',close);panel.querySelector('#ca-close').addEventListener('click',close);
+ // Dos accesos permanentes dentro de INICIO, usando las tarjetas nativas de JCP.
+ const home=document.querySelector('#dashboard .quick');
+ if(home){
+   const web=document.createElement('button');
+   web.type='button';web.className='card jcp-icon-card ca-home-card';
+   web.innerHTML='<span class="ca-home-emoji" aria-hidden="true">🌐</span><b>Página web</b>';
+   web.setAttribute('aria-label','Abrir página web de Colombia Autos');
+   web.addEventListener('click',()=>{window.open(SITE,'_blank','noopener,noreferrer')});
+   const publish=document.createElement('button');
+   publish.type='button';publish.className='card jcp-icon-card ca-home-card';
+   publish.innerHTML='<span class="ca-home-emoji" aria-hidden="true">🚗</span><b>Publicar</b>';
+   publish.setAttribute('aria-label','Elegir vehículo del inventario para publicar');
+   home.append(web,publish);
+   window.__caPublishFromHome=()=>publish.click();
+ }
  // Abrir el INVENTARIO REAL, no una segunda lista comercial.
  const inventory=document.getElementById('vehiculos');
  if(inventory){
@@ -77,14 +99,16 @@ function mount(){if(document.getElementById('ca-panel'))return;
    inventory.insertBefore(hint,inventory.firstChild);
    hint.querySelector('button').onclick=()=>{selectingFromInventory=false;hint.style.display='none'};
  }
- fab.addEventListener('click',()=>{
-   selectingFromInventory=true;
+ const openPublish=()=>{
    close();
+   selectingFromInventory=true;
    if(typeof openVehiclesHub==='function')openVehiclesHub();
    else if(typeof show==='function')show('vehiculos');
    else {selectingFromInventory=false;overlay.classList.add('ca-open');panel.classList.add('ca-open');load();return}
    const hint=document.getElementById('ca-inventory-hint');if(hint)hint.style.display='flex';
- });
+ };
+ const publishCard=document.querySelector('#dashboard .ca-home-card:last-child');
+ if(publishCard)publishCard.addEventListener('click',openPublish);
  // Mantiene intacto el comportamiento normal de las fichas fuera del modo comercial.
  const originalSelect=window.selectInventoryVehicle;
  if(typeof originalSelect==='function'){
