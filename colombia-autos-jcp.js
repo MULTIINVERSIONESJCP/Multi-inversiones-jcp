@@ -111,6 +111,17 @@ function inventoryCover(vehicleId){
    return typeof photo==='string'&&/^(?:data:image\/|blob:|https:\/\/)/i.test(photo)?photo:'';
  }catch{return ''}
 }
+function inventoryEstimatedPrice(vehicleId){
+ // El precio estimado proviene del inventario JCP, no del costo de compra.
+ try{
+  const vehicles=(typeof data!=='undefined'&&Array.isArray(data?.veh))?data.veh:[];
+  const v=vehicles.find(x=>String(x.id)===String(vehicleId));
+  if(!v)return 0;
+  const raw=v.additionalInfo?.precioEstimadoVenta??v.precioEstimadoVenta;
+  const n=typeof raw==='number'?raw:Number(String(raw??'').replace(/[^0-9]/g,''));
+  return Number.isSafeInteger(n)&&n>0&&n<=9999999999999?n:0;
+ }catch{return 0}
+}
 function photoUrl(db,pathOrUrl){if(/^https:\/\//i.test(str(pathOrUrl)))return str(pathOrUrl);return db.storage.from(BUCKET).getPublicUrl(str(pathOrUrl)).data.publicUrl}
 async function load(){const db=dbClient();if(!db){setStatus('No se encontró la conexión a Supabase. Inicia sesión en JCP.');return}
  let user;try{const r=await db.auth.getUser();if(r.error)throw r.error;user=r.data?.user}catch(err){setStatus('No se pudo verificar tu sesión: '+str(err.message));return}
@@ -147,8 +158,11 @@ async function load(){const db=dbClient();if(!db){setStatus('No se encontró la 
   const name=document.createElement('strong');name.textContent=title;
   const meta=document.createElement('small');meta.textContent=(car.publicado?'Publicado':'Oculto')+' · '+pics.length+' foto(s) públicas';
   choice.append(name,meta);choice.onclick=()=>{chooseVehicle(String(car.vehiculo_id));box.scrollIntoView({block:'nearest',behavior:'smooth'})};picker.append(choice);
-  const canPublish=Number(car.precio_venta)>0&&pics.length>0;
-  box.innerHTML=`<h3>${esc(title)}</h3><div class="ca-tag">${car.publicado?'🟢 PUBLICADO EN LA WEB':'⚪ OCULTO AL PÚBLICO'} · ${pics.length} foto(s)</div><label>Precio de venta público (COP)</label><input class="ca-price" inputmode="numeric" type="number" min="1" max="9999999999999" step="1" value="${Number(car.precio_venta)||''}" placeholder="Ej. 39990000"><div class="ca-photos"></div><label>Seleccionar fotografías para la página pública</label><input class="ca-file" type="file" accept="image/jpeg,image/png,image/webp" multiple><div class="ca-muted">Solo imágenes comerciales seleccionadas por ti. JPG, PNG o WebP; hasta 30 por carga y máximo 8 MB por foto.</div><div class="ca-row"><button type="button" class="ca-save">Guardar precio</button><button type="button" class="ca-upload ca-light">Subir fotografías</button><button type="button" class="ca-toggle ${car.publicado?'ca-hide':''}">${car.publicado?'Ocultar anuncio':'Publicar anuncio'}</button></div><div class="ca-result" role="status" aria-live="polite"></div>`;
+  const estimate=inventoryEstimatedPrice(car.vehiculo_id);
+  // No se cambia automáticamente el precio de anuncios ya publicados.
+  const initialPrice=car.publicado?(Number(car.precio_venta)||estimate):(estimate||Number(car.precio_venta)||0);
+  const canPublish=initialPrice>0&&pics.length>0;
+  box.innerHTML=`<h3>${esc(title)}</h3><div class="ca-tag">${car.publicado?'🟢 PUBLICADO EN LA WEB':'⚪ OCULTO AL PÚBLICO'} · ${pics.length} foto(s)</div><label>Precio de venta público (COP)</label><div class="ca-muted">Tomado del precio estimado de venta del Inventario JCP. Puedes ajustarlo.</div><input class="ca-price" inputmode="numeric" type="number" min="1" max="9999999999999" step="1" value="${initialPrice||''}" placeholder="Ej. 39990000"><div class="ca-photos"></div><label>Seleccionar fotografías para la página pública</label><input class="ca-file" type="file" accept="image/jpeg,image/png,image/webp" multiple><div class="ca-muted">Solo imágenes comerciales seleccionadas por ti. JPG, PNG o WebP; hasta 30 por carga y máximo 8 MB por foto.</div><div class="ca-row"><button type="button" class="ca-save">Guardar precio</button><button type="button" class="ca-upload ca-light">Subir fotografías</button><button type="button" class="ca-toggle ${car.publicado?'ca-hide':''}">${car.publicado?'Ocultar anuncio':'Publicar anuncio'}</button></div><div class="ca-result" role="status" aria-live="polite"></div>`;
   const price=box.querySelector('.ca-price'),file=box.querySelector('.ca-file'),result=box.querySelector('.ca-result');
   const msg=s=>result.textContent=s;const busy=b=>box.querySelectorAll('button').forEach(x=>x.disabled=b);
   const gallery=box.querySelector('.ca-photos');for(const urlOrPath of pics){const img=document.createElement('img');img.src=photoUrl(db,urlOrPath);img.loading='lazy';img.alt='Fotografía comercial de '+title;gallery.append(img)}
@@ -167,8 +181,16 @@ async function load(){const db=dbClient();if(!db){setStatus('No se encontró la 
    msg(`✅ ${complete} fotografía(s) guardadas. Actualizando…`);await load();
    }catch(ex){msg(`Se completaron ${complete} de ${chosen.length}. ${ex.message}. Comprueba que ejecutaste la configuración de fotos seguras en Supabase.`)}finally{busy(false)}
   };
-  box.querySelector('.ca-toggle').onclick=async()=>{if(!car.publicado){if(!Number(car.precio_venta)){msg('Primero guarda un precio de venta público.');return}if(!pics.length){msg('Primero sube al menos una fotografía comercial.');return}if(!confirm('¿Publicar este vehículo y sus fotos en la página pública de Colombia Autos?'))return}
-   busy(true);try{const r=await db.rpc('colombia_autos_publicar',{p_vehiculo_id:car.vehiculo_id,p_publicar:!car.publicado});if(r.error)throw r.error;await load()}catch(ex){msg('No se pudo actualizar el anuncio: '+ex.message)}finally{busy(false)}
+  box.querySelector('.ca-toggle').onclick=async()=>{const chosenPrice=Number(price.value);if(!car.publicado){if(!Number.isSafeInteger(chosenPrice)||chosenPrice<=0){msg('Este carro no tiene un precio estimado de venta válido en Inventario.');return}if(!pics.length){msg('Primero sube al menos una fotografía comercial.');return}if(!confirm('¿Publicar este vehículo y sus fotos en la página pública de Colombia Autos?'))return}
+   busy(true);try{
+    // Sincroniza el precio estimado al publicar, sin pedir ingresarlo dos veces.
+    if(!car.publicado&&chosenPrice!==Number(car.precio_venta)){
+      const saved=await db.rpc('colombia_autos_guardar_precio',{p_vehiculo_id:car.vehiculo_id,p_precio:chosenPrice});
+      if(saved.error)throw new Error('No se pudo sincronizar el precio: '+saved.error.message);
+      car.precio_venta=chosenPrice;
+    }
+    const r=await db.rpc('colombia_autos_publicar',{p_vehiculo_id:car.vehiculo_id,p_publicar:!car.publicado});if(r.error)throw r.error;await load()
+   }catch(ex){msg('No se pudo actualizar el anuncio: '+ex.message)}finally{busy(false)}
   };
   root.append(box);
  }
