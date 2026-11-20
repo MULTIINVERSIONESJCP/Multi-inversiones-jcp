@@ -13,7 +13,6 @@ const esc=x=>str(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"
 const cash=n=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(Number(n)||0);
 const formatPrice=n=>n?new Intl.NumberFormat('es-CO',{maximumFractionDigits:0}).format(Number(n)):'';
 const parsePrice=v=>Number(String(v??'').replace(/[^0-9]/g,''));
-let selectingFromInventory=false;
 const css=`
 #ca-overlay{position:fixed;inset:0;background:#000b;z-index:2147483644;display:none}
 #ca-overlay.ca-open{display:block}
@@ -25,6 +24,8 @@ const css=`
 #dashboard .ca-home-card{font:inherit;color:inherit;min-width:0;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;text-align:center;cursor:pointer}
 #dashboard .ca-home-card b{display:block;font-weight:800}
 #dashboard .ca-home-emoji{font-size:29px;line-height:1.2}
+#jcpHomeV2 .jcp-h2-q .ca-home-action{grid-column:span 3;justify-content:center;gap:12px;min-width:0;min-height:62px;white-space:nowrap}
+#jcpHomeV2 .ca-home-symbol{font-size:23px;line-height:1}
 #ca-panel h2{font-size:20px;margin:0;letter-spacing:.5px;color:#fff}
 #ca-panel h3{font-size:17px;line-height:1.25;color:#fff!important;margin:0 0 7px;font-weight:800}
 #ca-panel p{line-height:1.5;color:#bbb}
@@ -73,53 +74,55 @@ function mount(){if(document.getElementById('ca-panel'))return;
    overlay.classList.remove('ca-open');panel.classList.remove('ca-open');
    panel.querySelectorAll('input.ca-file').forEach(input=>{input.value=''});
    panel.querySelectorAll('.ca-result').forEach(el=>{el.textContent=''});
-   selectingFromInventory=false;
  };
  overlay.addEventListener('click',close);panel.querySelector('#ca-close').addEventListener('click',close);
- // Dos accesos permanentes dentro de INICIO, usando las tarjetas nativas de JCP.
- const home=document.querySelector('#dashboard .quick');
- if(home){
-   const web=document.createElement('button');
-   web.type='button';web.className='card jcp-icon-card ca-home-card';
-   web.innerHTML='<span class="ca-home-emoji" aria-hidden="true">🌐</span><b>Página web</b>';
-   web.setAttribute('aria-label','Abrir página web de Colombia Autos');
-   web.addEventListener('click',()=>{window.open(SITE,'_blank','noopener,noreferrer')});
-   const publish=document.createElement('button');
-   publish.type='button';publish.className='card jcp-icon-card ca-home-card';
-   publish.innerHTML='<span class="ca-home-emoji" aria-hidden="true">🚗</span><b>Publicar</b>';
-   publish.setAttribute('aria-label','Elegir vehículo del inventario para publicar');
-   home.append(web,publish);
-   window.__caPublishFromHome=()=>publish.click();
- }
- // Abrir el INVENTARIO REAL, no una segunda lista comercial.
- const inventory=document.getElementById('vehiculos');
- if(inventory){
-   const hint=document.createElement('div');hint.id='ca-inventory-hint';
-   hint.innerHTML='<span>🚗 COLOMBIA AUTOS · Toca la foto del carro que quieres publicar.</span><button type="button">Cancelar</button>';
-   inventory.insertBefore(hint,inventory.firstChild);
-   hint.querySelector('button').onclick=()=>{selectingFromInventory=false;hint.style.display='none'};
- }
- const openPublish=()=>{
-   close();
-   selectingFromInventory=true;
-   if(typeof openVehiclesHub==='function')openVehiclesHub();
-   else if(typeof show==='function')show('vehiculos');
-   else {selectingFromInventory=false;overlay.classList.add('ca-open');panel.classList.add('ca-open');load();return}
-   const hint=document.getElementById('ca-inventory-hint');if(hint)hint.style.display='flex';
+ // Una sola casilla en el Inicio visible, con el estilo nativo de JCP.
+ const attachHomeWeb=()=>{
+   const target=document.querySelector('#jcpHomeV2 .jcp-h2-q');
+   if(!target)return;
+   target.querySelectorAll('#ca-home-publish').forEach(node=>node.remove());
+   if(!target.querySelector('#ca-home-web')){
+     const web=document.createElement('button');
+     web.type='button';web.id='ca-home-web';web.className='jcp-h2-tile wide ca-home-action';
+     web.innerHTML='<span class="ca-home-symbol" aria-hidden="true">🌐</span><span>Página web</span>';
+     web.setAttribute('aria-label','Abrir página web de Colombia Autos');
+     web.onclick=()=>{window.open(SITE,'_blank','noopener,noreferrer')};
+     target.appendChild(web);
+   }
  };
- const publishCard=document.querySelector('#dashboard .ca-home-card:last-child');
- if(publishCard)publishCard.addEventListener('click',openPublish);
- // Mantiene intacto el comportamiento normal de las fichas fuera del modo comercial.
- const originalSelect=window.selectInventoryVehicle;
- if(typeof originalSelect==='function'){
-   window.selectInventoryVehicle=function(id){
-     if(!selectingFromInventory)return originalSelect.apply(this,arguments);
-     selectingFromInventory=false;
-     const hint=document.getElementById('ca-inventory-hint');if(hint)hint.style.display='none';
+ attachHomeWeb();
+ const homeRoot=document.getElementById('dashboard');
+ if(homeRoot){
+   const observer=new MutationObserver(attachHomeWeb);
+   observer.observe(homeRoot,{childList:true,subtree:true});
+ }
+ // Menú de tres puntos del DETALLE DEL VEHÍCULO: nunca abre un segundo inventario.
+ const attachDetailMenu=()=>{
+   const menu=document.getElementById('unifiedMenu_vehicleDetailView');
+   if(!menu||menu.querySelector('#ca-detail-publish'))return;
+   const btn=document.createElement('button');
+   btn.type='button';btn.id='ca-detail-publish';
+   btn.textContent='🌐 PUBLICAR EN PÁGINA WEB';
+   btn.addEventListener('click',()=>{
+     menu.classList.remove('open');
+     let id=null;
+     try{if(typeof selectedVehicleDetailId!=='undefined'&&selectedVehicleDetailId!=null)id=selectedVehicleDetailId}catch(_){}
+     if(id==null){
+       try{if(typeof selectedInventoryVehicleId!=='undefined'&&selectedInventoryVehicleId!=null)id=selectedInventoryVehicleId}catch(_){}
+     }
+     if(id==null){alert('Abre primero el detalle de un vehículo del inventario.');return}
      window.__caSelectedVehicle=String(id);
+     close();
      overlay.classList.add('ca-open');panel.classList.add('ca-open');
      load();
-   }
+   });
+   menu.appendChild(btn);
+ };
+ attachDetailMenu();
+ const detail=document.getElementById('vehicleDetailView');
+ if(detail){
+   const observer=new MutationObserver(attachDetailMenu);
+   observer.observe(detail,{childList:true,subtree:true});
  }
 
 }
