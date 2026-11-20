@@ -11,6 +11,8 @@ const dbClient=()=>{try{return typeof supabaseClient!=='undefined'?supabaseClien
 const str=x=>String(x??'');
 const esc=x=>str(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&quot;'}[c]));
 const cash=n=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(Number(n)||0);
+const formatPrice=n=>n?new Intl.NumberFormat('es-CO',{maximumFractionDigits:0}).format(Number(n)):'';
+const parsePrice=v=>Number(String(v??'').replace(/[^0-9]/g,''));
 let selectingFromInventory=false;
 const css=`
 #ca-overlay{position:fixed;inset:0;background:#000b;z-index:2147483644;display:none}
@@ -27,7 +29,7 @@ const css=`
 #ca-panel .ca-tag{font-size:12px;color:#bcbcbc;line-height:1.4}
 #ca-panel .ca-status{padding:11px 12px;border-radius:9px;border:1px solid #493d28;background:#241f16;color:#ead1a0;margin:14px 0;line-height:1.45}
 #ca-panel label{color:#f4f4f4;font-size:13px;font-weight:700;display:block;margin:13px 0 6px}
-#ca-panel input[type=number],#ca-panel input[type=file]{display:block;width:100%;border:1px solid #62512a;background:#090909;color:#fff;padding:11px;border-radius:9px;font:inherit;min-width:0}
+#ca-panel input.ca-price,#ca-panel input[type=file]{display:block;width:100%;border:1px solid #62512a;background:#090909;color:#fff;padding:11px;border-radius:9px;font:inherit;min-width:0}
 #ca-panel input::placeholder{color:#909090}
 #ca-panel input[type=file]::file-selector-button{background:#343434;color:#fff;border:0;border-radius:7px;padding:8px;margin-right:9px}
 #ca-panel button{background:#c5a15d;color:#141414;border:0;border-radius:8px;padding:11px 13px;font:700 13px system-ui;cursor:pointer}
@@ -112,14 +114,34 @@ function inventoryCover(vehicleId){
  }catch{return ''}
 }
 function inventoryEstimatedPrice(vehicleId){
- // El precio estimado proviene del inventario JCP, no del costo de compra.
+ // Lee el valor comercial usando la misma normalización que la ficha de JCP.
+ // No utiliza costo, precio de compra ni precios de otros vehículos.
  try{
   const vehicles=(typeof data!=='undefined'&&Array.isArray(data?.veh))?data.veh:[];
-  const v=vehicles.find(x=>String(x.id)===String(vehicleId));
-  if(!v)return 0;
-  const raw=v.additionalInfo?.precioEstimadoVenta??v.precioEstimadoVenta;
-  const n=typeof raw==='number'?raw:Number(String(raw??'').replace(/[^0-9]/g,''));
-  return Number.isSafeInteger(n)&&n>0&&n<=9999999999999?n:0;
+  const vehicle=vehicles.find(x=>String(x.id)===String(vehicleId));
+  if(!vehicle)return 0;
+  const valid=value=>{
+   if(value==null||value==='')return 0;
+   const n=typeof value==='number'?value:Number(String(value).replace(/[^0-9]/g,''));
+   return Number.isSafeInteger(n)&&n>0&&n<=9999999999999?n:0;
+  };
+  // Esta función existe en el index.html de JCP y resuelve campos anidados y alias.
+  if(typeof getVehicleCommercialSnapshot==='function'){
+   const n=valid(getVehicleCommercialSnapshot(vehicle)?.precioEstimadoVenta);
+   if(n)return n;
+  }
+  const aliases=new Set(['precioestimadoventa','precioventaestimado','valorestimadoventa','precioestimado','valorventaestimado']);
+  const normalize=key=>String(key).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'').toLowerCase();
+  const seen=new Set();let found=0;
+  const walk=(obj,depth)=>{
+   if(found||depth>7||!obj||typeof obj!=='object'||seen.has(obj))return;
+   seen.add(obj);
+   for(const [key,value] of Object.entries(obj)){
+    if(aliases.has(normalize(key))){const n=valid(value);if(n){found=n;return;}}
+   }
+   for(const value of Object.values(obj)){if(value&&typeof value==='object')walk(value,depth+1);if(found)return;}
+  };
+  walk(vehicle,0);return found;
  }catch{return 0}
 }
 function photoUrl(db,pathOrUrl){if(/^https:\/\//i.test(str(pathOrUrl)))return str(pathOrUrl);return db.storage.from(BUCKET).getPublicUrl(str(pathOrUrl)).data.publicUrl}
@@ -160,20 +182,21 @@ async function load(){const db=dbClient();if(!db){setStatus('No se encontró la 
   choice.append(name,meta);choice.onclick=()=>{chooseVehicle(String(car.vehiculo_id));box.scrollIntoView({block:'nearest',behavior:'smooth'})};picker.append(choice);
   const estimate=inventoryEstimatedPrice(car.vehiculo_id);
   // No se cambia automáticamente el precio de anuncios ya publicados.
-  const initialPrice=car.publicado?(Number(car.precio_venta)||estimate):(estimate||Number(car.precio_venta)||0);
+  const initialPrice=car.publicado?(Number(car.precio_venta)||estimate):estimate;
   const canPublish=initialPrice>0&&pics.length>0;
-  box.innerHTML=`<h3>${esc(title)}</h3><div class="ca-tag">${car.publicado?'🟢 PUBLICADO EN LA WEB':'⚪ OCULTO AL PÚBLICO'} · ${pics.length} foto(s)</div><label>Precio de venta público (COP)</label><div class="ca-muted">Tomado del precio estimado de venta del Inventario JCP. Puedes ajustarlo.</div><input class="ca-price" inputmode="numeric" type="number" min="1" max="9999999999999" step="1" value="${initialPrice||''}" placeholder="Ej. 39990000"><div class="ca-photos"></div><label>Seleccionar fotografías para la página pública</label><input class="ca-file" type="file" accept="image/jpeg,image/png,image/webp" multiple><div class="ca-muted">Solo imágenes comerciales seleccionadas por ti. JPG, PNG o WebP; hasta 30 por carga y máximo 8 MB por foto.</div><div class="ca-row"><button type="button" class="ca-save">Guardar precio</button><button type="button" class="ca-upload ca-light">Subir fotografías</button><button type="button" class="ca-toggle ${car.publicado?'ca-hide':''}">${car.publicado?'Ocultar anuncio':'Publicar anuncio'}</button></div><div class="ca-result" role="status" aria-live="polite"></div>`;
+  box.innerHTML=`<h3>${esc(title)}</h3><div class="ca-tag">${car.publicado?'🟢 PUBLICADO EN LA WEB':'⚪ OCULTO AL PÚBLICO'} · ${pics.length} foto(s)</div><label>Precio de venta público (COP)</label><div class="ca-muted">${estimate?'Precio estimado leído del inventario de este vehículo. Puedes ajustarlo.':'No se encontró precio estimado en la ficha de este vehículo; compruébalo en Inventario.'}</div><input class="ca-price" inputmode="numeric" type="text" maxlength="19" value="${formatPrice(initialPrice)}" placeholder="Ej. 39.990.000"><div class="ca-photos"></div><label>Seleccionar fotografías para la página pública</label><input class="ca-file" type="file" accept="image/jpeg,image/png,image/webp" multiple><div class="ca-muted">Solo imágenes comerciales seleccionadas por ti. JPG, PNG o WebP; hasta 30 por carga y máximo 8 MB por foto.</div><div class="ca-row"><button type="button" class="ca-save">Guardar precio</button><button type="button" class="ca-upload ca-light">Subir fotografías</button><button type="button" class="ca-toggle ${car.publicado?'ca-hide':''}">${car.publicado?'Ocultar anuncio':'Publicar anuncio'}</button></div><div class="ca-result" role="status" aria-live="polite"></div>`;
   const price=box.querySelector('.ca-price'),file=box.querySelector('.ca-file'),result=box.querySelector('.ca-result');
   const msg=s=>result.textContent=s;const busy=b=>box.querySelectorAll('button').forEach(x=>x.disabled=b);
+  price.addEventListener('input',()=>{const n=parsePrice(price.value);price.value=n?formatPrice(n):'';});
   const gallery=box.querySelector('.ca-photos');for(const urlOrPath of pics){const img=document.createElement('img');img.src=photoUrl(db,urlOrPath);img.loading='lazy';img.alt='Fotografía comercial de '+title;gallery.append(img)}
-  box.querySelector('.ca-save').onclick=async()=>{const n=Number(price.value);if(!Number.isSafeInteger(n)||n<=0||n>9999999999999){msg('Ingresa un precio válido en pesos colombianos.');return}busy(true);try{const r=await db.rpc('colombia_autos_guardar_precio',{p_vehiculo_id:car.vehiculo_id,p_precio:n});if(r.error)throw r.error;car.precio_venta=n;msg('✅ Precio comercial guardado: '+cash(n)+'. No modifica el costo financiero del vehículo.')}catch(ex){msg('No se pudo guardar: '+ex.message)}finally{busy(false)}};
+  box.querySelector('.ca-save').onclick=async()=>{const n=parsePrice(price.value);if(!Number.isSafeInteger(n)||n<=0||n>9999999999999){msg('Ingresa un precio válido en pesos colombianos.');return}busy(true);try{const r=await db.rpc('colombia_autos_guardar_precio',{p_vehiculo_id:car.vehiculo_id,p_precio:n});if(r.error)throw r.error;car.precio_venta=n;msg('✅ Precio comercial guardado: '+cash(n)+'. No modifica el costo financiero del vehículo.')}catch(ex){msg('No se pudo guardar: '+ex.message)}finally{busy(false)}};
   box.querySelector('.ca-upload').onclick=async()=>{const chosen=Array.from(file.files||[]);if(!chosen.length){msg('Selecciona una o varias fotos.');return}if(chosen.length>30){msg('Selecciona máximo 30 fotos por carga.');return}
    if(chosen.some(f=>f.size>8*1024*1024||f.size===0||!['image/jpeg','image/png','image/webp'].includes(f.type))){msg('Solo JPG, PNG o WebP, hasta 8 MB por foto.');return}
    if(!car.id){msg('Falta el identificador de la publicación.');return}
    busy(true);let complete=0;
-   try{for(const f of chosen){const ext=f.type==='image/png'?'png':f.type==='image/webp'?'webp':'jpg';const unique=globalThis.crypto?.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`;const path=`${user.id}/${car.id}/${unique}.${ext}`;
+   try{for(const f of chosen){const ext=f.type==='image/png'?'png':f.type==='image/webp'?'webp':'jpg';const unique=globalThis.crypto?.randomUUID?.()||`${Date.now().toString(16)}-${Math.floor(Math.random()*0xFFFFFFFF).toString(16)}`;const path=`${user.id}/${car.id}/${unique}.${ext}`;
      msg(`Subiendo fotografía ${complete+1} de ${chosen.length}…`);
-     const up=await db.storage.from(BUCKET).upload(path,f,{cacheControl:'3600',upsert:false,contentType:f.type});if(up.error)throw new Error('Error de almacenamiento: '+up.error.message);
+     const up=await db.storage.from(BUCKET).upload(path,f,{cacheControl:'3600',upsert:false,contentType:f.type});if(up.error)throw new Error('Error de almacenamiento: '+up.error.message+(up.error.statusCode?' (HTTP '+up.error.statusCode+')':''));
      const linked=await db.rpc('colombia_autos_agregar_foto',{p_vehiculo_id:car.vehiculo_id,p_ruta:path});
      if(linked.error)throw new Error('La foto se cargó, pero no se vinculó: '+linked.error.message);
      complete++;
@@ -181,7 +204,7 @@ async function load(){const db=dbClient();if(!db){setStatus('No se encontró la 
    msg(`✅ ${complete} fotografía(s) guardadas. Actualizando…`);await load();
    }catch(ex){msg(`Se completaron ${complete} de ${chosen.length}. ${ex.message}. Comprueba que ejecutaste la configuración de fotos seguras en Supabase.`)}finally{busy(false)}
   };
-  box.querySelector('.ca-toggle').onclick=async()=>{const chosenPrice=Number(price.value);if(!car.publicado){if(!Number.isSafeInteger(chosenPrice)||chosenPrice<=0){msg('Este carro no tiene un precio estimado de venta válido en Inventario.');return}if(!pics.length){msg('Primero sube al menos una fotografía comercial.');return}if(!confirm('¿Publicar este vehículo y sus fotos en la página pública de Colombia Autos?'))return}
+  box.querySelector('.ca-toggle').onclick=async()=>{const chosenPrice=parsePrice(price.value);if(!car.publicado){if(!Number.isSafeInteger(chosenPrice)||chosenPrice<=0){msg('Este carro no tiene un precio estimado de venta válido en Inventario.');return}if(!pics.length){msg('Primero sube al menos una fotografía comercial.');return}if(!confirm('¿Publicar este vehículo y sus fotos en la página pública de Colombia Autos?'))return}
    busy(true);try{
     // Sincroniza el precio estimado al publicar, sin pedir ingresarlo dos veces.
     if(!car.publicado&&chosenPrice!==Number(car.precio_venta)){
