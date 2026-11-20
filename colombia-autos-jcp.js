@@ -13,6 +13,35 @@ const esc=x=>str(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"
 const cash=n=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(Number(n)||0);
 const formatPrice=n=>n?new Intl.NumberFormat('es-CO',{maximumFractionDigits:0}).format(Number(n)):'';
 const parsePrice=v=>Number(String(v??'').replace(/[^0-9]/g,''));
+// Normaliza fotos del iPhone antes de subirlas. Se mantiene el orden de selección.
+async function prepareCommercialImage(original){
+ const maxBytes=8*1024*1024;
+ if(!original||!original.size)throw new Error('archivo vacío');
+ const type=String(original.type||'').toLowerCase();
+ const name=String(original.name||'foto');
+ const supported=/^image\/(jpeg|png|webp|heic|heif)$/.test(type)||/\.(jpe?g|png|webp|heic|heif)$/i.test(name);
+ if(!supported)throw new Error('formato de imagen no reconocido');
+ const url=URL.createObjectURL(original);
+ let img;
+ try{
+  img=await new Promise((resolve,reject)=>{
+   const image=new Image();image.onload=()=>resolve(image);
+   image.onerror=()=>reject(new Error('el iPhone no pudo abrir esta imagen; guárdala como JPG desde Fotos y vuelve a seleccionarla'));
+   image.src=url;
+  });
+  let w=img.naturalWidth,h=img.naturalHeight;
+  if(!(w>0&&h>0))throw new Error('imagen sin dimensiones válidas');
+  const ratio=Math.min(1,2200/Math.max(w,h));w=Math.max(1,Math.round(w*ratio));h=Math.max(1,Math.round(h*ratio));
+  const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+  const ctx=canvas.getContext('2d');if(!ctx)throw new Error('no se pudo preparar la imagen');
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.83));
+  canvas.width=0;canvas.height=0;
+  if(!blob||!blob.size||blob.size>maxBytes)throw new Error('la conversión no produjo una imagen válida de menos de 8 MB');
+  const safeName=name.replace(/\.[^.]+$/,'').replace(/[^a-z0-9_-]/gi,'_').slice(0,65)||'foto';
+  return new File([blob],safeName+'.jpg',{type:'image/jpeg',lastModified:Date.now()});
+ }finally{URL.revokeObjectURL(url)}
+}
 const draftPhotos=new Map();
 let publishingPhotos=false;
 function discardDrafts(){
@@ -236,7 +265,7 @@ async function load(){const db=dbClient();if(!db){setStatus('No se encontró la 
   // No se cambia automáticamente el precio de anuncios ya publicados.
   const initialPrice=car.publicado?(Number(car.precio_venta)||estimate):(estimate||Number(car.precio_venta)||0);
   const canPublish=initialPrice>0&&pics.length>0;
-  box.innerHTML=`<h3>${esc(title)}</h3><div class="ca-tag">${car.publicado?'🟢 PUBLICADO EN LA WEB':'⚪ OCULTO AL PÚBLICO'} · ${pics.length} foto(s)</div><label>Precio de venta público (COP)</label><div class="ca-muted">${estimate?'Precio estimado leído del inventario. Puedes ajustarlo.':(Number(car.precio_venta)>0?'Precio comercial guardado anteriormente; el estimado no está registrado en la ficha de inventario.':'No se encontró precio estimado en Inventario. Puedes ingresar un precio comercial.')}</div><input class="ca-price" inputmode="numeric" type="text" maxlength="19" value="${formatPrice(initialPrice)}" placeholder="Ej. 39.990.000"><div class="ca-photos"></div><div class="ca-draft-note">Las fotos nuevas son un borrador: solo se suben al confirmar «Publicar anuncio». Al cerrar, se descartan.</div><label>Seleccionar fotografías para la página pública</label><input class="ca-file" type="file" accept="image/jpeg,image/png,image/webp" multiple><div class="ca-muted">Solo imágenes comerciales seleccionadas por ti. JPG, PNG o WebP; hasta 30 por carga y máximo 8 MB por foto.</div><div class="ca-row"><button type="button" class="ca-save">Guardar precio</button><button type="button" class="ca-upload ca-light">Preparar fotografías</button><button type="button" class="ca-toggle ${car.publicado?'ca-hide':''}">${car.publicado?'Ocultar anuncio':'Publicar anuncio'}</button></div><div class="ca-result" role="status" aria-live="polite"></div>`;
+  box.innerHTML=`<h3>${esc(title)}</h3><div class="ca-tag">${car.publicado?'🟢 PUBLICADO EN LA WEB':'⚪ OCULTO AL PÚBLICO'} · ${pics.length} foto(s)</div><label>Precio de venta público (COP)</label><div class="ca-muted">${estimate?'Precio estimado leído del inventario. Puedes ajustarlo.':(Number(car.precio_venta)>0?'Precio comercial guardado anteriormente; el estimado no está registrado en la ficha de inventario.':'No se encontró precio estimado en Inventario. Puedes ingresar un precio comercial.')}</div><input class="ca-price" inputmode="numeric" type="text" maxlength="19" value="${formatPrice(initialPrice)}" placeholder="Ej. 39.990.000"><div class="ca-photos"></div><div class="ca-draft-note">Las fotos nuevas son un borrador: solo se suben al confirmar «Publicar anuncio». Al cerrar, se descartan.</div><label>Seleccionar fotografías para la página pública</label><input class="ca-file" type="file" accept="image/jpeg,image/png,image/webp" multiple><div class="ca-muted">Fotos de iPhone (JPG, PNG, WebP o HEIC). Se adaptan automáticamente a JPG, máximo 30 por carga.</div><div class="ca-row"><button type="button" class="ca-save">Guardar precio</button><button type="button" class="ca-upload ca-light">Preparar fotografías</button><button type="button" class="ca-toggle ${car.publicado?'ca-hide':''}">${car.publicado?'Ocultar anuncio':'Publicar anuncio'}</button></div><div class="ca-result" role="status" aria-live="polite"></div>`;
   const price=box.querySelector('.ca-price'),file=box.querySelector('.ca-file'),result=box.querySelector('.ca-result');
   const msg=s=>result.textContent=s;const busy=b=>box.querySelectorAll('button').forEach(x=>x.disabled=b);
   price.addEventListener('input',()=>{const n=parsePrice(price.value);price.value=n?formatPrice(n):'';});
@@ -274,15 +303,25 @@ async function load(){const db=dbClient();if(!db){setStatus('No se encontró la 
   };
   refreshGallery();
   box.querySelector('.ca-save').onclick=async()=>{const n=parsePrice(price.value);if(!Number.isSafeInteger(n)||n<=0||n>9999999999999){msg('Ingresa un precio válido en pesos colombianos.');return}busy(true);try{const r=await db.rpc('colombia_autos_guardar_precio',{p_vehiculo_id:car.vehiculo_id,p_precio:n});if(r.error)throw r.error;car.precio_venta=n;msg('✅ Precio comercial guardado: '+cash(n)+'. No modifica el costo financiero del vehículo.')}catch(ex){msg('No se pudo guardar: '+ex.message)}finally{busy(false)}};
-  box.querySelector('.ca-upload').onclick=()=>{
+  box.querySelector('.ca-upload').onclick=async()=>{
     const chosen=Array.from(file.files||[]);if(!chosen.length){msg('Selecciona una o varias fotos.');return}
     const key=String(car.vehiculo_id);const previous=draftPhotos.get(key)||[];
     if(previous.length+chosen.length>30){msg('Máximo 30 fotos nuevas por publicación.');return}
-    if(chosen.some(f=>f.size>8*1024*1024||f.size===0||!['image/jpeg','image/png','image/webp'].includes(f.type))){msg('Solo JPG, PNG o WebP, hasta 8 MB por foto.');return}
-    for(const f of chosen)previous.push({file:f,url:URL.createObjectURL(f)});
-    draftPhotos.set(key,previous);file.value='';refreshGallery();
-    if(car.publicado)box.querySelector('.ca-toggle').textContent='Guardar fotos nuevas';
-    msg(`✅ ${previous.length} foto(s) preparadas. No se han subido al servidor. Pulsa «Publicar anuncio» para guardarlas, o cierra para descartarlas.`);
+    busy(true);let prepared=0;const failed=[];
+    try{
+      for(const f of chosen){
+        msg(`Preparando fotografía ${prepared+failed.length+1} de ${chosen.length}…`);
+        try{
+          const converted=await prepareCommercialImage(f);
+          previous.push({file:converted,url:URL.createObjectURL(converted)});
+          prepared++;
+        }catch(e){failed.push(`${f.name||'Sin nombre'}: ${e.message}`)}
+      }
+      draftPhotos.set(key,previous);file.value='';refreshGallery();
+      if(car.publicado&&prepared)box.querySelector('.ca-toggle').textContent='Guardar fotos nuevas';
+      if(failed.length){msg(`✅ ${prepared} foto(s) preparadas. ⚠️ No se pudieron preparar ${failed.length}: ${failed.slice(0,3).join(' | ')}${failed.length>3?' | ...':''}`)}
+      else msg(`✅ ${previous.length} foto(s) preparadas en el orden seleccionado. Se convertirán a JPG y se guardarán al confirmar la publicación; cerrar las descarta.`);
+    }finally{busy(false)}
   };
   box.querySelector('.ca-toggle').onclick=async()=>{
     const chosenPrice=parsePrice(price.value);const drafts=draftPhotos.get(String(car.vehiculo_id))||[];
