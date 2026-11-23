@@ -24,7 +24,7 @@ window.jcpArchiveToIdb=function(key,val){
 
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>COLOMBIAUTOS JP - V2026.11.08.153</title>
+<title>COLOMBIAUTOS JP - V2026.11.08.154</title>
 <style id="jcp-consolidated-styles-v2026-09-14-2">
 :root{--bg:#090909;--card:#141414;--card2:#1b1b1b;--gold:#d4af37;--text:#f5f5f5;--muted:#a8a8a8;--green:#39d98a;--red:#ff6868}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}input,textarea,select{text-transform:uppercase}
@@ -4065,7 +4065,7 @@ img.brand-logo,img.unified-module-logo,img.inventory-inline-logo,img.acc-logo{ba
 </div>
 <div class="app">
 <header>
-<div class="brand"><img alt="COLOMBIAUTOS JP" class="brand-logo" src="logo-colombiautos.jpg"/></div><div class="top-menu-wrap"><button aria-label="Más opciones" class="dots-btn" onclick="toggleTopMenu(event)">⋮</button><div class="top-menu" id="topMenu"><button onclick="openSecurity();closeTopMenu()">🔒 Seguridad</button><button onclick="openSettings();closeTopMenu()">⚙️ Configuración</button><button id="jcpVersionMenuItem" onclick="openAppInfo();closeTopMenu()">ℹ️ Versión 2026.09.17.1</button></div></div></header>
+<div class="brand"><img alt="COLOMBIAUTOS JP" class="brand-logo" src="logo-colombiautos.jpg"/></div><div class="top-menu-wrap"><button aria-label="Más opciones" class="dots-btn" onclick="toggleTopMenu(event)">⋮</button><div class="top-menu" id="topMenu"><button onclick="openSecurity();closeTopMenu()">🔒 Seguridad</button><button onclick="openSettings();closeTopMenu()">⚙️ Configuración</button><button onclick="closeTopMenu();openLiquidador()">🧮 Liquidador de avalúos</button><button id="jcpVersionMenuItem" onclick="openAppInfo();closeTopMenu()">ℹ️ Versión 2026.09.17.1</button></div></div></header>
 <input accept="application/json,.json" id="backupFile" onchange="importBackup(event)" style="display:none" type="file"/>
 <nav id="nav"></nav>
 <div class="jcp-assistant-float" hidden="" id="jcpAssistantFloat">
@@ -5918,9 +5918,9 @@ img.brand-logo,img.unified-module-logo,img.inventory-inline-logo,img.acc-logo{ba
 </div>
 </section>
 </div>
-<script src="./jcp-accounting.js?v=2026.11.08.153"></script>
-<script src="./jcp-sync.js?v=2026.11.08.153"></script>
-<script src="./jcp-images.js?v=2026.11.08.153"></script>
+<script src="./jcp-accounting.js?v=2026.11.08.154"></script>
+<script src="./jcp-sync.js?v=2026.11.08.154"></script>
+<script src="./jcp-images.js?v=2026.11.08.154"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function ensureObligationPaymentFormVisible(){
@@ -10881,6 +10881,8 @@ async function exportVehicleImage(type){
     alert('SELECCIONA UN VEHÍCULO.');
     return false;
   }
+  // La imagen se muestra en una ventana con DESCARGAR / COMPARTIR (en el iPhone la descarga directa no hace nada).
+  let exportWin=null;try{exportWin=window.open('','_blank');if(exportWin)exportWin.document.write('<p style="font-family:Arial;padding:30px;text-align:center">Generando ficha…</p>');}catch(_e){exportWin=null;}
 
   const commercial=getVehicleCommercialSnapshot(vehicle);
   const isClient=type==='client';
@@ -11327,7 +11329,14 @@ async function exportVehicleImage(type){
     plate+
     '.png';
 
-  link.href=canvas.toDataURL('image/png');
+  let dataUrl='';
+  try{dataUrl=canvas.toDataURL('image/jpeg',0.92);}catch(e){try{if(exportWin)exportWin.close();}catch(_e){}alert('NO SE PUDO CREAR LA IMAGEN: LA FOTO DEL VEHÍCULO NO PERMITE EXPORTARSE. VUELVE A CARGAR LA FOTO DEL CARRO.');return false;}
+  if(exportWin&&!exportWin.closed&&typeof window.openSupportDocument==='function'){
+    const title=(isClient?'FICHA CLIENTE ':'INFORME INTERNO ')+(commercial.placa||'');
+    window.openSupportDocument('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=1080"><title>'+title+'</title><style>body{margin:0;background:#111}.sale-page{width:1080px;max-width:100%;margin:12px auto;background:#080808}.sale-page img{display:block;width:100%;height:auto}</style></head><body><div class="sale-page"><img src="'+dataUrl+'" alt="'+title+'"></div></body></html>',link.download.replace(/\.png$/i,''),title,exportWin);
+    return true;
+  }
+  link.href=dataUrl;link.download=link.download.replace(/\.png$/i,'.jpg');
   link.click();
 
   return true;
@@ -13222,7 +13231,7 @@ function openAppInfo(){
     return;
   }
   const account=cloudUser?.email||'SIN SESIÓN';
-  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.153\nCuenta de nube: '+account);
+  alert('COLOMBIAUTOS JP\nVersión instalada: 2026.11.08.154\nCuenta de nube: '+account);
 }
 function toggleVehicleModuleMenu(e){e.stopPropagation();document.getElementById('vehicleModuleMenu').classList.toggle('open')}function closeVehicleModuleMenu(){document.getElementById('vehicleModuleMenu').classList.remove('open')}function openSecurity(){document.getElementById('securityPanel').classList.add('open')}function closeSecurity(){document.getElementById('securityPanel').classList.remove('open')}document.addEventListener('click',function(e){const w=document.querySelector('.top-menu-wrap');if(w&&!w.contains(e.target))closeTopMenu();const vw=document.querySelector('.vehicle-module-menu-wrap');if(vw&&!vw.contains(e.target))closeVehicleModuleMenu()});const navItems=[
 ['dashboard','Inicio','home'],
@@ -17140,7 +17149,7 @@ function voidAccountingDocument(){
     const title=${JSON.stringify(String(shareTitle||safeFile))};
     const msg=document.getElementById('jcpSupportMsg');
     function setMsg(t){if(msg)msg.textContent=t||'';}
-    const LIB=${JSON.stringify(new URL('jcp-print.js?v=2026.11.08.153',location.href).href)};
+    const LIB=${JSON.stringify(new URL('jcp-print.js?v=2026.11.08.154',location.href).href)};
     const SNAP=${JSON.stringify(String(window.__jcpSnapFor||''))};
     let libP=null;
     function ensureLib(){
@@ -17544,7 +17553,7 @@ window.openRecordCopy=function(number){
 <script id="jcp-excel-export-script">
 (function(){
   'use strict';
-  const VERSION='2026.11.08.153',PREF='jcp_excel_export_preferences_v1';
+  const VERSION='2026.11.08.154',PREF='jcp_excel_export_preferences_v1';
   const val=(o,...keys)=>{for(const k of keys){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
   const num=(o,...keys)=>Number(val(o,...keys))||0;
   const fmtDate=value=>{if(!value)return '';const text=String(value),plain=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);const d=plain?new Date(Number(plain[1]),Number(plain[2])-1,Number(plain[3])):new Date(value);return Number.isNaN(d.getTime())?text:d.toLocaleDateString('es-CO');};
@@ -17713,8 +17722,7 @@ window.openRecordCopy=function(number){
     coin:'<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.5 5-1.5 5 .5s-5 1-5 3 5 2 5 .5"/>',
     calc:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/>',
     edit:'<path d="M4 20h4L19 9l-4-4L4 16v4zM13 7l4 4"/>',
-    grid:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/>',
-    globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3-3 15 0 18M12 3c3 3 3 15 0 18"/>'
+    grid:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/>'
   };
   function svg(k){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+(IC[k]||IC.doc)+'</svg>'}
 
@@ -17757,7 +17765,6 @@ window.openRecordCopy=function(number){
     vender:      {label:'Vender',         icon:'tag',     go:function(){openOperationsSales()}},
     registros:   {label:'Registros',      icon:'doc',     go:function(){openRecordsModule()}},
     clientes:    {label:'Clientes',       icon:'user',    go:function(){show('clientes')}},
-    paginaweb:   {label:'Página web',     icon:'globe',   go:function(){window.open('https://colombia-autos-jeissoncamilomar-1669s-projects.vercel.app/','_blank','noopener,noreferrer')}},
     inventario:  {label:'Inventario',     icon:'car',     go:function(){openVehiclesHub()}},
     operaciones: {label:'Operaciones',    icon:'ops',     go:function(){openOperationsHub()}},
     finanzas:    {label:'Finanzas',       icon:'card',    go:function(){show('cajaCapital')}},
@@ -21217,6 +21224,11 @@ function jcpParseLicencia(raw){
     runCardScan(file,{map:MAP,statusFn:status,previewEl:el('vehScanPreview'),fillOnlyEmpty:false,onDone:function(){setTimeout(function(){try{el('vehModeBox').scrollIntoView({behavior:'smooth',block:'start'});}catch(_e){}},80);}});
     });
   };
+  /* ---- Liquidador de avalúos (solo consulta) ---- */
+  window.jcpLiqScanPick=function(kind){var i=el(kind==='camera'?'liqScanCamera':'liqScanGallery');if(i){i.value='';i.click();}};
+  window.jcpLiqScanFile=function(input){var file0=input&&input.files&&input.files[0];if(!file0)return;try{input.value='';}catch(_e){}
+    cropThen(file0,function(file){var st=function(t,cls){var x=el('liqScanStatus');if(x){x.textContent=t||'';x.className='veh-scan-status'+(cls?' '+cls:'');}};
+      runCardScan(file,{map:{marca:'liqMarca',linea:'liqLinea',modelo:'liqModelo',cilindraje:'liqCil',placa:'liqPlaca',clase:'liqClase'},statusFn:st,previewEl:null,fillOnlyEmpty:false,onDone:function(){try{window.jcpLiqSearch&&window.jcpLiqSearch();}catch(_e){}}});});};
   /* ---- Permuta: carro que ingresa ---- */
   var PERM_MAP={marca:'permutaInMarca',clase:'permutaInClase',linea:'permutaInRef',modelo:'permutaInModelo',placa:'permutaInPlaca',color:'permutaInColor',servicio:'permutaInServicio',capacidad:'permutaInCapacidad',chasis:'permutaInChasis',motor:'permutaInMotor',cilindraje:'permutaInCilindraje'};
   window.PERM_MAP=PERM_MAP;
@@ -21413,7 +21425,7 @@ function jcpParseLicencia(raw){
   function permVals(c){var v1=+c.val1||0,d=+c.diff||0,v2=c.dir==='receive'?v1-d:(c.dir==='pay'?v1+d:v1);return {v1:v1,v2:Math.max(0,v2),d:d,payer:c.dir==='receive'?'PERMUTANTE 2':(c.dir==='pay'?'PERMUTANTE 1':'')};}
   // Copia del contrato: al generarlo se toma una imagen de cada hoja (con las fotos) y se guarda como un solo documento.
   // Las fotos sueltas de cédulas y tarjeta NO se guardan.
-  var H2C=new URL('jcp-print.js?v=2026.11.08.153',location.href).href;
+  var H2C=new URL('jcp-print.js?v=2026.11.08.154',location.href).href;
   function ctToast(t,ok){try{var d=document.createElement('div');d.textContent=t;d.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:100005;max-width:92%;padding:12px 16px;border-radius:12px;font:900 13px Arial,sans-serif;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.5);background:'+(ok?'#1f7a45':'#9b1c1c')+';color:#fff';document.body.appendChild(d);setTimeout(function(){d.remove();},ok?3500:7000);}catch(e){}}
   var CT_STORING={};
   function ctStorePages(num,out){if(!out||!out.length)return false;if(CT_STORING[num])return true;CT_STORING[num]=true;setTimeout(function(){delete CT_STORING[num];},600000);var sz=out.reduce(function(a,x){return a+String(x).length;},0);jcpCtLog(num+': '+out.length+' HOJAS CAPTURADAS ('+Math.round(sz/1024)+' KB). GUARDANDO…');var tries=0;jcpPersistLater(function(){tries++;var ct=ctFindSaved(num);if(!ct){if(tries%5===1)jcpCtLog(num+': EL CONTRATO TODAVÍA NO ESTÁ GUARDADO, ESPERANDO…');return false;}delete CT_STORING[num];if(ct.pages&&ct.pages.length)return;ct.pages=out;ct.pagesAt=new Date().toISOString();setTimeout(function(){var c2=ctFindSaved(num);jcpCtLog(num+': '+((c2&&c2.pages&&c2.pages.length)?'✅ COPIA GUARDADA':'⚠️ NO QUEDÓ GUARDADA'));},50);},'LA COPIA DEL CONTRATO');return true;}
@@ -21849,6 +21861,41 @@ function jcpParseLicencia(raw){
     }).catch(function(){TCX={why:'No se pudo cargar la tabla de avalúos. Toca VER / CAMBIAR AVALÚO y escríbelo.'};tcxApply();});};
   document.addEventListener('input',function(ev){var t=ev.target;if(!t)return;if(t.id==='sctDer'||t.id==='sctServ')setTimeout(tcxApply,0);},true);
   document.addEventListener('change',function(ev){var t=ev.target;if(!t||t.id!=='sctDer')return;var d=parseFormattedMoney(t.value)||0;data.settings=(data.settings&&typeof data.settings==='object')?data.settings:{};if(d&&d!==(+data.settings.traspasoDerechos||260300)){data.settings.traspasoDerechos=d;try{save();}catch(_e){}}},true);
+  // Liquidador de avalúos: escanear tarjeta o escribir datos y consultar la tabla MinTransporte. No guarda nada.
+  window.openLiquidador=function(){
+    var old=document.getElementById('liqModal');if(old)old.remove();
+    if(!document.getElementById('liqCss')){var st=document.createElement('style');st.id='liqCss';st.textContent='#liqModal{position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.85);display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow:auto}#liqModal .pcm-card{width:100%;max-width:560px;background:#121212;border:1px solid #6b5a2a;border-radius:16px;padding:16px;box-sizing:border-box;margin:auto 0}#liqModal .pcm-t{color:#d4af37;font-weight:900;font-size:16px}#liqModal .pcm-n{color:#ccc;font-weight:700;font-size:12px;margin:6px 0 10px;line-height:1.4}#liqModal .liq-scan{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}#liqModal .liq-scan button,#liqModal .liq-x{min-height:48px;border-radius:12px;font-weight:900;border:1px solid #4a3d1c;background:#17130b;color:#d4af37}#liqModal .liq-x{width:100%;margin-top:12px;background:#101010;color:#aaa;border-color:#333}#liqModal .liq-big{margin-top:12px;padding:14px;border-radius:14px;border:2px solid #d4af37;background:#1a1609;text-align:center}#liqModal .liq-big small{display:block;color:#d4af37;font-weight:900;font-size:11px;letter-spacing:.5px}#liqModal .liq-big b{display:block;color:#fff;font-size:30px;margin:6px 0}#liqModal .liq-big span{color:#ccc;font-size:11px;font-weight:700}#liqModal .liq-ret{margin-top:12px;padding-top:10px;border-top:1px solid #4a3d1c}#liqModal .liq-ret b{font-size:22px;color:#d4af37;margin:4px 0 0}';document.head.appendChild(st);}
+    var m=document.createElement('div');m.id='liqModal';
+    var f=function(id,lab,w,im){return '<label class="tcx-f'+(w?' tcx-w':'')+'"><b>'+lab+'</b><input id="'+id+'"'+(im?' inputmode="numeric"':'')+'/></label>';};
+    m.innerHTML='<div class="pcm-card"><div class="pcm-t">🧮 LIQUIDADOR DE AVALÚOS</div><div class="pcm-n">Escanea la tarjeta de propiedad o escribe los datos. Se consulta la tabla de avalúos 2026 del Ministerio de Transporte. No se guarda nada.</div>'
+      +'<div class="liq-scan"><button type="button" onclick="jcpLiqScanPick(\'camera\')">📷 TOMAR FOTO</button><button type="button" onclick="jcpLiqScanPick(\'gallery\')">🖼️ GALERÍA</button></div>'
+      +'<input accept="image/*" capture="environment" id="liqScanCamera" style="display:none" type="file" onchange="jcpLiqScanFile(this)"/><input accept="image/*" id="liqScanGallery" style="display:none" type="file" onchange="jcpLiqScanFile(this)"/>'
+      +'<div class="veh-scan-status" id="liqScanStatus"></div>'
+      +'<div class="tcx-g">'+f('liqMarca','Marca',false)+f('liqLinea','Línea / referencia',false)+f('liqModelo','Modelo',false,true)+f('liqCil','Cilindraje',false,true)+f('liqClase','Clase',false)+f('liqPlaca','Placa',false)+'</div>'
+      +'<div id="liqList" class="tcx-list"><div class="tcx-msg">ESCANEA LA TARJETA O ESCRIBE MARCA, LÍNEA Y MODELO.</div></div>'
+      +'<div id="liqRes"></div>'
+      +'<button type="button" class="liq-x">CERRAR</button></div>';
+    document.body.appendChild(m);
+    m.querySelector('.liq-x').onclick=function(){m.remove();};
+    var tmr=null;['liqMarca','liqLinea','liqModelo','liqCil'].forEach(function(id){var e=document.getElementById(id);if(e)e.addEventListener('input',function(){clearTimeout(tmr);tmr=setTimeout(window.jcpLiqSearch,350);});});
+    avalLoad().catch(function(){var b=document.getElementById('liqList');if(b)b.innerHTML='<div class="tcx-msg">⚠️ NO SE PUDO CARGAR LA TABLA DE AVALÚOS. REVISA LA CONEXIÓN.</div>';});
+  };
+  window.jcpLiqSearch=function(){
+    var $=function(id){return document.getElementById(id);};var box=$('liqList'),res=$('liqRes');if(!box)return;
+    var marca=up(($('liqMarca')||{}).value||''),linea=up(($('liqLinea')||{}).value||''),y=parseInt(String(($('liqModelo')||{}).value||'').replace(/\D/g,''),10)||0,cil=parseInt(String(($('liqCil')||{}).value||'').replace(/\D/g,''),10)||'';
+    if(res)res.innerHTML='';
+    if(!marca){box.innerHTML='<div class="tcx-msg">ESCRIBE AL MENOS LA MARCA.</div>';return;}
+    if(!y){box.innerHTML='<div class="tcx-msg">ESCRIBE EL MODELO (AÑO).</div>';return;}
+    if(y>2025){box.innerHTML='<div class="tcx-msg">⚠️ MODELO '+y+': NO ESTÁ EN LA TABLA 2026. PARA ESTOS MODELOS EL AVALÚO ES EL VALOR DE LA FACTURA DE COMPRA.</div>';return;}
+    avalLoad().then(function(){
+      var r0=avalSearch((marca+' '+linea).trim(),cil,y);
+      if(!r0.length){box.innerHTML='<div class="tcx-msg">NO HAY COINCIDENCIAS. PRUEBA CON LA MARCA Y UNA PALABRA DE LA LÍNEA.</div>';return;}
+      var show=function(x){var r=x.r;res.innerHTML='<div class="liq-big"><small>AVALÚO MINTRANSPORTE 2026</small><b>'+(x.val.aprox?'≈ ':'')+moneyFmt(x.val.miles*1000)+'</b><span>'+esc(r.marca+' '+(r.linea==='*'?'LÍNEAS NO INCLUIDAS (VALOR GENÉRICO)':r.linea)+(r.cil>1?' · '+r.cil+' CC':'')+' · '+(y<2001?'2001 Y ANTERIORES':y)+' · '+r.tn)+'</span><div class="liq-ret"><small>RETENCIÓN EN LA FUENTE (1%)</small><b>'+moneyFmt(Math.round(x.val.miles*1000*0.01))+'</b></div></div>';};
+      box.innerHTML=r0.map(function(x,i){var r=x.r;return '<button type="button" class="tcx-it'+(i===0?' on':'')+'" data-i="'+i+'"><span><b>'+esc(r.marca)+'</b> '+esc(r.linea==='*'?'LÍNEAS NO INCLUIDAS (VALOR GENÉRICO)':r.linea)+'<small>'+esc((r.cil>1?r.cil+' CC · ':'')+r.tn+' · '+(y<2001?'2001 Y ANTERIORES':y))+'</small></span><b>'+(x.val.aprox?'≈ ':'')+moneyFmt(x.val.miles*1000)+'</b></button>';}).join('');
+      box.querySelectorAll('.tcx-it').forEach(function(b){b.onclick=function(){box.querySelectorAll('.tcx-it').forEach(function(z){z.classList.remove('on');});b.classList.add('on');show(r0[+b.dataset.i]);};});
+      show(r0[0]);
+    }).catch(function(){box.innerHTML='<div class="tcx-msg">⚠️ NO SE PUDO CARGAR LA TABLA DE AVALÚOS. REVISA LA CONEXIÓN.</div>';});
+  };
   window.jcpTraspasoCalc=function(pre){var vid=null;try{vid=selectedSaleVehicleId;}catch(e){}
     var v=(data.veh||[]).find(function(x){return x&&String(x.id)===String(vid);});if(!v){alert('SELECCIONA PRIMERO EL VEHÍCULO.');return;}
     var ai=v.additionalInfo||{},marca=up(v.marca||v.m),linea=up(v.ref),modelo=parseInt(String(v.modelo||'').replace(/\D/g,''),10)||new Date().getFullYear(),cil=parseInt(String(v.cilindraje||ai.cilindraje||'').replace(/\D/g,''),10)||'';
@@ -22134,7 +22181,7 @@ function jcpParseLicencia(raw){
     }
     if(window.__ctHtmlOnly){window.__ctHtmlOut=html;return;}
     var _cap=false;  // ya no se toma pantallazo: el contrato queda guardado como documento (datos + fotos)
-    if(!c.draft&&!window.__ctReprint){try{jcpCtLog((c.numero||'SIN NÚMERO')+': GENERANDO CONTRATO · '+(c.kind||'')+' · documento guardado · v2026.11.08.153');}catch(_e){}}
+    if(!c.draft&&!window.__ctReprint){try{jcpCtLog((c.numero||'SIN NÚMERO')+': GENERANDO CONTRATO · '+(c.kind||'')+' · documento guardado · v2026.11.08.154');}catch(_e){}}
     if(_cap){try{ctJobPut(c.numero,html);}catch(_e){}setTimeout(ctImportSnaps,25000);setTimeout(ctImportSnaps,45000);}
     if(typeof window.openSupportDocument==='function'){window.__jcpSnapFor=_cap?c.numero:'';if(_cap)jcpCtLog(c.numero+': VENTANA DEL CONTRATO ABIERTA, TOMANDO COPIA ALLÁ');try{window.openSupportDocument(html,'CONTRATO_'+(c.numero||V.placa||''),'Contrato '+(c.numero||''),w);}finally{window.__jcpSnapFor='';}return;}
     if(_cap)ctCapturePages(html,c.numero);
@@ -22147,7 +22194,7 @@ function jcpParseLicencia(raw){
 window.jcpCtLog=function(msg){try{var k='jcp_ctcap_log',a=JSON.parse(localStorage.getItem(k)||'[]');var t=new Date();a.unshift(('0'+t.getHours()).slice(-2)+':'+('0'+t.getMinutes()).slice(-2)+':'+('0'+t.getSeconds()).slice(-2)+' '+String(msg).slice(0,160));localStorage.setItem(k,JSON.stringify(a.slice(0,40)));}catch(e){}try{console.log('[contrato]',msg);}catch(e){}};
 window.jcpCtLogGet=function(n){try{return JSON.parse(localStorage.getItem('jcp_ctcap_log')||'[]').slice(0,n||8);}catch(e){return [];}};
 window.jcpPrintLib=function(){
-  if(!window.__jcpPrintLibP){window.__jcpPrintLibP=fetch(new URL('jcp-print.js?v=2026.11.08.153',location.href).href).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(function(t){if(t.indexOf('html2canvas')<0)throw new Error('ARCHIVO jcp-print.js INVÁLIDO');return t;}).catch(function(e){window.__jcpPrintLibP=null;try{jcpCtLog('NO CARGÓ jcp-print.js: '+(e&&e.message||e));}catch(_e){}throw e;});}
+  if(!window.__jcpPrintLibP){window.__jcpPrintLibP=fetch(new URL('jcp-print.js?v=2026.11.08.154',location.href).href).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();}).then(function(t){if(t.indexOf('html2canvas')<0)throw new Error('ARCHIVO jcp-print.js INVÁLIDO');return t;}).catch(function(e){window.__jcpPrintLibP=null;try{jcpCtLog('NO CARGÓ jcp-print.js: '+(e&&e.message||e));}catch(_e){}throw e;});}
   return window.__jcpPrintLibP;
 };
 window.jcpInjectPrintLib=function(win){
@@ -22383,7 +22430,7 @@ window.jcpPersistLater=function(fn,label,tries){
   if(window.jcpCloudBootstrapReady===true)start();else window.addEventListener('jcp-cloud-bootstrap-ready',start,{once:true});
 })();
 </script>
-<script src="./app-update.js?v=2026.11.08.153"></script>
+<script src="./app-update.js?v=2026.11.08.154"></script>
 <script>
 /* JCP: resaltar casillas obligatorias (rojo vacío / verde lleno) en Facturar venta y Permuta */
 (function(){
